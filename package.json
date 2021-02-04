@@ -1,0 +1,30 @@
+{
+  "name": "ohm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "copy": "cp ./src/index.html ./dist/src/index.html",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jurelik/ohm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jurelik/ohm/issues"
+  },
+  "homepage": "https://github.com/jurelik/ohm#readme",
+  "devDependencies": {
+    "electron": "^11.2.2"
+  },
+  "dependencies": {
+    "go-ipfs": "^0.7.0",
+    "ipfs-http-client": "^49.0.1"
+  }
+}
