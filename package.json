@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "go-ipfs": "^0.7.0",
-    "ipfs-http-client": "^49.0.1"
+    "ipfs-http-client": "^49.0.1",
+    "node-fetch": "^2.6.1"
   }
 }

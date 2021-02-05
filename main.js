@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { spawn } = require('child_process')
-let daemon;
+let daemon = null;
 
 function createWindow () {
   const win = new BrowserWindow({
@@ -32,13 +32,15 @@ app.on('activate', () => {
   }
 })
 
-ipcMain.on('start', () => {
+ipcMain.on('start', (event) => {
+  if (daemon) return event.reply('daemon-ready'); //Check if daemon is already running
+
   daemon = spawn(require('go-ipfs').path(), ['daemon'])
 
   daemon.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);
     if (data.toString().match(/(?:daemon is running|Daemon is ready)/)) {
-      console.log('Daemon ready')
+      event.reply('daemon-ready');
     }
   });
 
