@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'Mono';
+  src: url('./assets/fonts/InputMono-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Mono'
+}
+
