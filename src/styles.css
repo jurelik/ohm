@@ -68,3 +68,21 @@ button {
   width: 100%;
   height: 30px;
 }
+
+.song {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+}
+
+.song .art {
+  object-fit: cover;
+  height: 50px;
+  width: 50px;
+}
+
+.titleAndArtist {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+}
