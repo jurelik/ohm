@@ -71,8 +71,19 @@ button {
 
 .song {
   display: flex;
+  flex-direction: column;
+}
+
+.song .main {
+  display: flex;
   flex-direction: row;
   cursor: pointer;
+}
+
+.song .main .titleAndArtist {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
 }
 
 .song .art {
@@ -81,8 +92,18 @@ button {
   width: 50px;
 }
 
-.titleAndArtist {
+.song .sounds-visible {
   display: flex;
   flex-direction: column;
-  align-content: flex-start;
+  cursor: pointer;
+}
+
+.song .sounds-visible .sound {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+}
+
+.song .sounds-hidden {
+  display: none;
 }
