@@ -15,6 +15,7 @@ function Nav() {
       el.setAttribute('id', name);
       el.setAttribute('type', 'button');
       el.innerHTML = first ? `> ${name}` : `  ${name}`;
+      first ? el.className = 'selected' : null;
       el.onclick = this.handleClick;
       this.nav.appendChild(el);
 
@@ -27,7 +28,9 @@ function Nav() {
 
   this.handleClick = (e) => {
     this.elements[e.srcElement.id].innerHTML = `> ${e.srcElement.id}`;
+    this.elements[e.srcElement.id].className = 'selected';
     this.elements[this.selected].innerHTML = this.selected;
+    this.elements[this.selected].className = null;
     this.selected = e.srcElement.id;
     client.changePage(e.srcElement.id);
   }

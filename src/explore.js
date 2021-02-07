@@ -6,14 +6,14 @@ function Explore() {
     this.demoId = 'aaa'
     this.demoSound1 = {
       type: 'original',
-      name: 'demo1',
-      url: 'ff'
+      title: 'demo1',
+      url: '/ipfs/QmQpbUHhJgq7JeFMGDjXP22cREPYaMGa5TZnZ48dHDFQgc'
     }
     this.demoSound2 = {
       type: 'internal',
-      name: 'demo2',
+      title: 'demo2',
       artist: 'testArtist',
-      url: 'ff'
+      url: '/ipfs/QmTp7eeKm1ymt6SZD3SPMD3mKkAFomE8x5xtJhqK48a8qy'
     }
 
     this.songs.push({
@@ -50,8 +50,8 @@ function Explore() {
     let art = document.createElement('img');
     let title = document.createElement('p');
     let artist = document.createElement('p');
-    let audio = document.createElement('audio');
     let toggle = document.createElement('button');
+    let playButton = document.createElement('button');
 
     //Add classes for styling
     song.classList.add('song');
@@ -64,9 +64,8 @@ function Explore() {
     art.setAttribute('src', `http://127.0.0.1:8080${_song.art}`)
     title.innerHTML = _song.title;
     artist.innerHTML = _song.artist;
-    audio.setAttribute('src', `http://127.0.0.1:8080${_song.url}`);
-    audio.setAttribute('controls', `true`);
     toggle.innerHTML = 'toggle';
+    playButton.innerHTML = 'play/pause';
 
     //Add sound elements
     for (let sound of _song.sounds) {
@@ -81,35 +80,37 @@ function Explore() {
     main.appendChild(titleAndArtist);
     titleAndArtist.appendChild(title);
     titleAndArtist.appendChild(artist);
-    main.appendChild(audio);
     main.appendChild(toggle);
+    main.appendChild(playButton);
 
     //Add listeners
     song.onclick = () => client.selectSong(_song);
     toggle.onclick = () => this.toggleSounds(song);
-
+    playButton.onclick = () => client.player.play(_song);
 
     return song;
   }
 
   this.createSoundElement = (_sound) => {
     let sound = document.createElement('div');
-    let name = document.createElement('p');
+    let title = document.createElement('p');
     let artist = document.createElement('p');
-    let audio = document.createElement('audio');
+    let playButton = document.createElement('button');
 
     sound.classList.add('sound');
 
     //Add attributes and innerHTML
-    name.innerHTML = _sound.name;
+    title.innerHTML = _sound.title;
     artist.innerHTML = _sound.artist;
-    audio.setAttribute('src', `http://127.0.0.1:8080${_sound.url}`);
-    audio.setAttribute('controls', `true`);
+    playButton.innerHTML = 'play/pause';
 
     //Build structure
     sound.appendChild(artist);
-    sound.appendChild(name);
-    sound.appendChild(audio);
+    sound.appendChild(title);
+    sound.appendChild(playButton);
+
+    //Add listeners
+    playButton.onclick = () => client.player.play(_sound);
 
     return sound;
   }
