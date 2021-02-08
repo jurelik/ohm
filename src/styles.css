@@ -77,6 +77,30 @@ button {
   height: 50px;
 }
 
+/* album element */
+.album {
+  display: flex;
+  flex-direction: column;
+}
+
+.album .main {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+}
+
+.album .main .titleAndArtist {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+}
+
+.album .art {
+  object-fit: cover;
+  height: 50px;
+  width: 50px;
+}
+
 /* song element */
 .song {
   display: flex;

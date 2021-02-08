@@ -47,6 +47,10 @@ function Client() {
     console.log(song);
   }
 
+  this.selectAlbum = (album) => {
+    console.log(album);
+  }
+
   this.handlePlayPause = () => {
     this.playing = !this.playing;
     this.player.play();
