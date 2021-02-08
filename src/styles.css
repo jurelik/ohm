@@ -32,6 +32,10 @@ button {
   margin-bottom: 5px;
 }
 
+svg {
+  pointer-events: none;
+}
+
 .root {
   display: flex;
   flex-direction: column;
@@ -105,18 +109,30 @@ button {
 .song {
   display: flex;
   flex-direction: column;
+  margin-bottom: 5px;
 }
 
 .song .main {
   display: flex;
   flex-direction: row;
+  align-items: center;
   cursor: pointer;
 }
 
 .song .main .titleAndArtist {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-content: flex-start;
+}
+
+.song .main button {
+  display: flex;
+  margin-bottom: 0px;
+}
+
+.song .main .separator {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .song .art {

@@ -1,8 +1,16 @@
+const playIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="537.5 236.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M554 253h0v150l150-75-150-75"/><path fill="none" d="M537.5 236.5h183v183h-183z"/></svg></svg>';
+const pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="534.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M566 255h0v150h30V255h-30m120 0h0-30v150h30V255"/><path fill="none" d="M534.5 238.5h183v183h-183z"/></svg>'
+
 const createSongElement = (_song) => {
-  //Helper function - possibly move outside component?
+  //Helper functions - possibly move outside component?
   const toggleSounds = (song) => {
     if (song.children[1].className === 'files-hidden') return song.children[1].className = 'files-visible';
     return song.children[1].className = 'files-hidden';
+  }
+
+  const handlePlayButton = (e, song) => {
+    client.playing ? e.target.innerHTML = playIcon : e.target.innerHTML = pauseIcon;
+    client.player.queueFile(song)
   }
 
   //Create elements
@@ -11,8 +19,9 @@ const createSongElement = (_song) => {
   let files = document.createElement('div');
   let titleAndArtist = document.createElement('div');
   let art = document.createElement('img');
-  let title = document.createElement('p');
   let artist = document.createElement('p');
+  let separator = document.createElement('p');
+  let title = document.createElement('p');
   let toggle = document.createElement('button');
   let playButton = document.createElement('button');
 
@@ -21,14 +30,17 @@ const createSongElement = (_song) => {
   main.classList.add('main');
   files.classList.add('files-hidden');
   titleAndArtist.classList.add('titleAndArtist');
+  separator.classList.add('separator');
   art.classList.add('art');
 
   //Add attributes and innerHTML
   art.setAttribute('src', `http://127.0.0.1:8080${_song.art}`)
-  title.innerHTML = _song.title;
   artist.innerHTML = _song.artist;
+  separator.innerHTML = '-';
+  title.innerHTML = _song.title;
   toggle.innerHTML = 'toggle';
-  playButton.innerHTML = 'play/pause';
+  //playButton.innerHTML = '|>';
+  playButton.innerHTML = playIcon;
 
   //Add file elements
   for (let file of _song.files) {
@@ -39,17 +51,18 @@ const createSongElement = (_song) => {
   //Build structure
   song.appendChild(main);
   song.appendChild(files);
-  main.appendChild(art);
-  main.appendChild(titleAndArtist);
-  titleAndArtist.appendChild(title);
-  titleAndArtist.appendChild(artist);
-  main.appendChild(toggle);
   main.appendChild(playButton);
+  //main.appendChild(art);
+  main.appendChild(titleAndArtist);
+  titleAndArtist.appendChild(artist);
+  titleAndArtist.appendChild(separator);
+  titleAndArtist.appendChild(title);
+  main.appendChild(toggle);
 
   //Add listeners
   song.onclick = () => client.selectSong(_song);
   toggle.onclick = () => toggleSounds(song);
-  playButton.onclick = () => client.player.queueFile(_song);
+  playButton.onclick = (e) => handlePlayButton(e, _song);
 
   return song;
 }

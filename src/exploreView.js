@@ -1,6 +1,6 @@
 const { createSongElement, createAlbumElement } = require('./utils/components');
 
-function Explore() {
+function ExploreView() {
   this.list = [];
 
   this.init = () => {
@@ -79,4 +79,4 @@ function Explore() {
   }
 }
 
-module.exports = Explore;
+module.exports = ExploreView;
