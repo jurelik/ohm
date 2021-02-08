@@ -101,17 +101,17 @@ button {
   width: 50px;
 }
 
-.song .sounds-visible {
+.song .files-visible {
   display: flex;
   flex-direction: column;
   cursor: pointer;
 }
 
-.song .sounds-hidden {
+.song .files-hidden {
   display: none;
 }
 
-.song .sound {
+.song .file {
   display: flex;
   flex-direction: row;
   cursor: pointer;
