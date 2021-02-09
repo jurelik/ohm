@@ -80,8 +80,9 @@ svg {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  width: 200px;
+  width: 120px;
   padding-left: 5px;
+  padding-top: 5px;
   color: #888;
 }
 
@@ -91,6 +92,12 @@ svg {
 
 .nav .selected {
   color: #eee;
+}
+
+.vertical-line {
+  border-left: 2px solid #888;
+  height: 100%;
+  margin-right: 5px;
 }
 
 .content {
@@ -150,11 +157,25 @@ svg {
 
 .song .main button {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
 }
 
 .song .main .separator {
   margin-left: 5px;
   margin-right: 5px;
+}
+
+.song .actions {
+  font-size: 10px;
+  color: #888;
+  margin-left: 25px;
+}
+
+.song .actions button {
+  padding: 0px;
+  margin-right: 10px;
 }
 
 .song .art {

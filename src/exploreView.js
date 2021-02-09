@@ -31,6 +31,8 @@ function ExploreView() {
       art: '/ipfs/QmWVc2saSwaTy7h3j6idN8U2jL6kqhMsoReFsf56vwfXr6',
       url: '/ipfs/QmU1B9JdMvhm4EB8kj487GfwQzfVtocKCm9XNAHkUtHz4f',
       files: [ this.demoFile1, this.demoFile2 ],
+      comments: ['hi', 'ho'],
+      pins: ['1', '2'],
       tags: ['lofi', 'hiphop']
     }
 
@@ -42,6 +44,8 @@ function ExploreView() {
       art: '/ipfs/QmWVc2saSwaTy7h3j6idN8U2jL6kqhMsoReFsf56vwfXr6',
       url: '/ipfs/QmTp7eeKm1ymt6SZD3SPMD3mKkAFomE8x5xtJhqK48a8qy',
       files: [ this.demoFile1, this.demoFile2 ],
+      comments: ['he', 'ha'],
+      pins: ['3', '4'],
       tags: ['lofi', 'hiphop']
     }
 
