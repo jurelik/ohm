@@ -1,21 +1,42 @@
 function Header() {
   this.handleBack = () => {
     let index = client.historyIndex - 1;
-    if (index >= 0) {
-      let view = client.history[index];
 
-      switch (view.type) {
-        case 'song':
-          client.historyIndex --;
-          return client.changeView(view.type, view.data);
-        default:
-          client.historyIndex --;
-          client.nav.select(view.type)
-          return client.changeView(view.type);
-      }
+    //Handle first item in list
+    if (index < 0) {
+      return console.log('at first index already');
     }
 
-    return console.log('at last index already');
+    let view = client.history[index];
+    switch (view.type) {
+      case 'song':
+        client.historyIndex--;
+        return client.changeView(view.type, view.data);
+      default:
+        client.historyIndex--;
+        client.nav.select(view.type)
+        return client.changeView(view.type);
+    }
+  }
+
+  this.handleForward = () => {
+    let index = client.historyIndex + 1;
+
+    //Handle last item in list
+    if (index > client.history.length - 1) {
+      return console.log('at last index already')
+    }
+
+    let view = client.history[index];
+    switch (view.type) {
+      case 'song':
+        client.historyIndex++;
+        return client.changeView(view.type, view.data);
+      default:
+        client.historyIndex++;
+        client.nav.select(view.type)
+        return client.changeView(view.type);
+    }
   }
 
   this.init = () => {
@@ -26,6 +47,7 @@ function Header() {
     forward.innerHTML = '>'
 
     back.onclick = this.handleBack;
+    forward.onclick = this.handleForward;
 
     client.headerEl.appendChild(back);
     client.headerEl.appendChild(forward);
