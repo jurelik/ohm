@@ -29,7 +29,6 @@ button {
   border: none;
   outline: none;
   cursor: pointer;
-  margin-bottom: 5px;
 }
 
 svg {
@@ -52,7 +51,22 @@ svg {
 
 .header {
   display: flex;
-  height: 30px;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+  padding-left: 5px;
+}
+
+.header button {
+  margin-right: 5px;
+}
+
+.header .enabled svg {
+  stroke: #eee;
+}
+
+.header .disabled svg {
+  stroke: #888;
 }
 
 .main {
@@ -69,6 +83,10 @@ svg {
   width: 200px;
   padding-left: 5px;
   color: #888;
+}
+
+.nav button {
+  margin-bottom: 5px;
 }
 
 .nav .selected {
@@ -132,7 +150,6 @@ svg {
 
 .song .main button {
   display: flex;
-  margin-bottom: 0px;
 }
 
 .song .main .separator {

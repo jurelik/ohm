@@ -61,6 +61,8 @@ function Client() {
       type,
       data
     })
+    this.header.backButton.className = 'enabled';
+    this.header.forwardButton.className = 'disabled';
     this.historyIndex++;
   }
 
