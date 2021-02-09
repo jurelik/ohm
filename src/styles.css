@@ -50,6 +50,11 @@ svg {
   height: 20px;
 }
 
+.header {
+  display: flex;
+  height: 30px;
+}
+
 .main {
   display: flex;
   flex-direction: row;
@@ -154,6 +159,7 @@ svg {
 .song .file {
   display: flex;
   flex-direction: row;
+  margin-left: 20px;
   cursor: pointer;
 }
 

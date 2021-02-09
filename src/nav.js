@@ -26,13 +26,18 @@ function Nav() {
     }
   }
 
-  this.handleClick = (e) => {
-    this.elements[e.srcElement.id].innerHTML = `> ${e.srcElement.id}`;
-    this.elements[e.srcElement.id].className = 'selected';
+  this.select = (id) => {
+    this.elements[id].innerHTML = `> ${id}`;
+    this.elements[id].className = 'selected';
     this.elements[this.selected].innerHTML = this.selected;
     this.elements[this.selected].className = null;
-    this.selected = e.srcElement.id;
-    client.changePage(e.srcElement.id);
+    this.selected = id;
+  }
+
+  this.handleClick = (e) => {
+    this.select(e.target.id);
+    client.addToHistory(e.target.id);
+    client.changeView(e.target.id);
   }
 }
 
