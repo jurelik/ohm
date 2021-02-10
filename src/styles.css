@@ -194,7 +194,13 @@ svg {
   display: none;
 }
 
-.song .file {
+.files {
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+}
+
+.file {
   display: flex;
   flex-direction: row;
   margin-left: 20px;

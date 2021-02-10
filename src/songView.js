@@ -1,12 +1,15 @@
 const { createSongViewElement } = require('./utils/components');
+
 function SongView() {
   this.song = null;
+  this.action = null
 
-  this.render = (song) => {
-    this.song = song;
-    let el;
-    el = createSongViewElement(song);
-    client.content.appendChild(el);
+  this.render = (data) => {
+    this.song = data.song;
+    this.action = data.action;
+
+    let songViewEl = createSongViewElement(data.song, data.action);
+    client.content.appendChild(songViewEl);
   }
 }
 

@@ -42,22 +42,24 @@ const createSongElement = (_song, songView) => {
   //  files.appendChild(el);
   //}
 
-  //Add actions
-  let actions = createActionsElement(_song);
-
   //Build structure
   song.appendChild(main);
-  song.appendChild(actions);
   main.appendChild(playButton);
   main.appendChild(titleAndArtist);
   titleAndArtist.appendChild(artist);
   titleAndArtist.appendChild(separator);
   titleAndArtist.appendChild(title);
 
+  //Add actions
+  if (!songView) {
+    let actions = createActionsElement(_song);
+    song.appendChild(actions);
+  }
+
   //Add listeners
   song.onclick = () => {
-    client.addToHistory('song', _song);
-    client.changeView('song', _song);
+    client.addToHistory('song', { song: _song, action: 'files' });
+    client.changeView('song', { song: _song, action: 'files' });
   }
   //toggle.onclick = (e) => toggleSounds(e, song);
   playButton.onclick = (e) => handlePlayButton(e, _song);
@@ -125,13 +127,73 @@ const createFileElement = (_file) => {
   return file;
 }
 
-const createSongViewElement = (_song) => {
+const createSongViewElement = (_song, _action) => {
+  let action = _action || 'files';
   let songView = document.createElement('div');
   let song = createSongElement(_song, true);
+  let songDropdown = createSongDropdownElement(_song, action);
 
   songView.appendChild(song);
+  songView.appendChild(songDropdown);
 
   return songView;
+}
+
+const createSongDropdownElement = (song, action) => {
+  let dropdown = document.createElement('div');
+
+  switch (action) {
+    case 'files':
+      let files = createFilesElement(song.files);
+      return dropdown.appendChild(files);
+    case 'comments':
+      let comments = createCommentsElement(song.comments);
+      return dropdown.appendChild(comments);
+    default:
+      return console.error('wrong action');
+  }
+}
+
+
+const createFilesElement = (_files) => {
+  let files = document.createElement('div');
+  files.className = 'files';
+
+  for (let file of _files) {
+    let fileEl = createFileElement(file);
+    files.appendChild(fileEl);
+  }
+
+  return files;
+}
+
+const createCommentElement = (_comment) => {
+  //Create elements
+  let comment = document.createElement('div');
+  let content = document.createElement('p');
+  comment.classList.add('comment');
+
+  //Add attributes and innerHTML
+  content.innerHTML = _comment;
+
+  //Build structure
+  comment.appendChild(content);
+
+  //Add listeners
+
+  return comment;
+}
+
+const createCommentsElement = (_comments) => {
+  let comments = document.createElement('div');
+  comments.className = 'comments';
+
+  for (let comment of _comments) {
+    let commentEl = createCommentElement(comment);
+    comments.appendChild(commentEl);
+  }
+
+  return comments;
 }
 
 const createActionsElement = (song) => {
@@ -156,6 +218,11 @@ const createActionsElement = (song) => {
   actions.appendChild(download);
 
   //Add listeners
+  comments.onclick = (e) => {
+    e.stopPropagation();
+    client.addToHistory('song', { song: song, action: 'comments' });
+    client.changeView('song', { song: song, action: 'comments' });
+  }
 
   return actions;
 }

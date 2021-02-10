@@ -54,23 +54,26 @@ function Client() {
   }
 
   this.addToHistory = (type, data) => {
-    //Check for duplicates on last index
-    const len = this.history.length - 1;
-    const _type = this.history[len].type;
-    const _dataId = this.history[len].data ? this.history[len].data.id : undefined;
-    if (data && type === _type && data.id === _dataId) return;
-    else if (!data && type === _type) return;
+    this.header.backButton.className = 'enabled';
+    this.header.forwardButton.className = 'disabled';
+    this.historyIndex++;
+
+    //Check for duplicates on next index
+    //const len = this.historyIndex;
+    //if (this.history[len]) {
+    //  const _type = this.history[len].type;
+    //  const _dataId = this.history[len].data ? this.history[len].data.id : undefined;
+    //  if (data && type === _type && data.id === _dataId) return;
+    //  else if (!data && type === _type) return;
+    //}
 
     //Clear all history above current index
-    this.history.splice(this.historyIndex + 1, len);
+    this.history.splice(this.historyIndex);
 
     this.history.push({
       type,
       data
     })
-    this.header.backButton.className = 'enabled';
-    this.header.forwardButton.className = 'disabled';
-    this.historyIndex++;
   }
 
   this.selectAlbum = (album) => {
