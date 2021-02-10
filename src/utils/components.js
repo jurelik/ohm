@@ -147,7 +147,7 @@ const createActionsElement = (song) => {
   files.innerHTML = `${song.files.length} files`;
   comments.innerHTML = `${song.comments.length} comments`;
   pins.innerHTML = `${song.pins.length} pins`;
-  download.innerHTML = 'download';
+  download.innerHTML = 'download all';
 
   //Build structure
   actions.appendChild(files);

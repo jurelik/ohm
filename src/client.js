@@ -54,8 +54,15 @@ function Client() {
   }
 
   this.addToHistory = (type, data) => {
+    //Check for duplicates on last index
+    const len = this.history.length - 1;
+    const _type = this.history[len].type;
+    const _dataId = this.history[len].data ? this.history[len].data.id : undefined;
+    if (data && type === _type && data.id === _dataId) return;
+    else if (!data && type === _type) return;
+
     //Clear all history above current index
-    this.history.splice(this.historyIndex + 1, this.history.length - 1);
+    this.history.splice(this.historyIndex + 1, len);
 
     this.history.push({
       type,

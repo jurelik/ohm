@@ -27,6 +27,9 @@ function Nav() {
   }
 
   this.select = (id) => {
+    //Check if same item
+    if (this.selected === id) return;
+
     this.elements[id].innerHTML = `> ${id}`;
     this.elements[id].className = 'selected';
     this.elements[this.selected].innerHTML = this.selected;
