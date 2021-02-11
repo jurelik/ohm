@@ -10,27 +10,32 @@ const SongView = require('./components/songView');
 const Player = require('./components/player');
 const Header = require('./components/header');
 
+const testData = require('./testData');
+
 function App() {
   this.ipfs;
   this.root = document.querySelector('.root');
   this.content = document.querySelector('.content');
   this.nav = new Nav();
-  this.exploreView = new ExploreView();
   this.player = new Player();
   this.header = new Header();
 
   //State
   this.playing = false;
-  this.history = [{ type: 'explore' }];
+  this.history = [];
   this.historyIndex = 0;
 
   this.init = () => {
     this.header.render();
     this.nav.render();
-    this.exploreView.init();
     this.player.render();
 
-    //Init an ipfs daemon & create a node
+    //Currently using test data
+    this.changeView('explore', testData);
+    this.addToHistory('explore', testData);
+    this.historyIndex = 0;
+
+    //Init an ipfs daemon & create an ipfs node
     ipcRenderer.on('daemon-ready', async () => {
       this.ipfs = createClient();
     });
@@ -43,7 +48,8 @@ function App() {
 
     switch (view) {
       case 'explore':
-        return this.exploreView.render();
+        let exploreView = new ExploreView(data);
+        return exploreView.render();
       case 'song':
         let songView = new SongView(data.song, data.action);
         return this.content.appendChild(songView.render());
@@ -63,7 +69,7 @@ function App() {
     this.history.push({
       type,
       data
-    })
+    });
   }
 
   this.selectAlbum = (album) => {

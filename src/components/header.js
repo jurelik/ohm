@@ -14,12 +14,11 @@ function Header() {
     }
 
     //Handle index at 0
-    if (index === 0) {
-      this.backButton.className = 'disabled';
-    }
+    if (index === 0) this.backButton.className = 'disabled';
 
     this.forwardButton.className = 'enabled';
     let view = app.history[index];
+
     switch (view.type) {
       case 'song':
         app.historyIndex--;
@@ -27,7 +26,7 @@ function Header() {
       default:
         app.historyIndex--;
         app.nav.select(view.type)
-        return app.changeView(view.type);
+        return app.changeView(view.type, view.data);
     }
   }
 

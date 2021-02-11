@@ -46,6 +46,7 @@ function Player() {
       app.playing ? this.el.children[2].pause() : this.el.children[2].play();
       return;
     }
+    console.log(song)
 
     //Load song into the player and play
     this.song = song;
