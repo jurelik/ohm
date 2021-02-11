@@ -1,12 +1,12 @@
 'use strict'
 
 function Nav() {
-  this.nav = document.querySelector('.nav');
+  this.el = document.querySelector('.nav');
   this.names = ['explore', 'feed', 'liked', 'files'];
   this.elements = {};
   this.selected = 'explore';
 
-  this.init = () => {
+  this.render = () => {
     let first = true;
 
     for (let name of this.names) {
@@ -17,7 +17,7 @@ function Nav() {
       el.innerHTML = first ? `> ${name}` : `  ${name}`;
       first ? el.className = 'selected' : null;
       el.onclick = this.handleClick;
-      this.nav.appendChild(el);
+      this.el.appendChild(el);
 
       //Store reference
       this.elements[name] = el;

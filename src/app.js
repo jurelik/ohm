@@ -4,18 +4,16 @@ const { ipcRenderer } = require('electron');
 const createClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
 
-const Nav = require('./nav');
-const ExploreView = require('./exploreView');
+const Nav = require('./components/nav');
+const ExploreView = require('./components/exploreView');
 const SongView = require('./components/songView');
-const Player = require('./player');
-const Header = require('./header');
+const Player = require('./components/player');
+const Header = require('./components/header');
 
 function App() {
-  this.node;
+  this.ipfs;
   this.root = document.querySelector('.root');
   this.content = document.querySelector('.content');
-  this.playerEl = document.querySelector('.player');
-  this.headerEl = document.querySelector('.header');
   this.nav = new Nav();
   this.exploreView = new ExploreView();
   this.player = new Player();
@@ -27,14 +25,14 @@ function App() {
   this.historyIndex = 0;
 
   this.init = () => {
-    this.header.init();
-    this.nav.init();
+    this.header.render();
+    this.nav.render();
     this.exploreView.init();
-    this.player.init();
+    this.player.render();
 
     //Init an ipfs daemon & create a node
     ipcRenderer.on('daemon-ready', async () => {
-      this.node = createClient();
+      this.ipfs = createClient();
     });
 
     ipcRenderer.send('start');

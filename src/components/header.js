@@ -1,4 +1,5 @@
 function Header() {
+  this.el = document.querySelector('.header');
   this.backIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="547.5 238.5 183 183"><path fill="none" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M669 255h0l-60 75 60 75"/><path fill="none" stroke="none" d="M547.5 238.5h183v183h-183z"/></svg></svg>';
   this.forwardIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="533.5 238.5 183 183"><path fill="none" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M595 255h0l60 75-60 75"/><path fill="none" stroke="none" d="M533.5 238.5h183v183h-183z"/></svg></svg>';
   this.backButton = null;
@@ -56,7 +57,7 @@ function Header() {
     }
   }
 
-  this.init = () => {
+  this.render = () => {
     //Create elements
     let back = document.createElement('button');
     let forward = document.createElement('button');
@@ -77,8 +78,8 @@ function Header() {
     this.backButton = back;
     this.forwardButton = forward;
 
-    app.headerEl.appendChild(back);
-    app.headerEl.appendChild(forward);
+    this.el.appendChild(back);
+    this.el.appendChild(forward);
   }
 }
 

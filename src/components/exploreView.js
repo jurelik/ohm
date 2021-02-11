@@ -1,6 +1,6 @@
 //const { createAlbumElement } = require('./utils/components');
-const Song = require('./components/song');
-const Album = require('./components/album');
+const Song = require('./song');
+const Album = require('./album');
 
 function ExploreView() {
   this.list = [];
