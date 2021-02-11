@@ -1,4 +1,5 @@
-const { createSongElement, createAlbumElement } = require('./utils/components');
+const { createAlbumElement } = require('./utils/components');
+const Song = require('./components/song');
 
 function ExploreView() {
   this.list = [];
@@ -70,7 +71,8 @@ function ExploreView() {
     for (let item of this.list) {
       let el;
       if (item.type === 'song') {
-        el = createSongElement(item);
+        let song = new Song(item);
+        el = song.render();
       }
       else if (item.type === 'album') {
         el = createAlbumElement(item);

@@ -9,6 +9,7 @@ function createWindow () {
     backgroundColor: "#222",
     //frame: false,
     titleBarStyle: 'hidden',
+    trafficLightPosition: { x: 9, y: 12 },
     webPreferences: {
       nodeIntegration: true
     }
