@@ -28,8 +28,8 @@ function ActionBar(data) {
     //Add listeners
     comments.onclick = (e) => {
       e.stopPropagation();
-      client.addToHistory('song', { song: this.data, action: 'comments' });
-      client.changeView('song', { song: this.data, action: 'comments' });
+      app.addToHistory('song', { song: this.data, action: 'comments' });
+      app.changeView('song', { song: this.data, action: 'comments' });
     }
 
     return this.el;

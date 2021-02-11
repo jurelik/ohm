@@ -12,7 +12,7 @@ function Player() {
       this.play(this.queue[this.queuePosition]);
     }
     else {
-      client.playing = false;
+      app.playing = false;
       this.queuePosition = 0;
     }
   }
@@ -34,8 +34,8 @@ function Player() {
     //Add listeners
     playButton.onclick = () => this.play(this.song);
     audio.onended = this.handleOnEnded;
-    audio.onplay = () => client.playing = true;
-    audio.onpause = () => client.playing = false;
+    audio.onplay = () => app.playing = true;
+    audio.onpause = () => app.playing = false;
 
     this.playerEl.appendChild(playButton);
     this.playerEl.appendChild(titleAndArtist);
@@ -45,7 +45,7 @@ function Player() {
   this.queueFile = (file) => {
     //Check if queue is already loaded into player
     if (this.queue[0] === file) {
-      client.playing ? this.playerEl.children[2].pause() : this.playerEl.children[2].play();
+      app.playing ? this.playerEl.children[2].pause() : this.playerEl.children[2].play();
       return;
     }
 
@@ -57,7 +57,7 @@ function Player() {
   this.queueFiles = (list) => {
     //Check if queue is already loaded into player
     if (this.queue === list) {
-      client.playing ? this.playerEl.children[2].pause() : this.playerEl.children[2].play();
+      app.playing ? this.playerEl.children[2].pause() : this.playerEl.children[2].play();
       return;
     }
 
@@ -69,7 +69,7 @@ function Player() {
   this.play = (song) => {
     //Check if song is already loaded into player
     if (this.song === song) {
-      client.playing ? this.playerEl.children[2].pause() : this.playerEl.children[2].play();
+      app.playing ? this.playerEl.children[2].pause() : this.playerEl.children[2].play();
       return;
     }
 

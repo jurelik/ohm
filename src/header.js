@@ -5,7 +5,7 @@ function Header() {
   this.forwardButton = null;
 
   this.handleBack = () => {
-    let index = client.historyIndex - 1;
+    let index = app.historyIndex - 1;
 
     //Handle first item in list
     if (index < 0) {
@@ -18,41 +18,41 @@ function Header() {
     }
 
     this.forwardButton.className = 'enabled';
-    let view = client.history[index];
+    let view = app.history[index];
     switch (view.type) {
       case 'song':
-        client.historyIndex--;
-        return client.changeView(view.type, view.data);
+        app.historyIndex--;
+        return app.changeView(view.type, view.data);
       default:
-        client.historyIndex--;
-        client.nav.select(view.type)
-        return client.changeView(view.type);
+        app.historyIndex--;
+        app.nav.select(view.type)
+        return app.changeView(view.type);
     }
   }
 
   this.handleForward = () => {
-    let index = client.historyIndex + 1;
+    let index = app.historyIndex + 1;
 
     //Handle last item in list
-    if (index > client.history.length - 1) {
+    if (index > app.history.length - 1) {
       return console.log('at last index already')
     }
 
     //Handle index at last position
-    if (index === client.history.length - 1) {
+    if (index === app.history.length - 1) {
       this.forwardButton.className = 'disabled';
     }
 
     this.backButton.className = 'enabled';
-    let view = client.history[index];
+    let view = app.history[index];
     switch (view.type) {
       case 'song':
-        client.historyIndex++;
-        return client.changeView(view.type, view.data);
+        app.historyIndex++;
+        return app.changeView(view.type, view.data);
       default:
-        client.historyIndex++;
-        client.nav.select(view.type)
-        return client.changeView(view.type);
+        app.historyIndex++;
+        app.nav.select(view.type)
+        return app.changeView(view.type);
     }
   }
 
@@ -77,8 +77,8 @@ function Header() {
     this.backButton = back;
     this.forwardButton = forward;
 
-    client.headerEl.appendChild(back);
-    client.headerEl.appendChild(forward);
+    app.headerEl.appendChild(back);
+    app.headerEl.appendChild(forward);
   }
 }
 

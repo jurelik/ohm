@@ -33,8 +33,8 @@ function Album(data) {
     main.appendChild(playButton);
 
     //Add listeners
-    this.el.onclick = () => client.selectAlbum(data);
-    playButton.onclick = () => client.player.queueFiles(data.songs);
+    this.el.onclick = () => app.selectAlbum(data);
+    playButton.onclick = () => app.player.queueFiles(data.songs);
 
     return this.el;
   }

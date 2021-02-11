@@ -39,8 +39,8 @@ function Nav() {
 
   this.handleClick = (e) => {
     this.select(e.target.id);
-    client.addToHistory(e.target.id);
-    client.changeView(e.target.id);
+    app.addToHistory(e.target.id);
+    app.changeView(e.target.id);
   }
 }
 

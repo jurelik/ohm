@@ -82,7 +82,7 @@ function ExploreView() {
       else {
         continue;
       }
-      client.content.appendChild(el);
+      app.content.appendChild(el);
     }
   }
 }

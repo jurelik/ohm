@@ -10,8 +10,8 @@ function Song(data, songView) {
 
   this.handlePlayButton = (e, song) => {
     e.stopPropagation();
-    client.playing ? e.target.innerHTML = this.playIcon : e.target.innerHTML = this.pauseIcon;
-    client.player.queueFile(song)
+    app.playing ? e.target.innerHTML = this.playIcon : e.target.innerHTML = this.pauseIcon;
+    app.player.queueFile(song)
   }
 
   this.render = () => {
@@ -51,8 +51,8 @@ function Song(data, songView) {
 
     //Add listeners
     this.el.onclick = () => {
-      client.addToHistory('song', { song: this.data, action: 'files' });
-      client.changeView('song', { song: this.data, action: 'files' });
+      app.addToHistory('song', { song: this.data, action: 'files' });
+      app.changeView('song', { song: this.data, action: 'files' });
     }
     playButton.onclick = (e) => this.handlePlayButton(e, this.data);
 

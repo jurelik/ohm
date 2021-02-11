@@ -23,7 +23,7 @@ function File(data) {
     this.el.appendChild(playButton);
 
     //Add listeners
-    playButton.onclick = () => client.player.queueFile(data);
+    playButton.onclick = () => app.player.queueFile(data);
 
     return this.el;
   }

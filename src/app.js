@@ -10,7 +10,7 @@ const SongView = require('./components/songView');
 const Player = require('./player');
 const Header = require('./header');
 
-function Client() {
+function App() {
   this.node;
   this.root = document.querySelector('.root');
   this.content = document.querySelector('.content');
