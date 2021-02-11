@@ -6,7 +6,7 @@ const fetch = require('node-fetch');
 
 const Nav = require('./nav');
 const ExploreView = require('./exploreView');
-const SongView = require('./songView');
+const SongView = require('./components/songView');
 const Player = require('./player');
 const Header = require('./header');
 
@@ -18,7 +18,6 @@ function Client() {
   this.headerEl = document.querySelector('.header');
   this.nav = new Nav();
   this.exploreView = new ExploreView();
-  this.songView = new SongView();
   this.player = new Player();
   this.header = new Header();
 
@@ -47,7 +46,8 @@ function Client() {
       case 'explore':
         return this.exploreView.render();
       case 'song':
-        return this.songView.render(data);
+        let songView = new SongView(data);
+        return this.content.appendChild(songView.render());
       default:
         return this.content.innerHTML = view;
     }
