@@ -10,7 +10,7 @@ function Files(data) {
 
     for (let _file of data) {
       let file = new File(_file);
-      this.files.appendChild(file);
+      this.el.appendChild(file.render());
     }
 
     return this.el;

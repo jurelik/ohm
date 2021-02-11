@@ -21,6 +21,7 @@ function Client() {
   this.player = new Player();
   this.header = new Header();
 
+  //State
   this.playing = false;
   this.history = [{ type: 'explore' }];
   this.historyIndex = 0;
@@ -46,7 +47,7 @@ function Client() {
       case 'explore':
         return this.exploreView.render();
       case 'song':
-        let songView = new SongView(data);
+        let songView = new SongView(data.song, data.action);
         return this.content.appendChild(songView.render());
       default:
         return this.content.innerHTML = view;
@@ -57,15 +58,6 @@ function Client() {
     this.header.backButton.className = 'enabled';
     this.header.forwardButton.className = 'disabled';
     this.historyIndex++;
-
-    //Check for duplicates on next index
-    //const len = this.historyIndex;
-    //if (this.history[len]) {
-    //  const _type = this.history[len].type;
-    //  const _dataId = this.history[len].data ? this.history[len].data.id : undefined;
-    //  if (data && type === _type && data.id === _dataId) return;
-    //  else if (!data && type === _type) return;
-    //}
 
     //Clear all history above current index
     this.history.splice(this.historyIndex);
