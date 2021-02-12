@@ -25,11 +25,11 @@ function Player() {
 
   this.handlePlayButton = () => {
     //Check if the current song is displayed in the current view
-    if (app.current.children[this.song.id]) {
+    if (this.song && app.current.children[this.song.id]) {
       app.current.children[this.song.id].handlePlayButtonRemote();
     }
 
-    this.play(this.song);
+    if (this.song) return this.play(this.song);
   }
 
   this.queueFile = (file) => {
