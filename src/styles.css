@@ -194,16 +194,29 @@ svg {
   display: none;
 }
 
+.song-view-main {
+  color: #888;
+  margin-left: 8px;
+}
+
+.song-view-main button {
+  padding: 0px;
+  margin-right: 10px;
+}
+
+.song-view-main .selected {
+  text-decoration: underline;
+  color: #eee;
+}
+
 .files {
   display: flex;
   flex-direction: column;
-  margin-left: 30px;
 }
 
 .file {
   display: flex;
   flex-direction: row;
-  margin-left: 20px;
   cursor: pointer;
 }
 
