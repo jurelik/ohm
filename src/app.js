@@ -24,6 +24,7 @@ function App() {
   this.playing = false;
   this.history = [];
   this.historyIndex = 0;
+  this.current = null;
 
   this.init = () => {
     this.header.render();
@@ -34,6 +35,7 @@ function App() {
     this.changeView('explore', testData);
     this.addToHistory('explore', testData);
     this.historyIndex = 0;
+    this.header.backButton.className = 'disabled';
 
     //Init an ipfs daemon & create an ipfs node
     ipcRenderer.on('daemon-ready', async () => {
@@ -49,9 +51,11 @@ function App() {
     switch (view) {
       case 'explore':
         let exploreView = new ExploreView(data);
+        this.current = exploreView;
         return exploreView.render();
       case 'song':
         let songView = new SongView(data.song, data.action);
+        this.current = songView;
         return this.content.appendChild(songView.render());
       default:
         return this.content.innerHTML = view;

@@ -34,7 +34,7 @@ let demoSong = {
 }
 
 let demoSong2 = {
-  id: 'aaa',
+  id: 'ddd',
   type: 'song',
   title: 'testTitle',
   artist: 'testArtist',
@@ -49,7 +49,7 @@ let demoSong2 = {
 testData.push(demoSong);
 
 testData.push({
-  id: 'aaa',
+  id: 'eee',
   type: 'album',
   title: 'testAlbumTitle',
   artist: 'testAlbumArtist',

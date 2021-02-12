@@ -23,6 +23,15 @@ function Player() {
     }
   }
 
+  this.handlePlayButton = () => {
+    //Check if the current song is displayed in the current view
+    if (app.current.children[this.song.id]) {
+      app.current.children[this.song.id].handlePlayButtonRemote();
+    }
+
+    this.play(this.song);
+  }
+
   this.queueFile = (file) => {
     //Check if queue is already loaded into player
     if (this.queue[0] !== file) {
@@ -73,7 +82,7 @@ function Player() {
     }
 
     //Add listeners
-    playButton.onclick = () => this.play(this.song);
+    playButton.onclick = this.handlePlayButton;
     this.audio.onended = this.handleOnEnded;
     this.audio.onplay = () => app.handlePlayPause(true);
     this.audio.onpause = () => app.handlePlayPause(false);

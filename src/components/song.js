@@ -10,8 +10,13 @@ function Song(data, songView) {
 
   this.handlePlayButton = (e, song) => {
     e.stopPropagation();
-    app.playing ? e.target.innerHTML = this.playIcon : e.target.innerHTML = this.pauseIcon;
+    app.player.state.playing ? e.target.innerHTML = this.playIcon : e.target.innerHTML = this.pauseIcon;
     app.player.queueFile(song)
+  }
+
+  this.handlePlayButtonRemote = () => {
+    let button = this.el.querySelector('button');
+    app.player.state.playing ? button.innerHTML = this.playIcon : button.innerHTML = this.pauseIcon;
   }
 
   this.render = () => {
