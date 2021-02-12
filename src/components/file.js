@@ -18,10 +18,11 @@ function File(data) {
 
   this.render = () => {
     //Create elements
-    let name = document.createElement('td');
-    let artist = document.createElement('td');
     let playButtonCell = document.createElement('td');
     let playButton = document.createElement('button');
+    let name = document.createElement('td');
+    let artist = document.createElement('td');
+    let type = document.createElement('td');
     let checkBoxCell = document.createElement('td');
     let checkBox = document.createElement('input');
 
@@ -29,15 +30,17 @@ function File(data) {
     this.el.classList.add('file');
 
     //Add attributes and innerHTML
+    playButton.innerHTML = this.playIcon;
     name.innerHTML = data.name;
     artist.innerHTML = data.artist;
-    playButton.innerHTML = this.playIcon;
+    type.innerHTML = data.fileType;
     checkBox.type = 'checkbox';
 
     //Build structure
     this.el.appendChild(playButtonCell);
     this.el.appendChild(name);
     this.el.appendChild(artist);
+    this.el.appendChild(type);
     this.el.appendChild(checkBoxCell);
     data.fileType === 'wav' || data.fileType === 'mp3' ? playButtonCell.appendChild(playButton) : null;
     checkBoxCell.appendChild(checkBox);

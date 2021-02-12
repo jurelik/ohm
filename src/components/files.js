@@ -10,18 +10,22 @@ function Files(data) {
     let playCell = document.createElement('th');
     let nameCell = document.createElement('th');
     let artistCell = document.createElement('th');
+    let typeCell = document.createElement('th');
     let downloadCell = document.createElement('th');
 
     this.el.className = 'files';
 
     playCell.innerHTML = '';
+    playCell.setAttribute('id', 'first');
     nameCell.innerHTML = 'name';
     artistCell.innerHTML = 'artist';
+    typeCell.innerHTML = 'type';
     downloadCell.innerHTML = 'download';
 
     header.appendChild(playCell);
     header.appendChild(nameCell);
     header.appendChild(artistCell);
+    header.appendChild(typeCell);
     header.appendChild(downloadCell);
 
     this.el.appendChild(header);
