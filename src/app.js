@@ -76,8 +76,7 @@ function App() {
     console.log(album);
   }
 
-  this.handlePlayPause = () => {
-    this.playing = !this.playing;
-    this.player.play();
+  this.handlePlayPause = (playing) => {
+    this.playing = playing;
   }
 }
