@@ -1,15 +1,37 @@
 const File = require('./file');
 
 function Files(data) {
-  this.el = document.createElement('div');
+  this.el = document.createElement('table');
   this.data = data;
   this.state = {};
 
   this.render = () => {
+    let header = document.createElement('tr');
+    let playCell = document.createElement('th');
+    let nameCell = document.createElement('th');
+    let artistCell = document.createElement('th');
+    let downloadCell = document.createElement('th');
+
     this.el.className = 'files';
+
+    playCell.innerHTML = '';
+    nameCell.innerHTML = 'name';
+    artistCell.innerHTML = 'artist';
+    downloadCell.innerHTML = 'download';
+
+    header.appendChild(playCell);
+    header.appendChild(nameCell);
+    header.appendChild(artistCell);
+    header.appendChild(downloadCell);
+
+    this.el.appendChild(header);
 
     for (let _file of data) {
       let file = new File(_file);
+
+      //Add file child to app.current for remote control
+      app.current.children[_file.id] = file;
+
       this.el.appendChild(file.render());
     }
 

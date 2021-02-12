@@ -162,7 +162,7 @@ svg {
   width: 25px;
 }
 
-.song .main .separator {
+.separator {
   margin-left: 5px;
   margin-right: 5px;
 }
@@ -209,14 +209,7 @@ svg {
   color: #eee;
 }
 
-.files {
-  display: flex;
-  flex-direction: column;
-}
-
-.file {
-  display: flex;
-  flex-direction: row;
+.file input[type=checkbox] {
   cursor: pointer;
 }
 

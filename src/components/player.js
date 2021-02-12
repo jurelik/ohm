@@ -18,7 +18,10 @@ function Player() {
       this.play(this.queue[this.queuePosition]);
     }
     else {
-      app.playing = false;
+      app.current.children[this.song.id].handlePlayButtonRemote();
+      this.state.playing = false;
+      this.el.innerHTML = '';
+      this.render();
       this.queuePosition = 0;
     }
   }
@@ -35,6 +38,9 @@ function Player() {
   this.queueFile = (file) => {
     //Check if queue is already loaded into player
     if (this.queue[0] !== file) {
+      //If another song is playing handle the playButton before changing file
+      this.song && this.state.playing ? app.current.children[this.song.id].handlePlayButtonRemote() : null;
+
       this.queue = [file];
       this.queuePosition = 0;
     }

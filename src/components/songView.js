@@ -11,8 +11,10 @@ function SongView(data, action) {
   this.render = () => {
     let action = this.action || 'files';
     let song = new Song(data, true);
-    this.children[data.id] = song;
     let main = new SongViewMain(data, action);
+
+    //Add song child for remote control
+    this.children[data.id] = song;
 
     this.el.appendChild(song.render());
     this.el.appendChild(main.render());
