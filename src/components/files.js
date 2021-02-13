@@ -33,8 +33,8 @@ function Files(data) {
     for (let _file of data) {
       let file = new File(_file);
 
-      //Add file child to app.current for remote control
-      app.current.children[_file.id] = file;
+      //Add file child to app.songView for remote control
+      app.songView.children[_file.id] = file;
 
       this.el.appendChild(file.render());
     }

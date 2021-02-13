@@ -19,6 +19,8 @@ function App() {
   this.nav = new Nav();
   this.player = new Player();
   this.header = new Header();
+  this.exploreView = null;
+  this.songView = null;
 
   //State
   this.playing = false;
@@ -50,13 +52,11 @@ function App() {
 
     switch (view) {
       case 'explore':
-        let exploreView = new ExploreView(testData); //TEST DATA - data will be fetched in the future
-        this.current = exploreView;
-        return exploreView.render();
+        this.exploreView = new ExploreView(testData); //TEST DATA - data will be fetched in the future
+        return this.exploreView.render();
       case 'song':
-        let songView = new SongView(data.song, data.action);
-        this.current = songView;
-        return this.content.appendChild(songView.render());
+        this.songView = new SongView(data.song, data.action);
+        return this.content.appendChild(this.songView.render());
       default:
         return this.content.innerHTML = view;
     }
@@ -75,6 +75,12 @@ function App() {
       data
     });
   }
+
+  this.updatePlayButtons = (id) => {
+    this.exploreView.children[id] ? this.exploreView.children[id].handlePlayButtonRemote() : null;
+    this.songView.children[id] ? this.songView.children[id].handlePlayButtonRemote() : null;
+  }
+
 
   this.selectAlbum = (album) => {
     console.log(album);

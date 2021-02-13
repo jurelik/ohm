@@ -38,7 +38,7 @@ function Song(data, songView) {
     artist.innerHTML = this.data.artist;
     separator.innerHTML = '•';
     title.innerHTML = this.data.title;
-    playButton.innerHTML = this.playIcon;
+    playButton.innerHTML = app.player.state.playing && app.player.song === this.data ? this.pauseIcon : this.playIcon;
 
     //Build structure
     this.el.appendChild(main);
