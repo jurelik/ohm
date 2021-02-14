@@ -7,7 +7,7 @@ let demoFile1 = {
   name: 'demo1',
   artist: 'testArtist',
   url: '/ipfs/QmQpbUHhJgq7JeFMGDjXP22cREPYaMGa5TZnZ48dHDFQgc',
-  tags: ['kick', 'wav']
+  tags: ['kick', 'hiphop']
 }
 
 let demoFile2 = {
@@ -17,12 +17,13 @@ let demoFile2 = {
   name: 'demo2',
   artist: 'testArtist',
   url: '/ipfs/QmTp7eeKm1ymt6SZD3SPMD3mKkAFomE8x5xtJhqK48a8qy',
-  tags: ['snare', 'wav']
+  tags: ['snare', 'hiphop']
 }
 
 let demoSong = {
   id: 'aaa',
   type: 'song',
+  fileType: 'mp3',
   title: 'testTitle',
   artist: 'testArtist',
   art: '/ipfs/QmWVc2saSwaTy7h3j6idN8U2jL6kqhMsoReFsf56vwfXr6',
@@ -36,6 +37,7 @@ let demoSong = {
 let demoSong2 = {
   id: 'ddd',
   type: 'song',
+  fileType: 'wav',
   title: 'testTitle',
   artist: 'testArtist',
   art: '/ipfs/QmWVc2saSwaTy7h3j6idN8U2jL6kqhMsoReFsf56vwfXr6',
@@ -47,13 +49,13 @@ let demoSong2 = {
 }
 
 testData.push(demoSong);
+testData.push(demoSong2);
 
 testData.push({
   id: 'eee',
   type: 'album',
   title: 'testAlbumTitle',
   artist: 'testAlbumArtist',
-  art: '/ipfs/QmWVc2saSwaTy7h3j6idN8U2jL6kqhMsoReFsf56vwfXr6',
   songs: [this.demoSong2, this.demoSong],
   url: '/ipfs/QmU1B9JdMvhm4EB8kj487GfwQzfVtocKCm9XNAHkUtHz4f',
   tags: ['edm', 'dub']

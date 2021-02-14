@@ -23,6 +23,7 @@ function File(data) {
     let name = document.createElement('td');
     let artist = document.createElement('td');
     let type = document.createElement('td');
+    let tags = document.createElement('td');
     let checkBoxCell = document.createElement('td');
     let checkBox = document.createElement('input');
 
@@ -34,6 +35,7 @@ function File(data) {
     name.innerHTML = data.name;
     artist.innerHTML = data.artist;
     type.innerHTML = data.fileType;
+    tags.innerHTML = data.tags.join(', ')
     checkBox.type = 'checkbox';
 
     //Build structure
@@ -41,6 +43,7 @@ function File(data) {
     this.el.appendChild(name);
     this.el.appendChild(artist);
     this.el.appendChild(type);
+    this.el.appendChild(tags);
     this.el.appendChild(checkBoxCell);
     data.fileType === 'wav' || data.fileType === 'mp3' ? playButtonCell.appendChild(playButton) : null;
     checkBoxCell.appendChild(checkBox);

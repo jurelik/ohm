@@ -1,4 +1,4 @@
-const ActionBar = require('./actionBar');
+const ActionBarSong = require('./actionBarSong');
 
 function Song(data, songView) {
   this.el = document.createElement('div');
@@ -50,7 +50,7 @@ function Song(data, songView) {
 
     //Add action bar
     if (!this.songView) {
-      let actionBar = new ActionBar(this.data);
+      let actionBar = new ActionBarSong(this.data);
       this.el.appendChild(actionBar.render());
     }
 

@@ -1,40 +1,58 @@
+//const ActionBar = require('./actionBar');
+
 function Album(data) {
   this.el = document.createElement('div');
   this.data = data;
   this.state = {};
+  this.playIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="408.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M443.75 255c-8.285 0-15 6.716-15 15h0v120c0 8.285 6.715 15 15 15h0l120-60c10-10 10-20 0-30h0l-120-60"/><path fill="none" d="M408.5 238.5h183v183h-183z"/></svg>';
+  this.pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="534.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M566 255h0v150h30V255h-30m120 0h0-30v150h30V255"/><path fill="none" d="M534.5 238.5h183v183h-183z"/></svg>'
+  this.albumIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="538.5 238.5 183 183"><path fill="none" stroke="#EEE" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" d="M555 405h105V285h-90c-8.285 0-15 6.716-15 15h0v105m150-150h0-90c-8.285 0-15 6.716-15 15h0v15m60 90h45V255"/><path fill="none" d="M538.5 238.5h183v183h-183v-183z"/></svg></svg>';
 
   this.render = () => {
     //Create elements
     let main = document.createElement('div');
     let titleAndArtist = document.createElement('div');
-    let art = document.createElement('img');
-    let title = document.createElement('p');
     let artist = document.createElement('p');
+    let separator = document.createElement('p');
+    let title = document.createElement('p');
     let playButton = document.createElement('button');
+    let albumIcon = document.createElement('div');
 
     //Add classes for styling
     this.el.classList.add('album');
     main.classList.add('main');
     titleAndArtist.classList.add('titleAndArtist');
-    art.classList.add('art');
+    separator.classList.add('separator');
+    albumIcon.classList.add('album-icon');
 
     //Add attributes and innerHTML
-    art.setAttribute('src', `http://127.0.0.1:8080${data.art}`)
-    title.innerHTML = data.title;
-    artist.innerHTML = data.artist;
-    playButton.innerHTML = 'play/pause';
+    artist.innerHTML = this.data.artist;
+    separator.innerHTML = '•';
+    title.innerHTML = this.data.title;
+    playButton.innerHTML = this.playIcon;
+    albumIcon.innerHTML = this.albumIcon;
 
     //Build structure
     this.el.appendChild(main);
-    main.appendChild(art);
-    main.appendChild(titleAndArtist);
-    titleAndArtist.appendChild(title);
-    titleAndArtist.appendChild(artist);
     main.appendChild(playButton);
+    main.appendChild(titleAndArtist);
+    main.appendChild(albumIcon);
+    titleAndArtist.appendChild(artist);
+    titleAndArtist.appendChild(separator);
+    titleAndArtist.appendChild(title);
+
+    //Add action bar
+    //if (!this.songView) {
+    //  let actionBar = new ActionBar(this.data);
+    //  this.el.appendChild(actionBar.render());
+    //}
 
     //Add listeners
-    this.el.onclick = () => app.selectAlbum(data);
-    playButton.onclick = () => app.player.queueFiles(data.songs);
+    //this.el.onclick = () => {
+    //  app.addToHistory('song', { song: this.data, action: 'files' });
+    //  app.changeView('song', { song: this.data, action: 'files' });
+    //}
+    //playButton.onclick = (e) => this.handlePlayButton(e, this.data);
 
     return this.el;
   }

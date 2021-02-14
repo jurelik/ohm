@@ -153,19 +153,28 @@ td button {
 .album .main {
   display: flex;
   flex-direction: row;
+  align-items: center;
   cursor: pointer;
 }
 
 .album .main .titleAndArtist {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-content: flex-start;
 }
 
-.album .art {
-  object-fit: cover;
-  height: 50px;
-  width: 50px;
+.album .main button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+}
+
+.album .main .album-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
 }
 
 /* song element */

@@ -11,6 +11,7 @@ function Files(data) {
     let nameCell = document.createElement('th');
     let artistCell = document.createElement('th');
     let typeCell = document.createElement('th');
+    let tagsCell = document.createElement('th');
     let downloadCell = document.createElement('th');
 
     this.el.className = 'files';
@@ -20,15 +21,21 @@ function Files(data) {
     nameCell.innerHTML = 'name';
     artistCell.innerHTML = 'artist';
     typeCell.innerHTML = 'type';
+    tagsCell.innerHTML = 'tags';
     downloadCell.innerHTML = 'download';
 
     header.appendChild(playCell);
     header.appendChild(nameCell);
     header.appendChild(artistCell);
     header.appendChild(typeCell);
+    header.appendChild(tagsCell);
     header.appendChild(downloadCell);
 
     this.el.appendChild(header);
+
+    //Include song as a file element
+    let songFile = new File(app.songView.data);
+    this.el.appendChild(songFile.render());
 
     for (let _file of data) {
       let file = new File(_file);
