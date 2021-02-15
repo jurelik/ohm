@@ -60,14 +60,18 @@ function Header() {
     //Create elements
     let back = document.createElement('button');
     let forward = document.createElement('button');
+    let right = document.createElement('div');
+    let upload = document.createElement('button');
 
     //Add innerHTML
     back.innerHTML = this.backIcon;
     forward.innerHTML = this.forwardIcon;
+    upload.innerHTML = 'upload';
 
     //Add classes
     forward.classList.add('disabled');
     back.classList.add('disabled');
+    right.classList.add('header-right');
 
     //Add listeners
     back.onclick = this.handleBack;
@@ -79,6 +83,8 @@ function Header() {
 
     this.el.appendChild(back);
     this.el.appendChild(forward);
+    this.el.appendChild(right);
+    right.appendChild(upload);
   }
 }
 

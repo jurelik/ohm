@@ -7,6 +7,7 @@ const fetch = require('node-fetch');
 const Nav = require('./components/nav');
 const ExploreView = require('./components/exploreView');
 const SongView = require('./components/songView');
+const AlbumView = require('./components/albumView');
 const Player = require('./components/player');
 const Header = require('./components/header');
 
@@ -21,6 +22,7 @@ function App() {
   this.header = new Header();
   this.exploreView = null;
   this.songView = null;
+  this.albumView = null;
 
   //State
   this.playing = false;
@@ -57,6 +59,9 @@ function App() {
       case 'song':
         this.songView = new SongView(data.song, data.action);
         return this.content.appendChild(this.songView.render());
+      case 'album':
+        this.albumView = new AlbumView(data.album);
+        return this.content.appendChild(this.albumView.render());
       default:
         return this.content.innerHTML = view;
     }

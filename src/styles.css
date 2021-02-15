@@ -78,6 +78,13 @@ td button {
   padding-left: 5px;
 }
 
+.header .header-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: auto;
+}
+
 .header button {
   margin-right: 5px;
 }
@@ -148,6 +155,7 @@ td button {
 .album {
   display: flex;
   flex-direction: column;
+  margin-bottom: 5px;
 }
 
 .album .main {
@@ -155,6 +163,17 @@ td button {
   flex-direction: row;
   align-items: center;
   cursor: pointer;
+}
+
+.album .actions {
+  font-size: 10px;
+  color: #888;
+  margin-left: 25px;
+}
+
+.album .actions button {
+  padding: 0px;
+  margin-right: 10px;
 }
 
 .album .main .titleAndArtist {
@@ -175,6 +194,10 @@ td button {
   justify-content: center;
   align-items: center;
   width: 25px;
+}
+
+.albumView .song {
+  margin-left: 18px;
 }
 
 /* song element */
@@ -224,16 +247,6 @@ td button {
   object-fit: cover;
   height: 50px;
   width: 50px;
-}
-
-.song .files-visible {
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.song .files-hidden {
-  display: none;
 }
 
 .song-view-main {

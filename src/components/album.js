@@ -1,4 +1,4 @@
-//const ActionBar = require('./actionBar');
+const ActionBarAlbum = require('./actionBarAlbum');
 
 function Album(data) {
   this.el = document.createElement('div');
@@ -42,17 +42,17 @@ function Album(data) {
     titleAndArtist.appendChild(title);
 
     //Add action bar
-    //if (!this.songView) {
-    //  let actionBar = new ActionBar(this.data);
-    //  this.el.appendChild(actionBar.render());
-    //}
+    if (!this.songView) {
+      let actionBar = new ActionBarAlbum(this.data);
+      this.el.appendChild(actionBar.render());
+    }
 
     //Add listeners
-    //this.el.onclick = () => {
-    //  app.addToHistory('song', { song: this.data, action: 'files' });
-    //  app.changeView('song', { song: this.data, action: 'files' });
-    //}
-    //playButton.onclick = (e) => this.handlePlayButton(e, this.data);
+    this.el.onclick = () => {
+      app.addToHistory('album', { album: this.data, action: 'files' });
+      app.changeView('album', { album: this.data, action: 'files' });
+    }
+    playButton.onclick = (e) => this.handlePlayButton(e, this.data);
 
     return this.el;
   }

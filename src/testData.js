@@ -56,7 +56,7 @@ testData.push({
   type: 'album',
   title: 'testAlbumTitle',
   artist: 'testAlbumArtist',
-  songs: [this.demoSong2, this.demoSong],
+  songs: [demoSong2, demoSong],
   url: '/ipfs/QmU1B9JdMvhm4EB8kj487GfwQzfVtocKCm9XNAHkUtHz4f',
   tags: ['edm', 'dub']
 });
