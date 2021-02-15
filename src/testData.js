@@ -20,6 +20,16 @@ let demoFile2 = {
   tags: ['snare', 'hiphop']
 }
 
+let demoFile3 = {
+  id: 'xxx',
+  type: 'internal',
+  fileType: 'wav',
+  name: 'demo3',
+  artist: 'testArtistX',
+  url: '/ipfs/QmU1B9JdMvhm4EB8kj487GfwQzfVtocKCm9XNAHkUtHz4f',
+  tags: ['snare', 'hiphop']
+}
+
 let demoSong = {
   id: 'aaa',
   type: 'song',
@@ -28,7 +38,7 @@ let demoSong = {
   artist: 'testArtist',
   art: '/ipfs/QmWVc2saSwaTy7h3j6idN8U2jL6kqhMsoReFsf56vwfXr6',
   url: '/ipfs/QmU1B9JdMvhm4EB8kj487GfwQzfVtocKCm9XNAHkUtHz4f',
-  files: [ demoFile1, demoFile2 ],
+  files: [ demoFile1, demoFile2, demoFile3 ],
   comments: ['hi', 'ho'],
   pins: ['1', '2'],
   tags: ['lofi', 'hiphop']

@@ -8,6 +8,17 @@ function Album(data) {
   this.pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="534.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M566 255h0v150h30V255h-30m120 0h0-30v150h30V255"/><path fill="none" d="M534.5 238.5h183v183h-183z"/></svg>'
   this.albumIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="538.5 238.5 183 183"><path fill="none" stroke="#EEE" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" d="M555 405h105V285h-90c-8.285 0-15 6.716-15 15h0v105m150-150h0-90c-8.285 0-15 6.716-15 15h0v15m60 90h45V255"/><path fill="none" d="M538.5 238.5h183v183h-183v-183z"/></svg></svg>';
 
+  this.handlePlayButton = (e) => {
+    e.stopPropagation();
+    app.player.state.playing ? e.target.innerHTML = this.playIcon : e.target.innerHTML = this.pauseIcon;
+    app.player.queueFiles(this.data)
+  }
+
+  this.handlePlayButtonRemote = () => {
+    let button = this.el.querySelector('button');
+    app.player.state.playing ? button.innerHTML = this.playIcon : button.innerHTML = this.pauseIcon;
+  }
+
   this.render = () => {
     //Create elements
     let main = document.createElement('div');
@@ -52,7 +63,7 @@ function Album(data) {
       app.addToHistory('album', { album: this.data, action: 'files' });
       app.changeView('album', { album: this.data, action: 'files' });
     }
-    playButton.onclick = (e) => this.handlePlayButton(e, this.data);
+    playButton.onclick = (e) => this.handlePlayButton(e, this.data.songs);
 
     return this.el;
   }

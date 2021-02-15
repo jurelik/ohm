@@ -33,18 +33,15 @@ function Files(data) {
 
     this.el.appendChild(header);
 
-    //Include song as a file element
-    let songFile = new File(app.songView.data);
-    this.el.appendChild(songFile.render());
-
     for (let _file of data) {
       let file = new File(_file);
 
       //Add file child to app.songView for remote control
-      app.songView.children[_file.id] = file;
+      app.songView.children.files[_file.id] = file;
 
       this.el.appendChild(file.render());
     }
+    console.log(app.songView.children)
 
     return this.el;
   }

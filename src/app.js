@@ -81,14 +81,21 @@ function App() {
     });
   }
 
-  this.updatePlayButtons = (id) => {
-    this.exploreView.children[id] ? this.exploreView.children[id].handlePlayButtonRemote() : null;
-    this.songView.children[id] ? this.songView.children[id].handlePlayButtonRemote() : null;
-  }
-
-
-  this.selectAlbum = (album) => {
-    console.log(album);
+  this.updatePlayButtons = (id, type) => {
+    if (type === 'song') {
+      this.exploreView.children.songs[id] ? this.exploreView.children.songs[id].handlePlayButtonRemote() : null;
+      this.songView && this.songView.children.song.data.id === id ? this.songView.children.song.handlePlayButtonRemote() : null;
+      if (this.albumView && this.albumView.children.songs[id]) {
+        this.albumView.children.songs[id].handlePlayButtonRemote()
+      }
+    }
+    else if (type === 'original' || type === 'internal' || type === 'external') {
+      this.songView && this.songView.children.files[id] ? this.songView.children.files[id].handlePlayButtonRemote() : null;
+    }
+    else if (type === 'album') {
+      this.exploreView.children.albums[id] ? this.exploreView.children.albums[id].handlePlayButtonRemote() : null;
+      this.albumView && this.albumView.children.album.data.id === id ? this.albumView.children.album.handlePlayButtonRemote() : null;
+    }
   }
 
   this.handlePlayPause = (playing) => {

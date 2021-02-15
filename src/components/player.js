@@ -2,6 +2,7 @@ function Player() {
   this.el = document.querySelector('.player');
   this.audio = document.querySelector('audio');
   this.song = null;
+  this.album = null;
   this.queue = [];
   this.queuePosition = 0;
   this.playIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="408.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M443.75 255c-8.285 0-15 6.716-15 15h0v120c0 8.285 6.715 15 15 15h0l120-60c10-10 10-20 0-30h0l-120-60"/><path fill="none" d="M408.5 238.5h183v183h-183z"/></svg>';
@@ -15,10 +16,14 @@ function Player() {
     this.queuePosition++;
 
     if (this.queue[this.queuePosition]) {
+      app.updatePlayButtons(this.song.id, this.song.type);
+      this.state.playing = false;
+      app.updatePlayButtons(this.album.songs[this.queuePosition].id, 'song');
       this.play(this.queue[this.queuePosition]);
     }
     else {
-      app.updatePlayButtons(this.song.id);
+      app.updatePlayButtons(this.song.id, this.song.type);
+      this.album ? app.updatePlayButtons(this.album.id, 'album') : null;
       this.state.playing = false;
       this.el.innerHTML = '';
       this.render();
@@ -29,17 +34,21 @@ function Player() {
   this.handlePlayButton = () => {
     //Check if the current song is displayed in the current view
     if (this.song) {
-      app.updatePlayButtons(this.song.id);
+      app.updatePlayButtons(this.song.id, this.song.type);
+      this.album ? app.updatePlayButtons(this.album.id, 'album') : null;
     }
 
     if (this.song) return this.play(this.song);
   }
 
   this.queueFile = (file) => {
+    //Reset this.album
+    this.album = null;
+
     //Check if queue is already loaded into player
     if (this.queue[0] !== file) {
       //If another song is playing handle the playButton before changing file
-      this.song && this.state.playing ? app.updatePlayButtons() : null;
+      if (this.song && this.state.playing) app.updatePlayButtons(this.song.id, this.song.type);
 
       this.queue = [file];
       this.queuePosition = 0;
@@ -48,10 +57,13 @@ function Player() {
     return this.play(this.queue[this.queuePosition]);
   }
 
-  this.queueFiles = (list) => {
+  this.queueFiles = (album) => {
+    this.album = album;
+    app.updatePlayButtons(this.album.songs[this.queuePosition].id, 'song');
+
     //Check if queue is already loaded into player
-    if (this.queue !== list) {
-      this.queue = list;
+    if (this.queue !== album.songs) {
+      this.queue = album.songs;
       this.queuePosition = 0;
     }
 
