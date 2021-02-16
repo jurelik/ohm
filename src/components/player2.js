@@ -27,15 +27,28 @@ function Player() {
 
   this.handleOnEnded = () => {
     this.playing = false;
-    this.handleRemoteTriggers(this.current.id);
+    this.handleRemoteTriggers(this.current.id, this.current.type);
     this.reRender();
   }
 
-  this.handleRemoteTriggers = (id) => {
+  this.handleRemoteTriggers = (id, type) => {
     for (let _view in app.views) {
       let view = app.views[_view];
-      if (view !== null) {
-        view.children.songs[id].remotePlayButtonTrigger();
+      if (view === null) {
+        continue;
+      }
+
+      switch (_view) {
+        case 'exploreView':
+          if (type === 'song' && view.children.songs[id]) view.children.songs[id].remotePlayButtonTrigger();
+          break;
+        case 'songView':
+          if (type === 'song' && view.children.song.data.id === id) view.children.song.remotePlayButtonTrigger();
+          if (this.isFile(type) && view.children.files[id]) view.children.files[id].remotePlayButtonTrigger();
+          break;
+        default:
+          console.error('view not recognized');
+          break;
       }
     }
   }
@@ -43,6 +56,10 @@ function Player() {
   this.handlePlayButton = () => {
     this.handleRemoteTriggers(this.current.id);
     this.play();
+  }
+
+  this.isFile = (type) => {
+    return type === 'original' || type === 'internal' || type === 'external';
   }
 
   this.updateSrc = () => {
@@ -56,7 +73,7 @@ function Player() {
     }
 
     //Change the playing state on previous file
-    if(this.current && this.playing) this.handleRemoteTriggers(this.current.id);
+    if(this.current && this.playing) this.handleRemoteTriggers(this.current.id, this.current.type);
 
     this.playing = false;
     this.queue = [file];
