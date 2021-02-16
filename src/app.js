@@ -8,7 +8,7 @@ const Nav = require('./components/nav');
 const ExploreView = require('./components/exploreView');
 const SongView = require('./components/songView');
 const AlbumView = require('./components/albumView');
-const Player = require('./components/player');
+const Player = require('./components/player2');
 const Header = require('./components/header');
 
 const testData = require('./testData');
@@ -20,9 +20,11 @@ function App() {
   this.nav = new Nav();
   this.player = new Player();
   this.header = new Header();
-  this.exploreView = null;
-  this.songView = null;
-  this.albumView = null;
+  this.views = {
+    exploreView: null,
+    songView: null,
+    albumView: null
+  }
 
   //State
   this.playing = false;
@@ -54,14 +56,14 @@ function App() {
 
     switch (view) {
       case 'explore':
-        this.exploreView = new ExploreView(testData); //TEST DATA - data will be fetched in the future
-        return this.exploreView.render();
+        this.views.exploreView = new ExploreView(testData); //TEST DATA - data will be fetched in the future
+        return this.views.exploreView.render();
       case 'song':
-        this.songView = new SongView(data.song, data.action);
-        return this.content.appendChild(this.songView.render());
+        this.views.songView = new SongView(data.song, data.action);
+        return this.content.appendChild(this.views.songView.render());
       case 'album':
-        this.albumView = new AlbumView(data.album);
-        return this.content.appendChild(this.albumView.render());
+        this.views.albumView = new AlbumView(data.album);
+        return this.content.appendChild(this.views.albumView.render());
       default:
         return this.content.innerHTML = view;
     }
@@ -79,26 +81,5 @@ function App() {
       type,
       data
     });
-  }
-
-  this.updatePlayButtons = (id, type) => {
-    if (type === 'song') {
-      this.exploreView.children.songs[id] ? this.exploreView.children.songs[id].handlePlayButtonRemote() : null;
-      this.songView && this.songView.children.song.data.id === id ? this.songView.children.song.handlePlayButtonRemote() : null;
-      if (this.albumView && this.albumView.children.songs[id]) {
-        this.albumView.children.songs[id].handlePlayButtonRemote()
-      }
-    }
-    else if (type === 'original' || type === 'internal' || type === 'external') {
-      this.songView && this.songView.children.files[id] ? this.songView.children.files[id].handlePlayButtonRemote() : null;
-    }
-    else if (type === 'album') {
-      this.exploreView.children.albums[id] ? this.exploreView.children.albums[id].handlePlayButtonRemote() : null;
-      this.albumView && this.albumView.children.album.data.id === id ? this.albumView.children.album.handlePlayButtonRemote() : null;
-    }
-  }
-
-  this.handlePlayPause = (playing) => {
-    this.playing = playing;
   }
 }

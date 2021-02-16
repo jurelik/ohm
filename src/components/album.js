@@ -14,11 +14,6 @@ function Album(data) {
     app.player.queueFiles(this.data)
   }
 
-  this.handlePlayButtonRemote = () => {
-    let button = this.el.querySelector('button');
-    app.player.state.playing ? button.innerHTML = this.playIcon : button.innerHTML = this.pauseIcon;
-  }
-
   this.render = () => {
     //Create elements
     let main = document.createElement('div');
