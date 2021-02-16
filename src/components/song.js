@@ -14,7 +14,7 @@ function Song(data, view) {
 
     this.setPlaying(!this.playing);
     this.reRender();
-    app.player.queueFile(this.data);
+    this.view === 'albumView' ? app.player.queueFiles(app.views.albumView.data.songs, this.getPosition(), 'song') : app.player.queueFile(this.data);
   }
 
   this.remotePlayButtonTrigger = () => {
@@ -29,6 +29,10 @@ function Song(data, view) {
   this.reRender = () => {
     this.el.innerHTML = '';
     this.render();
+  }
+
+  this.getPosition = () => {
+    return app.views.albumView.data.songs.indexOf(this.data);
   }
 
   this.render = () => {

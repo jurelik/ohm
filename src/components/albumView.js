@@ -24,7 +24,7 @@ function AlbumView(data, action) {
     this.el.appendChild(album.render());
 
     for (let _song of this.data.songs) {
-      let song = new Song(_song);
+      let song = new Song(_song, 'albumView');
 
       //Add file child to app.songView for remote control
       this.children.songs[_song.id] = song;

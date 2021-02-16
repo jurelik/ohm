@@ -27,11 +27,19 @@ function Player() {
 
   this.handleOnEnded = () => {
     this.playing = false;
-    this.handleRemoteTriggers(this.current.id, this.current.type);
+    this.handleRemoteTriggers(this.current.id, this.current.type, 'end');
     this.reRender();
+
+    //Continue playing if more items are in the queue
+    this.queuePosition++;
+    if (this.queuePosition > this.queue.length - 1) return this.queuePosition = 0;
+    this.current = this.queue[this.queuePosition];
+    this.updateSrc();
+    this.handleRemoteTriggers(this.current.id, this.current.type, 'autoplay');
+    this.play();
   }
 
-  this.handleRemoteTriggers = (id, type) => {
+  this.handleRemoteTriggers = (id, type, triggeredBy) => {
     for (let _view in app.views) {
       let view = app.views[_view];
       if (view === null) {
@@ -41,20 +49,95 @@ function Player() {
       switch (_view) {
         case 'exploreView':
           if (type === 'song' && view.children.songs[id]) view.children.songs[id].remotePlayButtonTrigger();
+          if (type === 'song' && triggeredBy === 'main') this.reRenderAlbum(view.children.albums); //re-render to check if any children are playing
           break;
         case 'songView':
           if (type === 'song' && view.children.song.data.id === id) view.children.song.remotePlayButtonTrigger();
           if (this.isFile(type) && view.children.files[id]) view.children.files[id].remotePlayButtonTrigger();
           break;
+        case 'albumView':
+          if (type === 'song' && view.children.songs[id] && triggeredBy === 'end') view.children.songs[id].remotePlayButtonTrigger();
+          if (type === 'song' && view.children.songs[id] && triggeredBy === 'album') view.children.songs[id].remotePlayButtonTrigger();
+          if (type === 'song' && view.children.songs[id] && triggeredBy === 'song') view.children.album.remotePlayButtonTrigger();
+          if (type === 'song' && view.children.songs[id] && triggeredBy === 'autoplay') view.children.songs[id].remotePlayButtonTrigger();
+          if (type === 'song' && view.children.songs[id] && triggeredBy === 'whilePlaying') {
+            view.children.songs[id].remotePlayButtonTrigger();
+            view.children.album.remotePlayButtonTrigger();
+          }
+          if (type === 'song' && view.children.songs[id] && triggeredBy === 'main') {
+            view.children.songs[id].remotePlayButtonTrigger();
+            view.children.album.remotePlayButtonTrigger();
+          }
+          break;
         default:
           console.error('view not recognized');
           break;
       }
+
+      //switch (_view) {
+      //  case 'exploreView':
+      //    if (type === 'song' && view.children.songs[id]) {
+      //      view.children.songs[id].remotePlayButtonTrigger();
+      //      break;
+      //    }
+      //    if (type === 'song' && triggeredBy === 'main') {
+      //      this.reRenderAlbum(view.children.albums); //re-render to check if any children are playing
+      //      break;
+      //    }
+      //    break;
+      //  case 'songView':
+      //    if (type === 'song' && view.children.song.data.id === id) {
+      //      view.children.song.remotePlayButtonTrigger();
+      //      break;
+      //    }
+      //    if (this.isFile(type) && view.children.files[id]) {
+      //      view.children.files[id].remotePlayButtonTrigger();
+      //      break;
+      //    }
+      //    break;
+      //  case 'albumView':
+      //    if (type === 'song' && view.children.songs[id] && triggeredBy === 'end') {
+      //      view.children.songs[id].remotePlayButtonTrigger();
+      //      break;
+      //    }
+      //    if (type === 'song' && view.children.songs[id] && triggeredBy === 'album') {
+      //      view.children.songs[id].remotePlayButtonTrigger();
+      //      break;
+      //    }
+      //    if (type === 'song' && view.children.songs[id] && triggeredBy === 'song') {
+      //      view.children.album.remotePlayButtonTrigger();
+      //      break;
+      //    }
+      //    if (type === 'song' && view.children.songs[id] && triggeredBy === 'autoplay') {
+      //      view.children.songs[id].remotePlayButtonTrigger();
+      //      break;
+      //    }
+      //    if (type === 'song' && view.children.songs[id] && triggeredBy === 'whilePlaying') {
+      //      view.children.songs[id].remotePlayButtonTrigger();
+      //      view.children.album.remotePlayButtonTrigger();
+      //      break;
+      //    }
+      //    if (type === 'song' && view.children.songs[id] && triggeredBy === 'main') {
+      //      view.children.songs[id].remotePlayButtonTrigger();
+      //      view.children.album.remotePlayButtonTrigger();
+      //      break;
+      //    }
+      //    break;
+      //  default:
+      //    console.error('view not recognized');
+      //    break;
+      //}
+    }
+  }
+
+  this.reRenderAlbum = (albums) => {
+    for (let album in albums) {
+      albums[album].remoteReRender();
     }
   }
 
   this.handlePlayButton = () => {
-    this.handleRemoteTriggers(this.current.id);
+    this.handleRemoteTriggers(this.current.id, this.current.type, 'main');
     this.play();
   }
 
@@ -79,6 +162,25 @@ function Player() {
     this.queue = [file];
     this.current = file;
     this.updateSrc();
+    this.play();
+  }
+
+  this.queueFiles = (files, position, triggeredBy) => {
+    //Check if queue is already loaded and we are playing the same song
+    if (this.queue === files && this.queuePosition === position) {
+      this.handleRemoteTriggers(this.current.id, this.current.type, triggeredBy);
+      return this.play();
+    }
+
+    //Change the playing state on previous song
+    if(this.current && this.playing) this.handleRemoteTriggers(this.current.id, this.current.type, 'whilePlaying');
+
+    this.playing = false;
+    this.queue = files;
+    this.queuePosition = position;
+    this.current = files[this.queuePosition];
+    this.updateSrc();
+    this.handleRemoteTriggers(this.current.id, this.current.type, triggeredBy);
     this.play();
   }
 
