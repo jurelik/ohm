@@ -23,6 +23,9 @@ function Header() {
       case 'song':
         app.historyIndex--;
         return app.changeView(view.type, view.data);
+      case 'album':
+        app.historyIndex--;
+        return app.changeView(view.type, view.data);
       default:
         app.historyIndex--;
         app.nav.select(view.type)
@@ -48,6 +51,9 @@ function Header() {
     switch (view.type) {
       case 'song':
         app.historyIndex++;
+        return app.changeView(view.type, view.data);
+      case 'album':
+        app.historyIndex--;
         return app.changeView(view.type, view.data);
       default:
         app.historyIndex++;
