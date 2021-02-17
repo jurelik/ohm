@@ -8,6 +8,7 @@ const Nav = require('./components/nav');
 const ExploreView = require('./components/exploreView');
 const SongView = require('./components/songView');
 const AlbumView = require('./components/albumView');
+const ArtistView = require('./components/artistView');
 const Player = require('./components/player');
 const Header = require('./components/header');
 
@@ -23,7 +24,8 @@ function App() {
   this.views = {
     exploreView: null,
     songView: null,
-    albumView: null
+    albumView: null,
+    artistView: null
   }
 
   //State
@@ -64,6 +66,9 @@ function App() {
       case 'album':
         this.views.albumView = new AlbumView(data.album);
         return this.content.appendChild(this.views.albumView.render());
+      case 'artist':
+        this.views.artistView = new ArtistView(data.artist);
+        return this.content.appendChild(this.views.artistView.render());
       default:
         return this.content.innerHTML = view;
     }

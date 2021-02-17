@@ -17,6 +17,20 @@ function Song(data, view) {
     this.view === 'albumView' ? app.player.queueFiles(app.views.albumView.data.songs, this.getPosition(), 'song') : app.player.queueFile(this.data);
   }
 
+  this.handleArtistButton = (e) => {
+    e.stopPropagation();
+
+    app.addToHistory('artist', { artist: this.data.artist });
+    app.changeView('artist', { artist: this.data.artist });
+  }
+
+  this.handleSongClick = (e) => {
+    e.stopPropagation();
+
+    app.addToHistory('song', { song: this.data, action: 'files' });
+    app.changeView('song', { song: this.data, action: 'files' });
+  }
+
   this.remotePlayButtonTrigger = () => {
     this.setPlaying(!this.playing);
     this.reRender();
@@ -39,7 +53,7 @@ function Song(data, view) {
     //Create elements
     let main = document.createElement('div');
     let titleAndArtist = document.createElement('div');
-    let artist = document.createElement('p');
+    let artist = document.createElement('button');
     let separator = document.createElement('p');
     let title = document.createElement('p');
     let playButton = document.createElement('button');
@@ -47,6 +61,7 @@ function Song(data, view) {
     //Add classes for styling
     this.el.classList.add('song');
     main.classList.add('main');
+    artist.classList.add('artist');
     titleAndArtist.classList.add('titleAndArtist');
     separator.classList.add('separator');
 
@@ -74,11 +89,9 @@ function Song(data, view) {
     }
 
     //Add listeners
-    this.el.onclick = () => {
-      app.addToHistory('song', { song: this.data, action: 'files' });
-      app.changeView('song', { song: this.data, action: 'files' });
-    }
+    this.el.onclick = this.handleSongClick;
     playButton.onclick = this.handlePlayButton;
+    artist.onclick = this.handleArtistButton;
 
     return this.el;
   }

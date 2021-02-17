@@ -9,7 +9,6 @@ function SongView(data, action) {
     song: null,
     files: {}
   };
-  this.state = {};
 
   this.render = () => {
     let action = this.action || 'files';

@@ -161,7 +161,7 @@ td button {
 .album .main {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
   cursor: pointer;
 }
 
@@ -210,8 +210,17 @@ td button {
 .song .main {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
   cursor: pointer;
+}
+
+.song .main .artist {
+  width: auto;
+  padding: 0px;
+}
+
+.song .main .artist:hover {
+  text-decoration: underline;
 }
 
 .song .main .titleAndArtist {

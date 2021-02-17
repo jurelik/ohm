@@ -79,7 +79,7 @@ let demoSong4 = {
   title: 'testTitle4',
   artist: 'testArtist4',
   art: '/ipfs/QmWVc2saSwaTy7h3j6idN8U2jL6kqhMsoReFsf56vwfXr6',
-  url: '/ipfs/QmTp7eeKm1ymt6SZD3SPMD3mKkAFomE8x5xtJhqK48a8qy',
+  url: '/ipfs/QmU1B9JdMvhm4EB8kj487GfwQzfVtocKCm9XNAHkUtHz4f',
   files: [ demoFile1, demoFile2 ],
   comments: ['he', 'ha'],
   pins: ['3', '4'],
