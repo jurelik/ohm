@@ -8,7 +8,7 @@ const Nav = require('./components/nav');
 const ExploreView = require('./components/exploreView');
 const SongView = require('./components/songView');
 const AlbumView = require('./components/albumView');
-const Player = require('./components/player2');
+const Player = require('./components/player');
 const Header = require('./components/header');
 
 const testData = require('./testData');
