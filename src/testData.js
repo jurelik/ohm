@@ -117,7 +117,7 @@ let demoSong6 = {
 testData.push(demoSong);
 testData.push(demoSong2);
 
-testData.push({
+let demoAlbum1 = {
   id: 'hhh',
   type: 'album',
   title: 'testAlbumTitle',
@@ -125,9 +125,9 @@ testData.push({
   songs: [demoSong3, demoSong4],
   url: '/ipfs/QmU1B9JdMvhm4EB8kj487GfwQzfVtocKCm9XNAHkUtHz4f',
   tags: ['edm', 'dub']
-});
+};
 
-testData.push({
+let demoAlbum2 = {
   id: 'iii',
   type: 'album',
   title: 'testAlbumTitle',
@@ -135,6 +135,22 @@ testData.push({
   songs: [demoSong5, demoSong6],
   url: '/ipfs/QmU1B9JdMvhm4EB8kj487GfwQzfVtocKCm9XNAHkUtHz4f',
   tags: ['edm', 'dub']
-});
+};
 
-module.exports = testData;
+
+testData.push(demoAlbum1);
+testData.push(demoAlbum2);
+
+testArtist = {
+  id: 'aaa',
+  name: 'testArtist',
+  bio: 'hello world',
+  location: 'earth',
+  songs: [demoSong, demoSong2],
+  albums: [demoAlbum1, demoAlbum2]
+}
+
+module.exports = {
+  testData,
+  testArtist
+};

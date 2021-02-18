@@ -52,43 +52,87 @@ function Player() {
         continue;
       }
 
-      switch (_view) {
-        case 'exploreView':
-          if (type !== 'song') break;
-          if (view.children.songs[id]) view.children.songs[id].remotePlayButtonTrigger();
-          if (triggeredBy === 'main') this.remoteAlbumTrigger(view.children.albums);
-          else if (triggeredBy === 'endAlbum') this.remoteAlbumTrigger(view.children.albums);
-          else if (triggeredBy === 'whilePlayingAlbum') this.remoteAlbumTrigger(view.children.albums);
-          else if (triggeredBy === 'whilePlayingAlbumAlbumPress') this.remoteAlbumTrigger(view.children.albums);
-          break;
-        case 'songView':
-          if (type === 'song' && view.children.song.data.id === id) view.children.song.remotePlayButtonTrigger();
-          else if (this.isFile(type) && view.children.files[id]) view.children.files[id].remotePlayButtonTrigger();
-          break;
-        case 'albumView':
-          if (type !== 'song') break;
-          if (view.children.songs[id] && triggeredBy === 'end') view.children.songs[id].remotePlayButtonTrigger();
-          if (view.children.songs[id] && triggeredBy === 'endAlbum') view.children.album.remotePlayButtonTrigger();
-          else if (view.children.songs[id] && triggeredBy === 'album') view.children.songs[id].remotePlayButtonTrigger();
-          else if (view.children.songs[id] && triggeredBy === 'song') view.children.album.remotePlayButtonTrigger();
-          else if (view.children.songs[id] && triggeredBy === 'autoplay') view.children.songs[id].remotePlayButtonTrigger();
-          else if (view.children.songs[id] && triggeredBy === 'whilePlayingSong') {
-            view.children.songs[id].remotePlayButtonTrigger();
-            view.children.album.remotePlayButtonTrigger();
-          }
-          else if (view.children.songs[id] && triggeredBy === 'whilePlayingAlbum') {
-            view.children.songs[id].remotePlayButtonTrigger();
-            view.children.album.remotePlayButtonTrigger();
-          }
-          else if (view.children.songs[id] && triggeredBy === 'main') {
-            view.children.songs[id].remotePlayButtonTrigger();
-            view.children.album.remotePlayButtonTrigger();
-          }
-          break;
-        default:
-          console.error('view not recognized');
-          break;
+      if (_view === 'exploreView' || _view === 'artistView') {
+        if (type !== 'song') continue;
+        if (view.children.songs[id]) view.children.songs[id].remotePlayButtonTrigger();
+        if (triggeredBy === 'main') this.remoteAlbumTrigger(view.children.albums);
+        else if (triggeredBy === 'endAlbum') this.remoteAlbumTrigger(view.children.albums);
+        else if (triggeredBy === 'whilePlayingAlbum') this.remoteAlbumTrigger(view.children.albums);
+        else if (triggeredBy === 'whilePlayingAlbumAlbumPress') this.remoteAlbumTrigger(view.children.albums);
       }
+      else if (_view === 'songView') {
+        if (type === 'song' && view.children.song.data.id === id) view.children.song.remotePlayButtonTrigger();
+        else if (this.isFile(type) && view.children.files[id]) view.children.files[id].remotePlayButtonTrigger();
+      }
+      else if (_view === 'albumView') {
+        if (type !== 'song') continue;
+        if (view.children.songs[id] && view.children.album.data.id === this.album && triggeredBy === 'end') view.children.songs[id].remotePlayButtonTrigger();
+        if (view.children.songs[id] && view.children.album.data.id === this.album && triggeredBy === 'endAlbum') view.children.album.remotePlayButtonTrigger();
+        else if (view.children.songs[id] && triggeredBy === 'album') view.children.songs[id].remotePlayButtonTrigger();
+        else if (view.children.songs[id] && triggeredBy === 'song') view.children.album.remotePlayButtonTrigger();
+        else if (view.children.songs[id] && triggeredBy === 'autoplay') view.children.songs[id].remotePlayButtonTrigger();
+        else if (view.children.songs[id] && triggeredBy === 'whilePlayingSong') {
+          view.children.songs[id].remotePlayButtonTrigger();
+          view.children.album.remotePlayButtonTrigger();
+        }
+        else if (view.children.songs[id] && triggeredBy === 'whilePlayingAlbum') {
+          view.children.songs[id].remotePlayButtonTrigger();
+          view.children.album.remotePlayButtonTrigger();
+        }
+        else if (view.children.songs[id] && triggeredBy === 'main') {
+          view.children.songs[id].remotePlayButtonTrigger();
+          view.children.album.remotePlayButtonTrigger();
+        }
+      }
+      else {
+        console.error('view not recognized');
+      }
+
+      //switch (_view) {
+      //  case 'exploreView':
+      //    if (type !== 'song') break;
+      //    if (view.children.songs[id]) view.children.songs[id].remotePlayButtonTrigger();
+      //    if (triggeredBy === 'main') this.remoteAlbumTrigger(view.children.albums);
+      //    else if (triggeredBy === 'endAlbum') this.remoteAlbumTrigger(view.children.albums);
+      //    else if (triggeredBy === 'whilePlayingAlbum') this.remoteAlbumTrigger(view.children.albums);
+      //    else if (triggeredBy === 'whilePlayingAlbumAlbumPress') this.remoteAlbumTrigger(view.children.albums);
+      //    break;
+      //  case 'songView':
+      //    if (type === 'song' && view.children.song.data.id === id) view.children.song.remotePlayButtonTrigger();
+      //    else if (this.isFile(type) && view.children.files[id]) view.children.files[id].remotePlayButtonTrigger();
+      //    break;
+      //  case 'albumView':
+      //    if (type !== 'song') break;
+      //    if (view.children.songs[id] && triggeredBy === 'end') view.children.songs[id].remotePlayButtonTrigger();
+      //    if (view.children.songs[id] && triggeredBy === 'endAlbum') view.children.album.remotePlayButtonTrigger();
+      //    else if (view.children.songs[id] && triggeredBy === 'album') view.children.songs[id].remotePlayButtonTrigger();
+      //    else if (view.children.songs[id] && triggeredBy === 'song') view.children.album.remotePlayButtonTrigger();
+      //    else if (view.children.songs[id] && triggeredBy === 'autoplay') view.children.songs[id].remotePlayButtonTrigger();
+      //    else if (view.children.songs[id] && triggeredBy === 'whilePlayingSong') {
+      //      view.children.songs[id].remotePlayButtonTrigger();
+      //      view.children.album.remotePlayButtonTrigger();
+      //    }
+      //    else if (view.children.songs[id] && triggeredBy === 'whilePlayingAlbum') {
+      //      view.children.songs[id].remotePlayButtonTrigger();
+      //      view.children.album.remotePlayButtonTrigger();
+      //    }
+      //    else if (view.children.songs[id] && triggeredBy === 'main') {
+      //      view.children.songs[id].remotePlayButtonTrigger();
+      //      view.children.album.remotePlayButtonTrigger();
+      //    }
+      //    break;
+      //  case 'artistView':
+      //    if (type !== 'song') break;
+      //    if (view.children.songs[id]) view.children.songs[id].remotePlayButtonTrigger();
+      //    if (triggeredBy === 'main') this.remoteAlbumTrigger(view.children.albums);
+      //    else if (triggeredBy === 'endAlbum') this.remoteAlbumTrigger(view.children.albums);
+      //    else if (triggeredBy === 'whilePlayingAlbum') this.remoteAlbumTrigger(view.children.albums);
+      //    else if (triggeredBy === 'whilePlayingAlbumAlbumPress') this.remoteAlbumTrigger(view.children.albums);
+      //    break;
+      //  default:
+      //    console.error('view not recognized');
+      //    break;
+      //}
     }
   }
 
@@ -116,8 +160,6 @@ function Player() {
   }
 
   this.queueFile = (file) => {
-    this.album = null; //Reset this.album
-
     //Check if file already loaded
     if (this.queue.length === 1 && this.queue[0] === file) {
       return this.play();
@@ -131,6 +173,7 @@ function Player() {
       this.handleRemoteTriggers(this.current.id, this.current.type, 'whilePlayingAlbum');
     }
 
+    this.album = null; //Reset this.album
     this.playing = false;
     this.queue = [file];
     this.current = file;

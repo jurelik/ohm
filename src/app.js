@@ -12,7 +12,7 @@ const ArtistView = require('./components/artistView');
 const Player = require('./components/player');
 const Header = require('./components/header');
 
-const testData = require('./testData');
+const { testData } = require('./testData');
 
 function App() {
   this.ipfs;

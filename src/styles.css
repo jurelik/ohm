@@ -281,3 +281,9 @@ td button {
   cursor: pointer;
 }
 
+.artist .bio {
+  color: #888;
+  margin: 20px 0px;
+  font-size: 11px;
+}
+
