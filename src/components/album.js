@@ -24,7 +24,7 @@ function Album(data) {
 
     this.setPlaying(!this.playing);
     this.reRender();
-    app.player.queueFiles(this.data.songs, this.getPosition(), 'album');
+    app.player.queueFiles(this.data, this.getPosition(), 'album');
   }
 
   this.remotePlayButtonTrigger = () => {

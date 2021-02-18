@@ -14,7 +14,7 @@ function Song(data, view) {
 
     this.setPlaying(!this.playing);
     this.reRender();
-    this.view === 'albumView' ? app.player.queueFiles(app.views.albumView.data.songs, this.getPosition(), 'song') : app.player.queueFile(this.data);
+    this.view === 'albumView' ? app.player.queueFiles(app.views.albumView.data, this.getPosition(), 'song') : app.player.queueFile(this.data);
   }
 
   this.handleArtistButton = (e) => {
