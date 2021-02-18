@@ -67,7 +67,7 @@ td button {
 .drag {
   -webkit-app-region: drag;
   width: 100%;
-  height: 20px;
+  height: 25px;
 }
 
 .header {
@@ -133,11 +133,14 @@ td button {
 }
 
 .player {
+  position: fixed;
+  bottom: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
   height: 50px;
+  background-color: #222;
 }
 
 .player button {
@@ -283,7 +286,21 @@ td button {
 
 .artist .bio {
   color: #888;
-  margin: 20px 0px;
+  margin-bottom: 20px;
   font-size: 11px;
+}
+
+.artist .location-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.artist .location-div svg {
+  margin-right: 5px;
+}
+
+.artist .location-div p {
+  margin: 0px;
 }
 

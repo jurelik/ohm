@@ -1,7 +1,7 @@
 function Header() {
   this.el = document.querySelector('.header');
-  this.backIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="547.5 238.5 183 183"><path fill="none" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M669 255h0l-60 75 60 75"/><path fill="none" stroke="none" d="M547.5 238.5h183v183h-183z"/></svg></svg>';
-  this.forwardIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="533.5 238.5 183 183"><path fill="none" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M595 255h0l60 75-60 75"/><path fill="none" stroke="none" d="M533.5 238.5h183v183h-183z"/></svg></svg>';
+  this.backIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="598.5 268.5 183 183"><path fill="none" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" d="M720 285h0l-60 75 60 75"/><path fill="none" stroke="none" d="M598.5 268.5h183v183h-183v-183z"/></svg>';
+  this.forwardIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="478.5 233.5 183 183"><path fill="none" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" d="M540 250h0l60 75-60 75"/><path fill="none" stroke="none" d="M478.5 233.5h183v183h-183v-183z"/></svg>';
   this.backButton = null;
   this.forwardButton = null;
 
