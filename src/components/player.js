@@ -36,6 +36,7 @@ function Player() {
     if (this.queuePosition > this.queue.length - 1) {
       this.handleRemoteTriggers(this.current.id, this.current.type, 'endAlbum');
       this.queue = [];
+      console.log('yooo')
       return this.queuePosition = 0;
     }
 
@@ -55,8 +56,9 @@ function Player() {
       switch (_view) {
         case 'exploreView':
           if (type === 'song' && view.children.songs[id]) view.children.songs[id].remotePlayButtonTrigger();
-          if (type === 'song' && triggeredBy === 'main') this.reRenderAlbum(view.children.albums); //re-render to check if any children are playing
-          if (type === 'song' && triggeredBy === 'endAlbum') this.reRenderAlbum(view.children.albums);
+          if (type === 'song' && triggeredBy === 'main') this.remoteAlbumTrigger(view.children.albums);
+          else if (type === 'song' && triggeredBy === 'endAlbum') this.remoteAlbumTrigger(view.children.albums);
+          else if (type === 'song' && triggeredBy === 'whilePlayingAlbum') this.remoteAlbumTrigger(view.children.albums);
           break;
         case 'songView':
           if (type === 'song' && view.children.song.data.id === id) view.children.song.remotePlayButtonTrigger();
@@ -68,7 +70,11 @@ function Player() {
           else if (type === 'song' && view.children.songs[id] && triggeredBy === 'album') view.children.songs[id].remotePlayButtonTrigger();
           else if (type === 'song' && view.children.songs[id] && triggeredBy === 'song') view.children.album.remotePlayButtonTrigger();
           else if (type === 'song' && view.children.songs[id] && triggeredBy === 'autoplay') view.children.songs[id].remotePlayButtonTrigger();
-          else if (type === 'song' && view.children.songs[id] && triggeredBy === 'whilePlaying') {
+          else if (type === 'song' && view.children.songs[id] && triggeredBy === 'whilePlayingSong') {
+            view.children.songs[id].remotePlayButtonTrigger();
+            view.children.album.remotePlayButtonTrigger();
+          }
+          else if (type === 'song' && view.children.songs[id] && triggeredBy === 'whilePlayingAlbum') {
             view.children.songs[id].remotePlayButtonTrigger();
             view.children.album.remotePlayButtonTrigger();
           }
@@ -87,6 +93,12 @@ function Player() {
   this.reRenderAlbum = (albums) => {
     for (let album in albums) {
       albums[album].remoteReRender();
+    }
+  }
+
+  this.remoteAlbumTrigger = (albums) => {
+    for (let album in albums) {
+      if (albums[album].data.songs === this.queue) return albums[album].remotePlayButtonTrigger();
     }
   }
 
@@ -112,6 +124,11 @@ function Player() {
     //Change the playing state on previous file
     if(this.current && this.playing) this.handleRemoteTriggers(this.current.id, this.current.type);
 
+    //If an album was playing before, update playing state
+    if (this.queue.length > 1 && this.playing) {
+      this.handleRemoteTriggers(this.current.id, this.current.type, 'whilePlayingAlbum');
+    }
+
     this.playing = false;
     this.queue = [file];
     this.current = file;
@@ -126,8 +143,9 @@ function Player() {
       return this.play();
     }
 
-    //Change the playing state on previous song
-    if(this.current && this.playing) this.handleRemoteTriggers(this.current.id, this.current.type, 'whilePlaying');
+    //Change the playing state on previous playing
+    if(this.current && this.playing && this.queue.length === 1) this.handleRemoteTriggers(this.current.id, this.current.type, 'whilePlayingSong');
+    if(this.current && this.playing && this.queue.length > 1) this.handleRemoteTriggers(this.current.id, this.current.type, 'whilePlayingAlbum');
 
     this.playing = false;
     this.queue = files;

@@ -42,6 +42,7 @@ function Album(data) {
   }
 
   this.remoteReRender = () => {
+    console.log(app.player.playing)
     this.el.innerHTML = '';
     this.playing = app.player.playing && this.childIsPlaying(app.player.current);
     this.render();

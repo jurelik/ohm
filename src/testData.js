@@ -79,6 +79,34 @@ let demoSong4 = {
   title: 'testTitle4',
   artist: 'testArtist4',
   art: '/ipfs/QmWVc2saSwaTy7h3j6idN8U2jL6kqhMsoReFsf56vwfXr6',
+  url: '/ipfs/QmTp7eeKm1ymt6SZD3SPMD3mKkAFomE8x5xtJhqK48a8qy',
+  files: [ demoFile1, demoFile2 ],
+  comments: ['he', 'ha'],
+  pins: ['3', '4'],
+  tags: ['lofi', 'hiphop']
+}
+
+let demoSong5 = {
+  id: 'fff',
+  type: 'song',
+  fileType: 'wav',
+  title: 'testTitle5',
+  artist: 'testArtist5',
+  art: '/ipfs/QmWVc2saSwaTy7h3j6idN8U2jL6kqhMsoReFsf56vwfXr6',
+  url: '/ipfs/QmTp7eeKm1ymt6SZD3SPMD3mKkAFomE8x5xtJhqK48a8qy',
+  files: [ demoFile1, demoFile2 ],
+  comments: ['he', 'ha'],
+  pins: ['3', '4'],
+  tags: ['lofi', 'hiphop']
+}
+
+let demoSong6 = {
+  id: 'ggg',
+  type: 'song',
+  fileType: 'wav',
+  title: 'testTitle6',
+  artist: 'testArtist6',
+  art: '/ipfs/QmWVc2saSwaTy7h3j6idN8U2jL6kqhMsoReFsf56vwfXr6',
   url: '/ipfs/QmU1B9JdMvhm4EB8kj487GfwQzfVtocKCm9XNAHkUtHz4f',
   files: [ demoFile1, demoFile2 ],
   comments: ['he', 'ha'],
@@ -90,11 +118,21 @@ testData.push(demoSong);
 testData.push(demoSong2);
 
 testData.push({
-  id: 'eee',
+  id: 'hhh',
   type: 'album',
   title: 'testAlbumTitle',
   artist: 'testAlbumArtist',
   songs: [demoSong3, demoSong4],
+  url: '/ipfs/QmU1B9JdMvhm4EB8kj487GfwQzfVtocKCm9XNAHkUtHz4f',
+  tags: ['edm', 'dub']
+});
+
+testData.push({
+  id: 'iii',
+  type: 'album',
+  title: 'testAlbumTitle',
+  artist: 'testAlbumArtist',
+  songs: [demoSong5, demoSong6],
   url: '/ipfs/QmU1B9JdMvhm4EB8kj487GfwQzfVtocKCm9XNAHkUtHz4f',
   tags: ['edm', 'dub']
 });
