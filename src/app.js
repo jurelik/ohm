@@ -55,6 +55,7 @@ function App() {
 
   this.changeView = (view, data) => {
     this.content.innerHTML = '';
+    this.content.scrollTop = 0;
 
     switch (view) {
       case 'explore':

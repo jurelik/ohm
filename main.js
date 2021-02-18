@@ -4,10 +4,11 @@ let daemon = null;
 
 function createWindow () {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 480,
+    height: 360,
+    minWidth: 400,
+    minHeight: 300,
     backgroundColor: "#222",
-    //frame: false,
     titleBarStyle: 'hidden',
     trafficLightPosition: { x: 9, y: 12 },
     webPreferences: {
