@@ -68,17 +68,25 @@ function Header() {
     }
   }
 
+  this.handleTest = async () => {
+    for await (const file of app.ipfs.files.ls('/testArtist/testSong')) {
+      console.log(file.name + ' ' + file.type)
+    }
+  }
+
   this.render = () => {
     //Create elements
     let back = document.createElement('button');
     let forward = document.createElement('button');
     let right = document.createElement('div');
     let upload = document.createElement('button');
+    let test = document.createElement('button');
 
     //Add innerHTML
     back.innerHTML = this.backIcon;
     forward.innerHTML = this.forwardIcon;
     upload.innerHTML = 'upload';
+    test.innerHTML = 'test';
 
     //Add classes
     forward.classList.add('disabled');
@@ -88,6 +96,7 @@ function Header() {
     //Add listeners
     back.onclick = this.handleBack;
     forward.onclick = this.handleForward;
+    test.onclick = this.handleTest;
 
     //Create reference
     this.backButton = back;
@@ -97,6 +106,7 @@ function Header() {
     this.el.appendChild(forward);
     this.el.appendChild(right);
     right.appendChild(upload);
+    right.appendChild(test);
   }
 }
 
