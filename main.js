@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { spawn } = require('child_process')
+const fs = require('fs');
 let daemon = null;
 
 function createWindow () {
@@ -40,6 +41,16 @@ app.on('activate', () => {
 ipcMain.on('start', (event) => {
   if (daemon) return event.reply('daemon-ready'); //Check if daemon is already running
 
+  //Check if the repo exists already
+  if (fs.existsSync(`/Users/${process.env.USER}/.ohm-ipfs`)) {
+    spawnDaemon(event);
+  }
+  else {
+    initRepo(event);
+  }
+});
+
+const spawnDaemon = (event) => {
   daemon = spawn(require('go-ipfs').path(), ['daemon'])
 
   daemon.stdout.on('data', (data) => {
@@ -60,4 +71,25 @@ ipcMain.on('start', (event) => {
   daemon.on('error', (err) => {
     console.log(err)
   })
-});
+}
+
+const initRepo = (event) => {
+  let init = spawn(require('go-ipfs').path(), ['init']);
+
+  init.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+
+  init.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  init.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+    spawnDaemon(event);
+  });
+
+  init.on('error', (err) => {
+    console.log(err)
+  })
+}
