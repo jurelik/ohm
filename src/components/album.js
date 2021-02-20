@@ -27,6 +27,13 @@ function Album(data) {
     app.player.queueFiles(this.data, this.getPosition(), 'album');
   }
 
+  this.handleArtistButton = (e) => {
+    e.stopPropagation();
+
+    app.addToHistory('artist', { artist: this.data.artist });
+    app.changeView('artist', { artist: this.data.artist });
+  }
+
   this.remotePlayButtonTrigger = () => {
     this.setPlaying(!this.playing);
     this.reRender();
@@ -38,13 +45,6 @@ function Album(data) {
 
   this.reRender = () => {
     this.el.innerHTML = '';
-    this.render();
-  }
-
-  this.remoteReRender = () => {
-    console.log(app.player.playing)
-    this.el.innerHTML = '';
-    this.playing = app.player.playing && this.childIsPlaying(app.player.current);
     this.render();
   }
 
@@ -61,23 +61,27 @@ function Album(data) {
     //Create elements
     let main = document.createElement('div');
     let titleAndArtist = document.createElement('div');
-    let artist = document.createElement('p');
+    let artist = document.createElement('button');
     let separator = document.createElement('p');
     let title = document.createElement('p');
+    let tag = document.createElement('p');
     let playButton = document.createElement('button');
     let albumIcon = document.createElement('div');
 
     //Add classes for styling
     this.el.classList.add('album');
     main.classList.add('main');
+    artist.classList.add('artist');
     titleAndArtist.classList.add('titleAndArtist');
     separator.classList.add('separator');
+    tag.classList.add('tag');
     albumIcon.classList.add('album-icon');
 
     //Add attributes and innerHTML
     artist.innerHTML = this.data.artist;
     separator.innerHTML = '•';
     title.innerHTML = this.data.title;
+    tag.innerHTML = '#' + this.data.tags[0];
     playButton.innerHTML = this.playing ? this.pauseIcon : this.playIcon;
     albumIcon.innerHTML = this.albumIcon;
 
@@ -89,6 +93,7 @@ function Album(data) {
     titleAndArtist.appendChild(artist);
     titleAndArtist.appendChild(separator);
     titleAndArtist.appendChild(title);
+    main.appendChild(tag);
 
     //Add action bar
     if (!this.songView) {
@@ -101,7 +106,8 @@ function Album(data) {
       app.addToHistory('album', { album: this.data, action: 'files' });
       app.changeView('album', { album: this.data, action: 'files' });
     }
-    playButton.onclick = (e) => this.handlePlayButton(e, this.data.songs);
+    playButton.onclick = this.handlePlayButton;
+    artist.onclick = this.handleArtistButton;
 
     return this.el;
   }

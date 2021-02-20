@@ -56,6 +56,7 @@ function Song(data, view) {
     let artist = document.createElement('button');
     let separator = document.createElement('p');
     let title = document.createElement('p');
+    let tag = document.createElement('p');
     let playButton = document.createElement('button');
 
     //Add classes for styling
@@ -63,12 +64,14 @@ function Song(data, view) {
     main.classList.add('main');
     artist.classList.add('artist');
     titleAndArtist.classList.add('titleAndArtist');
+    tag.classList.add('tag');
     separator.classList.add('separator');
 
     //Add attributes and innerHTML
     artist.innerHTML = this.data.artist;
     separator.innerHTML = '•';
     title.innerHTML = this.data.title;
+    tag.innerHTML = '#' + this.data.tags[0];
     playButton.innerHTML = this.playing ? this.pauseIcon : this.playIcon;
 
     //Build structure
@@ -78,6 +81,7 @@ function Song(data, view) {
     titleAndArtist.appendChild(artist);
     titleAndArtist.appendChild(separator);
     titleAndArtist.appendChild(title);
+    main.appendChild(tag);
 
     //Add action bar
     if (this.view === 'songView') {

@@ -182,10 +182,34 @@ td button {
   margin-right: 10px;
 }
 
+.album .actions button:hover {
+  text-decoration: underline;
+}
+
+.album .main .artist {
+  width: auto;
+  padding: 0px;
+}
+
+.album .main .artist:hover {
+  text-decoration: underline;
+}
+
 .album .main .titleAndArtist {
   display: flex;
   flex-direction: row;
   align-content: flex-start;
+}
+
+.album .main .tag {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  color: #888;
+  margin-left: auto;
+  margin-right: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .album .main button {
@@ -233,6 +257,17 @@ td button {
   display: flex;
   flex-direction: row;
   align-content: flex-start;
+}
+
+.song .main .tag {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  color: #888;
+  margin-left: auto;
+  margin-right: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .song .main button {

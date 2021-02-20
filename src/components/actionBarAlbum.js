@@ -6,7 +6,7 @@ function ActionBarAlbum(data) {
   this.render = () => {
     //Create elements
     let songs = document.createElement('button');
-    let comments = document.createElement('button');
+    let pin = document.createElement('button');
     let download = document.createElement('button');
 
     //Add classes for styling
@@ -14,19 +14,17 @@ function ActionBarAlbum(data) {
 
     //Add attributes and innerHTML
     songs.innerHTML = `${this.data.songs.length} songs`;
-    //comments.innerHTML = `${this.data.comments.length} comments`;
+    pin.innerHTML = `pin`;
     download.innerHTML = 'download all';
 
     //Build structure
     this.el.appendChild(songs);
-    this.el.appendChild(comments);
+    this.el.appendChild(pin);
     this.el.appendChild(download);
 
     //Add listeners
-    comments.onclick = (e) => {
+    pin.onclick = (e) => {
       e.stopPropagation();
-      app.addToHistory('album', { album: this.data, action: 'comments' });
-      app.changeView('album', { album: this.data, action: 'comments' });
     }
 
     return this.el;
