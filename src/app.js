@@ -59,7 +59,7 @@ function App() {
 
     switch (view) {
       case 'explore':
-        this.views.exploreView = new ExploreView(testData); //TEST DATA - data will be fetched in the future
+        this.views.exploreView = new ExploreView();
         return this.views.exploreView.render();
       case 'song':
         this.views.songView = new SongView(data.song, data.action);

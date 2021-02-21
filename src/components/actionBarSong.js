@@ -16,7 +16,7 @@ function ActionBarSong(data) {
     //Add attributes and innerHTML
     files.innerHTML = `${this.data.files.length} files`;
     comments.innerHTML = `${this.data.comments.length} comments`;
-    pins.innerHTML = `${this.data.pins.length} pins`;
+    pins.innerHTML = `pin`;
     download.innerHTML = 'download all';
 
     //Build structure
