@@ -34,6 +34,14 @@ function Album(data) {
     app.changeView('artist', { artist: this.data.artist });
   }
 
+  this.handleAlbumClick = (e) => {
+    e.stopPropagation();
+    if (app.current === 'album') return; //Prevent clicking album forever
+
+    app.addToHistory('album', { album: this.data, action: 'files' });
+    app.changeView('album', { album: this.data, action: 'files' });
+  }
+
   this.remotePlayButtonTrigger = () => {
     this.setPlaying(!this.playing);
     this.reRender();
@@ -102,10 +110,7 @@ function Album(data) {
     }
 
     //Add listeners
-    this.el.onclick = () => {
-      app.addToHistory('album', { album: this.data, action: 'files' });
-      app.changeView('album', { album: this.data, action: 'files' });
-    }
+    this.el.onclick = this.handleAlbumClick;
     playButton.onclick = this.handlePlayButton;
     artist.onclick = this.handleArtistButton;
 
