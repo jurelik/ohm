@@ -38,6 +38,9 @@ function Nav() {
   }
 
   this.handleClick = (e) => {
+    //Check if same item
+    if (e.target.id === app.current) return;
+
     this.select(e.target.id);
     app.addToHistory(e.target.id);
     app.changeView(e.target.id);

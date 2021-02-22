@@ -19,6 +19,7 @@ function Song(data, view) {
 
   this.handleArtistButton = (e) => {
     e.stopPropagation();
+    if (view === 'artistView') return; //Prevent clicking artist forever
 
     app.addToHistory('artist', { artist: this.data.artist });
     app.changeView('artist', { artist: this.data.artist });
@@ -26,6 +27,7 @@ function Song(data, view) {
 
   this.handleSongClick = (e) => {
     e.stopPropagation();
+    if (view === 'songView') return; //Prevent clicking song forever
 
     app.addToHistory('song', { song: this.data, action: 'files' });
     app.changeView('song', { song: this.data, action: 'files' });
