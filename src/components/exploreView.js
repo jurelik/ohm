@@ -8,7 +8,6 @@ function ExploreView() {
     songs: {},
     albums: {}
   };
-  this.state = {};
 
   this.fetch = () => {
     return new Promise(async (resolve, reject) => {
@@ -16,7 +15,9 @@ function ExploreView() {
         const _res = await fetch(`${app.URL}/api/latest`);
         const res = await _res.json();
 
-        resolve(res);
+        if (res.type === 'error') return reject(res.err);
+
+        resolve(res.payload);
       }
       catch (err) {
         reject(err);

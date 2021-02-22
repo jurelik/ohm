@@ -110,7 +110,7 @@ function Player() {
   }
 
   this.updateSrc = () => {
-    return this.audio.setAttribute('src', `${app.GATEWAY}${this.current.url}`);
+    return this.audio.setAttribute('src', `${app.GATEWAY}/ipfs/${this.current.cid}`);
   }
 
   this.queueFile = (file) => {
@@ -175,7 +175,7 @@ function Player() {
 
     //Add attributes and innerHTML
     playButton.innerHTML = this.playing ? this.pauseIcon : this.playIcon;
-    titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title}` : 'Load a song';
+    titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title || this.current.name}` : 'Load a song';
 
     //Add listeners
     playButton.onclick = this.handlePlayButton;

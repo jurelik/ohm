@@ -80,8 +80,8 @@ function App() {
         this.views.albumView = new AlbumView(data.album);
         return this.content.appendChild(this.views.albumView.render());
       case 'artist':
-        this.views.artistView = new ArtistView(data.artist);
-        return this.content.appendChild(this.views.artistView.render());
+        if (!this.views.artistView || this.views.artistView.data !== data.artist) this.views.artistView = new ArtistView(data.artist); //Prevent unnecessary fetching of data from server
+        return this.views.artistView.render();
       default:
         return this.content.innerHTML = view;
     }
