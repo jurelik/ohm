@@ -90,12 +90,6 @@ function Player() {
     }
   }
 
-  this.reRenderAlbum = (albums) => {
-    for (let album in albums) {
-      albums[album].remoteReRender();
-    }
-  }
-
   this.remoteAlbumTrigger = (albums) => {
     if (albums[this.album]) return albums[this.album].remotePlayButtonTrigger();
   }
@@ -115,7 +109,7 @@ function Player() {
 
   this.queueFile = (file) => {
     //Check if file already loaded
-    if (this.queue.length === 1 && this.queue[0] === file) {
+    if (this.queue.length === 1 && this.queue[0].id === file.id && this.queue[0].type === file.type) {
       return this.play();
     }
 
@@ -135,11 +129,22 @@ function Player() {
     this.play();
   }
 
+  this.sameQueue = (files) => {
+    if (this.queue.length !== files.length) return false;
+
+    for (let x = 0; x < files.length; x++) {
+      if (this.queue[x].id !== files[x].id) return false;
+    }
+
+    console.log('hi')
+    return true;
+  }
+
   this.queueFiles = (album, position, triggeredBy) => {
     let files = album.songs;
 
     //Check if queue is already loaded and we are playing the same song
-    if (this.queue === files && this.queuePosition === position) {
+    if (this.sameQueue(files) && this.queuePosition === position) {
       this.handleRemoteTriggers(this.current.id, this.current.type, triggeredBy);
       return this.play();
     }

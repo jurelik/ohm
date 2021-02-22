@@ -6,7 +6,7 @@ function Album(data) {
 
   this.childIsPlaying = (song) => { //This has to be declared above this.playing
     for (let _song of this.data.songs) {
-      if (_song === song) {
+      if (_song.id === song.id) {
         return true;
       }
     }
