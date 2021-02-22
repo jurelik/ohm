@@ -1,4 +1,3 @@
-//const { createAlbumElement } = require('./utils/components');
 const Song = require('./song');
 const Album = require('./album');
 
@@ -14,7 +13,7 @@ function ExploreView() {
   this.fetch = () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const _res = await fetch('http://localhost:3000/api/latest');
+        const _res = await fetch(`${app.URL}/api/latest`);
         const res = await _res.json();
 
         resolve(res);

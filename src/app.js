@@ -27,6 +27,8 @@ function App() {
     albumView: null,
     artistView: null
   }
+  this.GATEWAY;
+  this.URL;
 
   //State
   this.playing = false;
@@ -35,6 +37,16 @@ function App() {
   this.current = null;
 
   this.init = () => {
+    //Set constants
+    if (process.env.NODE_ENV === 'development') {
+      this.GATEWAY = 'http://localhost:8080';
+      this.URL = 'http://localhost:3000';
+    }
+    else {
+      //this.GATEWAY = 'http://localhost:8080';
+      //this.URL = 'http://localhost:3000';
+    }
+
     this.header.render();
     this.nav.render();
     this.player.render();
