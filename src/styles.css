@@ -126,13 +126,13 @@ td button {
 .vertical-line {
   border-left: 2px solid #888;
   height: 100%;
-  margin-right: 5px;
 }
 
 .content {
   width: 100%;
   overflow: auto;
   margin-bottom: 50px;
+  padding: 0px 5px;
 }
 
 .player {
@@ -349,4 +349,10 @@ td button {
 .comments p {
   color: #eee;
   margin: 0;
+}
+
+.upload-song {
+  background-color: #333;
+  padding: 5px;
+  border-radius: 5px;
 }
