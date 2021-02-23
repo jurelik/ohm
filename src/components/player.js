@@ -136,7 +136,6 @@ function Player() {
       if (this.queue[x].id !== files[x].id) return false;
     }
 
-    console.log('hi')
     return true;
   }
 

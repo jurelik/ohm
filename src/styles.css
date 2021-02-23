@@ -31,12 +31,12 @@ button {
   cursor: pointer;
 }
 
-svg {
-  pointer-events: none;
-}
-
 table {
   margin-top: 10px;
+}
+
+svg {
+  pointer-events: none;
 }
 
 th {
@@ -342,3 +342,11 @@ td button {
   margin: 0px;
 }
 
+.comments {
+  margin-top: 10px;
+}
+
+.comments p {
+  color: #eee;
+  margin: 0;
+}
