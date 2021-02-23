@@ -29,6 +29,9 @@ function Header() {
       case 'artist':
         app.historyIndex--;
         return app.changeView(view.type, view.data);
+      case 'upload':
+        app.historyIndex--;
+        return app.changeView(view.type, view.data);
       default:
         app.historyIndex--;
         app.nav.select(view.type)
@@ -61,6 +64,9 @@ function Header() {
       case 'artist':
         app.historyIndex++;
         return app.changeView(view.type, view.data);
+      case 'upload':
+        app.historyIndex++;
+        return app.changeView(view.type, view.data);
       default:
         app.historyIndex++;
         app.nav.select(view.type)
@@ -72,6 +78,11 @@ function Header() {
     for await (const file of app.ipfs.files.ls('/testArtist/testSong')) {
       console.log(file.name + ' ' + file.type)
     }
+  }
+
+  this.handleUpload = () => {
+    app.addToHistory('upload');
+    return app.changeView('upload');
   }
 
   this.render = () => {
@@ -96,6 +107,7 @@ function Header() {
     //Add listeners
     back.onclick = this.handleBack;
     forward.onclick = this.handleForward;
+    upload.onclick = this.handleUpload;
     test.onclick = this.handleTest;
 
     //Create reference

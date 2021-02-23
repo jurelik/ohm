@@ -9,10 +9,9 @@ const ExploreView = require('./components/exploreView');
 const SongView = require('./components/songView');
 const AlbumView = require('./components/albumView');
 const ArtistView = require('./components/artistView');
+const UploadView = require('./components/uploadView');
 const Player = require('./components/player');
 const Header = require('./components/header');
-
-const { testData } = require('./testData');
 
 function App() {
   this.ipfs;
@@ -25,7 +24,8 @@ function App() {
     exploreView: null,
     songView: null,
     albumView: null,
-    artistView: null
+    artistView: null,
+    uploadView: null
   }
   this.GATEWAY;
   this.URL;
@@ -51,9 +51,8 @@ function App() {
     this.nav.render();
     this.player.render();
 
-    //Currently using test data
-    this.changeView('explore', testData);
-    this.addToHistory('explore', testData);
+    this.changeView('explore');
+    this.addToHistory('explore');
     this.historyIndex = 0;
     this.header.backButton.className = 'disabled';
 
@@ -83,6 +82,9 @@ function App() {
       case 'artist':
         if (!this.views.artistView || this.views.artistView.data !== data.artist) this.views.artistView = new ArtistView(data.artist); //Prevent unnecessary fetching of data from server
         return this.views.artistView.render();
+      case 'upload':
+        this.views.uploadView = new UploadView();
+        return this.views.uploadView.render();
       default:
         return this.content.innerHTML = view;
     }

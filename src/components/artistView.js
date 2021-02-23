@@ -92,7 +92,6 @@ function ArtistView(data) {
       console.error(err)
     }
   }
-
 }
 
 module.exports = ArtistView;
