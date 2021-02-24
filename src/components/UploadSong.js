@@ -1,18 +1,33 @@
 const UploadFile = require('./UploadFile');
 
 function UploadSong(data) {
-  this.el = document.createElement('div');
+  this.el = document.createElement('fieldset');
   this.data = data;
+  this.children = [];
 
   this.handleAddFile = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    this.el.appendChild(new UploadFile().render());
+    let file = new UploadFile();
+    this.children.push(file);
+    this.el.appendChild(file.render());
+  }
+
+  this.getSongData = () => {
+    const song = Array.from(this.el.querySelectorAll('.song-input')).reduce((acc, input) => ({ ...acc, [input.name]: input.value }), {});
+    song.files = [];
+
+    for (let el of this.children) {
+      song.files.push(el.getFileData());
+    }
+
+    return song;
   }
 
   this.render = () => {
     //Create elements
+    let legend = document.createElement('legend');
     let titleDiv = document.createElement('div');
     let titleLabel = document.createElement('label');
     let title = document.createElement('input');
@@ -26,8 +41,12 @@ function UploadSong(data) {
 
     //Add classes for styling
     this.el.className = 'upload-song';
+    title.className = 'song-input';
+    tags.className = 'song-input';
+    file.className = 'song-input';
 
     //Add attributes and innerHTML
+    legend.innerHTML = 'song: ';
     titleLabel.setAttribute('for', 'title');
     titleLabel.innerHTML = 'title:';
     title.setAttribute('type', 'text');
@@ -49,6 +68,7 @@ function UploadSong(data) {
     tagsDiv.appendChild(tags);
     fileDiv.appendChild(fileLabel);
     fileDiv.appendChild(file);
+    this.el.appendChild(legend);
     this.el.appendChild(titleDiv);
     this.el.appendChild(tagsDiv);
     this.el.appendChild(fileDiv);

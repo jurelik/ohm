@@ -52,6 +52,26 @@ td button {
   display: flex;
 }
 
+input[type=text] {
+  font-family: inherit;
+  font-size: inherit;
+  background-color: #222;
+  color: #eee;
+  border: none;
+}
+
+input[type=text]:focus {
+  background-color: #222;
+  border: none;
+  outline: none;
+}
+
+input[type=radio] {
+  padding: 0;
+  margin: 0;
+  margin-right: 2px;
+}
+
 #first {
   border: 0px;
 }
@@ -352,7 +372,24 @@ td button {
 }
 
 .upload-song {
-  background-color: #333;
   padding: 5px;
-  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.upload-file {
+  padding: 5px;
+  margin: 10px 5px;
+}
+
+.radio-group-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.radio-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0 5px;
 }

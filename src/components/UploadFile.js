@@ -1,46 +1,103 @@
 function UploadFile(data) {
-  this.el = document.createElement('div');
+  this.el = document.createElement('fieldset');
   this.data = data;
+
+  this.handleTypeChange = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+  }
+
+  this.getFileData = () => {
+    const file = Array.from(this.el.querySelectorAll('.file-input')).reduce((acc, input) => {
+      if (input.type === 'radio' && input.checked) return { ...acc, [input.name]: input.id };
+      else if (input.type === 'radio' && !input.checked) return { ...acc };
+
+      return { ...acc, [input.name]: input.value };
+    }, {});
+    return file;
+  }
+
+  this.createInput = (name, type) => {
+    //Create elements
+    let el = document.createElement('div');
+    let label = document.createElement('label');
+    let input = document.createElement('input');
+
+    //Add classes for styling
+    input.className = 'file-input';
+
+    //Add attributes and innerHTML
+    label.setAttribute('for', name);
+    label.innerHTML = name + ': ';
+    input.setAttribute('type', type);
+    input.setAttribute('name', name);
+
+    //Build structure
+    el.appendChild(label);
+    el.appendChild(input);
+
+    return el;
+  }
+
+  this.createRadio = (name) => {
+    //Create elements
+    let el = document.createElement('div')
+    let label = document.createElement('label');
+    let input = document.createElement('input');
+
+    //Add classes for styling
+    el.className = 'radio-div';
+    input.className = 'file-input';
+
+    //Add attributes and innerHTML
+    label.setAttribute('for', name);
+    label.innerHTML = name;
+    input.setAttribute('type', 'radio');
+    input.setAttribute('name', 'type');
+    input.setAttribute('id', name);
+
+    //Build structure
+    el.appendChild(input);
+    el.appendChild(label);
+
+    return el;
+  }
 
   this.render = () => {
     //Create elements
-    let nameDiv = document.createElement('div');
-    let nameLabel = document.createElement('label');
-    let name = document.createElement('input');
-    let tagsDiv = document.createElement('div');
-    let tagsLabel = document.createElement('label');
-    let tags = document.createElement('input');
-    let fileDiv = document.createElement('div');
-    let fileLabel = document.createElement('label');
-    let file = document.createElement('input');
+    let legend = document.createElement('legend');
+    let typeDiv = document.createElement('div');
+    let typeLabel = document.createElement('p');
+    let typeOriginal = this.createRadio('original');
+    let typeInternal = this.createRadio('internal');
+    let typeExternal = this.createRadio('external');
+    let name = this.createInput('name', 'text');
+    let tags = this.createInput('tags', 'text');
+    let info = this.createInput('info', 'text');
+    let file = this.createInput('file', 'file');
 
     //Add classes for styling
     this.el.className = 'upload-file';
+    typeDiv.className = 'radio-group-div';
 
     //Add attributes and innerHTML
-    nameLabel.setAttribute('for', 'name');
-    nameLabel.innerHTML = 'name:';
-    name.setAttribute('type', 'text');
-    name.setAttribute('name', 'name');
-    tagsLabel.setAttribute('for', 'tags');
-    tagsLabel.innerHTML = 'tags:';
-    tags.setAttribute('type', 'text');
-    tags.setAttribute('name', 'tags');
-    fileLabel.setAttribute('for', 'tags');
-    fileLabel.innerHTML = 'file:';
-    file.setAttribute('type', 'file');
-    file.setAttribute('name', 'file');
+    legend.innerHTML = 'file: '
+    typeLabel.innerHTML = 'type: ';
 
     //Build structure
-    nameDiv.appendChild(nameLabel);
-    nameDiv.appendChild(name);
-    tagsDiv.appendChild(tagsLabel);
-    tagsDiv.appendChild(tags);
-    fileDiv.appendChild(fileLabel);
-    fileDiv.appendChild(file);
-    this.el.appendChild(nameDiv);
-    this.el.appendChild(tagsDiv);
-    this.el.appendChild(fileDiv);
+    typeDiv.appendChild(typeLabel);
+    typeDiv.appendChild(typeOriginal);
+    typeDiv.appendChild(typeInternal);
+    typeDiv.appendChild(typeExternal);
+    this.el.appendChild(legend);
+    this.el.appendChild(typeDiv);
+    this.el.appendChild(name);
+    this.el.appendChild(tags);
+    this.el.appendChild(info);
+    this.el.appendChild(file);
+
+    //Add listeners
 
     return app.content.appendChild(this.el);
   }
