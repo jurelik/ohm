@@ -72,6 +72,18 @@ input[type=radio] {
   margin-right: 2px;
 }
 
+input[type=file] {
+  font-family: inherit;
+  font-size: inherit;
+  color: #eee;
+}
+
+input[type=file] button {
+  font-family: inherit;
+  font-size: inherit;
+  color: #eee;
+}
+
 #first {
   border: 0px;
 }

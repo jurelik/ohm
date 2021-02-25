@@ -45,7 +45,10 @@ function UploadView(data) {
 
       if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
       for (let el of this.children) payload.songs.push(el.getSongData());
-      console.log(payload);
+
+      console.log(payload)
+      if (payload.album) {
+      }
     }
     catch (err) {
       console.log(err);
