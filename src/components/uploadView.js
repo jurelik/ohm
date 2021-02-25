@@ -14,6 +14,7 @@ function UploadView(data) {
     let uploadSong = new UploadSong();
     this.children.push(uploadSong);
     this.form.appendChild(uploadSong.render());
+    uploadSong.el.querySelector('input').focus(); //Focus first input
   }
 
   this.handleRemoveSong = (e) => {
@@ -72,7 +73,8 @@ function UploadView(data) {
     removeSong.onclick = this.handleRemoveSong;
     submit.onclick = this.handleSubmit;
 
-    return app.content.appendChild(this.el);
+    app.content.appendChild(this.el);
+    return this.children[0].el.querySelector('input').focus(); //Focus the first input
   }
 }
 

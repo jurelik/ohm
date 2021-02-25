@@ -130,7 +130,7 @@ function UploadFile(data) {
 
     //Add listeners
 
-    return app.content.appendChild(this.el);
+    return this.el;
   }
 }
 

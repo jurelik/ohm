@@ -9,9 +9,9 @@ function UploadSong(data) {
     e.preventDefault();
     e.stopPropagation();
 
-    let file = new UploadFile();
-    this.children.push(file);
-    this.el.appendChild(file.render());
+    let uploadFile = new UploadFile();
+    this.children.push(uploadFile);
+    this.el.appendChild(uploadFile.render());
   }
 
   this.getSongData = () => {
@@ -77,7 +77,7 @@ function UploadSong(data) {
     //Add listeners
     addFile.onclick = this.handleAddFile;
 
-    return app.content.appendChild(this.el);
+    return this.el;
   }
 }
 
