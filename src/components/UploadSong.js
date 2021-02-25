@@ -16,6 +16,11 @@ function UploadSong(data) {
 
   this.getSongData = () => {
     const song = Array.from(this.el.querySelectorAll('.song-input')).reduce((acc, input) => ({ ...acc, [input.name]: input.value }), {});
+
+    //Handle empty fields
+    if (song.title === '') throw 'song title is missing'
+    if (song.file === '') throw 'song file is missing'
+
     song.files = [];
 
     for (let el of this.children) {

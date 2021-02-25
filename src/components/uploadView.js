@@ -28,13 +28,18 @@ function UploadView(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    let a = [];
+    try {
+      let a = [];
 
-    for (let el of this.children) {
-      a.push(el.getSongData());
+      for (let el of this.children) {
+        a.push(el.getSongData());
+      }
+
+      console.log(a);
     }
-
-    console.log(a);
+    catch (err) {
+      console.log(err);
+    }
   }
 
   this.display = () => {
