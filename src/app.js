@@ -83,6 +83,8 @@ function App() {
         if (!this.views.artistView || this.views.artistView.data !== data.artist) this.views.artistView = new ArtistView(data.artist); //Prevent unnecessary fetching of data from server
         return this.views.artistView.render();
       case 'upload':
+        if (this.views.uploadView) return this.views.uploadView.display(); //Prevent re-render to preserve input state etc.
+
         this.views.uploadView = new UploadView();
         return this.views.uploadView.render();
       default:

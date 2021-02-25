@@ -381,6 +381,10 @@ input[type=radio] {
   margin: 10px 5px;
 }
 
+.label-disabled {
+  color: #888;
+}
+
 .radio-group-div {
   display: flex;
   flex-direction: row;

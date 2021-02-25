@@ -6,6 +6,7 @@ function UploadView(data) {
   this.form = document.createElement('form');
   this.form.setAttribute('id', 'upload-form');
   this.children = [];
+  this.fileCounter = 0;
 
   this.handleAddSong = (e) => {
     e.stopPropagation();
@@ -26,10 +27,17 @@ function UploadView(data) {
     e.stopPropagation();
     e.preventDefault();
 
+    let a = [];
+
     for (let el of this.children) {
-      console.log(el.getSongData());
+      a.push(el.getSongData());
     }
 
+    console.log(a);
+  }
+
+  this.display = () => {
+    return app.content.appendChild(this.el);
   }
 
   this.render = () => {
