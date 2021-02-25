@@ -1,4 +1,5 @@
 const UploadSong = require('./UploadSong');
+const UploadAlbum = require('./UploadAlbum');
 
 function UploadView(data) {
   this.el = document.createElement('div');
@@ -6,19 +7,27 @@ function UploadView(data) {
   this.form = document.createElement('form');
   this.form.setAttribute('id', 'upload-form');
   this.children = [];
+  this.album = null;
   this.fileCounter = 0;
 
   this.handleAddSong = (e) => {
     e.stopPropagation();
 
+    //Update album section
+    if (this.children.length === 1) this.album.enable();
+
     let uploadSong = new UploadSong();
     this.children.push(uploadSong);
     this.form.appendChild(uploadSong.render());
+
     uploadSong.el.querySelector('input').focus(); //Focus first input
   }
 
   this.handleRemoveSong = (e) => {
     e.stopPropagation();
+
+    //Update album section
+    if (this.children.length === 2) this.album.disable();
 
     this.form.removeChild(this.children[this.children.length - 1].el);
     this.children.pop();
@@ -29,13 +38,14 @@ function UploadView(data) {
     e.preventDefault();
 
     try {
-      let a = [];
+      let payload = {
+        album: null,
+        songs: []
+      };
 
-      for (let el of this.children) {
-        a.push(el.getSongData());
-      }
-
-      console.log(a);
+      if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
+      for (let el of this.children) payload.songs.push(el.getSongData());
+      console.log(payload);
     }
     catch (err) {
       console.log(err);
@@ -51,6 +61,8 @@ function UploadView(data) {
     let addSong = document.createElement('button');
     let removeSong = document.createElement('button');
     let submit = document.createElement('input');
+    this.album = new UploadAlbum();
+    let album = this.album.render();
 
     //Add classes for styling
     this.el.className = 'upload';
@@ -63,6 +75,7 @@ function UploadView(data) {
 
     //Build structure
     this.el.appendChild(this.form);
+    this.form.appendChild(album);
     this.el.appendChild(addSong);
     this.el.appendChild(removeSong);
     this.el.appendChild(submit);

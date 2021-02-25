@@ -41,7 +41,7 @@ function UploadFile(data) {
       if (file.file === '') throw 'file is missing';
     }
     else if (file.type === 'internal') {
-      if (file.id === '') throw 'file id is missing';
+      if (file.id === '') throw 'file name is missing';
       if (file.file === '') throw 'file is missing';
     }
 

@@ -22,10 +22,7 @@ function UploadSong(data) {
     if (song.file === '') throw 'song file is missing'
 
     song.files = [];
-
-    for (let el of this.children) {
-      song.files.push(el.getFileData());
-    }
+    for (let el of this.children) song.files.push(el.getFileData());
 
     return song;
   }
