@@ -33,24 +33,43 @@ function UploadView(data) {
     this.children.pop();
   }
 
-  this.handleSubmit = (e) => {
+  this.handleSubmit = async (e) => {
     e.stopPropagation();
     e.preventDefault();
+    let payload = {
+      album: null,
+      songs: []
+    };
 
     try {
-      let payload = {
-        album: null,
-        songs: []
-      };
-
       if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
       for (let el of this.children) payload.songs.push(el.getSongData());
 
       console.log(payload)
       if (payload.album) {
+        //Check if album already exists
+        for await (const album of app.ipfs.files.ls('/antik/albums')) {
+          if (album.name === payload.album.title) throw 'album with the same name already exists';
+        }
+
+        app.ipfs.files.mkdir(`/antik/albums/${payload.album.title}/songs`, { parents: true }); //Create album folder
+        for (let song of payload.songs) {
+          let format = song.file.name.slice(-3);
+          let buffer = await payload.songs[0].file.arrayBuffer();
+
+          await app.ipfs.files.mkdir(`/antik/albums/${payload.album.title}/songs/${song.title}/files`, { parents: true }); //Create a song folder for every song
+
+          let { cid } = await app.ipfs.add({ content: buffer }); //Add song to IPFS and save it to MFS
+          await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/albums/${payload.album.title}/songs/${song.title}/antik - ${song.title}.${format}` );
+
+          console.log(cid.string);
+        }
       }
     }
     catch (err) {
+      if (err === 'album with the same name already exists') return console.log(err);
+
+      await app.ipfs.files.rm(`/antik/albums/${payload.album.title}`, { recursive: true });
       console.log(err);
     }
   }
