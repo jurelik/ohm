@@ -1,5 +1,6 @@
 const UploadSong = require('./UploadSong');
 const UploadAlbum = require('./UploadAlbum');
+const ipfs = require('../utils/ipfs');
 
 function UploadView(data) {
   this.el = document.createElement('div');
@@ -45,25 +46,8 @@ function UploadView(data) {
       if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
       for (let el of this.children) payload.songs.push(el.getSongData());
 
-      console.log(payload)
       if (payload.album) {
-        //Check if album already exists
-        for await (const album of app.ipfs.files.ls('/antik/albums')) {
-          if (album.name === payload.album.title) throw 'album with the same name already exists';
-        }
-
-        app.ipfs.files.mkdir(`/antik/albums/${payload.album.title}/songs`, { parents: true }); //Create album folder
-        for (let song of payload.songs) {
-          let format = song.file.name.slice(-3);
-          let buffer = await payload.songs[0].file.arrayBuffer();
-
-          await app.ipfs.files.mkdir(`/antik/albums/${payload.album.title}/songs/${song.title}/files`, { parents: true }); //Create a song folder for every song
-
-          let { cid } = await app.ipfs.add({ content: buffer }); //Add song to IPFS and save it to MFS
-          await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/albums/${payload.album.title}/songs/${song.title}/antik - ${song.title}.${format}` );
-
-          console.log(cid.string);
-        }
+        await ipfs.uploadAlbum(payload);
       }
     }
     catch (err) {
