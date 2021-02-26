@@ -15,6 +15,7 @@ const uploadAlbum = async (payload) => {
     //Get album CID
     const stats = await app.ipfs.files.stat(`/antik/albums/${payload.album.title}`);
     payload.album.cid = stats.cid.string;
+    payload.album.tags = payload.album.tags.split(/[,;]+/); //Convert string into array
   }
   catch (err) {
     throw err;
@@ -64,6 +65,7 @@ const addSong = async (song, payload) => {
     delete song.file;
     song.fileType = format;
     song.cid = cid.string;
+    song.tags = song.tags.split(/[,;]+/); //Convert string into array
 
     //Add Files
     for (let file of song.files) {
@@ -88,6 +90,7 @@ const addFile = async (file, songTitle, albumTitle) => {
     delete file.file;
     file.fileType = format;
     file.cid = cid.string;
+    file.tags = file.tags.split(/[,;]+/); //Convert string into array
   }
   catch (err) {
     throw err;

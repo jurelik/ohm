@@ -39,12 +39,13 @@ function UploadFile(data) {
     //Handle empty fields
     if (file.type === 'original' || file.type === 'external') {
       if (file.name === '') throw 'file name is missing';
-      if (file.file === '') throw 'file is missing';
     }
     else if (file.type === 'internal') {
       if (file.id === '') throw 'file name is missing';
-      if (file.file === '') throw 'file is missing';
     }
+
+    if (file.file === '') throw 'file is missing';
+    if (file.tags === '') throw 'file tags are missing';
 
     return file;
   }

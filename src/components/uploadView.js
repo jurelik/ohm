@@ -53,14 +53,26 @@ function UploadView(data) {
         await ipfs.uploadSingle(payload);
       }
       console.log(payload);
+      //Send payload to server
+      const _res = await fetch(`${app.URL}/api/upload`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const res = await _res.json();
+      console.log(res);
+      if (res.type === 'error') throw 'errrorrrr'
     }
     catch (err) {
-      console.log(err);
       if (err === 'album with the same name already exists') return console.log(err);
       if (err === 'single with the same name already exists') return console.log(err);
 
+      console.log(err);
       if (payload.album) await app.ipfs.files.rm(`/antik/albums/${payload.album.title}`, { recursive: true });
-      else await app.ipfs.files.rm(`/antik/singles/${payload.songs[0].title}`, { recursive: true });
+      else if (payload.songs.length > 0) await app.ipfs.files.rm(`/antik/singles/${payload.songs[0].title}`, { recursive: true });
     }
   }
 

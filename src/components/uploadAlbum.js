@@ -22,7 +22,8 @@ function UploadAlbum(data) {
     const album = Array.from(this.el.querySelectorAll('input')).reduce((acc, input) => ({ ...acc, [input.name]: input.value }), {});
 
     //Handle empty fields
-    if (album.title === '') throw 'album title is missing'
+    if (album.title === '') throw 'album title is missing';
+    if (album.tags === '') throw 'album tags are missing';
 
     return album;
   }
