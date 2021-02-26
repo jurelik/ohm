@@ -49,12 +49,18 @@ function UploadView(data) {
       if (payload.album) {
         await ipfs.uploadAlbum(payload);
       }
+      else {
+        await ipfs.uploadSingle(payload);
+      }
+      console.log(payload);
     }
     catch (err) {
-      if (err === 'album with the same name already exists') return console.log(err);
-
-      await app.ipfs.files.rm(`/antik/albums/${payload.album.title}`, { recursive: true });
       console.log(err);
+      if (err === 'album with the same name already exists') return console.log(err);
+      if (err === 'single with the same name already exists') return console.log(err);
+
+      if (payload.album) await app.ipfs.files.rm(`/antik/albums/${payload.album.title}`, { recursive: true });
+      else await app.ipfs.files.rm(`/antik/singles/${payload.songs[0].title}`, { recursive: true });
     }
   }
 
