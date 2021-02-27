@@ -104,6 +104,9 @@ function Player() {
   }
 
   this.updateSrc = () => {
+    //If song, artist and title must be included as the CID points to the song parent folder
+    if (this.current.type === 'song') return this.audio.setAttribute('src', `${app.GATEWAY}/ipfs/${this.current.cid}/${this.current.artist} - ${this.current.title || this.current.name}.${this.current.fileType}`);
+
     return this.audio.setAttribute('src', `${app.GATEWAY}/ipfs/${this.current.cid}`);
   }
 
@@ -164,6 +167,7 @@ function Player() {
   }
 
   this.play = () => {
+    console.log(this.audio)
     this.playing ? this.audio.pause() : this.audio.play();
   }
 

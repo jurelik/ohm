@@ -33,10 +33,6 @@ const uploadSingle = async (payload) => {
 
     //Add single
     await addSong(single, payload);
-
-    //Get single CID
-    const stats = await app.ipfs.files.stat(`/antik/singles/${single.title}`);
-    single.cid = stats.cid.string;
   }
   catch (err) {
     throw err;
@@ -44,28 +40,34 @@ const uploadSingle = async (payload) => {
 }
 
 //Helpers
-
 const addSong = async (song, payload) => {
   try {
     let format = song.file.name.slice(-3);
     let albumTitle = payload.album ? payload.album.title : null;
     let buffer = await song.file.arrayBuffer();
     let { cid } = await app.ipfs.add({ content: buffer }); //Add song to IPFS
+    let folder;
 
     if (albumTitle) {
       await app.ipfs.files.mkdir(`/antik/albums/${albumTitle}/songs/${song.title}/files`, { parents: true }); //Create a song folder for every song
       await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/albums/${albumTitle}/songs/${song.title}/antik - ${song.title}.${format}`); //Save song to MFS
+
+      //Get song folder CID
+      folder = await app.ipfs.files.stat(`/antik/albums/${albumTitle}/songs/${song.title}`);
     }
     else {
       await app.ipfs.files.mkdir(`/antik/singles/${song.title}/files`, { parents: true }); //Create single folder
       await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/singles/${song.title}/antik - ${song.title}.${format}`); //Save song to MFS
+
+      //Get song folder CID
+      folder = await app.ipfs.files.stat(`/antik/singles/${song.title}`);
     }
 
     //Clean up the object
     delete song.file;
     song.fileType = format;
-    song.cid = cid.string;
     song.tags = song.tags.split(/[,;]+/); //Convert string into array
+    song.cid = folder.cid.string;
 
     //Add Files
     for (let file of song.files) {
@@ -84,7 +86,7 @@ const addFile = async (file, songTitle, albumTitle) => {
     let { cid } = await app.ipfs.add({ content: buffer }); //Add file to IPFS
 
     if (albumTitle) await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/albums/${albumTitle}/songs/${songTitle}/files/antik - ${file.name}.${format}` ); //add to album
-    else await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/singles/${songTitle}/antik - ${songTitle}.${format}` ); //add to single
+    else await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/singles/${songTitle}/files/antik - ${file.name}.${format}` ); //add to single
 
     //Clean up the object
     delete file.file;
