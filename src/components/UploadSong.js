@@ -23,7 +23,7 @@ function UploadSong(data) {
 
     //Handle empty fields
     if (song.title === '') throw 'song title is missing'
-    if (song.file === '') throw 'song file is missing'
+    if (!song.file) throw 'song file is missing'
     if (song.tags === '') throw 'song tags are missing'
 
     song.files = [];

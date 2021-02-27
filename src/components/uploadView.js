@@ -41,6 +41,7 @@ function UploadView(data) {
       album: null,
       songs: []
     };
+    let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
 
     try {
       if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
@@ -52,6 +53,8 @@ function UploadView(data) {
       else {
         await ipfs.uploadSingle(payload);
       }
+
+      writtenToMFS = true; //MFS has been modified
       console.log(payload);
       //Send payload to server
       const _res = await fetch(`${app.URL}/api/upload`, {
@@ -71,8 +74,8 @@ function UploadView(data) {
       if (err === 'single with the same name already exists') return console.log(err);
 
       console.log(err);
-      if (payload.album) await app.ipfs.files.rm(`/antik/albums/${payload.album.title}`, { recursive: true });
-      else if (payload.songs.length > 0) await app.ipfs.files.rm(`/antik/singles/${payload.songs[0].title}`, { recursive: true });
+      if (payload.album && writtenToMFS) await app.ipfs.files.rm(`/antik/albums/${payload.album.title}`, { recursive: true });
+      else if (payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/antik/singles/${payload.songs[0].title}`, { recursive: true });
     }
   }
 
