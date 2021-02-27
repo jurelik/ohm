@@ -81,6 +81,8 @@ const addSong = async (song, payload) => {
 
 const addFile = async (file, songTitle, albumTitle) => {
   try {
+    if (file.type === 'internal') return;
+
     let format = file.file.name.slice(-3);
     let buffer = await file.file.arrayBuffer();
     let { cid } = await app.ipfs.add({ content: buffer }); //Add file to IPFS
