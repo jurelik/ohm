@@ -17,6 +17,7 @@ function ExploreView() {
 
         if (res.type === 'error') return reject(res.err);
 
+        console.log(res.payload)
         resolve(res.payload);
       }
       catch (err) {

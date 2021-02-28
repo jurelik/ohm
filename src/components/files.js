@@ -8,27 +8,36 @@ function Files(data) {
   this.render = () => {
     let header = document.createElement('tr');
     let playCell = document.createElement('th');
+    let idCell = document.createElement('th');
     let nameCell = document.createElement('th');
     let artistCell = document.createElement('th');
     let typeCell = document.createElement('th');
+    let fileTypeCell = document.createElement('th');
     let tagsCell = document.createElement('th');
+    let infoCell = document.createElement('th');
     let downloadCell = document.createElement('th');
 
     this.el.className = 'files';
 
     playCell.innerHTML = '';
     playCell.setAttribute('id', 'first');
+    idCell.innerHTML = 'id';
     nameCell.innerHTML = 'name';
     artistCell.innerHTML = 'artist';
     typeCell.innerHTML = 'type';
+    fileTypeCell.innerHTML = 'format';
     tagsCell.innerHTML = 'tags';
+    infoCell.innerHTML = 'info';
     downloadCell.innerHTML = 'download';
 
     header.appendChild(playCell);
+    header.appendChild(idCell);
     header.appendChild(nameCell);
     header.appendChild(artistCell);
     header.appendChild(typeCell);
+    header.appendChild(fileTypeCell);
     header.appendChild(tagsCell);
+    header.appendChild(infoCell);
     header.appendChild(downloadCell);
 
     this.el.appendChild(header);

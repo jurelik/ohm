@@ -31,10 +31,13 @@ function File(data) {
     //Create elements
     let playButtonCell = document.createElement('td');
     let playButton = document.createElement('button');
+    let id = document.createElement('td');
     let name = document.createElement('td');
     let artist = document.createElement('td');
     let type = document.createElement('td');
+    let fileType = document.createElement('td');
     let tags = document.createElement('td');
+    let info = document.createElement('td');
     let checkBoxCell = document.createElement('td');
     let checkBox = document.createElement('input');
 
@@ -43,18 +46,24 @@ function File(data) {
 
     //Add attributes and innerHTML
     playButton.innerHTML = this.playing ? this.pauseIcon : this.playIcon;
+    id.innerHTML = data.id;
     name.innerHTML = data.name;
     artist.innerHTML = data.artist;
-    type.innerHTML = data.fileType;
-    tags.innerHTML = data.tags.join(', ')
+    type.innerHTML = data.type;
+    fileType.innerHTML = data.fileType;
+    tags.innerHTML = data.tags.join(', ');
+    info.innerHTML = data.info;
     checkBox.type = 'checkbox';
 
     //Build structure
     this.el.appendChild(playButtonCell);
+    this.el.appendChild(id);
     this.el.appendChild(name);
     this.el.appendChild(artist);
     this.el.appendChild(type);
+    this.el.appendChild(fileType);
     this.el.appendChild(tags);
+    this.el.appendChild(info);
     this.el.appendChild(checkBoxCell);
     data.fileType === 'wav' || data.fileType === 'mp3' ? playButtonCell.appendChild(playButton) : null;
     checkBoxCell.appendChild(checkBox);
