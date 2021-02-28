@@ -1,8 +1,14 @@
 function UploadFile(data) {
   this.el = document.createElement('fieldset');
   this.data = data;
+
+  //Elements
   this.name = null;
   this.id = null;
+  this.tags = null;
+  this.info = null;
+  this.file = null;
+
   //Add unique id to file and increase fileCounter
   this.unique = app.views.uploadView.fileCounter;
   app.views.uploadView.fileCounter++;
@@ -17,6 +23,12 @@ function UploadFile(data) {
 
       this.name.querySelector('input').disabled = false;
       this.name.querySelector('label').className = '';
+      this.tags.querySelector('input').disabled = false;
+      this.tags.querySelector('label').className = '';
+      this.info.querySelector('input').disabled = false;
+      this.info.querySelector('label').className = '';
+      this.file.querySelector('input').disabled = false;
+      this.file.querySelector('label').className = '';
     }
     else if (e.target.value === 'internal') {
       this.id.querySelector('input').disabled = false;
@@ -24,6 +36,12 @@ function UploadFile(data) {
 
       this.name.querySelector('input').disabled = true;
       this.name.querySelector('label').className = 'label-disabled';
+      this.tags.querySelector('input').disabled = true;
+      this.tags.querySelector('label').className = 'label-disabled';
+      this.info.querySelector('input').disabled = true;
+      this.info.querySelector('label').className = 'label-disabled';
+      this.file.querySelector('input').disabled = true;
+      this.file.querySelector('label').className = 'label-disabled';
     }
   }
 
@@ -139,6 +157,9 @@ function UploadFile(data) {
     //Save reference to name and id elements
     this.name = name;
     this.id = id;
+    this.tags = tags;
+    this.info = info;
+    this.file = file;
 
     //Add listeners
 

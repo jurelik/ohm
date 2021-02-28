@@ -67,7 +67,7 @@ function UploadView(data) {
 
       const res = await _res.json();
       console.log(res);
-      if (res.type === 'error') throw 'errrorrrr'
+      if (res.type === 'error') throw res.err;
     }
     catch (err) {
       if (err === 'album with the same name already exists') return console.log(err);
