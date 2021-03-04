@@ -2,7 +2,6 @@
 
 const { ipcRenderer } = require('electron');
 const createClient = require('ipfs-http-client');
-const fetch = require('node-fetch');
 
 const Nav = require('./components/nav');
 const ExploreView = require('./components/exploreView');

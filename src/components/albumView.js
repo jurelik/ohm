@@ -13,15 +13,23 @@ function AlbumView(data, action) {
 
 
   this.render = () => {
-    let action = this.action || 'files';
+    //Create elements
     let album = new Album(data, true);
+    let description = document.createElement('div');
 
+    //Add classes for styling
     this.el.className = 'albumView';
+    description.className = 'description';
 
     //Add song child for remote control
     this.children.album = album;
 
+    //Add attributes and innerHTML
+    description.innerHTML = data.description;
+
+    //Build structure
     this.el.appendChild(album.render());
+    this.el.appendChild(description);
 
     for (let _song of this.data.songs) {
       let song = new Song(_song, 'albumView');

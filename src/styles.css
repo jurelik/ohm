@@ -258,6 +258,14 @@ input[type=file] button {
   width: 25px;
 }
 
+.albumView .description {
+  color: #888;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 25px;
+  font-size: 11px;
+}
+
 .albumView .song {
   margin-left: 18px;
 }
