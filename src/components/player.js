@@ -167,7 +167,6 @@ function Player() {
   }
 
   this.play = () => {
-    console.log(this.audio)
     this.playing ? this.audio.pause() : this.audio.play();
   }
 

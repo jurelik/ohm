@@ -5,17 +5,21 @@ function UploadAlbum(data) {
   this.enable = () => {
     let inputs = this.el.querySelectorAll('input');
     let labels = this.el.querySelectorAll('label');
+    let textarea = this.el.querySelector('textarea');
 
     for (let input of inputs) input.disabled = false;
     for (let label of labels) label.className = '';
+    textarea.disabled = false;
   }
 
   this.disable = () => {
     let inputs = this.el.querySelectorAll('input');
     let labels = this.el.querySelectorAll('label');
+    let textarea = this.el.querySelector('textarea');
 
     for (let input of inputs) input.disabled = true;
     for (let label of labels) label.className = 'label-disabled';
+    textarea.disabled = true;
   }
 
   this.getAlbumData = () => {
@@ -36,11 +40,15 @@ function UploadAlbum(data) {
     let tagsDiv = document.createElement('div');
     let tagsLabel = document.createElement('label');
     let tags = document.createElement('input');
+    let descriptionDiv = document.createElement('div');
+    let descriptionLabel = document.createElement('label');
+    let description = document.createElement('textarea');
 
     //Add classes for styling
     this.el.className = 'upload-album';
     title.className = 'album-input';
     tags.className = 'album-input';
+    description.className = 'album-textarea';
 
     //Add attributes and innerHTML
     titleLabel.setAttribute('for', 'title');
@@ -57,13 +65,23 @@ function UploadAlbum(data) {
     tags.setAttribute('name', 'tags');
     tags.disabled = true;
 
+    descriptionLabel.setAttribute('for', 'description');
+    descriptionLabel.innerHTML = 'album description:';
+    descriptionLabel.className = 'label-disabled';
+    descriptionDiv.className = 'upload-description';
+    description.setAttribute('name', 'description');
+    description.disabled = true;
+
     //Build structure
     titleDiv.appendChild(titleLabel);
     titleDiv.appendChild(title);
     tagsDiv.appendChild(tagsLabel);
     tagsDiv.appendChild(tags);
+    descriptionDiv.appendChild(descriptionLabel);
+    descriptionDiv.appendChild(description);
     this.el.appendChild(titleDiv);
     this.el.appendChild(tagsDiv);
+    this.el.appendChild(descriptionDiv);
 
     //Add listeners
 
