@@ -11,10 +11,10 @@ function UploadSong(data) {
 
     let uploadFile = new UploadFile();
     this.children.push(uploadFile);
-    this.el.appendChild(uploadFile.render());
+    this.el.insertBefore(uploadFile.render(), this.el.children[this.el.children.length - 2]);
   }
 
-  this.handleDelete = (e) => {
+  this.handleDeleteSong = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -93,7 +93,7 @@ function UploadSong(data) {
 
     //Add listeners
     addFile.onclick = this.handleAddFile;
-    deleteSong.onclick = this.handleDelete;
+    deleteSong.onclick = this.handleDeleteSong;
 
     return this.el;
   }
