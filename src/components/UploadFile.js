@@ -45,6 +45,13 @@ function UploadFile(data) {
     }
   }
 
+  this.handleDeleteFile = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.data.handleRemoveFile(this.unique);
+  }
+
   this.getFileData = () => {
     const file = Array.from(this.el.querySelectorAll('.file-input')).reduce((acc, input) => {
       if (input.type === 'radio' && input.checked) return { ...acc, type: input.value };
@@ -129,6 +136,7 @@ function UploadFile(data) {
     let tags = this.createInput('tags', 'text');
     let info = this.createInput('info', 'text');
     let file = this.createInput('file', 'file');
+    let deleteFile = document.createElement('button');
 
     //Add classes for styling
     this.el.className = 'upload-file';
@@ -140,6 +148,7 @@ function UploadFile(data) {
     typeLabel.innerHTML = 'type: ';
     typeOriginal.querySelector('.file-input').checked = true;
     id.querySelector('.file-input').disabled = true;
+    deleteFile.innerHTML = 'delete file';
 
     //Build structure
     typeDiv.appendChild(typeLabel);
@@ -153,8 +162,9 @@ function UploadFile(data) {
     this.el.appendChild(tags);
     this.el.appendChild(info);
     this.el.appendChild(file);
+    this.el.appendChild(deleteFile);
 
-    //Save reference to name and id elements
+    //Save references elements
     this.name = name;
     this.id = id;
     this.tags = tags;
@@ -162,6 +172,7 @@ function UploadFile(data) {
     this.file = file;
 
     //Add listeners
+    deleteFile.onclick = this.handleDeleteFile;
 
     return this.el;
   }

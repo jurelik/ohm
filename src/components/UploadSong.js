@@ -5,11 +5,15 @@ function UploadSong(data) {
   this.data = data;
   this.children = [];
 
+  //Add unique id to file and increase songCounter
+  this.unique = app.views.uploadView.songCounter;
+  app.views.uploadView.songCounter++;
+
   this.handleAddFile = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    let uploadFile = new UploadFile();
+    let uploadFile = new UploadFile({ handleRemoveFile: this.handleRemoveFile });
     this.children.push(uploadFile);
     this.el.insertBefore(uploadFile.render(), this.el.children[this.el.children.length - 2]);
   }
@@ -18,7 +22,22 @@ function UploadSong(data) {
     e.preventDefault();
     e.stopPropagation();
 
-    return app.views.uploadView.handleRemoveSong(this.data);
+    return app.views.uploadView.handleRemoveSong(this.unique);
+  }
+
+  this.handleRemoveFile = (unique) => {
+    //Find file to delete
+    let file;
+    this.children.some(child => {
+      if (child.unique === unique) {
+        file = child
+        return true;
+      }
+    });
+    let index = this.children.indexOf(file);
+
+    this.el.removeChild(this.children[index].el);
+    this.children.splice(index, 1);
   }
 
   this.getSongData = () => {

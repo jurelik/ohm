@@ -17,9 +17,8 @@ function UploadView(data) {
     e.stopPropagation();
 
     if (this.children.length === 1) this.album.enable(); //Update album section
-    this.songCounter++; //Increment songCounter
 
-    let uploadSong = new UploadSong(this.songCounter);
+    let uploadSong = new UploadSong();
     this.children.push(uploadSong);
     this.form.appendChild(uploadSong.render());
 
@@ -32,7 +31,7 @@ function UploadView(data) {
     //Find song to delete
     let song;
     this.children.some(child => {
-      if (child.data === unique) {
+      if (child.unique === unique) {
         song = child
         return true;
       }
@@ -114,7 +113,7 @@ function UploadView(data) {
     this.el.appendChild(submit);
 
     if (this.children.length === 0) {
-      let uploadSong = new UploadSong(this.songCounter);
+      let uploadSong = new UploadSong();
       this.children.push(uploadSong);
       this.form.appendChild(uploadSong.render());
     }
