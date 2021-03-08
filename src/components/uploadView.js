@@ -10,28 +10,37 @@ function UploadView(data) {
   this.children = [];
   this.album = null;
   this.fileCounter = 0;
+  this.songCounter = 0;
 
   this.handleAddSong = (e) => {
+    e.preventDefault();
     e.stopPropagation();
 
-    //Update album section
-    if (this.children.length === 1) this.album.enable();
+    if (this.children.length === 1) this.album.enable(); //Update album section
+    this.songCounter++; //Increment songCounter
 
-    let uploadSong = new UploadSong();
+    let uploadSong = new UploadSong(this.songCounter);
     this.children.push(uploadSong);
     this.form.appendChild(uploadSong.render());
 
     uploadSong.el.querySelector('input').focus(); //Focus first input
   }
 
-  this.handleRemoveSong = (e) => {
-    e.stopPropagation();
+  this.handleRemoveSong = (unique) => {
+    if (this.children.length === 2) this.album.disable(); //Update album section
 
-    //Update album section
-    if (this.children.length === 2) this.album.disable();
+    //Find song to delete
+    let song;
+    this.children.some(child => {
+      if (child.data === unique) {
+        song = child
+        return true;
+      }
+    });
+    let index = this.children.indexOf(song);
 
-    this.form.removeChild(this.children[this.children.length - 1].el);
-    this.children.pop();
+    this.form.removeChild(this.children[index].el);
+    this.children.splice(index, 1);
   }
 
   this.handleSubmit = async (e) => {
@@ -86,7 +95,6 @@ function UploadView(data) {
   this.render = () => {
     //Create elements
     let addSong = document.createElement('button');
-    let removeSong = document.createElement('button');
     let submit = document.createElement('input');
     this.album = new UploadAlbum();
     let album = this.album.render();
@@ -96,7 +104,6 @@ function UploadView(data) {
 
     //Add attributes and innerHTML
     addSong.innerHTML = 'add song';
-    removeSong.innerHTML = 'remove song';
     submit.innerHTML = 'submit';
     submit.setAttribute('type', 'submit');
 
@@ -104,18 +111,16 @@ function UploadView(data) {
     this.el.appendChild(this.form);
     this.form.appendChild(album);
     this.el.appendChild(addSong);
-    this.el.appendChild(removeSong);
     this.el.appendChild(submit);
 
     if (this.children.length === 0) {
-      let uploadSong = new UploadSong();
+      let uploadSong = new UploadSong(this.songCounter);
       this.children.push(uploadSong);
       this.form.appendChild(uploadSong.render());
     }
 
     //Add listeners
     addSong.onclick = this.handleAddSong;
-    removeSong.onclick = this.handleRemoveSong;
     submit.onclick = this.handleSubmit;
 
     app.content.appendChild(this.el);

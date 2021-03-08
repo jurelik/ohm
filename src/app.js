@@ -70,7 +70,7 @@ function App() {
 
     switch (view) {
       case 'explore':
-        this.views.exploreView = new ExploreView();
+        if (!this.views.exploreView) this.views.exploreView = new ExploreView(); //Prevent unnecessary fetching of data from server
         return this.views.exploreView.render();
       case 'song':
         this.views.songView = new SongView(data.song, data.action);

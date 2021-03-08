@@ -85,6 +85,7 @@ function Player() {
         }
       }
       else {
+        //Remove this error in production
         console.error('view not recognized');
       }
     }

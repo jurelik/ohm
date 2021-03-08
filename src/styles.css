@@ -397,6 +397,17 @@ input[type=file] button {
   margin-bottom: 10px;
 }
 
+.upload-song button {
+  padding: 0;
+  margin-top: 10px;
+  margin-right: 10px;
+  font-size: 11px;
+}
+
+.upload-song button:hover {
+  text-decoration: underline;
+}
+
 .upload-file {
   padding: 5px;
   margin: 10px 5px;

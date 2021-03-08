@@ -14,6 +14,13 @@ function UploadSong(data) {
     this.el.appendChild(uploadFile.render());
   }
 
+  this.handleDelete = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    return app.views.uploadView.handleRemoveSong(this.data);
+  }
+
   this.getSongData = () => {
     const song = Array.from(this.el.querySelectorAll('.song-input')).reduce((acc, input) => {
       if (input.type === 'file') return { ...acc, [input.name]: input.files[0] };
@@ -45,6 +52,7 @@ function UploadSong(data) {
     let fileLabel = document.createElement('label');
     let file = document.createElement('input');
     let addFile = document.createElement('button');
+    let deleteSong = document.createElement('button');
 
     //Add classes for styling
     this.el.className = 'upload-song';
@@ -67,6 +75,7 @@ function UploadSong(data) {
     file.setAttribute('type', 'file');
     file.setAttribute('name', 'file');
     addFile.innerHTML = 'add file';
+    deleteSong.innerHTML = 'delete song';
 
     //Build structure
     titleDiv.appendChild(titleLabel);
@@ -80,9 +89,11 @@ function UploadSong(data) {
     this.el.appendChild(tagsDiv);
     this.el.appendChild(fileDiv);
     this.el.appendChild(addFile);
+    this.el.appendChild(deleteSong);
 
     //Add listeners
     addFile.onclick = this.handleAddFile;
+    deleteSong.onclick = this.handleDelete;
 
     return this.el;
   }

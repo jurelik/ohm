@@ -17,7 +17,6 @@ function ExploreView() {
 
         if (res.type === 'error') return reject(res.err);
 
-        console.log(res.payload)
         resolve(res.payload);
       }
       catch (err) {
@@ -28,6 +27,8 @@ function ExploreView() {
 
   this.render = async () => {
     try {
+      this.el.innerHTML = ''; //Reset innerHTML
+
       //Fetch data from server on first render
       if (!this.data) {
         this.data = await this.fetch();
