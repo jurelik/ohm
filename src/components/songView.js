@@ -21,6 +21,7 @@ function SongView(data, action) {
     this.el.appendChild(song.render());
     this.el.appendChild(main.render());
 
+    app.content.appendChild(this.el);
     return this.el;
   }
 }

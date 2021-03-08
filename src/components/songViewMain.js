@@ -52,6 +52,7 @@ function SongViewMain(data, action) {
       case 'comments':
         let comments = new Comments(data.comments);
         this.el.appendChild(comments.render());
+        comments.el.querySelector('textarea').focus(); //Focus the input
         actionBarComments.className = 'selected';
         break;
       default:

@@ -5,8 +5,13 @@
   font-style: normal;
 }
 
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 html {
   background-color: #222;
+  box-sizing: border-box;
 }
 
 body {
@@ -29,6 +34,10 @@ button {
   border: none;
   outline: none;
   cursor: pointer;
+}
+
+button:hover, button:focus {
+  text-decoration: underline;
 }
 
 table {
@@ -161,10 +170,12 @@ input[type=file] button {
 }
 
 .content {
+  position: relative;
   width: 100%;
-  overflow: auto;
+  overflow-y: auto;
   margin-bottom: 50px;
-  padding: 0px 5px;
+  padding-left: 5px;
+  padding-right: 10px;
 }
 
 .player {
@@ -214,17 +225,9 @@ input[type=file] button {
   margin-right: 10px;
 }
 
-.album .actions button:hover {
-  text-decoration: underline;
-}
-
 .album .main .artist {
   width: auto;
   padding: 0px;
-}
-
-.album .main .artist:hover {
-  text-decoration: underline;
 }
 
 .album .main .titleAndArtist {
@@ -289,10 +292,6 @@ input[type=file] button {
   padding: 0px;
 }
 
-.song .main .artist:hover {
-  text-decoration: underline;
-}
-
 .song .main .titleAndArtist {
   display: flex;
   flex-direction: row;
@@ -333,19 +332,42 @@ input[type=file] button {
   margin-right: 10px;
 }
 
-.song .actions button:hover {
-  text-decoration: underline;
-}
-
-.song .art {
-  object-fit: cover;
-  height: 50px;
-  width: 50px;
-}
-
 .song-view-main {
   color: #888;
   margin-left: 8px;
+}
+
+.song-view-main .comment-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: #222;
+  width: 100%;
+}
+
+.comment-container .marker {
+  color: #eee;
+  margin-left: 13px;
+}
+
+.comment-container textarea {
+  border: none;
+  background-color: #222;
+  color: #eee;
+  flex: 1;
+  margin-left: 5px;
+  margin-right: 5px;
+  resize: none;
+}
+
+.comment-container textarea:focus {
+  outline: none;
+}
+
+.comment-container button {
+  color: #eee;
 }
 
 .song-view-main button {
@@ -402,10 +424,6 @@ input[type=file] button {
   margin-top: 10px;
   margin-right: 10px;
   font-size: 11px;
-}
-
-.upload-song button:hover {
-  text-decoration: underline;
 }
 
 .upload-file {

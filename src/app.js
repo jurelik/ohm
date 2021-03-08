@@ -74,7 +74,7 @@ function App() {
         return this.views.exploreView.render();
       case 'song':
         this.views.songView = new SongView(data.song, data.action);
-        return this.content.appendChild(this.views.songView.render());
+        return this.views.songView.render();
       case 'album':
         this.views.albumView = new AlbumView(data.album);
         return this.content.appendChild(this.views.albumView.render());
