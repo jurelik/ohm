@@ -370,6 +370,10 @@ input[type=file] button {
   color: #eee;
 }
 
+.comment {
+  margin: 5px 0;
+}
+
 .song-view-main button {
   padding: 0px;
   margin-right: 10px;

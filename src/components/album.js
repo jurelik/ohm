@@ -29,6 +29,7 @@ function Album(data) {
 
   this.handleArtistButton = (e) => {
     e.stopPropagation();
+    if (app.current === 'artist') return; //Prevent clicking album forever
 
     app.addToHistory('artist', { artist: this.data.artist });
     app.changeView('artist', { artist: this.data.artist });
