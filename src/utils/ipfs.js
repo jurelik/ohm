@@ -39,6 +39,39 @@ const uploadSingle = async (payload) => {
   }
 }
 
+const checkIfArtistExists = async (artist) => {
+  try {
+    for await (const file of app.ipfs.files.ls('/')) {
+      if (file.name === artist && file.type === 'directory') return true;
+    }
+
+    return false;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const checkIfSongExists = async (data) => {
+  try {
+    for await (const file of app.ipfs.files.ls(`/${data.artist}/singles/`)) {
+      if (file.name === data.title && file.type === 'directory') {
+        //Compare CIDs to see if the full song folder is pinned
+        const stat = await app.ipfs.files.stat(`/${data.artist}/singles/${data.title}`);
+
+        if (stat.cid.string === data.cid) return true;
+        else return false;
+      }
+    }
+
+    return false;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+
 //Helpers
 const addSong = async (song, payload) => {
   try {
@@ -103,5 +136,7 @@ const addFile = async (file, songTitle, albumTitle) => {
 
 module.exports = {
   uploadAlbum,
-  uploadSingle
+  uploadSingle,
+  checkIfArtistExists,
+  checkIfSongExists
 }

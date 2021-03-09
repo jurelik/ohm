@@ -44,7 +44,7 @@ function ExploreView() {
         if (item.type === 'song') {
           let song = new Song(item);
           this.children.songs[item.id] = song;
-          el = song.render();
+          el = await song.render();
         }
         else if (item.type === 'album') {
           let album = new Album(item);

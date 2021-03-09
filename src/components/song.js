@@ -51,55 +51,60 @@ function Song(data, view) {
     return app.views.albumView.data.songs.indexOf(this.data);
   }
 
-  this.render = () => {
-    //Create elements
-    let main = document.createElement('div');
-    let titleAndArtist = document.createElement('div');
-    let artist = document.createElement('button');
-    let separator = document.createElement('p');
-    let title = document.createElement('p');
-    let tag = document.createElement('p');
-    let playButton = document.createElement('button');
+  this.render = async () => {
+    try {
+      //Create elements
+      let main = document.createElement('div');
+      let titleAndArtist = document.createElement('div');
+      let artist = document.createElement('button');
+      let separator = document.createElement('p');
+      let title = document.createElement('p');
+      let tag = document.createElement('p');
+      let playButton = document.createElement('button');
 
-    //Add classes for styling
-    this.el.classList.add('song');
-    main.classList.add('main');
-    artist.classList.add('artist');
-    titleAndArtist.classList.add('titleAndArtist');
-    tag.classList.add('tag');
-    separator.classList.add('separator');
+      //Add classes for styling
+      this.el.classList.add('song');
+      main.classList.add('main');
+      artist.classList.add('artist');
+      titleAndArtist.classList.add('titleAndArtist');
+      tag.classList.add('tag');
+      separator.classList.add('separator');
 
-    //Add attributes and innerHTML
-    artist.innerHTML = this.data.artist;
-    separator.innerHTML = '•';
-    title.innerHTML = this.data.title;
-    tag.innerHTML = '#' + this.data.tags[0];
-    playButton.innerHTML = this.playing ? this.pauseIcon : this.playIcon;
+      //Add attributes and innerHTML
+      artist.innerHTML = this.data.artist;
+      separator.innerHTML = '•';
+      title.innerHTML = this.data.title;
+      tag.innerHTML = '#' + this.data.tags[0];
+      playButton.innerHTML = this.playing ? this.pauseIcon : this.playIcon;
 
-    //Build structure
-    this.el.appendChild(main);
-    main.appendChild(playButton);
-    main.appendChild(titleAndArtist);
-    titleAndArtist.appendChild(artist);
-    titleAndArtist.appendChild(separator);
-    titleAndArtist.appendChild(title);
-    main.appendChild(tag);
+      //Build structure
+      this.el.appendChild(main);
+      main.appendChild(playButton);
+      main.appendChild(titleAndArtist);
+      titleAndArtist.appendChild(artist);
+      titleAndArtist.appendChild(separator);
+      titleAndArtist.appendChild(title);
+      main.appendChild(tag);
 
-    //Add action bar
-    if (this.view === 'songView') {
-      //Do nothing
+      //Add action bar
+      if (this.view === 'songView') {
+        //Do nothing
+      }
+      else {
+        let actionBar = new ActionBarSong(this.data);
+        this.el.appendChild(await actionBar.render());
+      }
+
+      //Add listeners
+      this.el.onclick = this.handleSongClick;
+      playButton.onclick = this.handlePlayButton;
+      artist.onclick = this.handleArtistButton;
+
+      return this.el;
     }
-    else {
-      let actionBar = new ActionBarSong(this.data);
-      this.el.appendChild(actionBar.render());
+    catch (err) {
+      console.error(err);
     }
-
-    //Add listeners
-    this.el.onclick = this.handleSongClick;
-    playButton.onclick = this.handlePlayButton;
-    artist.onclick = this.handleArtistButton;
-
-    return this.el;
   }
 }
 
