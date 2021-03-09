@@ -50,14 +50,15 @@ function App() {
     this.nav.render();
     this.player.render();
 
-    this.changeView('explore');
-    this.addToHistory('explore');
-    this.historyIndex = 0;
-    this.header.backButton.className = 'disabled';
-
     //Init an ipfs daemon & create an ipfs node
     ipcRenderer.on('daemon-ready', async () => {
       this.ipfs = createClient();
+
+      //Render first content
+      this.changeView('explore');
+      this.addToHistory('explore');
+      this.historyIndex = 0;
+      this.header.backButton.className = 'disabled';
     });
 
     ipcRenderer.send('start');

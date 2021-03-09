@@ -30,6 +30,8 @@ function Comments(data) {
       payload.artist = 'antik'; //For testing purposes
       const comment = new Comment(payload);
       this.el.insertBefore(comment.render(), this.el.children[0]);
+
+      this.el.querySelector('textarea').value = ''; //Reset comment field to empty
     }
     catch (err) {
       console.error(err);
