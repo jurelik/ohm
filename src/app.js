@@ -63,31 +63,36 @@ function App() {
     ipcRenderer.send('start');
   }
 
-  this.changeView = (view, data) => {
-    this.content.innerHTML = '';
-    this.content.scrollTop = 0;
-    this.current = view;
+  this.changeView = async (view, data) => {
+    try {
+      this.content.innerHTML = '';
+      this.content.scrollTop = 0;
+      this.current = view;
 
-    switch (view) {
-      case 'explore':
-        if (!this.views.exploreView) this.views.exploreView = new ExploreView(); //Prevent unnecessary fetching of data from server
-        return this.views.exploreView.render();
-      case 'song':
-        this.views.songView = new SongView(data.song, data.action);
-        return this.views.songView.render();
-      case 'album':
-        this.views.albumView = new AlbumView(data.album);
-        return this.content.appendChild(this.views.albumView.render());
-      case 'artist':
-        if (!this.views.artistView || this.views.artistView.data !== data.artist) this.views.artistView = new ArtistView(data.artist); //Prevent unnecessary fetching of data from server
-        return this.views.artistView.render();
-      case 'upload':
-        if (this.views.uploadView) return this.views.uploadView.display(); //Prevent re-render to preserve input state etc.
+      switch (view) {
+        case 'explore':
+          if (!this.views.exploreView) this.views.exploreView = new ExploreView(); //Prevent unnecessary fetching of data from server
+          return await this.views.exploreView.render();
+        case 'song':
+          this.views.songView = new SongView(data.song, data.action);
+          return await this.views.songView.render();
+        case 'album':
+          this.views.albumView = new AlbumView(data.album);
+          return await this.views.albumView.render();
+        case 'artist':
+          if (!this.views.artistView || this.views.artistView.data !== data.artist) this.views.artistView = new ArtistView(data.artist); //Prevent unnecessary fetching of data from server
+          return await this.views.artistView.render();
+        case 'upload':
+          if (this.views.uploadView) return this.views.uploadView.display(); //Prevent re-render to preserve input state etc.
 
-        this.views.uploadView = new UploadView();
-        return this.views.uploadView.render();
-      default:
-        return this.content.innerHTML = view;
+          this.views.uploadView = new UploadView();
+          return this.views.uploadView.render();
+        default:
+          return this.content.innerHTML = view;
+      }
+    }
+    catch (err) {
+      console.error(err);
     }
   }
 

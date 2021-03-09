@@ -10,19 +10,24 @@ function SongView(data, action) {
     files: {}
   };
 
-  this.render = () => {
-    let action = this.action || 'files';
-    let song = new Song(data, 'songView');
-    let main = new SongViewMain(data, action);
+  this.render = async () => {
+    try {
+      let action = this.action || 'files';
+      let song = new Song(data, 'songView');
+      let main = new SongViewMain(data, action);
 
-    //Add song child for remote control
-    this.children.song = song;
+      //Add song child for remote control
+      this.children.song = song;
 
-    this.el.appendChild(song.render());
-    this.el.appendChild(main.render());
+      this.el.appendChild(await song.render());
+      this.el.appendChild(main.render());
 
-    app.content.appendChild(this.el);
-    return this.el;
+      app.content.appendChild(this.el);
+      return this.el;
+    }
+    catch (err) {
+      console.error(err);
+    }
   }
 }
 

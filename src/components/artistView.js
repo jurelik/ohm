@@ -81,7 +81,7 @@ function ArtistView(data) {
         //Add file child to app.songView for remote control
         this.children.songs[_song.id] = song;
 
-        this.el.appendChild(song.render());
+        this.el.appendChild(await song.render());
       }
 
       //Add listeners
