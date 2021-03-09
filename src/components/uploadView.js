@@ -63,7 +63,6 @@ function UploadView(data) {
       }
 
       writtenToMFS = true; //MFS has been modified
-      console.log(payload);
       //Send payload to server
       const _res = await fetch(`${app.URL}/api/upload`, {
         method: 'POST',
@@ -74,7 +73,6 @@ function UploadView(data) {
       });
 
       const res = await _res.json();
-      console.log(res);
       if (res.type === 'error') throw res.err;
     }
     catch (err) {

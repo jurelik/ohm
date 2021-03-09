@@ -5,10 +5,35 @@ function Comments(data) {
   this.data = data;
   this.state = {};
 
-  this.handleSubmit = (e) => {
+  this.handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('hi');
+
+    const payload = {};
+    try {
+      //Append data to payload
+      payload.content = this.el.querySelector('textarea').value;
+      payload.songId = app.views.songView.data.id;
+
+      const _res = await fetch(`${app.URL}/api/comment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const res = await _res.json();
+      if (res.type === 'error') throw res.err;
+
+      //Insert new comment into the DOM
+      payload.artist = 'antik'; //For testing purposes
+      const comment = new Comment(payload);
+      this.el.insertBefore(comment.render(), this.el.children[0]);
+    }
+    catch (err) {
+      console.error(err);
+    }
   }
 
   this.render = () => {
@@ -31,7 +56,7 @@ function Comments(data) {
 
     //Build structure
     for (let _comment of this.data) {
-      let comment = new Comment(_comment);
+      const comment = new Comment(_comment);
       this.el.appendChild(comment.render());
     }
 
