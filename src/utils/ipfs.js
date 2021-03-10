@@ -108,6 +108,24 @@ const unpinSong = async (data, albumTitle) => {
   }
 }
 
+const pinAlbum = async (data) => {
+  try {
+    await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/albums/${data.title}`, { parents: true });
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const unpinAlbum = async (data) => {
+  try {
+    await app.ipfs.files.rm(`/${data.artist}/albums/${data.title}`, { recursive: true });
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 //Helpers
 const addSong = async (song, payload) => {
   try {
@@ -178,5 +196,7 @@ module.exports = {
   albumExists,
   songInAlbumExists,
   pinSong,
-  unpinSong
+  unpinSong,
+  pinAlbum,
+  unpinAlbum
 }

@@ -3,7 +3,24 @@ const ipfs = require('../utils/ipfs');
 function ActionBarAlbum(data) {
   this.el = document.createElement('div');
   this.data = data;
-  this.state = {};
+  this.pinned = false;
+
+  this.handlePinClick = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      this.pinned ? await ipfs.unpinAlbum(this.data) : await ipfs.pinAlbum(this.data);
+      this.pinned = !this.pinned;
+
+      //Update pin innerHTML
+      this.el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
+      console.log('success');
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
 
   this.checkIfPinned = async () => {
     try {
@@ -20,6 +37,9 @@ function ActionBarAlbum(data) {
 
   this.render = async () => {
     try {
+      //Check if album is pinned
+      this.pinned = await this.checkIfPinned();
+
       //Create elements
       let songs = document.createElement('button');
       let pin = document.createElement('button');
@@ -27,10 +47,11 @@ function ActionBarAlbum(data) {
 
       //Add classes for styling
       this.el.className = 'actions';
+      pin.className = 'pin';
 
       //Add attributes and innerHTML
       songs.innerHTML = `${this.data.songs.length} songs`;
-      pin.innerHTML = await this.checkIfPinned() ? 'pinned' : 'pin';
+      pin.innerHTML = this.pinned ? 'unpin' : 'pin';
       download.innerHTML = 'download all';
 
       //Build structure
@@ -39,9 +60,7 @@ function ActionBarAlbum(data) {
       this.el.appendChild(download);
 
       //Add listeners
-      pin.onclick = (e) => {
-        e.stopPropagation();
-      }
+      pin.onclick = this.handlePinClick;
 
       return this.el;
     }
