@@ -29,7 +29,7 @@ function AlbumView(data, action) {
       description.innerHTML = data.description;
 
       //Build structure
-      this.el.appendChild(album.render());
+      this.el.appendChild(await album.render());
       this.el.appendChild(description);
 
       for (let _song of this.data.songs) {

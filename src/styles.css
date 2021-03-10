@@ -36,7 +36,7 @@ button {
   cursor: pointer;
 }
 
-button:hover, button:focus {
+button:hover, button:active {
   text-decoration: underline;
 }
 

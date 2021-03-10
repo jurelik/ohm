@@ -66,56 +66,61 @@ function Album(data) {
     return 0;
   }
 
-  this.render = () => {
-    //Create elements
-    let main = document.createElement('div');
-    let titleAndArtist = document.createElement('div');
-    let artist = document.createElement('button');
-    let separator = document.createElement('p');
-    let title = document.createElement('p');
-    let tag = document.createElement('p');
-    let playButton = document.createElement('button');
-    let albumIcon = document.createElement('div');
+  this.render = async () => {
+    try {
+      //Create elements
+      let main = document.createElement('div');
+      let titleAndArtist = document.createElement('div');
+      let artist = document.createElement('button');
+      let separator = document.createElement('p');
+      let title = document.createElement('p');
+      let tag = document.createElement('p');
+      let playButton = document.createElement('button');
+      let albumIcon = document.createElement('div');
 
-    //Add classes for styling
-    this.el.classList.add('album');
-    main.classList.add('main');
-    artist.classList.add('artist');
-    titleAndArtist.classList.add('titleAndArtist');
-    separator.classList.add('separator');
-    tag.classList.add('tag');
-    albumIcon.classList.add('album-icon');
+      //Add classes for styling
+      this.el.classList.add('album');
+      main.classList.add('main');
+      artist.classList.add('artist');
+      titleAndArtist.classList.add('titleAndArtist');
+      separator.classList.add('separator');
+      tag.classList.add('tag');
+      albumIcon.classList.add('album-icon');
 
-    //Add attributes and innerHTML
-    artist.innerHTML = this.data.artist;
-    separator.innerHTML = '•';
-    title.innerHTML = this.data.title;
-    tag.innerHTML = '#' + this.data.tags[0];
-    playButton.innerHTML = this.playing ? this.pauseIcon : this.playIcon;
-    albumIcon.innerHTML = this.albumIcon;
+      //Add attributes and innerHTML
+      artist.innerHTML = this.data.artist;
+      separator.innerHTML = '•';
+      title.innerHTML = this.data.title;
+      tag.innerHTML = '#' + this.data.tags[0];
+      playButton.innerHTML = this.playing ? this.pauseIcon : this.playIcon;
+      albumIcon.innerHTML = this.albumIcon;
 
-    //Build structure
-    this.el.appendChild(main);
-    main.appendChild(playButton);
-    main.appendChild(titleAndArtist);
-    main.appendChild(albumIcon);
-    titleAndArtist.appendChild(artist);
-    titleAndArtist.appendChild(separator);
-    titleAndArtist.appendChild(title);
-    main.appendChild(tag);
+      //Build structure
+      this.el.appendChild(main);
+      main.appendChild(playButton);
+      main.appendChild(titleAndArtist);
+      main.appendChild(albumIcon);
+      titleAndArtist.appendChild(artist);
+      titleAndArtist.appendChild(separator);
+      titleAndArtist.appendChild(title);
+      main.appendChild(tag);
 
-    //Add action bar
-    if (!this.songView) {
-      let actionBar = new ActionBarAlbum(this.data);
-      this.el.appendChild(actionBar.render());
+      //Add action bar
+      if (!this.songView) {
+        let actionBar = new ActionBarAlbum(this.data);
+        this.el.appendChild(await actionBar.render());
+      }
+
+      //Add listeners
+      this.el.onclick = this.handleAlbumClick;
+      playButton.onclick = this.handlePlayButton;
+      artist.onclick = this.handleArtistButton;
+
+      return this.el;
     }
-
-    //Add listeners
-    this.el.onclick = this.handleAlbumClick;
-    playButton.onclick = this.handlePlayButton;
-    artist.onclick = this.handleArtistButton;
-
-    return this.el;
+    catch (err) {
+      console.error(err);
+    }
   }
 }
 

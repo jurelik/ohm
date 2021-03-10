@@ -49,7 +49,7 @@ function ExploreView() {
         else if (item.type === 'album') {
           let album = new Album(item);
           this.children.albums[item.id] = album;
-          el = album.render();
+          el = await album.render();
         }
         else {
           continue;
