@@ -15,7 +15,12 @@ function ActionBarAlbum(data) {
 
       //Update pin innerHTML
       this.el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
-      console.log('success');
+
+      //If in albumView, update all song pins as well
+      if (app.current = 'album') {
+        const pins = app.views.albumView.el.querySelectorAll('.pin');
+        for (let x = 1; x < pins.length; x++) pins[x].innerHTML = this.pinned ? 'unpin' : 'pin';
+      }
     }
     catch (err) {
       console.error(err);
