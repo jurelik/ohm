@@ -5,7 +5,7 @@ const uploadAlbum = async (payload) => {
       if (album.name === payload.album.title) throw 'album with the same name already exists';
     }
 
-    app.ipfs.files.mkdir(`/antik/albums/${payload.album.title}/songs`, { parents: true }); //Create album folder
+    app.ipfs.files.mkdir(`/antik/albums/${payload.album.title}/`, { parents: true }); //Create album folder
 
     //Add songs
     for (let song of payload.songs) {
@@ -28,7 +28,7 @@ const uploadSingle = async (payload) => {
 
     //Check if single already exists
     for await (const _single of app.ipfs.files.ls('/antik/singles')) {
-      if (_single.name === single.title) throw 'single with the same name already exists';
+      if (_single.name === single.title && _single.type === 'directory') throw 'single with the same name already exists';
     }
 
     //Add single
@@ -78,7 +78,7 @@ const albumExists = async (data) => {
 
 const songInAlbumExists = async (data, albumTitle) => {
   try {
-    for await (const file of app.ipfs.files.ls(`/${data.artist}/albums/${albumTitle}/songs/`)) {
+    for await (const file of app.ipfs.files.ls(`/${data.artist}/albums/${albumTitle}/`)) {
       if (file.name === data.title && file.type === 'directory') return file.cid.string;
     }
     return false;
@@ -90,7 +90,7 @@ const songInAlbumExists = async (data, albumTitle) => {
 
 const pinSong = async (data, albumTitle) => {
   try {
-    if (albumTitle) await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/albums/${albumTitle}/songs/${data.title}`, { parents: true });
+    if (albumTitle) await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/albums/${albumTitle}/${data.title}`, { parents: true });
     else await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/singles/${data.title}`, { parents: true });
   }
   catch (err) {
@@ -100,7 +100,7 @@ const pinSong = async (data, albumTitle) => {
 
 const unpinSong = async (data, albumTitle) => {
   try {
-    if (albumTitle) await app.ipfs.files.rm(`/${data.artist}/albums/${albumTitle}/songs/${data.title}`, { recursive: true });
+    if (albumTitle) await app.ipfs.files.rm(`/${data.artist}/albums/${albumTitle}/${data.title}`, { recursive: true });
     else await app.ipfs.files.rm(`/${data.artist}/singles/${data.title}`, { recursive: true });
   }
   catch (err) {
@@ -136,15 +136,25 @@ const addSong = async (song, payload) => {
     let folder;
 
     if (albumTitle) {
-      await app.ipfs.files.mkdir(`/antik/albums/${albumTitle}/songs/${song.title}/files`, { parents: true }); //Create a song folder for every song
-      await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/albums/${albumTitle}/songs/${song.title}/antik - ${song.title}.${format}`); //Save song to MFS
+      await app.ipfs.files.mkdir(`/antik/albums/${albumTitle}/${song.title}/files`, { parents: true }); //Create a song folder for every song
+      await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/albums/${albumTitle}/${song.title}/antik - ${song.title}.${format}`); //Save song to MFS
+
+      //Add Files
+      for (let file of song.files) {
+        await addFile(file, song.title, albumTitle);
+      }
 
       //Get song folder CID
-      folder = await app.ipfs.files.stat(`/antik/albums/${albumTitle}/songs/${song.title}`);
+      folder = await app.ipfs.files.stat(`/antik/albums/${albumTitle}/${song.title}`);
     }
     else {
       await app.ipfs.files.mkdir(`/antik/singles/${song.title}/files`, { parents: true }); //Create single folder
       await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/singles/${song.title}/antik - ${song.title}.${format}`); //Save song to MFS
+
+      //Add Files
+      for (let file of song.files) {
+        await addFile(file, song.title, albumTitle);
+      }
 
       //Get song folder CID
       folder = await app.ipfs.files.stat(`/antik/singles/${song.title}`);
@@ -156,10 +166,6 @@ const addSong = async (song, payload) => {
     song.tags = song.tags.split(/[,;]+/); //Convert string into array
     song.cid = folder.cid.string;
 
-    //Add Files
-    for (let file of song.files) {
-      await addFile(file, song.title, albumTitle);
-    }
   }
   catch (err) {
     throw err;
@@ -174,7 +180,7 @@ const addFile = async (file, songTitle, albumTitle) => {
     let buffer = await file.file.arrayBuffer();
     let { cid } = await app.ipfs.add({ content: buffer }); //Add file to IPFS
 
-    if (albumTitle) await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/albums/${albumTitle}/songs/${songTitle}/files/antik - ${file.name}.${format}` ); //add to album
+    if (albumTitle) await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/albums/${albumTitle}/${songTitle}/files/antik - ${file.name}.${format}` ); //add to album
     else await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/singles/${songTitle}/files/antik - ${file.name}.${format}` ); //add to single
 
     //Clean up the object

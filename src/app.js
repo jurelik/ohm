@@ -52,7 +52,7 @@ function App() {
 
     //Init an ipfs daemon & create an ipfs node
     ipcRenderer.on('daemon-ready', async () => {
-      this.ipfs = createClient();
+      this.ipfs = createClient({ timeout: 5000 });
 
       //Render first content
       this.changeView('explore');
