@@ -24,17 +24,19 @@ function ActionBarSong(data) {
 
   this.checkIfPinned = async () => {
     try {
-      if (await ipfs.artistExists(this.data.artist) === false) return false; //Check if artist folder exists
       if (app.current === 'album') {
+        if (await ipfs.artistExists(this.data.artist) === false) return false; //Check if artist folder exists
         if (await ipfs.albumExists(app.views.albumView.data) === false) return false; //Check if album folder exists
 
         const cid = await ipfs.songInAlbumExists(this.data, app.views.albumView.data.title); //Get song CID
-        console.log(cid)
-        console.log(this.data.cid)
         if (!cid || cid !== this.data.cid) return false; //Check if CID matches
       }
-      else if (await ipfs.songExists(this.data) === false) return false; //Check if song folder exists and if it matches the CID
+      else {
+        if (await ipfs.artistExists(this.data.artist) === false) return false; //Check if artist folder exists
 
+        const cid = await ipfs.songExists(this.data); //Get song CID
+        if (!cid || cid !== this.data.cid) return false; //Check if CID matches
+      }
       return true;
     }
     catch (err) {

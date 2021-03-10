@@ -55,15 +55,8 @@ const artistExists = async (artist) => {
 const songExists = async (data) => {
   try {
     for await (const file of app.ipfs.files.ls(`/${data.artist}/singles/`)) {
-      if (file.name === data.title && file.type === 'directory') {
-        //Compare CIDs to see if the full song folder is pinned
-        const stat = await app.ipfs.files.stat(`/${data.artist}/singles/${data.title}`);
-
-        if (stat.cid.string === data.cid) return true;
-        else return false;
-      }
+      if (file.name === data.title && file.type === 'directory') return file.cid.string;
     }
-
     return false;
   }
   catch (err) {
