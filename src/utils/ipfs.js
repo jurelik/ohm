@@ -100,7 +100,7 @@ const pinSong = async (data, albumTitle) => {
 
 const unpinSong = async (data, albumTitle) => {
   try {
-    if (albumTitle) await app.ipfs.files.rm(`/${data.artist}/albums/${albumTitle}`, { recursive: true });
+    if (albumTitle) await app.ipfs.files.rm(`/${data.artist}/albums/${albumTitle}/songs/${data.title}`, { recursive: true });
     else await app.ipfs.files.rm(`/${data.artist}/singles/${data.title}`, { recursive: true });
   }
   catch (err) {

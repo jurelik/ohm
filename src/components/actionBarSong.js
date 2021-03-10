@@ -16,7 +16,8 @@ function ActionBarSong(data) {
     e.stopPropagation();
 
     try {
-      this.pinned ? await ipfs.unpinSong(this.data) : await ipfs.pinSong(this.data);
+      if (app.current === 'album') this.pinned ? await ipfs.unpinSong(this.data, app.views.albumView.data.title) : await ipfs.pinSong(this.data, app.views.albumView.data.title);
+      else this.pinned ? await ipfs.unpinSong(this.data) : await ipfs.pinSong(this.data);
       this.pinned = !this.pinned;
 
       //Update pin innerHTML
