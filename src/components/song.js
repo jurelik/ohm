@@ -13,7 +13,7 @@ function Song(data, view) {
     e.stopPropagation();
 
     this.setPlaying(!this.playing);
-    this.reRender();
+    this.el.querySelector('.playButton').innerHTML = this.playing ? this.pauseIcon : this.playIcon;
     this.view === 'albumView' ? app.player.queueFiles(app.views.albumView.data, this.getPosition(), 'song') : app.player.queueFile(this.data);
   }
 
@@ -35,7 +35,7 @@ function Song(data, view) {
 
   this.remotePlayButtonTrigger = () => {
     this.setPlaying(!this.playing);
-    this.reRender();
+    this.el.querySelector('.playButton').innerHTML = this.playing ? this.pauseIcon : this.playIcon;
   }
 
   this.setPlaying = (value) => {
@@ -69,6 +69,7 @@ function Song(data, view) {
       titleAndArtist.classList.add('titleAndArtist');
       tag.classList.add('tag');
       separator.classList.add('separator');
+      playButton.className = 'playButton';
 
       //Add attributes and innerHTML
       artist.innerHTML = this.data.artist;

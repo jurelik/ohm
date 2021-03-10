@@ -23,7 +23,7 @@ function Album(data) {
     e.stopPropagation();
 
     this.setPlaying(!this.playing);
-    this.reRender();
+    this.el.querySelector('.playButton').innerHTML = this.playing ? this.pauseIcon : this.playIcon;
     app.player.queueFiles(this.data, this.getPosition(), 'album');
   }
 
@@ -45,7 +45,7 @@ function Album(data) {
 
   this.remotePlayButtonTrigger = () => {
     this.setPlaying(!this.playing);
-    this.reRender();
+    this.el.querySelector('.playButton').innerHTML = this.playing ? this.pauseIcon : this.playIcon;
   }
 
   this.setPlaying = (value) => {
@@ -85,6 +85,7 @@ function Album(data) {
       titleAndArtist.classList.add('titleAndArtist');
       separator.classList.add('separator');
       tag.classList.add('tag');
+      playButton.className = 'playButton';
       albumIcon.classList.add('album-icon');
 
       //Add attributes and innerHTML
