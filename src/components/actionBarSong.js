@@ -3,7 +3,7 @@ const ipfs = require('../utils/ipfs');
 function ActionBarSong(data) {
   this.el = document.createElement('div');
   this.data = data;
-  this.state = {};
+  this.pinned = false;
 
   this.handleCommentsClick = (e) => {
     e.stopPropagation();
@@ -16,6 +16,12 @@ function ActionBarSong(data) {
     e.stopPropagation();
 
     try {
+      this.pinned ? await ipfs.unpinSong(this.data) : await ipfs.pinSong(this.data);
+      this.pinned = !this.pinned;
+
+      //Update pin innerHTML
+      this.el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
+      console.log('success');
     }
     catch (err) {
       console.error(err);
@@ -46,6 +52,8 @@ function ActionBarSong(data) {
 
   this.render = async () => {
     try {
+      this.pinned = await this.checkIfPinned(); //Check if song is pinned
+
       //Create elements
       let files = document.createElement('button');
       let comments = document.createElement('button');
@@ -54,11 +62,12 @@ function ActionBarSong(data) {
 
       //Add classes for styling
       this.el.className = 'actions';
+      pin.className = 'pin';
 
       //Add attributes and innerHTML
       files.innerHTML = `${this.data.files.length} files`;
       comments.innerHTML = `${this.data.comments.length} comments`;
-      pin.innerHTML = await this.checkIfPinned() ? 'pinned' : 'pin';
+      pin.innerHTML = this.pinned ? 'unpin' : 'pin';
       download.innerHTML = 'download all';
 
       //Build structure
