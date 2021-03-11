@@ -52,7 +52,7 @@ function Player() {
         continue;
       }
 
-      if (_view === 'exploreView' || _view === 'artistView') {
+      if (_view === 'exploreView' || _view === 'artistView' || _view === 'pinnedView') {
         if (type !== 'song') continue;
         if (view.children.songs[id]) view.children.songs[id].remotePlayButtonTrigger();
         if (triggeredBy === 'main') this.remoteAlbumTrigger(view.children.albums);
