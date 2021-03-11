@@ -2,7 +2,7 @@
 
 function Nav() {
   this.el = document.querySelector('.nav');
-  this.names = ['explore', 'feed', 'liked', 'files'];
+  this.names = ['explore', 'feed', 'pinned', 'files'];
   this.elements = {};
   this.selected = 'explore';
 
