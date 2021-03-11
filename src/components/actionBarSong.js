@@ -22,7 +22,6 @@ function ActionBarSong(data) {
 
       //Update pin innerHTML
       this.el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
-      console.log('success');
     }
     catch (err) {
       console.error(err);
@@ -42,8 +41,6 @@ function ActionBarSong(data) {
         if (await ipfs.artistExists(this.data.artist) === false) return false; //Check if artist folder exists
 
         const cid = await ipfs.songExists(this.data); //Get song CID
-        console.log(cid)
-        console.log(this.data.cid)
         if (!cid || cid !== this.data.cid) return false; //Check if CID matches
       }
       return true;

@@ -90,6 +90,9 @@ const songInAlbumExists = async (data, albumTitle) => {
 
 const pinSong = async (data, albumTitle) => {
   try {
+    //Create album folder if it doesn't exist yet
+    if (await albumExists({ artist: data.artist, title: albumTitle }) === false) await app.ipfs.files.mkdir(`/${data.artist}/albums/${albumTitle}`);
+
     if (albumTitle) await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/albums/${albumTitle}/${data.title}`, { parents: true });
     else await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/singles/${data.title}`, { parents: true });
   }
@@ -110,6 +113,9 @@ const unpinSong = async (data, albumTitle) => {
 
 const pinAlbum = async (data) => {
   try {
+    //Delete previous folders if they exist (due to only a song being pinned etc.)
+    if (await albumExists(data)) await app.ipfs.files.rm(`/${data.artist}/albums/${data.title}`, { recursive: true });
+
     await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/albums/${data.title}`, { parents: true });
   }
   catch (err) {

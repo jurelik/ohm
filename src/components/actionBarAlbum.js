@@ -17,9 +17,12 @@ function ActionBarAlbum(data) {
       this.el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
 
       //If in albumView, update all song pins as well
-      if (app.current = 'album') {
-        const pins = app.views.albumView.el.querySelectorAll('.pin');
-        for (let x = 1; x < pins.length; x++) pins[x].innerHTML = this.pinned ? 'unpin' : 'pin';
+      if (app.current === 'album') {
+        let songs = app.views.albumView.children.songs;
+        for (let key in songs) {
+          songs[key].children.actionBar.pinned = this.pinned;
+          songs[key].el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
+        }
       }
     }
     catch (err) {
