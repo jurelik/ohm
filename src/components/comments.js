@@ -4,6 +4,7 @@ function Comments(data) {
   this.el = document.createElement('div');
   this.data = data;
   this.state = {};
+  console.log(this.data)
 
   this.handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,10 +27,17 @@ function Comments(data) {
       const res = await _res.json();
       if (res.type === 'error') throw res.err;
 
+      //Create new comment data
+      const _data = {
+        id: 0,
+        content: payload.content,
+        artist: 'antik' //For testing purposes
+      }
+
       //Insert new comment into the DOM
-      payload.artist = 'antik'; //For testing purposes
-      const comment = new Comment(payload);
+      const comment = new Comment(_data);
       this.el.insertBefore(comment.render(), this.el.children[0]);
+      this.data.unshift(_data);
 
       this.el.querySelector('textarea').value = ''; //Reset comment field to empty
     }
@@ -40,7 +48,7 @@ function Comments(data) {
 
   this.render = () => {
     //Create elements
-    const container = document.createElement('div');
+    const container = document.createElement('form');
     const marker = document.createElement('div');
     const textarea = document.createElement('textarea');
     const submit = document.createElement('button');
@@ -52,6 +60,7 @@ function Comments(data) {
 
     //Add attributes and innerHTML
     submit.innerHTML = 'submit';
+    submit.setAttribute('type', 'submit');
     textarea.setAttribute('rows', '1');
     textarea.setAttribute('autofocus', true);
     marker.innerHTML = '> '
@@ -68,7 +77,7 @@ function Comments(data) {
     container.appendChild(submit);
 
     //Add listeners
-    submit.onclick = this.handleSubmit;
+    container.onsubmit = this.handleSubmit;
 
     return this.el;
   }
