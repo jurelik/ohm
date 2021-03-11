@@ -132,7 +132,7 @@ const unpinAlbum = async (data) => {
   }
 }
 
-const getRepoStructure = async () => {
+const getPinned = async () => {
   try {
     const artists = [];
     const albums = [];
@@ -162,8 +162,9 @@ const getRepoStructure = async () => {
     });
 
     const res = await _res.json();
-    console.log(res)
     if (res.type === 'error') throw res.err;
+
+    return res.payload;
   }
   catch (err) {
     console.error(err);
@@ -249,5 +250,5 @@ module.exports = {
   unpinSong,
   pinAlbum,
   unpinAlbum,
-  getRepoStructure
+  getPinned
 }

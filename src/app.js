@@ -9,6 +9,7 @@ const SongView = require('./components/songView');
 const AlbumView = require('./components/albumView');
 const ArtistView = require('./components/artistView');
 const UploadView = require('./components/uploadView');
+const PinnedView = require('./components/pinnedView');
 const Player = require('./components/player');
 const Header = require('./components/header');
 
@@ -24,7 +25,8 @@ function App() {
     songView: null,
     albumView: null,
     artistView: null,
-    uploadView: null
+    uploadView: null,
+    pinnedView: null
   }
   this.GATEWAY;
   this.URL;
@@ -88,6 +90,9 @@ function App() {
 
           this.views.uploadView = new UploadView();
           return this.views.uploadView.render();
+        case 'pinned':
+          this.views.pinnedView = new PinnedView();
+          return await this.views.pinnedView.render();
         default:
           return this.content.innerHTML = view;
       }
