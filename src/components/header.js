@@ -1,3 +1,5 @@
+const ipfs = require('../utils/ipfs');
+
 function Header() {
   this.el = document.querySelector('.header');
   this.backIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="598.5 268.5 183 183"><path fill="none" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" d="M720 285h0l-60 75 60 75"/><path fill="none" stroke="none" d="M598.5 268.5h183v183h-183v-183z"/></svg>';
@@ -75,9 +77,7 @@ function Header() {
   }
 
   this.handleTest = async () => {
-    for await (const file of app.ipfs.files.ls('/testArtist/testSong')) {
-      console.log(file.name + ' ' + file.type)
-    }
+    await ipfs.getRepoStructure();
   }
 
   this.handleUpload = () => {

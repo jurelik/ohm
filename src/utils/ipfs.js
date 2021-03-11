@@ -132,6 +132,44 @@ const unpinAlbum = async (data) => {
   }
 }
 
+const getRepoStructure = async () => {
+  try {
+    const artists = [];
+    const albums = [];
+    const songs = [];
+
+    for await (const file of app.ipfs.files.ls(`/`)) artists.push(file.name); //Get artists
+    for (const artist of artists) {
+      for await (const file of app.ipfs.files.ls(`/${artist}/albums`)) { //Get albums
+        const stat = await app.ipfs.files.stat(`/${artist}/albums/${file.name}`);
+        albums.push(stat.cid.string);
+      }
+      for await (const file of app.ipfs.files.ls(`/${artist}/singles`)) {
+        const stat = await app.ipfs.files.stat(`/${artist}/singles/${file.name}`);
+        songs.push(stat.cid.string);
+      }
+    }
+
+    const _res = await fetch(`${app.URL}/api/pinned`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        albums,
+        songs
+      })
+    });
+
+    const res = await _res.json();
+    console.log(res)
+    if (res.type === 'error') throw res.err;
+  }
+  catch (err) {
+    console.error(err);
+  }
+}
+
 //Helpers
 const addSong = async (song, payload) => {
   try {
@@ -210,5 +248,6 @@ module.exports = {
   pinSong,
   unpinSong,
   pinAlbum,
-  unpinAlbum
+  unpinAlbum,
+  getRepoStructure
 }
