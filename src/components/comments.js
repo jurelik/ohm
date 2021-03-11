@@ -4,7 +4,6 @@ function Comments(data) {
   this.el = document.createElement('div');
   this.data = data;
   this.state = {};
-  console.log(this.data)
 
   this.handleSubmit = async (e) => {
     e.preventDefault();

@@ -7,6 +7,22 @@ function SongViewMain(data, action) {
   this.action = action;
   this.state = {};
 
+  this.handleFilesClick = () => {
+    if (this.action === 'files') return;
+    this.action = 'files';
+    this.el.innerHTML = '';
+    app.views.songView.el.className = 'song-view-files'; //Change className of songView to account for comment bar height
+    this.render();
+  }
+
+  this.handleCommentsClick = () => {
+    if (this.action === 'comments') return;
+    this.action = 'comments';
+    this.el.innerHTML = '';
+    app.views.songView.el.className = 'song-view-comments'; //Change className of songView to account for comment bar height
+    this.render();
+  }
+
   this.render = () => {
     //Create elements
     let actionBar = document.createElement('div');
@@ -29,19 +45,8 @@ function SongViewMain(data, action) {
     actionBar.appendChild(actionBarPins);
 
     //Add listeners
-    actionBarFiles.onclick = () => {
-      if (this.action === 'files') return;
-      this.action = 'files';
-      this.el.innerHTML = '';
-      this.render();
-    }
-
-    actionBarComments.onclick = () => {
-      if (this.action === 'comments') return;
-      this.action = 'comments';
-      this.el.innerHTML = '';
-      this.render();
-    }
+    actionBarFiles.onclick = this.handleFilesClick;
+    actionBarComments.onclick = this.handleCommentsClick;
 
     switch (this.action) {
       case 'files':

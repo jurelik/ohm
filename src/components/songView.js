@@ -12,9 +12,13 @@ function SongView(data, action) {
 
   this.render = async () => {
     try {
+      //Create elements
       let action = this.action || 'files';
       let song = new Song(data, 'songView');
       let main = new SongViewMain(data, action);
+
+      //Add classes for styling
+      this.el.className = this.action === 'comments' ? 'song-view-comments' : 'song-view-files';
 
       //Add song child for remote control
       this.children.song = song;

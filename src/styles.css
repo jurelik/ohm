@@ -332,6 +332,16 @@ input[type=file] button {
   margin-right: 10px;
 }
 
+.song-view-files {
+  height: 100%;
+  overflow: auto;
+}
+
+.song-view-comments {
+  height: calc(100% - 20px);
+  overflow: auto;
+}
+
 .song-view-main {
   color: #888;
   margin-left: 8px;
