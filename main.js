@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const { spawn } = require('child_process')
 const fs = require('fs');
 let daemon = null;
+let userDataPath = null;
 
 function createWindow () {
   const win = new BrowserWindow({
@@ -38,8 +39,13 @@ app.on('activate', () => {
   }
 })
 
+//IPC events
 ipcMain.on('start', (event) => {
-  if (daemon) return event.reply('daemon-ready'); //Check if daemon is already running
+  //Check if config / transfers files exist
+  userDataPath = app.getPath('userData');
+  if (!fs.existsSync(`${userDataPath}/transfers.json`)) fs.writeFileSync(`${userDataPath}/transfers.json`,'{}');
+
+  if (daemon) return event.reply('daemon-ready', userDataPath); //Check if daemon is already running
 
   //Check if the repo exists already
   if (fs.existsSync(`/Users/${process.env.USER}/.ohm-ipfs`)) {
@@ -56,7 +62,7 @@ const spawnDaemon = (event) => {
   daemon.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);
     if (data.toString().match(/(?:daemon is running|Daemon is ready)/)) {
-      event.reply('daemon-ready');
+      event.reply('daemon-ready', userDataPath);
     }
   });
 

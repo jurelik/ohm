@@ -10,8 +10,10 @@ const AlbumView = require('./components/albumView');
 const ArtistView = require('./components/artistView');
 const UploadView = require('./components/uploadView');
 const PinnedView = require('./components/pinnedView');
+const TransfersView = require('./components/transfersView');
 const Player = require('./components/player');
 const Header = require('./components/header');
+const Store = require('./components/store');
 
 function App() {
   this.ipfs;
@@ -26,16 +28,19 @@ function App() {
     albumView: null,
     artistView: null,
     uploadView: null,
-    pinnedView: null
+    pinnedView: null,
+    transfersView: null
   }
   this.GATEWAY;
   this.URL;
+  this.USER_DATA_PATH;
 
   //State
   this.playing = false;
   this.history = [];
   this.historyIndex = 0;
   this.current = null;
+  this.transfersStore = null;
 
   this.init = () => {
     //Set constants
@@ -53,14 +58,25 @@ function App() {
     this.player.render();
 
     //Init an ipfs daemon & create an ipfs node
-    ipcRenderer.on('daemon-ready', async () => {
-      this.ipfs = createClient({ timeout: 5000 });
+    ipcRenderer.on('daemon-ready', async (e, userDataPath) => {
+      try {
+        this.ipfs = createClient({ timeout: 5000 });
+        this.USER_DATA_PATH = userDataPath;
 
-      //Render first content
-      this.changeView('explore');
-      this.addToHistory('explore');
-      this.historyIndex = 0;
-      this.header.backButton.className = 'disabled';
+        //Create transfersStore
+        this.transfersStore = new Store({ name: 'transfers' });
+        this.transfersStore.init();
+
+        //Render first content
+        this.changeView('explore');
+        this.addToHistory('explore');
+        this.historyIndex = 0;
+        this.header.backButton.className = 'disabled';
+
+      }
+      catch (err) {
+        console.error(err);
+      }
     });
 
     ipcRenderer.send('start');
@@ -93,6 +109,9 @@ function App() {
         case 'pinned':
           this.views.pinnedView = new PinnedView();
           return await this.views.pinnedView.render();
+        case 'transfers':
+          this.views.transfersView = new TransfersView();
+          return await this.views.transfersView.render();
         default:
           return this.content.innerHTML = view;
       }

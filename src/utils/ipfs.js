@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const uploadAlbum = async (payload) => {
   try {
     //Check if album already exists
@@ -32,7 +34,11 @@ const uploadSingle = async (payload) => {
     }
 
     //Add single
+    const unique = startTransfer(single);
+    payload.unique = unique;
     await addSong(single, payload);
+
+    return unique;
   }
   catch (err) {
     throw err;
@@ -172,12 +178,34 @@ const getPinned = async () => {
 }
 
 //Helpers
+const handleProgress = (prog, size, unique) => {
+  const percentage = Math.round(prog / size * 100);
+  app.transfersStore.update(unique, { progress: percentage });
+}
+
+const startTransfer = (payload) => {
+  //Generate unique ID
+  const unique = crypto.randomBytes(6).toString('base64');
+  if (app.transfersStore.get()[unique]) return startTransfer(payload); //If the unique ID exists already, create a new one
+
+  //Start transfer
+  app.transfersStore.add(unique, {
+    name: payload.title,
+    artist: 'antik', //For testing purposes
+    type: 'upload',
+    progress: 0, //In percent
+    completed: false
+  });
+
+  return unique;
+}
+
 const addSong = async (song, payload) => {
   try {
     let format = song.file.name.slice(-3);
     let albumTitle = payload.album ? payload.album.title : null;
     let buffer = await song.file.arrayBuffer();
-    let { cid } = await app.ipfs.add({ content: buffer }); //Add song to IPFS
+    let { cid } = await app.ipfs.add({ content: buffer }, { progress: (prog) => handleProgress(prog, buffer.byteLength, payload.unique) } ); //Add song to IPFS
     let folder;
 
     if (albumTitle) {
@@ -210,7 +238,6 @@ const addSong = async (song, payload) => {
     song.fileType = format;
     song.tags = song.tags.split(/[,;]+/); //Convert string into array
     song.cid = folder.cid.string;
-
   }
   catch (err) {
     throw err;

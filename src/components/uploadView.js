@@ -50,16 +50,17 @@ function UploadView(data) {
       songs: []
     };
     let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
+    let unique = null;
 
     try {
       if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
       for (let el of this.children) payload.songs.push(el.getSongData());
 
       if (payload.album) {
-        await ipfs.uploadAlbum(payload);
+        unique = await ipfs.uploadAlbum(payload);
       }
       else {
-        await ipfs.uploadSingle(payload);
+        unique = await ipfs.uploadSingle(payload);
       }
 
       writtenToMFS = true; //MFS has been modified
@@ -74,6 +75,8 @@ function UploadView(data) {
 
       const res = await _res.json();
       if (res.type === 'error') throw res.err;
+      app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
+      console.log(app.transfersStore.get());
     }
     catch (err) {
       if (err === 'album with the same name already exists') return console.log(err);
