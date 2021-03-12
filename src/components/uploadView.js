@@ -76,7 +76,7 @@ function UploadView(data) {
       const res = await _res.json();
       if (res.type === 'error') throw res.err;
       app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
-      console.log(app.transfersStore.get());
+      console.log(app.transfersStore.get()[unique]);
     }
     catch (err) {
       if (err === 'album with the same name already exists') return console.log(err);

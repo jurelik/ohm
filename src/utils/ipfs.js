@@ -9,7 +9,9 @@ const uploadAlbum = async (payload) => {
 
     app.ipfs.files.mkdir(`/antik/albums/${payload.album.title}/`, { parents: true }); //Create album folder
 
-    //Add songs
+    //Create a unique ID for the transfer and add songs
+    const unique = startTransfer(payload);
+    payload.unique = unique;
     for (let song of payload.songs) {
       await addSong(song, payload);
     }
@@ -18,6 +20,8 @@ const uploadAlbum = async (payload) => {
     const stats = await app.ipfs.files.stat(`/antik/albums/${payload.album.title}`);
     payload.album.cid = stats.cid.string;
     payload.album.tags = payload.album.tags.split(/[,;]+/); //Convert string into array
+
+    return unique;
   }
   catch (err) {
     throw err;
@@ -33,7 +37,7 @@ const uploadSingle = async (payload) => {
       if (_single.name === single.title && _single.type === 'directory') throw 'single with the same name already exists';
     }
 
-    //Add single
+    //Create a unique ID for the transfer and add single
     const unique = startTransfer(single);
     payload.unique = unique;
     await addSong(single, payload);
@@ -179,8 +183,10 @@ const getPinned = async () => {
 
 //Helpers
 const handleProgress = (prog, size, unique) => {
-  const percentage = Math.round(prog / size * 100);
+  const transfer = app.transfersStore.get()[unique];
+  const percentage = Math.round((prog / size * 100 / transfer.songsAmt) + (100 / transfer.songsAmt * transfer.cycle));
   app.transfersStore.update(unique, { progress: percentage });
+  console.log(JSON.parse(JSON.stringify(app.transfersStore.get()[unique])));
 }
 
 const startTransfer = (payload) => {
@@ -190,10 +196,13 @@ const startTransfer = (payload) => {
 
   //Start transfer
   app.transfersStore.add(unique, {
-    name: payload.title,
+    name: payload.album ? payload.album.title : payload.title,
     artist: 'antik', //For testing purposes
+    album: payload.album ? true : false,
+    songsAmt: payload.album ? payload.songs.length : 1, //Get song amount to calculate progress
     type: 'upload',
     progress: 0, //In percent
+    cycle: 0, //Keep track of how many songs have been added
     completed: false
   });
 
@@ -202,11 +211,11 @@ const startTransfer = (payload) => {
 
 const addSong = async (song, payload) => {
   try {
+    let folder;
     let format = song.file.name.slice(-3);
     let albumTitle = payload.album ? payload.album.title : null;
     let buffer = await song.file.arrayBuffer();
     let { cid } = await app.ipfs.add({ content: buffer }, { progress: (prog) => handleProgress(prog, buffer.byteLength, payload.unique) } ); //Add song to IPFS
-    let folder;
 
     if (albumTitle) {
       await app.ipfs.files.mkdir(`/antik/albums/${albumTitle}/${song.title}/files`, { parents: true }); //Create a song folder for every song
@@ -238,6 +247,8 @@ const addSong = async (song, payload) => {
     song.fileType = format;
     song.tags = song.tags.split(/[,;]+/); //Convert string into array
     song.cid = folder.cid.string;
+
+    app.transfersStore.update(payload.unique, { cycle: app.transfersStore.get()[payload.unique].cycle + 1 }); //Increment transfer cycle
   }
   catch (err) {
     throw err;

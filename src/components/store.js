@@ -7,7 +7,6 @@ function Store(opts) {
   this.init = () => {
     this.path = `${app.USER_DATA_PATH}/${opts.name}.json`;
     this.data = JSON.parse(fs.readFileSync(this.path));
-    console.log(this.data);
   }
 
   this.get = () => {
