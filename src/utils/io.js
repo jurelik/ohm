@@ -36,6 +36,37 @@ const upload = async (payload) => {
   }
 }
 
+const resumeUpload = async (transfer) => {
+  try {
+    if (transfer.payload.album) {
+      unique = await ipfs.uploadAlbum(payload);
+    }
+    else {
+      unique = await ipfs.reUploadSingle(transfer.payload);
+    }
+
+    writtenToMFS = true; //MFS has been modified
+    //Send payload to server
+    const _res = await fetch(`${app.URL}/api/upload`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(transfer.payload)
+    });
+
+    const res = await _res.json();
+    if (res.type === 'error') throw res.err;
+    app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
+  }
+  catch (err) {
+    console.error(err);
+    if (transfer.payload.album && writtenToMFS) await app.ipfs.files.rm(`/antik/albums/${transfer.payload.album.title}`, { recursive: true });
+    else if (transfer.payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/antik/singles/${transfer.payload.songs[0].title}`, { recursive: true });
+  }
+}
+
 module.exports = {
-  upload
+  upload,
+  resumeUpload
 }

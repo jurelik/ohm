@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const fsp = require('fs').promises;
 
 const uploadAlbum = async (payload) => {
   try {
@@ -41,6 +42,26 @@ const uploadSingle = async (payload) => {
     await addSong(single, payload);
 
     return unique;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const reUploadSingle = async (payload) => {
+  try {
+    const single = payload.songs[0];
+    console.log(single)
+
+    //Check if single already exists
+    for await (const _single of app.ipfs.files.ls('/antik/singles')) {
+      if (_single.name === single.title && _single.type === 'directory') app.ipfs.files.rm(`/antik/singles/${single.title}`, { recursive: true });
+    }
+
+    //Add single
+    await addSong(single, payload);
+
+    return payload.unique;
   }
   catch (err) {
     throw err;
@@ -214,9 +235,9 @@ const startTransfer = (payload) => {
 const addSong = async (song, payload) => {
   try {
     let folder;
-    let format = song.file.name.slice(-3);
+    let format = song.filePath.slice(-3);
     let albumTitle = payload.album ? payload.album.title : null;
-    let buffer = await song.file.arrayBuffer();
+    let buffer = await fsp.readFile(song.filePath);
     let { cid } = await app.ipfs.add({ content: buffer }, { progress: (prog) => handleProgress(prog, buffer.byteLength, payload.unique) } ); //Add song to IPFS
 
     if (albumTitle) {
@@ -245,9 +266,8 @@ const addSong = async (song, payload) => {
     }
 
     //Clean up the object
-    delete song.file;
     song.fileType = format;
-    song.tags = song.tags.split(/[,;]+/); //Convert string into array
+    song.tags = typeof song.tags !== 'object' ? song.tags.split(/[,;]+/) : song.tags; //Convert string into array
     song.cid = folder.cid.string;
 
     app.transfersStore.update(payload.unique, { cycle: app.transfersStore.get()[payload.unique].cycle + 1 }); //Increment transfer cycle
@@ -282,6 +302,7 @@ const addFile = async (file, songTitle, albumTitle) => {
 module.exports = {
   uploadAlbum,
   uploadSingle,
+  reUploadSingle,
   artistExists,
   songExists,
   albumExists,

@@ -1,3 +1,5 @@
+const io = require('../utils/io');
+
 function Transfer(data) {
   this.el = document.createElement('div');
   this.data = data;
@@ -7,11 +9,18 @@ function Transfer(data) {
     this.el.querySelector(`.${value}`).innerHTML = this.data[value]; //Update DOM
   }
 
-  this.handleResume = (e) => {
+  this.handleResume = async (e) => {
     e.stopPropagation();
     e.preventDefault();
 
-    console.log('hi')
+    try {
+      app.transfersStore.update(this.data.payload.unique, { ...this.data, progress: 0, cycle: 0 });
+      this.el.querySelector(`.progress`).innerHTML = 0; //Update DOM
+      await io.resumeUpload(this.data);
+    }
+    catch (err) {
+      console.error(err);
+    }
   }
 
   this.render = () => {
