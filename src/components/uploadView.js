@@ -1,6 +1,6 @@
 const UploadSong = require('./UploadSong');
 const UploadAlbum = require('./UploadAlbum');
-const ipfs = require('../utils/ipfs');
+const io = require('../utils/io');
 
 function UploadView(data) {
   this.el = document.createElement('div');
@@ -45,46 +45,19 @@ function UploadView(data) {
   this.handleSubmit = async (e) => {
     e.stopPropagation();
     e.preventDefault();
+
     let payload = {
       album: null,
       songs: []
     };
-    let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
-    let unique = null;
+    if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
+    for (let el of this.children) payload.songs.push(el.getSongData());
 
     try {
-      if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
-      for (let el of this.children) payload.songs.push(el.getSongData());
-
-      if (payload.album) {
-        unique = await ipfs.uploadAlbum(payload);
-      }
-      else {
-        unique = await ipfs.uploadSingle(payload);
-      }
-
-      writtenToMFS = true; //MFS has been modified
-      //Send payload to server
-      const _res = await fetch(`${app.URL}/api/upload`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const res = await _res.json();
-      if (res.type === 'error') throw res.err;
-      app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
-      console.log(app.transfersStore.get()[unique]);
+      await io.upload(payload);
     }
     catch (err) {
-      if (err === 'album with the same name already exists') return console.log(err);
-      if (err === 'single with the same name already exists') return console.log(err);
-
-      console.log(err);
-      if (payload.album && writtenToMFS) await app.ipfs.files.rm(`/antik/albums/${payload.album.title}`, { recursive: true });
-      else if (payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/antik/singles/${payload.songs[0].title}`, { recursive: true });
+      console.error(err);
     }
   }
 
