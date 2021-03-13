@@ -5,7 +5,7 @@ const uploadAlbum = async (payload) => {
   try {
     //Check if album already exists
     for await (const album of app.ipfs.files.ls('/antik/albums')) {
-      if (album.name === payload.album.title) throw 'album with the same name already exists';
+      if (album.name === payload.album.title && album.type === 'directory') throw 'album with the same name already exists';
     }
 
     app.ipfs.files.mkdir(`/antik/albums/${payload.album.title}/`, { parents: true }); //Create album folder
@@ -22,6 +22,33 @@ const uploadAlbum = async (payload) => {
     payload.album.tags = payload.album.tags.split(/[,;]+/); //Convert string into array
 
     return unique;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const reUploadAlbum = async (payload) => {
+  try {
+    //Delete folder in MFS if it was previously created
+    for await (const album of app.ipfs.files.ls('/antik/albums')) {
+      if (album.name === payload.album.title && album.type === 'directory') app.ipfs.files.rm(`/antik/albums/${payload.album.title}`, { recursive: true });
+    }
+
+    //Create a new folder
+    app.ipfs.files.mkdir(`/antik/albums/${payload.album.title}/`, { parents: true }); //Create album folder
+
+    //Add songs
+    for (let song of payload.songs) {
+      await addSong(song, payload);
+    }
+
+    //Get album CID
+    const stats = await app.ipfs.files.stat(`/antik/albums/${payload.album.title}`);
+    payload.album.cid = stats.cid.string;
+    payload.album.tags = typeof payload.album.tags !== 'object' ? payload.album.tags.split(/[,;]+/) : payload.album.tags; //Convert string into array
+
+    return payload.unique;
   }
   catch (err) {
     throw err;
@@ -51,9 +78,8 @@ const uploadSingle = async (payload) => {
 const reUploadSingle = async (payload) => {
   try {
     const single = payload.songs[0];
-    console.log(single)
 
-    //Check if single already exists
+    //Delete folder in MFS if it was previously created
     for await (const _single of app.ipfs.files.ls('/antik/singles')) {
       if (_single.name === single.title && _single.type === 'directory') app.ipfs.files.rm(`/antik/singles/${single.title}`, { recursive: true });
     }
@@ -300,6 +326,7 @@ const addFile = async (file, songTitle, albumTitle) => {
 
 module.exports = {
   uploadAlbum,
+  reUploadAlbum,
   uploadSingle,
   reUploadSingle,
   artistExists,

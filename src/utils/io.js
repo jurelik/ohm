@@ -39,7 +39,7 @@ const upload = async (payload) => {
 const resumeUpload = async (transfer) => {
   try {
     if (transfer.payload.album) {
-      unique = await ipfs.uploadAlbum(payload);
+      unique = await ipfs.reUploadAlbum(transfer.payload);
     }
     else {
       unique = await ipfs.reUploadSingle(transfer.payload);
