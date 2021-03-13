@@ -11,7 +11,6 @@ const uploadAlbum = async (payload) => {
 
     //Create a unique ID for the transfer and add songs
     const unique = startTransfer(payload);
-    payload.unique = unique;
     for (let song of payload.songs) {
       await addSong(song, payload);
     }
@@ -38,8 +37,7 @@ const uploadSingle = async (payload) => {
     }
 
     //Create a unique ID for the transfer and add single
-    const unique = startTransfer(single);
-    payload.unique = unique;
+    const unique = startTransfer(payload);
     await addSong(single, payload);
 
     return unique;
@@ -185,18 +183,20 @@ const getPinned = async () => {
 const handleProgress = (prog, size, unique) => {
   const transfer = app.transfersStore.get()[unique];
   const percentage = Math.round((prog / size * 100 / transfer.songsAmt) + (100 / transfer.songsAmt * transfer.cycle));
-  app.transfersStore.update(unique, { progress: percentage });
-  console.log(JSON.parse(JSON.stringify(app.transfersStore.get()[unique])));
+  app.transfersStore.update(unique, { progress: percentage }); //Update progress in transfersStore
+  if (app.views.transfersView) app.views.transfersView.children[unique].update('progress'); //Update progress in transfersView
 }
 
 const startTransfer = (payload) => {
   //Generate unique ID
   const unique = crypto.randomBytes(6).toString('base64');
+  payload.unique = unique;
   if (app.transfersStore.get()[unique]) return startTransfer(payload); //If the unique ID exists already, create a new one
 
   //Start transfer
   app.transfersStore.add(unique, {
-    name: payload.album ? payload.album.title : payload.title,
+    payload,
+    name: payload.album ? payload.album.title : payload.songs[0].title,
     artist: 'antik', //For testing purposes
     album: payload.album ? true : false,
     songsAmt: payload.album ? payload.songs.length : 1, //Get song amount to calculate progress
@@ -205,6 +205,8 @@ const startTransfer = (payload) => {
     cycle: 0, //Keep track of how many songs have been added
     completed: false
   });
+
+  if (app.views.transfersView) app.views.transfersView.addTransfer(unique); //Add transfer to transferView
 
   return unique;
 }

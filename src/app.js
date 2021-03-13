@@ -60,7 +60,7 @@ function App() {
     //Init an ipfs daemon & create an ipfs node
     ipcRenderer.on('daemon-ready', async (e, userDataPath) => {
       try {
-        this.ipfs = createClient({ timeout: 5000 });
+        this.ipfs = createClient();
         this.USER_DATA_PATH = userDataPath;
 
         //Create transfersStore

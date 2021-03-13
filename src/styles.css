@@ -483,3 +483,12 @@ input[type=file] button {
   align-items: center;
   margin: 0 5px;
 }
+
+.transfer {
+  display: flex;
+  flex-direction: row;
+}
+
+.transfer p {
+  margin: 0 5px;
+}

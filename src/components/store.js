@@ -13,6 +13,10 @@ function Store(opts) {
     return this.data;
   }
 
+  this.getOne = (key) => {
+    return this.data[key];
+  }
+
   this.set = (val) => {
     this.data = val;
     fs.writeFileSync(this.path, JSON.stringify(this.data));
