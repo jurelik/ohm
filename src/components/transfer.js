@@ -9,6 +9,12 @@ function Transfer(data) {
     this.el.querySelector(`.${value}`).innerHTML = this.data[value]; //Update DOM
   }
 
+  this.handleComplete = () => {
+    this.data.completed = true;
+    this.el.querySelector('.completed').innerHTML = 'COMPLETED';
+    this.el.querySelector('button').remove();
+  }
+
   this.handleResume = async (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -23,6 +29,14 @@ function Transfer(data) {
     }
   }
 
+  this.handleClear = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    app.transfersStore.rm(this.data.payload.unique);
+    return app.views.transfersView.removeTransfer(this.data.payload.unique);
+  }
+
   this.render = () => {
     //Create elements
     const name = document.createElement('p');
@@ -31,10 +45,12 @@ function Transfer(data) {
     const progress = document.createElement('p');
     const completed = document.createElement('p');
     const resume = document.createElement('button');
+    const clear = document.createElement('button');
 
     //Add classes for styling
     this.el.className = 'transfer';
     progress.className = 'progress';
+    completed.className = 'completed';
 
     //Add attributes and innerHTML
     name.innerHTML = this.data.name;
@@ -43,6 +59,7 @@ function Transfer(data) {
     progress.innerHTML = this.data.progress;
     resume.innerHTML = 'resume';
     resume.disabled = this.data.completed ? true : false;
+    clear.innerHTML = 'clear';
     completed.innerHTML = this.data.completed ? 'COMPLETED' : 'INCOMPLETE';
 
     //Build structure
@@ -51,10 +68,12 @@ function Transfer(data) {
     this.el.appendChild(type);
     this.el.appendChild(progress);
     this.el.appendChild(completed);
-    this.el.appendChild(resume);
+    if (!this.data.completed) this.el.appendChild(resume);
+    this.el.appendChild(clear);
 
     //Add listeners
     resume.onclick = this.handleResume;
+    clear.onclick = this.handleClear;
 
     return this.el;
   }

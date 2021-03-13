@@ -16,6 +16,13 @@ function TransfersView(data) {
     this.el.appendChild(transfer.render());
   }
 
+  this.removeTransfer = (unique) => {
+    this.children[unique].el.remove(); //Remove from DOM
+    delete this.children[unique]; //Remove from children
+
+    this.transfers = app.transfersStore.get(); //Update state
+  }
+
   this.render = async () => {
     try {
       //Create elements

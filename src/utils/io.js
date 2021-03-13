@@ -25,6 +25,7 @@ const upload = async (payload) => {
     const res = await _res.json();
     if (res.type === 'error') throw res.err;
     app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
+    if (app.views.transfersView) app.views.transfersView.children[payload.unique].handleComplete(); //Update status of transfer to completed
   }
   catch (err) {
     if (err === 'album with the same name already exists') return console.log(err);
