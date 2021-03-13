@@ -24,8 +24,15 @@ const upload = async (payload) => {
 
     const res = await _res.json();
     if (res.type === 'error') throw res.err;
-    app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
-    if (app.views.transfersView) app.views.transfersView.children[payload.unique].handleComplete(); //Update status of transfer to completed
+
+    //Handle errors after this point differently as the song/album was already successfully uploaded by this point
+    try {
+      app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
+      if (app.views.transfersView) app.views.transfersView.children[payload.unique].handleComplete(); //Update status of transfer to completed
+    }
+    catch (err) {
+      console.error(err);
+    }
   }
   catch (err) {
     if (err === 'album with the same name already exists') return console.log(err);
@@ -58,7 +65,15 @@ const resumeUpload = async (transfer) => {
 
     const res = await _res.json();
     if (res.type === 'error') throw res.err;
-    app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
+
+    //Handle errors after this point differently as the song/album was already successfully uploaded by this point
+    try {
+      app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
+      if (app.views.transfersView) app.views.transfersView.children[transfer.payload.unique].handleComplete(); //Update status of transfer to completed
+    }
+    catch (err) {
+      console.error(err);
+    }
   }
   catch (err) {
     console.error(err);
