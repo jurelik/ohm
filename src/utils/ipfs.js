@@ -281,18 +281,17 @@ const addFile = async (file, songTitle, albumTitle) => {
   try {
     if (file.type === 'internal') return;
 
-    let format = file.file.name.slice(-3);
-    let buffer = await file.file.arrayBuffer();
+    let format = file.filePath.slice(-3);
+    let buffer = await fsp.readFile(file.filePath);
     let { cid } = await app.ipfs.add({ content: buffer }); //Add file to IPFS
 
     if (albumTitle) await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/albums/${albumTitle}/${songTitle}/files/antik - ${file.name}.${format}` ); //add to album
     else await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/singles/${songTitle}/files/antik - ${file.name}.${format}` ); //add to single
 
     //Clean up the object
-    delete file.file;
     file.fileType = format;
     file.cid = cid.string;
-    file.tags = file.tags.split(/[,;]+/); //Convert string into array
+    file.tags = typeof file.tags !== 'object' ? file.tags.split(/[,;]+/) : file.tags; //Convert string into array
   }
   catch (err) {
     throw err;

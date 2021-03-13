@@ -56,7 +56,7 @@ function UploadFile(data) {
     const file = Array.from(this.el.querySelectorAll('.file-input')).reduce((acc, input) => {
       if (input.type === 'radio' && input.checked) return { ...acc, type: input.value };
       else if (input.type === 'radio' && !input.checked) return { ...acc };
-      else if (input.type === 'file') return { ...acc, [input.name]: input.files[0] };
+      else if (input.type === 'file') return { ...acc, filePath: input.files[0].path };
 
       return { ...acc, [input.name]: input.value };
     }, {});
@@ -64,7 +64,7 @@ function UploadFile(data) {
     //Handle empty fields
     if (file.type === 'original' || file.type === 'external') {
       if (file.name === '') throw 'file name is missing';
-      if (file.file === '') throw 'file is missing';
+      if (file.filePath === '') throw 'file is missing';
       if (file.tags === '') throw 'file tags are missing';
     }
     else if (file.type === 'internal') {
