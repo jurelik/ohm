@@ -25,6 +25,8 @@ function Store(opts) {
   this.add = (unique, obj) => { //Add item to store
     this.data[unique] = obj;
     fs.writeFileSync(this.path, JSON.stringify(this.data));
+
+    return this.data[unique];
   }
 
   this.rm = (unique) => { //Remove item from store

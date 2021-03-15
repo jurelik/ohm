@@ -63,6 +63,16 @@ function App() {
         this.ipfs = createClient();
         this.USER_DATA_PATH = userDataPath;
 
+        //Create user folder if it doesn't exist yet
+        let initialised = false;
+        for await (const file of this.ipfs.files.ls('/')) {
+          if (file.name === 'antik') initialised = true; //For testing purposes
+        }
+        if (!initialised) {
+          await this.ipfs.files.mkdir('/antik/singles', { parents: true });
+          await this.ipfs.files.mkdir('/antik/albums', { parents: true });
+        }
+
         //Create transfersStore
         this.transfersStore = new Store({ name: 'transfers' });
         this.transfersStore.init();

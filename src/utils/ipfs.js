@@ -11,7 +11,7 @@ const uploadAlbum = async (payload) => {
     app.ipfs.files.mkdir(`/antik/albums/${payload.album.title}/`, { parents: true }); //Create album folder
 
     //Create a unique ID for the transfer and add songs
-    const unique = startTransfer(payload);
+    const unique = startTransferUpload(payload);
     for (let song of payload.songs) {
       await addSong(song, payload);
     }
@@ -65,7 +65,7 @@ const uploadSingle = async (payload) => {
     }
 
     //Create a unique ID for the transfer and add single
-    const unique = startTransfer(payload);
+    const unique = startTransferUpload(payload);
     await addSong(single, payload);
 
     return unique;
@@ -145,11 +145,17 @@ const songInAlbumExists = async (data, albumTitle) => {
 
 const pinSong = async (data, albumTitle) => {
   try {
-    //Create album folder if it doesn't exist yet
-    if (await albumExists({ artist: data.artist, title: albumTitle }) === false) await app.ipfs.files.mkdir(`/${data.artist}/albums/${albumTitle}`);
+    //Create transfer
 
-    if (albumTitle) await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/albums/${albumTitle}/${data.title}`, { parents: true });
-    else await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/singles/${data.title}`, { parents: true });
+    //Create folder if it doesn't exist yet
+    if (albumTitle && await albumExists({ artist: data.artist, title: albumTitle }) === false) await app.ipfs.files.mkdir(`/${data.artist}/albums/${albumTitle}`);
+    if (!albumTitle && await songExists({ artist: data.artist, title: data.title }) === false) await app.ipfs.files.mkdir(`/${data.artist}/singles/${data.title}`);
+
+    const unique = startTransferPin(data, albumTitle);
+
+    //if (albumTitle) await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/albums/${albumTitle}/${data.title}`, { parents: true });
+    //else await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/singles/${data.title}`, { parents: true });
+    await app.ipfs.pin.add(`/ipfs/${data.cid}`);
   }
   catch (err) {
     throw err;
@@ -234,11 +240,50 @@ const handleProgress = (prog, size, unique) => {
   if (app.views.transfersView) app.views.transfersView.children[unique].update('progress'); //Update progress in transfersView
 }
 
-const startTransfer = (payload) => {
+const startTransferPin = (payload) => {
   //Generate unique ID
   const unique = crypto.randomBytes(6).toString('base64');
   payload.unique = unique;
-  if (app.transfersStore.get()[unique]) return startTransfer(payload); //If the unique ID exists already, create a new one
+  if (app.transfersStore.get()[unique]) return startTransferUpload(payload); //If the unique ID exists already, create a new one
+
+  //Start transfer
+  const transfer = app.transfersStore.add(unique, {
+    payload,
+    name: payload.album ? payload.album.title : payload.title,
+    artist: 'antik', //For testing purposes
+    album: payload.album ? true : false,
+    songsAmt: payload.album ? payload.songs.length : 1, //Get song amount to calculate progress
+    type: 'pin',
+    progress: '',
+    completed: false
+  });
+
+  if (app.views.transfersView) app.views.transfersView.addTransfer(unique); //Add transfer to transferView
+
+  const interval = transferInterval(transfer); //Create an interval to update progress
+
+  return unique;
+}
+
+const transferInterval = (transfer) => {
+  const interval = setInterval(async () => {
+    try {
+      const stat = await app.ipfs.files.stat(`/ipfs/${transfer.payload.cid}`, { withLocal: true });
+      console.log(stat)
+    }
+    catch (err) {
+      throw err;
+    }
+  }, 1000);
+
+  return interval;
+}
+
+const startTransferUpload = (payload) => {
+  //Generate unique ID
+  const unique = crypto.randomBytes(6).toString('base64');
+  payload.unique = unique;
+  if (app.transfersStore.get()[unique]) return startTransferUpload(payload); //If the unique ID exists already, create a new one
 
   //Start transfer
   app.transfersStore.add(unique, {
