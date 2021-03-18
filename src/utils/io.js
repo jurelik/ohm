@@ -2,15 +2,10 @@ const ipfs = require('../utils/ipfs');
 
 const upload = async (payload) => {
   let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
-  let unique = null;
 
   try {
-    if (payload.album) {
-      unique = await ipfs.uploadAlbum(payload);
-    }
-    else {
-      unique = await ipfs.uploadSingle(payload);
-    }
+    if (payload.album) await ipfs.uploadAlbum(payload);
+    else await ipfs.uploadSingle(payload);
 
     writtenToMFS = true; //MFS has been modified
     //Send payload to server
@@ -27,7 +22,7 @@ const upload = async (payload) => {
 
     //Handle errors after this point differently as the song/album was already successfully uploaded by this point
     try {
-      app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
+      app.transfersStore.update(payload.unique, { completed: true }); //Update status of transfer to completed
       if (app.views.transfersView) app.views.transfersView.children[payload.unique].handleComplete(); //Update status of transfer to completed
     }
     catch (err) {

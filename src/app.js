@@ -34,6 +34,7 @@ function App() {
   this.GATEWAY;
   this.URL;
   this.USER_DATA_PATH;
+  this.MULTIADDR;
 
   //State
   this.playing = false;
@@ -49,8 +50,8 @@ function App() {
       this.URL = 'http://localhost:3000';
     }
     else {
-      //this.GATEWAY = 'http://localhost:8080';
-      //this.URL = 'http://localhost:3000';
+      this.GATEWAY = 'http://localhost:8080';
+      this.URL = 'http://18.132.82.84:3000';
     }
 
     this.header.render();
@@ -62,6 +63,8 @@ function App() {
       try {
         this.ipfs = createClient();
         this.USER_DATA_PATH = userDataPath;
+        const id = await this.ipfs.id()
+        this.MULTIADDR = id.addresses[4];
 
         //Create user folder if it doesn't exist yet
         let initialised = false;

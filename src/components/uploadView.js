@@ -48,13 +48,17 @@ function UploadView(data) {
 
     let payload = {
       album: null,
-      songs: []
+      songs: [],
+      multiaddr: app.MULTIADDR, //Include multiaddr in payload
+      unique: null,
     };
     if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
     for (let el of this.children) payload.songs.push(el.getSongData());
 
     try {
+      console.log(payload);
       await io.upload(payload);
+      console.log(payload);
     }
     catch (err) {
       console.error(err);
