@@ -11,17 +11,17 @@ const uploadAlbum = async (payload) => {
     app.ipfs.files.mkdir(`/antik/albums/${payload.album.title}/`, { parents: true }); //Create album folder
 
     //Create a unique ID for the transfer and add songs
-    const unique = startTransferUpload(payload);
+    payload.unique = startTransferUpload(payload);
     for (let song of payload.songs) {
       await addSong(song, payload);
+      app.transfersStore.update(payload.unique, { cycle: app.transfersStore.get()[payload.unique].cycle + 1 }); //Increment transfer cycle
     }
 
     //Get album CID
     const stats = await app.ipfs.files.stat(`/antik/albums/${payload.album.title}`);
     payload.album.cid = stats.cid.string;
-    payload.album.tags = payload.album.tags.split(/[,;]+/); //Convert string into array
 
-    return unique;
+    return payload.unique;
   }
   catch (err) {
     throw err;
@@ -41,12 +41,12 @@ const reUploadAlbum = async (payload) => {
     //Add songs
     for (let song of payload.songs) {
       await addSong(song, payload);
+      app.transfersStore.update(payload.unique, { cycle: app.transfersStore.get()[payload.unique].cycle + 1 }); //Increment transfer cycle
     }
 
     //Get album CID
     const stats = await app.ipfs.files.stat(`/antik/albums/${payload.album.title}`);
     payload.album.cid = stats.cid.string;
-    payload.album.tags = typeof payload.album.tags !== 'object' ? payload.album.tags.split(/[,;]+/) : payload.album.tags; //Convert string into array
 
     return payload.unique;
   }
@@ -65,12 +65,11 @@ const uploadSingle = async (payload) => {
     }
 
     //Create a unique ID for the transfer and add single
-    const unique = startTransferUpload(payload);
-    payload.unique = unique;
+    payload.unique = startTransferUpload(payload);
     await addSong(single, payload);
-    app.transfersStore.update(unique, { cycle: app.transfersStore.get()[unique].cycle + 1 }); //Increment transfer cycle
+    app.transfersStore.update(payload.unique, { cycle: app.transfersStore.get()[payload.unique].cycle + 1 }); //Increment transfer cycle
 
-    return unique;
+    return payload.unique;
   }
   catch (err) {
     throw err;
@@ -88,6 +87,7 @@ const reUploadSingle = async (payload) => {
 
     //Add single
     await addSong(single, payload);
+    app.transfersStore.update(payload.unique, { cycle: app.transfersStore.get()[payload.unique].cycle + 1 }); //Increment transfer cycle
 
     return payload.unique;
   }
@@ -366,10 +366,9 @@ const addFile = async (file, songTitle, albumTitle) => {
     if (albumTitle) await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/albums/${albumTitle}/${songTitle}/files/antik - ${file.name}.${format}` ); //add to album
     else await app.ipfs.files.cp(`/ipfs/${cid.string}`, `/antik/singles/${songTitle}/files/antik - ${file.name}.${format}` ); //add to single
 
-    //Clean up the object
+    //Add cid and fileType to song
     file.fileType = format;
     file.cid = cid.string;
-    file.tags = typeof file.tags !== 'object' ? file.tags.split(/[,;]+/) : file.tags; //Convert string into array
   }
   catch (err) {
     throw err;
