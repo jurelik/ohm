@@ -22,7 +22,9 @@ function Transfer(data) {
 
     try {
       if (this.data.active) { //If active pause
-
+        app.transfersStore.update(this.data.payload.unique, { ...this.data, active: false });
+        this.el.querySelector(`.resume`).innerHTML = 'resume'; //Update DOM
+        return ipfs.pauseTransfer(this.data.payload.unique);
       }
 
       switch (this.data.type) {

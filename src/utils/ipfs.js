@@ -148,17 +148,18 @@ const songInAlbumExists = async (data, albumTitle) => {
 const pinSong = async (data, albumTitle) => {
   try {
     //Check if already being transferred
-    let { foundTransfer, unique } = checkIfPinExists(data);
+    let unique = checkIfPinExists(data);
 
     //Create transfer
-    if (foundTransfer && unique) resumePinSong(foundTransfer);
+    if (unique) resumePinSong(unique);
     else unique = startTransferPin(data, albumTitle);
+    const transfer = app.transfersStore.getOne(unique);
 
-    await app.ipfs.pin.add(`/ipfs/${data.cid}`);
+    await app.ipfs.pin.add(`/ipfs/${data.cid}`, { signal: transfer.controller.signal });
 
     //Copy to MFS
-    if (albumTitle) await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/albums/${albumTitle}/${data.title}`, { parents: true });
-    else await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/singles/${data.title}`, { parents: true });
+    if (albumTitle) await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/albums/${albumTitle}/${data.title}`, { parents: true, signal: transfer.controller.signal });
+    else await app.ipfs.files.cp(`/ipfs/${data.cid}`, `/${data.artist}/singles/${data.title}`, { parents: true, signal: transfer.controller.signal });
 
     app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
     if (app.views.transfersView) app.views.transfersView.children[unique].handleComplete(); //Update status of transfer to completed
@@ -176,26 +177,6 @@ const unpinSong = async (data, albumTitle) => {
   catch (err) {
     throw err;
   }
-}
-
-const resumePinSong = (transfer) => {
-  transfer.timeout = transferTimeout(transfer); //Create an interval to update progress
-  transfer.active = true;
-}
-
-const checkIfPinExists = (data) => {
-  const transfers = app.transfersStore.get();
-  let foundTransfer;
-  let unique;
-  for (let _unique in transfers) {
-    if (transfers[_unique].payload.id === data.id && transfers[_unique].payload.type === data.type) {
-      foundTransfer = transfers[_unique];
-      unique = _unique;
-      break;
-    }
-  }
-
-  return { foundTransfer, unique };
 }
 
 const pinAlbum = async (data) => {
@@ -258,6 +239,12 @@ const getPinned = async () => {
   }
 }
 
+const pauseTransfer = (unique) => {
+  const transfer = app.transfersStore.getOne(unique);
+  transfer.active = false;
+  transfer.controller.abort('User paused transfer.');
+}
+
 //Helpers
 const handleProgress = (prog, size, unique) => {
   const transfer = app.transfersStore.get()[unique];
@@ -285,7 +272,7 @@ const startTransferPin = (payload) => {
     completed: false
   };
 
-  transfer.timeout = transferTimeout(transfer); //Create an interval to update progress
+  transfer.timeout = transferTimeout(unique); //Create an interval to update progress
 
   app.transfersStore.add(unique, transfer);
   if (app.views.transfersView) app.views.transfersView.addTransfer(unique); //Add transfer to transferView
@@ -293,8 +280,31 @@ const startTransferPin = (payload) => {
   return unique;
 }
 
-const transferTimeout = (transfer) => {
+const resumePinSong = (unique) => {
+  const controller = new AbortController();
+  const transfer = app.transfersStore.getOne(unique);
+  transfer.timeout = transferTimeout(unique); //Create an interval to update progress
+  transfer.active = true;
+  transfer.controller = controller;
+}
+
+const checkIfPinExists = (data) => {
+  const transfers = app.transfersStore.get();
+  let unique;
+  for (let _unique in transfers) {
+    if (transfers[_unique].payload.id === data.id && transfers[_unique].payload.type === data.type) {
+      unique = _unique;
+      break;
+    }
+  }
+
+  return unique;
+}
+
+const transferTimeout = (unique) => {
   return setTimeout(async () => {
+    const transfer = app.transfersStore.getOne(unique);
+
     try {
       const stat = await app.ipfs.files.stat(`/ipfs/${transfer.payload.cid}`, { withLocal: true, timeout: 2000 });
       console.log(stat)
@@ -303,11 +313,11 @@ const transferTimeout = (transfer) => {
       if (app.views.transfersView) app.views.transfersView.children[transfer.payload.unique].update('progress'); //Update progress in transfersView
 
       if (percentage === 100) return;
-      transfer.timeout = transferTimeout(transfer);
+      transfer.timeout = transferTimeout(unique);
     }
     catch (err) {
       console.error(err.message)
-      if (transfer.active) transfer.timer = transferTimeout(transfer);
+      if (transfer.active) transfer.timer = transferTimeout(unique);
     }
   }, 1000);
 }
@@ -410,5 +420,6 @@ module.exports = {
   unpinSong,
   pinAlbum,
   unpinAlbum,
-  getPinned
+  getPinned,
+  pauseTransfer
 }
