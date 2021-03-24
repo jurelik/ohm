@@ -63,7 +63,7 @@ function App() {
       try {
         this.ipfs = createClient();
         this.USER_DATA_PATH = userDataPath;
-        const id = await this.ipfs.id()
+        const id = await this.ipfs.id() //Get multiaddress for swarm connections
         this.MULTIADDR = id.addresses[4];
 
         //Create user folder if it doesn't exist yet
@@ -79,6 +79,7 @@ function App() {
         //Create transfersStore
         this.transfersStore = new Store({ name: 'transfers' });
         this.transfersStore.init();
+        this.initTransfers();
 
         //Render first content
         this.changeView('explore');
@@ -146,5 +147,13 @@ function App() {
       type,
       data
     });
+  }
+
+  this.initTransfers = () => {
+    const transfers = this.transfersStore.get();
+
+    for (let unique in transfers) {
+      transfers[unique].active = false; //All transfers are paused on app open - ADD OPTION TO DISABLE THIS
+    }
   }
 }

@@ -1,4 +1,5 @@
 const io = require('../utils/io');
+const ipfs = require('../utils/ipfs');
 
 function Transfer(data) {
   this.el = document.createElement('div');
@@ -20,9 +21,21 @@ function Transfer(data) {
     e.preventDefault();
 
     try {
-      app.transfersStore.update(this.data.payload.unique, { ...this.data, progress: 0, cycle: 0 });
-      this.el.querySelector(`.progress`).innerHTML = 0; //Update DOM
-      await io.resumeUpload(this.data);
+      if (this.data.active) { //If active pause
+
+      }
+
+      switch (this.data.type) {
+        case 'upload':
+          app.transfersStore.update(this.data.payload.unique, { ...this.data, progress: 0, cycle: 0, active: true });
+          this.el.querySelector(`.progress`).innerHTML = 0; //Update DOM
+          this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
+          await io.resumeUpload(this.data);
+        case 'pin':
+          app.transfersStore.update(this.data.payload.unique, { ...this.data, active: true });
+          this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
+          await ipfs.pinSong(this.data.payload);
+      }
     }
     catch (err) {
       console.error(err);
@@ -51,13 +64,14 @@ function Transfer(data) {
     this.el.className = 'transfer';
     progress.className = 'progress';
     completed.className = 'completed';
+    resume.className = 'resume';
 
     //Add attributes and innerHTML
     name.innerHTML = this.data.name;
     artist.innerHTML = this.data.artist;
     type.innerHTML = this.data.type;
     progress.innerHTML = this.data.progress;
-    resume.innerHTML = 'resume';
+    resume.innerHTML = this.data.active ? 'pause' : 'resume';
     resume.disabled = this.data.completed ? true : false;
     clear.innerHTML = 'clear';
     completed.innerHTML = this.data.completed ? 'COMPLETED' : 'INCOMPLETE';

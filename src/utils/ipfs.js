@@ -147,13 +147,13 @@ const songInAlbumExists = async (data, albumTitle) => {
 
 const pinSong = async (data, albumTitle) => {
   try {
+    //Check if already being transferred
+    let { foundTransfer, unique } = checkIfPinExists(data);
+
     //Create transfer
+    if (foundTransfer && unique) resumePinSong(foundTransfer);
+    else unique = startTransferPin(data, albumTitle);
 
-    //Create folder if it doesn't exist yet
-    //if (albumTitle && await albumExists({ artist: data.artist, title: albumTitle }) === false) await app.ipfs.files.mkdir(`/${data.artist}/albums/${albumTitle}`);
-    //if (!albumTitle && await songExists({ artist: data.artist, title: data.title }) === false) await app.ipfs.files.mkdir(`/${data.artist}/singles/${data.title}`);
-
-    const unique = startTransferPin(data, albumTitle);
     await app.ipfs.pin.add(`/ipfs/${data.cid}`);
 
     //Copy to MFS
@@ -176,6 +176,26 @@ const unpinSong = async (data, albumTitle) => {
   catch (err) {
     throw err;
   }
+}
+
+const resumePinSong = (transfer) => {
+  transfer.timeout = transferTimeout(transfer); //Create an interval to update progress
+  transfer.active = true;
+}
+
+const checkIfPinExists = (data) => {
+  const transfers = app.transfersStore.get();
+  let foundTransfer;
+  let unique;
+  for (let _unique in transfers) {
+    if (transfers[_unique].payload.id === data.id && transfers[_unique].payload.type === data.type) {
+      foundTransfer = transfers[_unique];
+      unique = _unique;
+      break;
+    }
+  }
+
+  return { foundTransfer, unique };
 }
 
 const pinAlbum = async (data) => {
@@ -250,10 +270,10 @@ const startTransferPin = (payload) => {
   //Generate unique ID
   const unique = crypto.randomBytes(6).toString('base64');
   payload.unique = unique;
-  if (app.transfersStore.get()[unique]) return startTransferUpload(payload); //If the unique ID exists already, create a new one
+  if (app.transfersStore.get()[unique]) return startTransferPin(payload); //If the unique ID exists already, create a new one
 
   //Start transfer
-  const transfer = app.transfersStore.add(unique, {
+  const transfer = {
     payload,
     name: payload.album ? payload.album.title : payload.title,
     artist: 'antik', //For testing purposes
@@ -261,33 +281,35 @@ const startTransferPin = (payload) => {
     songsAmt: payload.album ? payload.songs.length : 1, //Get song amount to calculate progress
     type: 'pin',
     progress: 0,
+    active: true, //Is the timeout active
     completed: false
-  });
+  };
 
+  transfer.timeout = transferTimeout(transfer); //Create an interval to update progress
+
+  app.transfersStore.add(unique, transfer);
   if (app.views.transfersView) app.views.transfersView.addTransfer(unique); //Add transfer to transferView
-
-  transferInterval(transfer); //Create an interval to update progress
 
   return unique;
 }
 
-const transferInterval = (transfer) => {
-  const interval = setInterval(async () => {
+const transferTimeout = (transfer) => {
+  return setTimeout(async () => {
     try {
-      const stat = await app.ipfs.files.stat(`/ipfs/${transfer.payload.cid}`, { withLocal: true });
+      const stat = await app.ipfs.files.stat(`/ipfs/${transfer.payload.cid}`, { withLocal: true, timeout: 2000 });
       console.log(stat)
       const percentage = Math.round(stat.sizeLocal / stat.cumulativeSize * 100);
       app.transfersStore.update(transfer.payload.unique, { progress: percentage }); //Update progress in transfersStore
       if (app.views.transfersView) app.views.transfersView.children[transfer.payload.unique].update('progress'); //Update progress in transfersView
 
-      if (percentage === 100) clearInterval(interval);
+      if (percentage === 100) return;
+      transfer.timeout = transferTimeout(transfer);
     }
     catch (err) {
-      throw err;
+      console.error(err.message)
+      if (transfer.active) transfer.timer = transferTimeout(transfer);
     }
   }, 1000);
-
-  return interval;
 }
 
 const startTransferUpload = (payload) => {
