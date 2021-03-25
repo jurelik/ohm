@@ -30,7 +30,59 @@ const uploadAlbum = async (payload) => {
   }
 }
 
+const artistExists = async (artist) => {
+  try {
+    for await (const file of app.ipfs.files.ls('/')) {
+      if (file.name === artist && file.type === 'directory') return true;
+    }
+    return false;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const songExists = async (data) => {
+  try {
+    for await (const file of app.ipfs.files.ls(`/${data.artist}/singles/`)) {
+      if (file.name === data.title && file.type === 'directory') return file.cid.string;
+    }
+    return false;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const albumExists = async (data) => {
+  try {
+    for await (const file of app.ipfs.files.ls(`/${data.artist}/albums/`)) {
+      if (file.name === data.title && file.type === 'directory') return file.cid.string;
+    }
+    return false;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const songInAlbumExists = async (data, albumTitle) => {
+  try {
+    for await (const file of app.ipfs.files.ls(`/${data.artist}/albums/${albumTitle}/`)) {
+      if (file.name === data.title && file.type === 'directory') return file.cid.string;
+    }
+    return false;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   uploadSingle,
-  uploadAlbum
+  uploadAlbum,
+  artistExists,
+  songExists,
+  albumExists,
+  songInAlbumExists
 }
