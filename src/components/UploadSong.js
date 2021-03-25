@@ -42,18 +42,23 @@ function UploadSong(data) {
 
   this.getSongData = () => {
     const song = Array.from(this.el.querySelectorAll('.song-input')).reduce((acc, input) => {
-      if (input.type === 'file') return { ...acc, filePath: input.files[0].path };
+      if (input.type === 'file') return { ...acc, path: input.files[0].path };
 
       return { ...acc, [input.name]: input.value };
     }, {});
 
     //Handle empty fields
     if (song.title === '') throw 'song title is missing'
-    if (!song.filePath) throw 'song file is missing'
+    if (!song.path) throw 'song file is missing'
     if (song.tags === '') throw 'song tags are missing'
 
+    //Add files
     song.files = [];
     for (let el of this.children) song.files.push(el.getFileData());
+
+    //Add CID & format
+    song.cid = null;
+    song.format = song.path.slice(-3);
 
     return song;
   }

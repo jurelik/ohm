@@ -1,4 +1,5 @@
 const ipfs = require('../utils/ipfs');
+const log = require('../utils/log');
 
 function Header() {
   this.el = document.querySelector('.header');
@@ -77,7 +78,8 @@ function Header() {
   }
 
   this.handleTest = async () => {
-    await ipfs.getRepoStructure();
+    log('yello')
+    log.success('hello')
   }
 
   this.handleUpload = () => {

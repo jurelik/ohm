@@ -1,6 +1,7 @@
 const UploadSong = require('./UploadSong');
 const UploadAlbum = require('./UploadAlbum');
 const io = require('../utils/io');
+const log = require('../utils/log');
 
 function UploadView(data) {
   this.el = document.createElement('div');
@@ -50,18 +51,17 @@ function UploadView(data) {
       album: null,
       songs: [],
       multiaddr: app.MULTIADDR, //Include multiaddr in payload
-      unique: null,
     };
     if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
     for (let el of this.children) payload.songs.push(el.getSongData());
 
     try {
-      console.log(payload);
+      log('Beginning upload.')
       await io.upload(payload);
-      console.log(payload);
+      log.success('Successfully uploaded.');
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 
