@@ -71,13 +71,17 @@ function UploadView(data) {
 
   this.render = () => {
     //Create elements
+    let bottomBar = document.createElement('div');
     let addSong = document.createElement('button');
     let submit = document.createElement('input');
+    let spinner = document.createElement('div');
     this.album = new UploadAlbum();
     let album = this.album.render();
 
     //Add classes for styling
     this.el.className = 'upload';
+    bottomBar.className = 'upload-bottom-bar';
+    spinner.className = 'spinner';
 
     //Add attributes and innerHTML
     addSong.innerHTML = 'add song';
@@ -87,8 +91,10 @@ function UploadView(data) {
     //Build structure
     this.el.appendChild(this.form);
     this.form.appendChild(album);
-    this.el.appendChild(addSong);
-    this.el.appendChild(submit);
+    this.el.appendChild(bottomBar);
+    bottomBar.appendChild(addSong);
+    bottomBar.appendChild(submit);
+    bottomBar.appendChild(spinner);
 
     if (this.children.length === 0) {
       let uploadSong = new UploadSong();

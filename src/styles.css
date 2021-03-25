@@ -484,6 +484,12 @@ input[type=file] button {
   margin: 0 5px;
 }
 
+.upload-bottom-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .transfer {
   display: flex;
   flex-direction: row;
@@ -491,4 +497,26 @@ input[type=file] button {
 
 .transfer p {
   margin: 0 5px;
+}
+
+/**Spinner**/
+.spinner {
+  content: " ";
+  display: block;
+  width: 12px;
+  height: 12px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  border-color: #fff #fff #fff transparent;
+  animation: spinner 1.2s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
