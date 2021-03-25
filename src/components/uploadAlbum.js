@@ -30,6 +30,9 @@ function UploadAlbum(data) {
     if (album.title === '') throw 'album title is missing';
     if (album.tags === '') throw 'album tags are missing';
 
+    //Add CID property
+    album.cid = null;
+
     return album;
   }
 

@@ -71,7 +71,8 @@ function UploadFile(data) {
       if (file.id === '') throw 'file id is missing';
     }
 
-    //Add format
+    //Add properties
+    file.cid = null;
     file.format = file.path.slice(-3);
 
     return file;

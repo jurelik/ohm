@@ -8,10 +8,10 @@ const upload = async (payload) => {
     if (payload.album) await ipfs.uploadAlbum(payload);
     else await ipfs.uploadSingle(payload);
     writtenToMFS = true; //MFS has been modified
-    log(`${payload.album ? 'Album' : 'Single'} added to IPFS.`);
+    log(`${payload.album ? 'Album' : 'Single'} added to IPFS...`);
 
     //Send payload to server
-    log('Sending to mothership.');
+    log('Sending to mothership...');
     const _res = await fetch(`${app.URL}/api/upload`, {
       method: 'POST',
       headers: {

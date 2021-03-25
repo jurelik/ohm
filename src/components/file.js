@@ -50,7 +50,7 @@ function File(data) {
     name.innerHTML = data.name;
     artist.innerHTML = data.artist;
     type.innerHTML = data.type;
-    fileType.innerHTML = data.fileType;
+    fileType.innerHTML = data.format;
     tags.innerHTML = data.tags.join(', ');
     info.innerHTML = data.info;
     checkBox.type = 'checkbox';
@@ -65,7 +65,7 @@ function File(data) {
     this.el.appendChild(tags);
     this.el.appendChild(info);
     this.el.appendChild(checkBoxCell);
-    data.fileType === 'wav' || data.fileType === 'mp3' ? playButtonCell.appendChild(playButton) : null;
+    data.format === 'wav' || data.format === 'mp3' ? playButtonCell.appendChild(playButton) : null;
     checkBoxCell.appendChild(checkBox);
 
     //Add listeners
