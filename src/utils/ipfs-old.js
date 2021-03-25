@@ -218,21 +218,7 @@ const getPinned = async () => {
       }
     }
 
-    const _res = await fetch(`${app.URL}/api/pinned`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        albums,
-        songs
-      })
-    });
-
-    const res = await _res.json();
-    if (res.type === 'error') throw res.err;
-
-    return res.payload;
+    return { albums, songs };
   }
   catch (err) {
     console.error(err);

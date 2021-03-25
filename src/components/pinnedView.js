@@ -1,4 +1,5 @@
 const ipfs = require('../utils/ipfs');
+const log = require('../utils/log');
 const Album = require('./album');
 const Song = require('./song');
 
@@ -10,10 +11,32 @@ function PinnedView(data) {
     albums: {}
   };
 
+  this.init = async () => {
+    try {
+      const payload = await ipfs.getPinned();
+
+      const _res = await fetch(`${app.URL}/api/pinned`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const res = await _res.json();
+      if (res.type === 'error') throw res.err;
+
+      return res.payload;
+    }
+    catch (err) {
+      log.error(err);
+    }
+  }
+
   this.render = async () => {
     try {
       //Get data
-      this.data = await ipfs.getPinned();
+      this.data = await this.init();
 
       //Create elements
       let albums = document.createElement('p');
