@@ -47,22 +47,35 @@ function UploadView(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    let payload = {
-      album: null,
-      songs: [],
-      multiaddr: app.MULTIADDR, //Include multiaddr in payload
-    };
-    if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
-    for (let el of this.children) payload.songs.push(el.getSongData());
+    const spinner = this.addSpinner(); //Add spinner
 
     try {
+      let payload = {
+        album: null,
+        songs: [],
+        multiaddr: app.MULTIADDR, //Include multiaddr in payload
+      };
+      if (this.children.length > 1) payload.album = this.album.getAlbumData(); //Include album data if more than one song
+      for (let el of this.children) payload.songs.push(el.getSongData());
+
       log('Beginning upload.')
       await io.upload(payload);
       log.success('Successfully uploaded.');
+      spinner.remove();
     }
     catch (err) {
       log.error(err);
+      spinner.remove();
     }
+  }
+
+  this.addSpinner = () => {
+    const bottomBar = this.el.querySelector('.upload-bottom-bar');
+    const spinner = document.createElement('div');
+    spinner.className = 'spinner';
+    bottomBar.appendChild(spinner);
+
+    return spinner
   }
 
   this.display = () => {
@@ -74,14 +87,12 @@ function UploadView(data) {
     let bottomBar = document.createElement('div');
     let addSong = document.createElement('button');
     let submit = document.createElement('input');
-    let spinner = document.createElement('div');
     this.album = new UploadAlbum();
     let album = this.album.render();
 
     //Add classes for styling
     this.el.className = 'upload';
     bottomBar.className = 'upload-bottom-bar';
-    spinner.className = 'spinner';
 
     //Add attributes and innerHTML
     addSong.innerHTML = 'add song';
@@ -94,7 +105,6 @@ function UploadView(data) {
     this.el.appendChild(bottomBar);
     bottomBar.appendChild(addSong);
     bottomBar.appendChild(submit);
-    bottomBar.appendChild(spinner);
 
     if (this.children.length === 0) {
       let uploadSong = new UploadSong();

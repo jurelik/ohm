@@ -42,7 +42,7 @@ function UploadSong(data) {
 
   this.getSongData = () => {
     const song = Array.from(this.el.querySelectorAll('.song-input')).reduce((acc, input) => {
-      if (input.type === 'file') return { ...acc, path: input.files[0].path };
+      if (input.type === 'file' && input.files[0]) return { ...acc, path: input.files[0].path };
 
       return { ...acc, [input.name]: input.value };
     }, {});

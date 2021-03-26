@@ -1,3 +1,5 @@
+const fsp = require('fs').promises;
+
 const addSong = async (song, path) => {
   try {
     const buffer = await fsp.readFile(song.path);
