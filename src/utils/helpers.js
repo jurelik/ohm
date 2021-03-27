@@ -1,4 +1,5 @@
 const fsp = require('fs').promises;
+const crypto = require('crypto');
 
 const addSong = async (song, path) => {
   try {
@@ -28,6 +29,51 @@ const addSong = async (song, path) => {
   }
 }
 
+const generateTransferId = () => {
+  //Generate unique ID
+  const unique = crypto.randomBytes(6).toString('base64');
+  if (app.transfersStore.get()[unique]) return generateTransferId(); //If the unique ID exists already, create a new one
+  return unique;
+}
+
+const transferTimeout = (unique) => {
+  return setTimeout(async () => {
+    const transfer = app.transfersStore.getOne(unique);
+
+    try {
+      const stat = await app.ipfs.files.stat(`/ipfs/${transfer.cid}`, { withLocal: true, timeout: 2000 });
+      const percentage = Math.round(stat.sizeLocal / stat.cumulativeSize * 100);
+      app.transfersStore.update(unique, { progress: percentage }); //Update progress in transfersStore
+      if (app.current = 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].update('progress'); //Update progress in transfersView
+
+      if (percentage === 100) return;
+      transfer.timeout = transferTimeout(unique);
+    }
+    catch (err) {
+      console.error(err.message)
+      if (transfer.active) transfer.timer = transferTimeout(unique);
+    }
+
+  }, 1000);
+}
+
+const transferExists = (cid) => {
+  const transfers = app.transfersStore.get();
+  let unique = null;
+
+  for (const _unique in transfers) {
+    if (transfers[_unique].cid === cid) {
+      unique = _unique;
+      break;
+    }
+  }
+
+  return unique;
+}
+
 module.exports = {
-  addSong
+  addSong,
+  generateTransferId,
+  transferTimeout,
+  transferExists
 }

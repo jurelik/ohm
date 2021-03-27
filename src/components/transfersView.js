@@ -34,9 +34,9 @@ function TransfersView(data) {
 
       //Append transfers
       this.transfers = app.transfersStore.get();
-      for (let key in this.transfers) {
-        let transfer = new Transfer(this.transfers[key]);
-        this.children[key] = transfer;
+      for (let unique in this.transfers) {
+        let transfer = new Transfer(this.transfers[unique], unique);
+        this.children[unique] = transfer;
         this.el.appendChild(transfer.render());
       }
 

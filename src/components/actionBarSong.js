@@ -1,4 +1,5 @@
 const ipfs = require('../utils/ipfs');
+const log = require('../utils/log');
 
 function ActionBarSong(data) {
   this.el = document.createElement('div');
@@ -16,15 +17,17 @@ function ActionBarSong(data) {
     e.stopPropagation();
 
     try {
-      if (app.current === 'album') this.pinned ? await ipfs.unpinSong(this.data, app.views.albumView.data.title) : await ipfs.pinSong(this.data, app.views.albumView.data.title);
-      else this.pinned ? await ipfs.unpinSong(this.data) : await ipfs.pinSong(this.data);
+      //if (app.current === 'album') this.pinned ? await ipfs.unpinSong(this.data, app.views.albumView.data.title) : await ipfs.pinSong(this.data, app.views.albumView.data.title);
+      log('Initiating transfer..');
+      this.pinned ? await ipfs.unpinSong(this.data) : await ipfs.pinSong(this.data);
       this.pinned = !this.pinned;
+      log.success('Song pinned.');
 
       //Update pin innerHTML
       this.el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 

@@ -1,12 +1,13 @@
 const io = require('../utils/io');
 const ipfs = require('../utils/ipfs');
 
-function Transfer(data) {
+function Transfer(data, unique) {
   this.el = document.createElement('div');
   this.data = data;
+  this.unique = unique; //Store transfer's unique key
 
   this.update = (value) => {
-    this.data = app.transfersStore.getOne(this.data.payload.unique); //Update data
+    this.data = app.transfersStore.getOne(this.unique); //Update data
     this.el.querySelector(`.${value}`).innerHTML = this.data[value]; //Update DOM
   }
 
@@ -19,24 +20,20 @@ function Transfer(data) {
   this.handleResume = async (e) => {
     e.stopPropagation();
     e.preventDefault();
+    console.log(this.data);
 
     try {
       if (this.data.active) { //If active pause
-        app.transfersStore.update(this.data.payload.unique, { ...this.data, active: false });
+        app.transfersStore.update(this.unique, { active: false });
         this.el.querySelector(`.resume`).innerHTML = 'resume'; //Update DOM
-        return ipfs.pauseTransfer(this.data.payload.unique);
+        return ipfs.pausePin(this.unique);
       }
 
       switch (this.data.type) {
-        case 'upload':
-          app.transfersStore.update(this.data.payload.unique, { ...this.data, progress: 0, cycle: 0, active: true });
-          this.el.querySelector(`.progress`).innerHTML = 0; //Update DOM
-          this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
-          await io.resumeUpload(this.data);
         case 'pin':
-          app.transfersStore.update(this.data.payload.unique, { ...this.data, active: true });
+          app.transfersStore.update(this.unique, { active: true });
           this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
-          await ipfs.pinSong(this.data.payload);
+          await ipfs.resumePin(this.unique);
       }
     }
     catch (err) {
@@ -48,8 +45,8 @@ function Transfer(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    app.transfersStore.rm(this.data.payload.unique);
-    return app.views.transfersView.removeTransfer(this.data.payload.unique);
+    app.transfersStore.rm(this.unique);
+    return app.views.transfersView.removeTransfer(this.unique);
   }
 
   this.render = () => {
