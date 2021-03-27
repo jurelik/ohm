@@ -1,5 +1,6 @@
 const io = require('../utils/io');
 const ipfs = require('../utils/ipfs');
+const log = require('../utils/log');
 
 function Transfer(data, unique) {
   this.el = document.createElement('div');
@@ -20,20 +21,22 @@ function Transfer(data, unique) {
   this.handleResume = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-    console.log(this.data);
 
     try {
       if (this.data.active) { //If active pause
-        app.transfersStore.update(this.unique, { active: false });
+        log('Innitiating pause..');
         this.el.querySelector(`.resume`).innerHTML = 'resume'; //Update DOM
-        return ipfs.pausePin(this.unique);
+        ipfs.pausePin(this.unique);
+        log.success('Successfully paused.');
+        return;
       }
 
       switch (this.data.type) {
         case 'pin':
-          app.transfersStore.update(this.unique, { active: true });
+          log('Innitiating transfer..');
           this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
           await ipfs.resumePin(this.unique);
+          log.success('Successfully pinned.');
       }
     }
     catch (err) {

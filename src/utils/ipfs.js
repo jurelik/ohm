@@ -52,12 +52,43 @@ const pinSong = async (payload) => {
       controller
     };
 
-    transfer.timeout = helpers.transferTimeout(unique); //Create an interval to update progress
     app.transfersStore.add(unique, transfer); //Add transfer to transfersStore
+    transfer.timeout = helpers.transferTimeout(unique); //Create an interval to update progress
     log('Transfer initiated..');
 
     await app.ipfs.pin.add(`/ipfs/${payload.cid}`, { signal: controller.signal });
     await app.ipfs.files.cp(`/ipfs/${payload.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal });
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const resumePin = async (unique) => {
+  try {
+    const controller = new AbortController();
+    const transfer = app.transfersStore.getOne(unique);
+
+    //Resume transfer
+    app.transfersStore.update(unique, { active: true, controller, timeout: helpers.transferTimeout(unique) });
+    log('Transfer initiated..');
+
+    await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal });
+    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal });
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const pausePin = async (unique) => {
+  try {
+    const transfer = app.transfersStore.getOne(unique);
+
+    //Resume transfer
+    app.transfersStore.update(unique, { active: false });
+    transfer.controller.abort();
+    clearTimeout(transfer.timeout);
   }
   catch (err) {
     throw err;
@@ -141,6 +172,8 @@ module.exports = {
   uploadSingle,
   uploadAlbum,
   pinSong,
+  resumePin,
+  pausePin,
   getPinned,
   artistExists,
   songExists,
