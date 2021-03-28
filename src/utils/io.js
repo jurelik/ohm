@@ -5,6 +5,7 @@ const upload = async (payload) => {
   let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
 
   try {
+    log('Adding to IPFS...');
     if (payload.album) await ipfs.uploadAlbum(payload);
     else await ipfs.uploadSingle(payload);
     writtenToMFS = true; //MFS has been modified

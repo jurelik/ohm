@@ -88,8 +88,13 @@ const resumePin = async (unique) => {
     app.transfersStore.update(unique, { active: true, controller, timeout: helpers.transferTimeout(unique) });
     log('Transfer initiated..');
 
+    //Add to MFS
     await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal });
-    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal });
+    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}${transfer.name}`, { signal: controller.signal });
+
+    clearTimeout(transfer.timeout);
+    app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
+    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].update('completed'); //Update progress in transfersView
   }
   catch (err) {
     throw err;
