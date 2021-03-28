@@ -78,8 +78,7 @@ function Header() {
   }
 
   this.handleTest = async () => {
-    log('yello')
-    log.success('hello')
+    log(app.current)
   }
 
   this.handleUpload = () => {

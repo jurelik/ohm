@@ -21,7 +21,7 @@ function ActionBarSong(data) {
       log('Initiating transfer..');
       this.pinned ? await ipfs.unpinSong(this.data) : await ipfs.pinSong(this.data);
       this.pinned = !this.pinned;
-      log.success('Song pinned.');
+      log.success(`Song ${this.pinned ? 'pinned' : 'unpinned'}`);
 
       //Update pin innerHTML
       this.el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';

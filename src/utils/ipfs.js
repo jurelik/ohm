@@ -56,8 +56,23 @@ const pinSong = async (payload) => {
     transfer.timeout = helpers.transferTimeout(unique); //Create an interval to update progress
     log('Transfer initiated..');
 
+    //Add to MFS
     await app.ipfs.pin.add(`/ipfs/${payload.cid}`, { signal: controller.signal });
-    await app.ipfs.files.cp(`/ipfs/${payload.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal });
+    await app.ipfs.files.cp(`/ipfs/${payload.cid}`, `${transfer.path}${transfer.name}`, { signal: controller.signal });
+
+    clearTimeout(transfer.timeout);
+    app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
+    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].update('completed'); //Update progress in transfersView
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const unpinSong = async (payload) => {
+  try {
+    const path = app.current === 'album' ? `/${payload.artist}/albums/${app.views.albumView.data.title}/` : `/${payload.artist}/singles/`;
+    await app.ipfs.files.rm(`${path}${payload.title}`, { recursive: true });
   }
   catch (err) {
     throw err;
@@ -172,6 +187,7 @@ module.exports = {
   uploadSingle,
   uploadAlbum,
   pinSong,
+  unpinSong,
   resumePin,
   pausePin,
   getPinned,
