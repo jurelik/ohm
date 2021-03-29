@@ -71,9 +71,24 @@ const transferExists = (cid) => {
   return unique;
 }
 
+const createAlbumFolder = async (transfer) => {
+  try {
+    //Check if folder exists already
+    for await (const folder of app.ipfs.files.ls(`/${transfer.artist}/albums`)) {
+      if (folder.name === transfer.albumTitle) return;
+    }
+
+    await app.ipfs.files.mkdir(transfer.path);
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   addSong,
   generateTransferId,
   transferTimeout,
-  transferExists
+  transferExists,
+  createAlbumFolder
 }
