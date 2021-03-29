@@ -34,8 +34,6 @@ const uploadAlbum = async (payload) => {
 const pinSong = async (payload) => {
   try {
     log(payload);
-    const current = app.current; //Grab screen where pin was initiated
-    const albumTitle = current === 'album' ? app.views.albumView.data.title : null;
     if (helpers.transferExists(payload.cid)) throw 'Transfer exists already.'; //Check if transfer already exists
 
     //Create transfer
@@ -44,8 +42,8 @@ const pinSong = async (payload) => {
     const transfer = {
       title: payload.title,
       artist: payload.artist,
-      albumTitle,
-      path: current === 'album' ? `/${payload.artist}/albums/${albumTitle}/` : `/${payload.artist}/singles/`,
+      albumTitle: payload.albumTitle,
+      path: payload.albumTitle ? `/${payload.artist}/albums/${payload.albumTitle}/` : `/${payload.artist}/singles/`,
       cid: payload.cid,
       type: 'pin',
       progress: 0,
@@ -61,7 +59,7 @@ const pinSong = async (payload) => {
 
     //Add to MFS
     await app.ipfs.pin.add(`/ipfs/${payload.cid}`, { signal: controller.signal });
-    if (current === 'album') await helpers.createAlbumFolder(transfer); //Create an album folder if needed
+    if (payload.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
     await app.ipfs.files.cp(`/ipfs/${payload.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal, parents: true });
 
     clearTimeout(transfer.timeout);

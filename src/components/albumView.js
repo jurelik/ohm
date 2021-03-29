@@ -15,7 +15,7 @@ function AlbumView(data, action) {
   this.render = async () => {
     try {
       //Create elements
-      let album = new Album(data, true);
+      let album = new Album(this.data, true);
       let description = document.createElement('div');
 
       //Add classes for styling
@@ -33,6 +33,7 @@ function AlbumView(data, action) {
       this.el.appendChild(description);
 
       for (let _song of this.data.songs) {
+        _song.albumTitle = this.data.title; // Include album title in song data
         let song = new Song(_song, 'albumView');
 
         //Add file child to app.songView for remote control
