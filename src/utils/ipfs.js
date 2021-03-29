@@ -73,7 +73,7 @@ const pinSong = async (payload) => {
 
 const unpinSong = async (payload) => {
   try {
-    const path = app.current === 'album' ? `/${payload.artist}/albums/${app.views.albumView.data.title}/` : `/${payload.artist}/singles/`;
+    const path = payload.albumTitle ? `/${payload.artist}/albums/${payload.albumTitle}/` : `/${payload.artist}/singles/`;
     await app.ipfs.files.rm(`${path}${payload.title}`, { recursive: true });
   }
   catch (err) {
