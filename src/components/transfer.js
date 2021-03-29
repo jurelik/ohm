@@ -60,7 +60,7 @@ function Transfer(data, unique) {
 
   this.render = () => {
     //Create elements
-    const name = document.createElement('p');
+    const title = document.createElement('p');
     const artist = document.createElement('p');
     const type = document.createElement('p');
     const progress = document.createElement('p');
@@ -75,7 +75,7 @@ function Transfer(data, unique) {
     resume.className = 'resume';
 
     //Add attributes and innerHTML
-    name.innerHTML = this.data.name;
+    title.innerHTML = this.data.title;
     artist.innerHTML = this.data.artist;
     type.innerHTML = this.data.type;
     progress.innerHTML = this.data.progress;
@@ -85,7 +85,7 @@ function Transfer(data, unique) {
     completed.innerHTML = this.data.completed ? 'COMPLETED' : 'INCOMPLETE';
 
     //Build structure
-    this.el.appendChild(name);
+    this.el.appendChild(title);
     this.el.appendChild(artist);
     this.el.appendChild(type);
     this.el.appendChild(progress);
