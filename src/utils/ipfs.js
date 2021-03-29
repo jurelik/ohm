@@ -79,6 +79,54 @@ const unpinSong = async (payload) => {
   }
 }
 
+const pinAlbum = async (payload) => {
+  try {
+    log(payload);
+    if (helpers.transferExists(payload.cid)) throw 'Transfer exists already.'; //Check if transfer already exists
+
+    //Create transfer
+    const unique = helpers.generateTransferId(); //Generate unique id for the transfer
+    const controller = new AbortController(); //Create abort controller to abort pin.add
+    const transfer = {
+      title: payload.title,
+      artist: payload.artist,
+      album: true,
+      path: `/${payload.artist}/albums/`,
+      cid: payload.cid,
+      type: 'pin',
+      progress: 0,
+      active: true, //Is the timeout active
+      completed: false,
+      timeout: null,
+      controller
+    };
+
+    app.transfersStore.add(unique, transfer); //Add transfer to transfersStore
+    transfer.timeout = helpers.transferTimeout(unique); //Create an interval to update progress
+    log('Transfer initiated..');
+
+    //Add to MFS
+    await app.ipfs.pin.add(`/ipfs/${payload.cid}`, { signal: controller.signal });
+    await app.ipfs.files.cp(`/ipfs/${payload.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal });
+
+    clearTimeout(transfer.timeout);
+    app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
+    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender();
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const unpinAlbum = async (payload) => {
+  try {
+    await app.ipfs.files.rm(`/${payload.artist}/albums/${payload.title}`, { recursive: true });
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 const resumePin = async (unique) => {
   try {
     const controller = new AbortController();
@@ -193,6 +241,8 @@ module.exports = {
   uploadAlbum,
   pinSong,
   unpinSong,
+  pinAlbum,
+  unpinAlbum,
   resumePin,
   pausePin,
   getPinned,

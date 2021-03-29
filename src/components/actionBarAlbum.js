@@ -1,4 +1,5 @@
 const ipfs = require('../utils/ipfs');
+const log = require('../utils/log');
 
 function ActionBarAlbum(data) {
   this.el = document.createElement('div');
@@ -10,6 +11,7 @@ function ActionBarAlbum(data) {
     e.stopPropagation();
 
     try {
+      log('Initiating transfer..');
       this.pinned ? await ipfs.unpinAlbum(this.data) : await ipfs.pinAlbum(this.data);
       this.pinned = !this.pinned;
 
@@ -24,6 +26,8 @@ function ActionBarAlbum(data) {
           songs[key].el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
         }
       }
+
+      log.success(`Album ${this.pinned ? 'pinned' : 'unpinned'}`);
     }
     catch (err) {
       console.error(err);

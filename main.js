@@ -19,6 +19,7 @@ function createWindow () {
   })
 
   win.loadFile('src/index.html')
+  win.webContents.openDevTools() //Uncomment in production
 }
 
 app.whenReady().then(createWindow)
