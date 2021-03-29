@@ -62,7 +62,7 @@ const pinSong = async (payload) => {
 
     clearTimeout(transfer.timeout);
     app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
-    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].update('completed'); //Update progress in transfersView
+    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender();
   }
   catch (err) {
     throw err;

@@ -52,6 +52,12 @@ function Transfer(data, unique) {
     return app.views.transfersView.removeTransfer(this.unique);
   }
 
+  this.reRender = () => {
+    this.data = app.transfersStore.getOne(this.unique); //Update data
+    this.el.innerHTML = '';
+    this.render();
+  }
+
   this.render = () => {
     //Create elements
     const name = document.createElement('p');
