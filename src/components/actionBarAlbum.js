@@ -64,7 +64,7 @@ function ActionBarAlbum(data) {
       //Add attributes and innerHTML
       songs.innerHTML = `${this.data.songs.length} songs`;
       pin.innerHTML = this.pinned ? 'unpin' : 'pin';
-      download.innerHTML = 'download all';
+      download.innerHTML = 'download';
 
       //Build structure
       this.el.appendChild(songs);

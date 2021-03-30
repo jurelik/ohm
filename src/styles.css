@@ -215,6 +215,9 @@ input[type=file] button {
 }
 
 .album .actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   font-size: 10px;
   color: #888;
   margin-left: 25px;
@@ -322,9 +325,19 @@ input[type=file] button {
 }
 
 .song .actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   font-size: 10px;
   color: #888;
   margin-left: 25px;
+  height: 15px;
+}
+
+.transfer-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .song .actions button {
