@@ -1,5 +1,6 @@
 const ipfs = require('../utils/ipfs');
 const log = require('../utils/log');
+const helpers = require('../utils/helpers');
 
 function ActionBarSong(data) {
   this.el = document.createElement('div');
@@ -19,8 +20,8 @@ function ActionBarSong(data) {
     e.stopPropagation();
 
     try {
-      //if (app.current === 'album') this.pinned ? await ipfs.unpinSong(this.data, app.views.albumView.data.title) : await ipfs.pinSong(this.data, app.views.albumView.data.title);
       log('Initiating transfer..');
+      this.appendTransferIcon();
       this.pinned ? await ipfs.unpinSong(this.data) : await ipfs.pinSong(this.data);
       this.pinned = !this.pinned;
       log.success(`Song ${this.pinned ? 'pinned' : 'unpinned'}`);
@@ -36,12 +37,18 @@ function ActionBarSong(data) {
   this.handleDownloadClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
+  }
 
+  this.appendTransferIcon = () => {
     const transfer = document.createElement('div');
     transfer.className = 'transfer-icon';
     transfer.innerHTML = this.transferIcon;
     this.el.appendChild(transfer);
+  }
 
+  this.removeTransferIcon = () => {
+    const transfer = this.el.querySelector('.transfer-icon');
+    transfer.remove();
   }
 
   this.checkIfPinned = async () => {
@@ -91,6 +98,9 @@ function ActionBarSong(data) {
       this.el.appendChild(comments);
       this.el.appendChild(pin);
       this.el.appendChild(download);
+
+      //Add transfer icon if applicable
+      if (helpers.transferExists(this.data.cid)) this.appendTransferIcon();
 
       //Add listeners
       comments.onclick = this.handleCommentsClick;
