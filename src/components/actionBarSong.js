@@ -53,11 +53,11 @@ function ActionBarSong(data) {
 
   this.checkIfPinned = async () => {
     try {
-      if (app.current === 'album') {
+      if (this.data.albumTitle) {
         if (await ipfs.artistExists(this.data.artist) === false) return false; //Check if artist folder exists
-        if (await ipfs.albumExists(app.views.albumView.data) === false) return false; //Check if album folder exists
+        if (await ipfs.albumExists(this.data) === false) return false; //Check if album folder exists
 
-        const cid = await ipfs.songInAlbumExists(this.data, app.views.albumView.data.title); //Get song CID
+        const cid = await ipfs.songInAlbumExists(this.data, this.data.albumTitle); //Get song CID
         if (!cid || cid !== this.data.cid) return false; //Check if CID matches
       }
       else {

@@ -110,6 +110,7 @@ const pinAlbum = async (payload) => {
 
     //Add to MFS
     await app.ipfs.pin.add(`/ipfs/${payload.cid}`, { signal: controller.signal });
+    await helpers.removeExistingAlbumFolder(payload); //Check if folder exists (due to songs being pinned individually) and remove it
     await app.ipfs.files.cp(`/ipfs/${payload.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal, parents: true });
 
     clearTimeout(transfer.timeout);
@@ -221,7 +222,7 @@ const songExists = async (data) => {
 const albumExists = async (data) => {
   try {
     for await (const file of app.ipfs.files.ls(`/${data.artist}/albums/`)) {
-      if (file.name === data.title && file.type === 'directory') return file.cid.string;
+      if (file.name === (data.albumTitle || data.title) && file.type === 'directory') return file.cid.string;
     }
     return false;
   }

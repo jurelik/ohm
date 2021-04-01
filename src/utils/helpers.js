@@ -85,10 +85,23 @@ const createAlbumFolder = async (transfer) => {
   }
 }
 
+const removeExistingAlbumFolder = async (payload) => {
+  try {
+    //Check if folder exists already
+    for await (const folder of app.ipfs.files.ls(`/${payload.artist}/albums`)) {
+      if (folder.name === payload.title) return await app.ipfs.files.rm(`/${payload.artist}/albums/${payload.title}`, { recursive: true });
+    }
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   addSong,
   generateTransferId,
   transferTimeout,
   transferExists,
-  createAlbumFolder
+  createAlbumFolder,
+  removeExistingAlbumFolder
 }
