@@ -132,8 +132,11 @@ const unpinAlbum = async (payload) => {
 
 const resumePin = async (unique) => {
   try {
-    const controller = new AbortController();
     const transfer = app.transfersStore.getOne(unique);
+    if (transfer.active) throw 'Transfer is already active'; //Check if transfer is already active
+    if (transfer.completed) throw 'Transfer has already been completed'; //Check if transfer has already been completed
+
+    const controller = new AbortController();
 
     //Resume transfer
     app.transfersStore.update(unique, { active: true, controller, timeout: helpers.transferTimeout(unique) });

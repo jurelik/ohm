@@ -334,7 +334,7 @@ input[type=file] button {
   height: 15px;
 }
 
-.transfer-icon {
+.pin-icon {
   display: flex;
   justify-content: center;
   align-items: center;

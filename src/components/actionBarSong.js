@@ -7,7 +7,7 @@ function ActionBarSong(data) {
   this.data = data;
   this.pinned = false;
 
-  this.transferIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="598.5 258.5 183 183"><path fill="none" stroke="#BBB" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M720 350h0v30l45-45-45-45v30h-30m-30 30h0v-30l-45 45 45 45v-30h30m-30-30h60"/><path fill="none" d="M598.5 258.5h183v183h-183v-183z"/></svg></svg>'
+  this.pinIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="598.5 258.5 183 183"><path fill="none" stroke="#BBB" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M720 350h0v30l45-45-45-45v30h-30m-30 30h0v-30l-45 45 45 45v-30h30m-30-30h60"/><path fill="none" d="M598.5 258.5h183v183h-183v-183z"/></svg></svg>'
 
   this.handleCommentsClick = (e) => {
     e.stopPropagation();
@@ -21,13 +21,13 @@ function ActionBarSong(data) {
 
     try {
       log('Initiating transfer..');
-      this.appendTransferIcon();
       this.pinned ? await ipfs.unpinSong(this.data) : await ipfs.pinSong(this.data);
       this.pinned = !this.pinned;
       log.success(`Song ${this.pinned ? 'pinned' : 'unpinned'}`);
 
       //Update pin innerHTML
       this.el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
+      this.pinned ? this.appendPinIcon() : this.removePinIcon();
     }
     catch (err) {
       log.error(err);
@@ -39,16 +39,16 @@ function ActionBarSong(data) {
     e.stopPropagation();
   }
 
-  this.appendTransferIcon = () => {
-    const transfer = document.createElement('div');
-    transfer.className = 'transfer-icon';
-    transfer.innerHTML = this.transferIcon;
-    this.el.appendChild(transfer);
+  this.appendPinIcon = () => {
+    const icon = document.createElement('div');
+    icon.className = 'pin-icon';
+    icon.innerHTML = this.pinIcon;
+    this.el.appendChild(icon);
   }
 
-  this.removeTransferIcon = () => {
-    const transfer = this.el.querySelector('.transfer-icon');
-    transfer.remove();
+  this.removePinIcon = () => {
+    const icon = this.el.querySelector('.pin-icon');
+    icon.remove();
   }
 
   this.checkIfPinned = async () => {
@@ -99,8 +99,8 @@ function ActionBarSong(data) {
       this.el.appendChild(pin);
       this.el.appendChild(download);
 
-      //Add transfer icon if applicable
-      if (helpers.transferExists(this.data.cid)) this.appendTransferIcon();
+      //Add pin icon if applicable
+      if (this.pinned) this.appendPinIcon();
 
       //Add listeners
       comments.onclick = this.handleCommentsClick;

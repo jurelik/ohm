@@ -24,7 +24,6 @@ function Transfer(data, unique) {
 
     try {
       if (this.data.active) { //If active pause
-        log('Innitiating pause..');
         this.el.querySelector(`.resume`).innerHTML = 'resume'; //Update DOM
         ipfs.pausePin(this.unique);
         log.success('Successfully paused.');
