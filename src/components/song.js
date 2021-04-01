@@ -103,6 +103,7 @@ function Song(data, view) {
       playButton.onclick = this.handlePlayButton;
       artist.onclick = this.handleArtistButton;
 
+      app.songs.push(this); //Store song reference in global state
       return this.el;
     }
     catch (err) {

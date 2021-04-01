@@ -30,6 +30,7 @@ function ActionBarAlbum(data) {
       }
 
       log.success(`Album ${this.pinned ? 'pinned' : 'unpinned'}`);
+      if (!this.pinned) this.removePinIcon();
     }
     catch (err) {
       console.error(err);

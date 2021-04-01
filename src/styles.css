@@ -221,6 +221,7 @@ input[type=file] button {
   font-size: 10px;
   color: #888;
   margin-left: 25px;
+  height: 15px;
 }
 
 .album .actions button {

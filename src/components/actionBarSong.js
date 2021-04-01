@@ -27,7 +27,7 @@ function ActionBarSong(data) {
 
       //Update pin innerHTML
       this.el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
-      this.pinned ? this.appendPinIcon() : this.removePinIcon();
+      if (!this.pinned) this.removePinIcon();
     }
     catch (err) {
       log.error(err);

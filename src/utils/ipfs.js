@@ -65,7 +65,8 @@ const pinSong = async (payload) => {
 
     clearTimeout(transfer.timeout);
     app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
-    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender();
+    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender(); //Update transfersView if applicable
+    helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
   }
   catch (err) {
     throw err;
@@ -149,7 +150,8 @@ const resumePin = async (unique) => {
 
     clearTimeout(transfer.timeout);
     app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
-    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender();
+    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender(); //Update transferView if applicable
+    helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
   }
   catch (err) {
     throw err;

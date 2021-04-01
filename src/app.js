@@ -41,6 +41,8 @@ function App() {
   this.history = [];
   this.historyIndex = 0;
   this.current = null;
+  this.songs = [];
+  this.albums = [];
   this.transfersStore = null;
 
   this.init = () => {
@@ -101,6 +103,8 @@ function App() {
       this.content.innerHTML = '';
       this.content.scrollTop = 0;
       this.current = view;
+      this.songs = []; //Clear song references
+      this.albums = []; //Clear album references
 
       switch (view) {
         case 'explore':

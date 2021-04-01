@@ -3,6 +3,7 @@ const ActionBarAlbum = require('./actionBarAlbum');
 function Album(data) {
   this.el = document.createElement('div');
   this.data = data;
+  this.children = {};
 
   this.childIsPlaying = (song) => { //This has to be declared above this.playing
     for (let _song of this.data.songs) {
@@ -107,16 +108,16 @@ function Album(data) {
       main.appendChild(tag);
 
       //Add action bar
-      if (!this.songView) {
-        let actionBar = new ActionBarAlbum(this.data);
-        this.el.appendChild(await actionBar.render());
-      }
+      let actionBar = new ActionBarAlbum(this.data);
+      this.children.actionBar = actionBar;
+      this.el.appendChild(await actionBar.render());
 
       //Add listeners
       this.el.onclick = this.handleAlbumClick;
       playButton.onclick = this.handlePlayButton;
       artist.onclick = this.handleArtistButton;
 
+      app.albums.push(this); //Store album reference in global state
       return this.el;
     }
     catch (err) {
