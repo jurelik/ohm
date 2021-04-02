@@ -112,7 +112,7 @@ const pinAlbum = async (payload) => {
 
     //Add to MFS
     await app.ipfs.pin.add(`/ipfs/${payload.cid}`, { signal: controller.signal });
-    await helpers.removeExistingAlbumFolder(payload); //Check if folder exists (due to songs being pinned individually) and remove it
+    await helpers.removeExistingAlbumFolder(transfer); //Check if folder exists (due to songs being pinned individually) and remove it
     await app.ipfs.files.cp(`/ipfs/${payload.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal, parents: true });
 
     clearTimeout(transfer.timeout);
@@ -141,7 +141,7 @@ const resumePin = async (unique) => {
 
     //Perform checks before resuming a transfer
     if (transfer.active) throw 'Transfer is already active'; //Check if transfer is already active
-    const folderExists = await helpers.folderExists(transfer.path, transfer.title); //Check if song/album folder exists already
+    const folderExists = await helpers.folderExists(transfer); //Check if song/album folder exists already
     if (transfer.completed && folderExists) throw 'Transfer has already been completed'; //Check if transfer has already been completed
 
     //Resume transfer
@@ -151,6 +151,7 @@ const resumePin = async (unique) => {
     //Add to MFS
     await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal });
     if (transfer.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
+    if (transfer.album) await helpers.removeExistingAlbumFolder(transfer); //Check if folder exists (due to songs being pinned individually) and remove it
     await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal, parents: true });
 
     clearTimeout(transfer.timeout);

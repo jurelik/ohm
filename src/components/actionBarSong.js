@@ -49,6 +49,16 @@ function ActionBarSong(data) {
     this.pinned = false; //Update pinned state
     this.el.querySelector('.pin-icon').remove(); //Remove pin icon
     this.el.querySelector('.pin').innerHTML = 'pin' //Update pin
+
+    //Update album pin state if applicable
+    if (this.data.albumTitle && app.current === 'album') {
+      const actionBar = app.albums[0].children.actionBar;
+      if (!actionBar.pinned) return;
+
+      actionBar.pinned = false; //Update pinned state
+      actionBar.el.querySelector('.pin-icon').remove(); //Remove pin icon
+      actionBar.el.querySelector('.pin').innerHTML = 'pin' //Update pin
+    }
   }
 
   this.checkIfPinned = async () => {

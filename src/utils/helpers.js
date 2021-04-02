@@ -72,11 +72,15 @@ const transferExists = (cid, albumTitle) => {
   return unique;
 }
 
-const folderExists = async (path, name) => {
+const folderExists = async (transfer) => {
   try {
     //Check if folder exists already
-    for await (const folder of app.ipfs.files.ls(path)) {
-      if (folder.name === name) return true;
+    for await (const folder of app.ipfs.files.ls(transfer.path)) {
+      if (folder.name === transfer.title) {
+        //Check if CIDs are equal
+        const { cid } = await app.ipfs.files.stat(`${transfer.path}${transfer.title}`);
+        if (cid.string === transfer.cid) return true;
+      }
     }
 
     return false
@@ -100,11 +104,11 @@ const createAlbumFolder = async (transfer) => {
   }
 }
 
-const removeExistingAlbumFolder = async (payload) => {
+const removeExistingAlbumFolder = async (transfer) => {
   try {
     //Check if folder exists already
-    for await (const folder of app.ipfs.files.ls(`/${payload.artist}/albums`)) {
-      if (folder.name === payload.title) return await app.ipfs.files.rm(`/${payload.artist}/albums/${payload.title}`, { recursive: true });
+    for await (const folder of app.ipfs.files.ls(`/${transfer.artist}/albums`)) {
+      if (folder.name === transfer.title) return await app.ipfs.files.rm(`/${transfer.artist}/albums/${transfer.title}`, { recursive: true });
     }
   }
   catch (err) {
@@ -148,6 +152,7 @@ const appendPinIcon = (cid) => {
       //If in albumView, append icon to all songs as well
       for (const song of app.songs) {
         const actionBar = song.children.actionBar;
+        if (actionBar.pinned) continue; //If songs is already pinned move on
 
         actionBar.pinned = true; //Update pinned state
         actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
