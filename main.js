@@ -6,7 +6,7 @@ let userDataPath = null;
 
 function createWindow () {
   const win = new BrowserWindow({
-    width: 480,
+    width: 800,
     height: 360,
     minWidth: 400,
     minHeight: 300,
