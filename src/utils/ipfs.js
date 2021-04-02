@@ -118,6 +118,7 @@ const pinAlbum = async (payload) => {
     clearTimeout(transfer.timeout);
     app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
     if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender();
+    helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
   }
   catch (err) {
     throw err;

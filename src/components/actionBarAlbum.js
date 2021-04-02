@@ -14,23 +14,14 @@ function ActionBarAlbum(data) {
 
     try {
       log('Initiating transfer..');
-      this.pinned ? await ipfs.unpinAlbum(this.data) : await ipfs.pinAlbum(this.data);
-      this.pinned = !this.pinned;
 
-      //Update pin innerHTML
-      this.el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
-
-      //If in albumView, update all song pins as well
-      if (app.current === 'album') {
-        let songs = app.views.albumView.children.songs;
-        for (let key in songs) {
-          songs[key].children.actionBar.pinned = this.pinned;
-          songs[key].el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
-        }
+      if (this.pinned) {
+        await ipfs.unpinAlbum(this.data)
+        this.removePinIcon();
       }
+      else await ipfs.pinAlbum(this.data);
 
       log.success(`Album ${this.pinned ? 'pinned' : 'unpinned'}`);
-      if (!this.pinned) this.removePinIcon();
     }
     catch (err) {
       console.error(err);
@@ -45,9 +36,9 @@ function ActionBarAlbum(data) {
   }
 
   this.removePinIcon = () => {
-    //Remove pin icon from album
-    const icon = this.el.querySelector('.pin-icon');
-    icon.remove();
+    this.pinned = false; //Update pin state
+    this.el.querySelector('.pin').innerHTML = 'pin'; //Update .pin element
+    this.el.querySelector('.pin-icon').remove(); //Remove pin icon
 
     //Remove pin icon from songs if in albumView
     if (app.current === 'album') {
