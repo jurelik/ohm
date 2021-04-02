@@ -45,8 +45,20 @@ function ActionBarAlbum(data) {
   }
 
   this.removePinIcon = () => {
+    //Remove pin icon from album
     const icon = this.el.querySelector('.pin-icon');
     icon.remove();
+
+    //Remove pin icon from songs if in albumView
+    if (app.current === 'album') {
+      for (const song of app.songs) {
+        const actionBar = song.children.actionBar;
+
+        actionBar.pinned = false; //Update pinned state
+        actionBar.el.querySelector('.pin').innerHTML = 'pin'; //Update .pin element
+        actionBar.removePinIcon(); //Remove icon
+      }
+    }
   }
 
   this.checkIfPinned = async () => {

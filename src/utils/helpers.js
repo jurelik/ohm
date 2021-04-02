@@ -58,12 +58,12 @@ const transferTimeout = (unique) => {
   }, 1000);
 }
 
-const transferExists = (cid) => {
+const transferExists = (cid, albumTitle) => {
   const transfers = app.transfersStore.get();
   let unique = null;
 
   for (const _unique in transfers) {
-    if (transfers[_unique].cid === cid) {
+    if (transfers[_unique].cid === cid && transfers[_unique].albumTitle === albumTitle) {
       unique = _unique;
       break;
     }
@@ -118,9 +118,7 @@ const appendPinIcon = (cid) => {
     if (song.data.cid === cid && song.children.actionBar) {
       const actionBar = song.children.actionBar;
 
-      //Update .pin element
-      const pin = actionBar.el.querySelector('.pin');
-      pin.innerHTML = 'unpin';
+      actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
 
       //Append icon
       const icon = document.createElement('div');
@@ -135,9 +133,7 @@ const appendPinIcon = (cid) => {
     if (album.data.cid === cid && album.children.actionBar) {
       const actionBar = album.children.actionBar;
 
-      //Update .pin element
-      const pin = actionBar.el.querySelector('.pin');
-      pin.innerHTML = 'unpin';
+      actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
 
       //Append icon
       const icon = document.createElement('div');
@@ -151,9 +147,8 @@ const appendPinIcon = (cid) => {
       for (const song of app.songs) {
         const actionBar = song.children.actionBar;
 
-        //Update .pin element
-        const pin = actionBar.el.querySelector('.pin');
-        pin.innerHTML = 'unpin';
+        actionBar.pinned = true; //Update pinned state
+        actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
 
         //Append icon
         const icon = document.createElement('div');

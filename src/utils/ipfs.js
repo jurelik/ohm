@@ -34,7 +34,7 @@ const uploadAlbum = async (payload) => {
 const pinSong = async (payload) => {
   try {
     log(payload);
-    const _unique = helpers.transferExists(payload.cid); //Check if transfer already exists
+    const _unique = helpers.transferExists(payload.cid, payload.albumTitle); //Check if transfer already exists
     if (_unique) return resumePin(_unique);
 
     //Create transfer
