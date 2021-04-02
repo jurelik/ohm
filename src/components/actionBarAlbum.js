@@ -20,8 +20,6 @@ function ActionBarAlbum(data) {
         this.removePinIcon();
       }
       else await ipfs.pinAlbum(this.data);
-
-      log.success(`Album ${this.pinned ? 'pinned' : 'unpinned'}`);
     }
     catch (err) {
       console.error(err);

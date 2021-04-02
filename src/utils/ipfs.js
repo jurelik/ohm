@@ -67,6 +67,7 @@ const pinSong = async (payload) => {
     app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
     if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender(); //Update transfersView if applicable
     helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
+    log.success('Song pinned.');
   }
   catch (err) {
     throw err;
@@ -77,6 +78,7 @@ const unpinSong = async (payload) => {
   try {
     const path = payload.albumTitle ? `/${payload.artist}/albums/${payload.albumTitle}/` : `/${payload.artist}/singles/`;
     await app.ipfs.files.rm(`${path}${payload.title}`, { recursive: true });
+    log.success('Song unpinned.');
   }
   catch (err) {
     throw err;
@@ -119,6 +121,7 @@ const pinAlbum = async (payload) => {
     app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
     if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender();
     helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
+    log.success('Album pinned.');
   }
   catch (err) {
     throw err;
@@ -128,6 +131,7 @@ const pinAlbum = async (payload) => {
 const unpinAlbum = async (payload) => {
   try {
     await app.ipfs.files.rm(`/${payload.artist}/albums/${payload.title}`, { recursive: true });
+    log.success('Album unpinned.');
   }
   catch (err) {
     throw err;
@@ -158,6 +162,8 @@ const resumePin = async (unique) => {
     app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
     if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender(); //Update transferView if applicable
     helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
+
+    log.success(`${transfer.album ? 'Album' : 'Song'} pinned.`)
   }
   catch (err) {
     throw err;

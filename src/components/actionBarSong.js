@@ -26,7 +26,6 @@ function ActionBarSong(data) {
         this.removePinIcon();
       }
       else await ipfs.pinSong(this.data);
-      log.success(`Song ${this.pinned ? 'pinned' : 'unpinned'}`);
     }
     catch (err) {
       log.error(err);

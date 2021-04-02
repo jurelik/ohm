@@ -35,7 +35,6 @@ function Transfer(data, unique) {
           log('Innitiating transfer..');
           this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
           await ipfs.resumePin(this.unique);
-          log.success('Successfully pinned.');
       }
     }
     catch (err) {
