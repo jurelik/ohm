@@ -21,13 +21,12 @@ function ActionBarSong(data) {
 
     try {
       log('Initiating transfer..');
-      this.pinned ? await ipfs.unpinSong(this.data) : await ipfs.pinSong(this.data);
-      this.pinned = !this.pinned;
+      if (this.pinned) {
+        await ipfs.unpinSong(this.data);
+        this.removePinIcon();
+      }
+      else await ipfs.pinSong(this.data);
       log.success(`Song ${this.pinned ? 'pinned' : 'unpinned'}`);
-
-      //Update pin innerHTML
-      this.el.querySelector('.pin').innerHTML = this.pinned ? 'unpin' : 'pin';
-      if (!this.pinned) this.removePinIcon();
     }
     catch (err) {
       log.error(err);
@@ -47,8 +46,9 @@ function ActionBarSong(data) {
   }
 
   this.removePinIcon = () => {
-    const icon = this.el.querySelector('.pin-icon');
-    icon.remove();
+    this.pinned = false; //Update pinned state
+    this.el.querySelector('.pin-icon').remove(); //Remove pin icon
+    this.el.querySelector('.pin').innerHTML = 'pin' //Update pin
   }
 
   this.checkIfPinned = async () => {

@@ -82,7 +82,7 @@ const folderExists = async (path, name) => {
     return false
   }
   catch (err) {
-    throw err;
+    return false;
   }
 }
 
@@ -118,6 +118,7 @@ const appendPinIcon = (cid) => {
     if (song.data.cid === cid && song.children.actionBar) {
       const actionBar = song.children.actionBar;
 
+      actionBar.pinned = true; //Update pinned state
       actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
 
       //Append icon
@@ -133,6 +134,7 @@ const appendPinIcon = (cid) => {
     if (album.data.cid === cid && album.children.actionBar) {
       const actionBar = album.children.actionBar;
 
+      actionBar.pinned = true; //Update pinned state
       actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
 
       //Append icon

@@ -149,6 +149,7 @@ const resumePin = async (unique) => {
 
     //Add to MFS
     await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal });
+    if (transfer.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
     await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal, parents: true });
 
     clearTimeout(transfer.timeout);
