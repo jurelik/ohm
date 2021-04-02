@@ -34,8 +34,8 @@ const uploadAlbum = async (payload) => {
 const pinSong = async (payload) => {
   try {
     log(payload);
-    const _unique = helpers.transferExists(payload.cid);
-    if (_unique) return resumePin(_unique); //Check if transfer already exists
+    const _unique = helpers.transferExists(payload.cid); //Check if transfer already exists
+    if (_unique) return resumePin(_unique);
 
     //Create transfer
     const unique = helpers.generateTransferId(); //Generate unique id for the transfer
@@ -86,7 +86,8 @@ const unpinSong = async (payload) => {
 const pinAlbum = async (payload) => {
   try {
     log(payload);
-    if (helpers.transferExists(payload.cid)) throw 'Transfer exists already.'; //Check if transfer already exists
+    const _unique = helpers.transferExists(payload.cid); //Check if transfer already exists
+    if (_unique) return resumePin(_unique);
 
     //Create transfer
     const unique = helpers.generateTransferId(); //Generate unique id for the transfer
@@ -135,10 +136,12 @@ const unpinAlbum = async (payload) => {
 const resumePin = async (unique) => {
   try {
     const transfer = app.transfersStore.getOne(unique);
-    if (transfer.active) throw 'Transfer is already active'; //Check if transfer is already active
-    if (transfer.completed) throw 'Transfer has already been completed'; //Check if transfer has already been completed
-
     const controller = new AbortController();
+
+    //Perform checks before resuming a transfer
+    if (transfer.active) throw 'Transfer is already active'; //Check if transfer is already active
+    const folderExists = await helpers.folderExists(transfer.path, transfer.title); //Check if song/album folder exists already
+    if (transfer.completed && folderExists) throw 'Transfer has already been completed'; //Check if transfer has already been completed
 
     //Resume transfer
     app.transfersStore.update(unique, { active: true, controller, timeout: helpers.transferTimeout(unique) });

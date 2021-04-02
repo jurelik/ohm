@@ -2,7 +2,6 @@ const fsp = require('fs').promises;
 const crypto = require('crypto');
 const pinIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="598.5 258.5 183 183"><path fill="none" stroke="#BBB" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M720 350h0v30l45-45-45-45v30h-30m-30 30h0v-30l-45 45 45 45v-30h30m-30-30h60"/><path fill="none" d="M598.5 258.5h183v183h-183v-183z"/></svg></svg>'
 
-
 const addSong = async (song, path) => {
   try {
     const buffer = await fsp.readFile(song.path);
@@ -71,6 +70,20 @@ const transferExists = (cid) => {
   }
 
   return unique;
+}
+
+const folderExists = async (path, name) => {
+  try {
+    //Check if folder exists already
+    for await (const folder of app.ipfs.files.ls(path)) {
+      if (folder.name === name) return true;
+    }
+
+    return false
+  }
+  catch (err) {
+    throw err;
+  }
 }
 
 const createAlbumFolder = async (transfer) => {
@@ -157,6 +170,7 @@ module.exports = {
   generateTransferId,
   transferTimeout,
   transferExists,
+  folderExists,
   createAlbumFolder,
   removeExistingAlbumFolder,
   appendPinIcon,
