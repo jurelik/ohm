@@ -127,12 +127,7 @@ const appendPinIcon = (cid) => {
       songFound = true;
       actionBar.pinned = true; //Update pinned state
       actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
-
-      //Append icon
-      const icon = document.createElement('div');
-      icon.className = 'pin-icon';
-      icon.innerHTML = pinIcon;
-      actionBar.el.appendChild(icon);
+      actionBar.appendPinIcon(); //Append pin icon
     }
     if (actionBar.pinned) amountPinned++;
   }
@@ -142,12 +137,7 @@ const appendPinIcon = (cid) => {
 
     actionBar.pinned = true; //Update pinned state
     actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
-
-    //Append icon
-    const icon = document.createElement('div');
-    icon.className = 'pin-icon';
-    icon.innerHTML = pinIcon;
-    return actionBar.el.appendChild(icon);
+    return actionBar.appendPinIcon(); //Append pin icon
   }
   if (songFound) return; //Stop here if song was found already
 
@@ -158,28 +148,18 @@ const appendPinIcon = (cid) => {
 
       actionBar.pinned = true; //Update pinned state
       actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
+      actionBar.appendPinIcon(); //Append pin icon
 
-      //Append icon
-      const icon = document.createElement('div');
-      icon.className = 'pin-icon';
-      icon.innerHTML = pinIcon;
-      actionBar.el.appendChild(icon);
+      if (app.current !== 'album') return; //Stop here if not currently in albumView
 
-      if (app.current !== 'album') return;
-
-      //If in albumView, append icon to all songs as well
+      //Append icon to all songs as well
       for (const song of app.songs) {
         const actionBar = song.children.actionBar;
         if (actionBar.pinned) continue; //If songs is already pinned move on
 
         actionBar.pinned = true; //Update pinned state
         actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
-
-        //Append icon
-        const icon = document.createElement('div');
-        icon.className = 'pin-icon';
-        icon.innerHTML = pinIcon;
-        actionBar.el.appendChild(icon);
+        actionBar.appendPinIcon(); //Append pin icon
       }
     }
   }
