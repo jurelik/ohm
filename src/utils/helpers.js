@@ -147,7 +147,7 @@ const appendPinIconToSong = (cid) => {
 
   if (app.current === 'album' && songFound && amountPinned === app.songs.length) { //If all songs in album view are pinned, update the pin state of album as well
     const actionBar = app.albums[0].children.actionBar;
-    return updatePinnedState(actionBar);
+    updatePinnedState(actionBar);
   }
   if (songFound) return true;
 }

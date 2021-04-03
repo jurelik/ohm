@@ -32,9 +32,17 @@ function ActionBarSong(data) {
     }
   }
 
-  this.handleDownloadClick = (e) => {
+  this.handleDownloadClick = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    try {
+      log('Initiating transfer..');
+      await ipfs.downloadSong(this.data);
+    }
+    catch (err) {
+      log.error(err);
+    }
   }
 
   this.appendPinIcon = () => {

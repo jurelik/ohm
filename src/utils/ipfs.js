@@ -1,4 +1,5 @@
 const fsp = require('fs').promises;
+const fs = require('fs');
 const helpers = require('./helpers');
 const log = require('./log');
 
@@ -209,6 +210,67 @@ const getPinned = async () => {
   }
 }
 
+const downloadSong = async (payload) => {
+  try {
+    log(payload);
+    //const _unique = helpers.transferExists(payload.cid, payload.albumTitle); //Check if transfer already exists
+    //if (_unique) return resumePin(_unique);
+
+    //Create transfer
+    const unique = helpers.generateTransferId(); //Generate unique id for the transfer
+    const controller = new AbortController(); //Create abort controller to abort pin.add
+    const transfer = {
+      title: payload.title,
+      artist: payload.artist,
+      albumTitle: payload.albumTitle,
+      path: payload.albumTitle ? `/${payload.artist}/albums/${payload.albumTitle}/` : `/${payload.artist}/singles/`,
+      cid: payload.cid,
+      type: 'download',
+      progress: 0,
+      active: true, //Is the timeout active
+      completed: false,
+      timeout: null,
+      controller
+    };
+
+    app.transfersStore.add(unique, transfer); //Add transfer to transfersStore
+    transfer.timeout = helpers.transferTimeout(unique); //Create an interval to update progress
+    log('Transfer initiated..');
+
+    //Add to MFS
+    await app.ipfs.pin.add(`/ipfs/${payload.cid}`, { signal: controller.signal });
+    if (payload.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
+    await app.ipfs.files.cp(`/ipfs/${payload.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal, parents: true });
+
+    //Download to filesystem
+    for await (const file of app.ipfs.get(payload.cid)) {
+      console.log(file.type, file.path)
+
+      if (!file.content) continue;
+
+      const stream = fs.createWriteStream('test.wav');
+      const content = []
+
+      for await (const chunk of file.content) {
+        stream.write(chunk);
+        content.push(chunk)
+      }
+
+      stream.end();
+    }
+
+    clearTimeout(transfer.timeout);
+    app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
+    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender(); //Update transfersView if applicable
+    helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
+    log.success('Song pinned.');
+
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 const artistExists = async (artist) => {
   try {
     for await (const file of app.ipfs.files.ls('/')) {
@@ -267,6 +329,7 @@ module.exports = {
   resumePin,
   pausePin,
   getPinned,
+  downloadSong,
   artistExists,
   songExists,
   albumExists,
