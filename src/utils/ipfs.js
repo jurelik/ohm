@@ -149,7 +149,7 @@ const resumePin = async (unique) => {
     if (transfer.completed && folderExists) throw 'Transfer has already been completed'; //Check if transfer has already been completed
 
     //Resume transfer
-    app.transfersStore.update(unique, { active: true, controller, timeout: helpers.transferTimeout(unique) });
+    app.transfersStore.update(unique, { active: true, completed: false, controller, timeout: helpers.transferTimeout(unique) });
     log('Transfer initiated..');
 
     //Add to MFS
