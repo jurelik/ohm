@@ -117,6 +117,21 @@ const removeExistingAlbumFolder = async (transfer) => {
 }
 
 const appendPinIcon = (cid) => {
+  const songFound = appendPinIconToSong(cid);
+  if (songFound) return; //Stop here if song is found
+  appendPinIconToAlbum(cid);
+}
+
+//
+//PRIVATE FUNCTIONS
+//
+const updatePinnedState = (actionBar) => {
+  actionBar.pinned = true; //Update pinned state
+  actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
+  actionBar.appendPinIcon(); //Append pin icon
+}
+
+const appendPinIconToSong = (cid) => {
   let amountPinned = 0; //Keep track of how many songs are pinned in order to update album pin status
   let songFound = false //Keep track of whether or not a song was found before checking the albums
 
@@ -125,41 +140,31 @@ const appendPinIcon = (cid) => {
 
     if (song.data.cid === cid && song.children.actionBar) {
       songFound = true;
-      actionBar.pinned = true; //Update pinned state
-      actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
-      actionBar.appendPinIcon(); //Append pin icon
+      updatePinnedState(actionBar);
     }
     if (actionBar.pinned) amountPinned++;
   }
 
   if (app.current === 'album' && songFound && amountPinned === app.songs.length) { //If all songs in album view are pinned, update the pin state of album as well
     const actionBar = app.albums[0].children.actionBar;
-
-    actionBar.pinned = true; //Update pinned state
-    actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
-    return actionBar.appendPinIcon(); //Append pin icon
+    return updatePinnedState(actionBar);
   }
-  if (songFound) return; //Stop here if song was found already
+  if (songFound) return true;
+}
 
-  //Check albums
+const appendPinIconToAlbum = (cid) => {
   for (const album of app.albums) {
     if (album.data.cid === cid && album.children.actionBar) {
       const actionBar = album.children.actionBar;
 
-      actionBar.pinned = true; //Update pinned state
-      actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
-      actionBar.appendPinIcon(); //Append pin icon
-
+      updatePinnedState(actionBar);
       if (app.current !== 'album') return; //Stop here if not currently in albumView
 
       //Append icon to all songs as well
       for (const song of app.songs) {
         const actionBar = song.children.actionBar;
         if (actionBar.pinned) continue; //If songs is already pinned move on
-
-        actionBar.pinned = true; //Update pinned state
-        actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
-        actionBar.appendPinIcon(); //Append pin icon
+        updatePinnedState(actionBar);
       }
     }
   }
