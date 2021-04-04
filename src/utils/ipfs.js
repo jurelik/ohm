@@ -244,18 +244,13 @@ const downloadSong = async (payload) => {
 
     //Download to filesystem
     for await (const file of app.ipfs.get(payload.cid)) {
-      console.log(file.type, file.path)
-
       if (!file.content) continue;
 
-      const stream = fs.createWriteStream('test.wav');
-      const content = []
-
-      for await (const chunk of file.content) {
-        stream.write(chunk);
-        content.push(chunk)
-      }
-
+      //Write file to disk
+      const fsPath = file.path.slice(file.path.indexOf('/') + 1);
+      await fsp.mkdir(`${process.env.HOME}/Documents/ohm/${payload.artist}/singles/${payload.title}/files`, { recursive: true });
+      const stream = fs.createWriteStream(`${process.env.HOME}/Documents/ohm/${payload.artist}/singles/${payload.title}/${fsPath}`);
+      for await (const chunk of file.content) stream.write(chunk);
       stream.end();
     }
 
@@ -263,8 +258,7 @@ const downloadSong = async (payload) => {
     app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
     if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender(); //Update transfersView if applicable
     helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
-    log.success('Song pinned.');
-
+    log.success('Song downloaded.');
   }
   catch (err) {
     throw err;
