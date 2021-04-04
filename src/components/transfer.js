@@ -35,6 +35,10 @@ function Transfer(data, unique) {
           log('Innitiating transfer..');
           this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
           await ipfs.resumePin(this.unique);
+        case 'download':
+          log('Innitiating transfer..');
+          this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
+          await ipfs.resumePin(this.unique);
       }
     }
     catch (err) {
