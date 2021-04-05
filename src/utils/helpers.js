@@ -76,6 +76,12 @@ const transferExists = (payload, type) => {
 
 const folderExists = async (transfer) => {
   try {
+    //Check if album folder exists when dealing with a song inside an album
+    if (transfer.albumTitle) {
+      const albumExists = await albumFolderExists(transfer);
+      if (!albumExists) return false;
+    }
+
     //Check if folder exists already
     for await (const folder of app.ipfs.files.ls(transfer.path)) {
       if (folder.name === transfer.title) {
@@ -138,7 +144,7 @@ const writeToDisk = async (transfer) => {
 
       //Write file to disk
       const fsPath = file.path.slice(file.path.indexOf('/') + 1);
-      await fsp.mkdir(`${process.env.HOME}/Documents/ohm/${transfer.artist}/singles/${transfer.title}/files`, { recursive: true });
+      await fsp.mkdir(`${process.env.HOME}/Documents/ohm/${transfer.path}/${transfer.title}/files`, { recursive: true });
       const stream = fs.createWriteStream(`${process.env.HOME}/Documents/ohm/${transfer.path}/${transfer.title}/${fsPath}`);
       for await (const chunk of file.content) stream.write(chunk);
       stream.end();
@@ -154,8 +160,8 @@ const pinItem = async (transfer, controller) => {
   try {
     log('Pinning...')
     await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal });
-    if (transfer.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
-    if (transfer.album) await helpers.removeExistingAlbumFolder(transfer); //Check if folder exists and remove it
+    if (transfer.albumTitle) await createAlbumFolder(transfer); //Create an album folder if needed
+    if (transfer.album) await removeExistingAlbumFolder(transfer); //Check if folder exists and remove it
     await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}/${transfer.title}`, { signal: controller.signal, parents: true });
     log('Successfully pinned item.')
   }
@@ -211,6 +217,22 @@ const appendPinIconToAlbum = (cid) => {
     }
   }
 }
+
+const albumFolderExists = async (transfer) => {
+  try {
+    const path = transfer.path.slice(0, transfer.path.lastIndexOf('/')); //Format path to not include albumTitle
+    for await (const folder of app.ipfs.files.ls(path)) {
+      if (folder.name === transfer.albumTitle) {
+        return true;
+      }
+    }
+    return false;
+  }
+  catch (err) {
+    return false;
+  }
+}
+
 
 module.exports = {
   addSong,
