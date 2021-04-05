@@ -1,5 +1,7 @@
 const fsp = require('fs').promises;
+const fs = require('fs');
 const crypto = require('crypto');
+const log = require('./log');
 const pinIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="598.5 258.5 183 183"><path fill="none" stroke="#BBB" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M720 350h0v30l45-45-45-45v30h-30m-30 30h0v-30l-45 45 45 45v-30h30m-30-30h60"/><path fill="none" d="M598.5 258.5h183v183h-183v-183z"/></svg></svg>'
 
 const addSong = async (song, path) => {
@@ -59,7 +61,6 @@ const transferTimeout = (unique) => {
 }
 
 const transferExists = (payload, type) => {
-  console.log(type)
   const transfers = app.transfersStore.get();
   let unique = null;
 
@@ -123,6 +124,46 @@ const appendPinIcon = (cid) => {
   appendPinIconToAlbum(cid);
 }
 
+const createMFSTransferPath = (payload) => {
+  if (payload.album) return `/${payload.artist}/albums`;
+  if (payload.albumTitle) return `/${payload.artist}/albums/${payload.albumTitle}`;
+  return `/${payload.artist}/singles`;
+}
+
+const writeToDisk = async (transfer) => {
+  try {
+    log('Writing to disk...')
+    for await (const file of app.ipfs.get(transfer.cid)) {
+      if (!file.content) continue;
+
+      //Write file to disk
+      const fsPath = file.path.slice(file.path.indexOf('/') + 1);
+      await fsp.mkdir(`${process.env.HOME}/Documents/ohm/${transfer.artist}/singles/${transfer.title}/files`, { recursive: true });
+      const stream = fs.createWriteStream(`${process.env.HOME}/Documents/ohm/${transfer.path}/${transfer.title}/${fsPath}`);
+      for await (const chunk of file.content) stream.write(chunk);
+      stream.end();
+    }
+    log('Successfully downloaded item.')
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const pinItem = async (transfer, controller) => {
+  try {
+    log('Pinning...')
+    await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal });
+    if (transfer.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
+    if (transfer.album) await helpers.removeExistingAlbumFolder(transfer); //Check if folder exists and remove it
+    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}/${transfer.title}`, { signal: controller.signal, parents: true });
+    log('Successfully pinned item.')
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 //
 //PRIVATE FUNCTIONS
 //
@@ -180,4 +221,7 @@ module.exports = {
   createAlbumFolder,
   removeExistingAlbumFolder,
   appendPinIcon,
+  createMFSTransferPath,
+  writeToDisk,
+  pinItem
 }
