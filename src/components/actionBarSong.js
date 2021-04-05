@@ -38,7 +38,7 @@ function ActionBarSong(data) {
 
     try {
       log('Initiating transfer..');
-      await ipfs.downloadSong(this.data);
+      await ipfs.startTransfer(this.data, { download: true });
     }
     catch (err) {
       log.error(err);
