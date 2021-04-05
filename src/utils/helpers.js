@@ -58,12 +58,13 @@ const transferTimeout = (unique) => {
   }, 1000);
 }
 
-const transferExists = (cid, albumTitle) => {
+const transferExists = (payload, type) => {
+  console.log(type)
   const transfers = app.transfersStore.get();
   let unique = null;
 
   for (const _unique in transfers) {
-    if (transfers[_unique].cid === cid && transfers[_unique].albumTitle === albumTitle) {
+    if (transfers[_unique].cid === payload.cid && transfers[_unique].albumTitle === payload.albumTitle && transfers[_unique].type === type) {
       unique = _unique;
       break;
     }
@@ -78,7 +79,7 @@ const folderExists = async (transfer) => {
     for await (const folder of app.ipfs.files.ls(transfer.path)) {
       if (folder.name === transfer.title) {
         //Check if CIDs are equal
-        const { cid } = await app.ipfs.files.stat(`${transfer.path}${transfer.title}`);
+        const { cid } = await app.ipfs.files.stat(`${transfer.path}/${transfer.title}`);
         if (cid.string === transfer.cid) return true;
       }
     }
@@ -140,7 +141,7 @@ const appendPinIconToSong = (cid) => {
 
     if (song.data.cid === cid && song.children.actionBar) {
       songFound = true;
-      updatePinnedState(actionBar);
+      if (!actionBar.pinned) updatePinnedState(actionBar);
     }
     if (actionBar.pinned) amountPinned++;
   }

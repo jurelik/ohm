@@ -25,7 +25,7 @@ function ActionBarSong(data) {
         await ipfs.unpinSong(this.data);
         this.removePinIcon();
       }
-      else await ipfs.pinSong(this.data);
+      else await ipfs.startTransfer(this.data);
     }
     catch (err) {
       log.error(err);

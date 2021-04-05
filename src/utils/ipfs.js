@@ -56,10 +56,25 @@ const writeToDisk = async (transfer) => {
   }
 }
 
-const startTransfer = async (payload, options) => {
+const pinItem = async (transfer, controller) => {
+  try {
+    await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal });
+    if (transfer.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
+    if (transfer.album) await helpers.removeExistingAlbumFolder(transfer); //Check if folder exists and remove it
+    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}/${transfer.title}`, { signal: controller.signal, parents: true });
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const startTransfer = async (payload, _options) => {
+  const options = _options || {}; //Initialise the options object if not provided
+
   try {
     log(payload);
-    const _unique = helpers.transferExists(payload.cid, payload.albumTitle); //Check if transfer already exists
+    const type = options.download ? 'download' : 'pin';
+    const _unique = helpers.transferExists(payload, type); //Check if transfer already exists
     if (_unique) return resumeTransfer(_unique);
 
     //Create transfer
@@ -72,7 +87,7 @@ const startTransfer = async (payload, options) => {
       albumTitle: payload.albumTitle,
       path,
       cid: payload.cid,
-      type: options.download ? 'download' : 'pin',
+      type,
       progress: 0,
       active: true, //Is the timeout active
       completed: false,
@@ -84,12 +99,8 @@ const startTransfer = async (payload, options) => {
     transfer.timeout = helpers.transferTimeout(unique); //Create an interval to update progress
     log('Transfer initiated..');
 
-    //Add to MFS
-    await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal });
-    if (transfer.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
-    if (transfer.album) await helpers.removeExistingAlbumFolder(transfer); //Check if folder exists and remove it
-    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}/${transfer.title}`, { signal: controller.signal, parents: true });
-
+    const folderExists = await helpers.folderExists(transfer); //Check if folder exists already
+    if (!folderExists) await pinItem(transfer, controller); //Add to MFS
     if (transfer.type === 'download') await writeToDisk(transfer); //Download to file system if download option is specified
 
     clearTimeout(transfer.timeout);
@@ -105,7 +116,6 @@ const startTransfer = async (payload, options) => {
 }
 
 const resumeTransfer = async (unique) => {
-  console.log('hi')
   try {
     const transfer = app.transfersStore.getOne(unique);
     const controller = new AbortController();
@@ -113,18 +123,13 @@ const resumeTransfer = async (unique) => {
     //Perform checks before resuming a transfer
     if (transfer.active) throw 'Transfer is already active'; //Check if transfer is already active
     const folderExists = await helpers.folderExists(transfer); //Check if song/album folder exists already
-    if (transfer.completed && folderExists) throw 'Transfer has already been completed'; //Check if transfer has already been completed
+    if (transfer.completed && folderExists && transfer.type === 'pin') throw 'Transfer has already been completed'; //Check if item has already been pinned
 
     //Resume transfer
     app.transfersStore.update(unique, { active: true, completed: false, controller, timeout: helpers.transferTimeout(unique) });
     log('Transfer initiated..');
 
-    //Add to MFS
-    await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal });
-    if (transfer.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
-    if (transfer.album) await helpers.removeExistingAlbumFolder(transfer); //Check if folder exists (due to songs being pinned individually) and remove it
-    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal, parents: true });
-
+    if (!folderExists) await pinItem(transfer, controller); //Add to MFS
     if (transfer.type === 'download') await writeToDisk(transfer); //Download to file system if download option is specified
 
     clearTimeout(transfer.timeout);
@@ -137,7 +142,6 @@ const resumeTransfer = async (unique) => {
   catch (err) {
     throw err;
   }
-
 }
 
 const pinSong = async (payload) => {
