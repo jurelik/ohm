@@ -1,5 +1,3 @@
-const fsp = require('fs').promises;
-const fs = require('fs');
 const helpers = require('./helpers');
 const log = require('./log');
 
@@ -109,43 +107,14 @@ const resumeTransfer = async (unique) => {
   }
 }
 
-const pinSong = async (payload) => {
+const pauseTransfer = async (unique) => {
   try {
-    log(payload);
-    const _unique = helpers.transferExists(payload.cid, payload.albumTitle); //Check if transfer already exists
-    if (_unique) return resumePin(_unique);
+    const transfer = app.transfersStore.getOne(unique);
 
-    //Create transfer
-    const unique = helpers.generateTransferId(); //Generate unique id for the transfer
-    const controller = new AbortController(); //Create abort controller to abort pin.add
-    const transfer = {
-      title: payload.title,
-      artist: payload.artist,
-      albumTitle: payload.albumTitle,
-      path: payload.albumTitle ? `/${payload.artist}/albums/${payload.albumTitle}/` : `/${payload.artist}/singles/`,
-      cid: payload.cid,
-      type: 'pin',
-      progress: 0,
-      active: true, //Is the timeout active
-      completed: false,
-      timeout: null,
-      controller
-    };
-
-    app.transfersStore.add(unique, transfer); //Add transfer to transfersStore
-    transfer.timeout = helpers.transferTimeout(unique); //Create an interval to update progress
-    log('Transfer initiated..');
-
-    //Add to MFS
-    await app.ipfs.pin.add(`/ipfs/${payload.cid}`, { signal: controller.signal });
-    if (payload.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
-    await app.ipfs.files.cp(`/ipfs/${payload.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal, parents: true });
-
+    //Resume transfer
+    app.transfersStore.update(unique, { active: false });
+    transfer.controller.abort();
     clearTimeout(transfer.timeout);
-    app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
-    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender(); //Update transfersView if applicable
-    helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
-    log.success('Song pinned.');
   }
   catch (err) {
     throw err;
@@ -156,106 +125,18 @@ const unpinSong = async (payload) => {
   try {
     const path = payload.albumTitle ? `/${payload.artist}/albums/${payload.albumTitle}/` : `/${payload.artist}/singles/`;
     await app.ipfs.files.rm(`${path}${payload.title}`, { recursive: true });
+    await app.ipfs.pin.rm(`/ipfs/${payload.cid}`, { recursive: true });
     log.success('Song unpinned.');
   }
   catch (err) {
     throw err;
   }
 }
-
-const pinAlbum = async (payload) => {
-  try {
-    log(payload);
-    const _unique = helpers.transferExists(payload.cid); //Check if transfer already exists
-    if (_unique) return resumePin(_unique);
-
-    //Create transfer
-    const unique = helpers.generateTransferId(); //Generate unique id for the transfer
-    const controller = new AbortController(); //Create abort controller to abort pin.add
-    const transfer = {
-      title: payload.title,
-      artist: payload.artist,
-      album: true,
-      path: `/${payload.artist}/albums/`,
-      cid: payload.cid,
-      type: 'pin',
-      progress: 0,
-      active: true, //Is the timeout active
-      completed: false,
-      timeout: null,
-      controller
-    };
-
-    app.transfersStore.add(unique, transfer); //Add transfer to transfersStore
-    transfer.timeout = helpers.transferTimeout(unique); //Create an interval to update progress
-    log('Transfer initiated..');
-
-    //Add to MFS
-    await app.ipfs.pin.add(`/ipfs/${payload.cid}`, { signal: controller.signal });
-    await helpers.removeExistingAlbumFolder(transfer); //Check if folder exists (due to songs being pinned individually) and remove it
-    await app.ipfs.files.cp(`/ipfs/${payload.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal, parents: true });
-
-    clearTimeout(transfer.timeout);
-    app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
-    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender();
-    helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
-    log.success('Album pinned.');
-  }
-  catch (err) {
-    throw err;
-  }
-}
-
 const unpinAlbum = async (payload) => {
   try {
     await app.ipfs.files.rm(`/${payload.artist}/albums/${payload.title}`, { recursive: true });
+    await app.ipfs.pin.rm(`/ipfs/${payload.cid}`, { recursive: true });
     log.success('Album unpinned.');
-  }
-  catch (err) {
-    throw err;
-  }
-}
-
-const resumePin = async (unique) => {
-  try {
-    const transfer = app.transfersStore.getOne(unique);
-    const controller = new AbortController();
-
-    //Perform checks before resuming a transfer
-    if (transfer.active) throw 'Transfer is already active'; //Check if transfer is already active
-    const folderExists = await helpers.folderExists(transfer); //Check if song/album folder exists already
-    if (transfer.completed && folderExists) throw 'Transfer has already been completed'; //Check if transfer has already been completed
-
-    //Resume transfer
-    app.transfersStore.update(unique, { active: true, completed: false, controller, timeout: helpers.transferTimeout(unique) });
-    log('Transfer initiated..');
-
-    //Add to MFS
-    await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal });
-    if (transfer.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
-    if (transfer.album) await helpers.removeExistingAlbumFolder(transfer); //Check if folder exists (due to songs being pinned individually) and remove it
-    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal, parents: true });
-
-    clearTimeout(transfer.timeout);
-    app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
-    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender(); //Update transferView if applicable
-    helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
-
-    log.success(`${transfer.album ? 'Album' : 'Song'} pinned.`)
-  }
-  catch (err) {
-    throw err;
-  }
-}
-
-const pausePin = async (unique) => {
-  try {
-    const transfer = app.transfersStore.getOne(unique);
-
-    //Resume transfer
-    app.transfersStore.update(unique, { active: false });
-    transfer.controller.abort();
-    clearTimeout(transfer.timeout);
   }
   catch (err) {
     throw err;
@@ -284,61 +165,6 @@ const getPinned = async () => {
   }
   catch (err) {
     console.error(err);
-  }
-}
-
-const downloadSong = async (payload) => {
-  try {
-    log(payload);
-    //const _unique = helpers.transferExists(payload.cid, payload.albumTitle); //Check if transfer already exists
-    //if (_unique) return resumePin(_unique);
-
-    //Create transfer
-    const unique = helpers.generateTransferId(); //Generate unique id for the transfer
-    const controller = new AbortController(); //Create abort controller to abort pin.add
-    const transfer = {
-      title: payload.title,
-      artist: payload.artist,
-      albumTitle: payload.albumTitle,
-      path: payload.albumTitle ? `/${payload.artist}/albums/${payload.albumTitle}/` : `/${payload.artist}/singles/`,
-      cid: payload.cid,
-      type: 'download',
-      progress: 0,
-      active: true, //Is the timeout active
-      completed: false,
-      timeout: null,
-      controller
-    };
-
-    app.transfersStore.add(unique, transfer); //Add transfer to transfersStore
-    transfer.timeout = helpers.transferTimeout(unique); //Create an interval to update progress
-    log('Transfer initiated..');
-
-    //Add to MFS
-    await app.ipfs.pin.add(`/ipfs/${payload.cid}`, { signal: controller.signal });
-    if (payload.albumTitle) await helpers.createAlbumFolder(transfer); //Create an album folder if needed
-    await app.ipfs.files.cp(`/ipfs/${payload.cid}`, `${transfer.path}${transfer.title}`, { signal: controller.signal, parents: true });
-
-    //Download to filesystem
-    for await (const file of app.ipfs.get(payload.cid)) {
-      if (!file.content) continue;
-
-      //Write file to disk
-      const fsPath = file.path.slice(file.path.indexOf('/') + 1);
-      await fsp.mkdir(`${process.env.HOME}/Documents/ohm/${payload.artist}/singles/${payload.title}/files`, { recursive: true });
-      const stream = fs.createWriteStream(`${process.env.HOME}/Documents/ohm/${payload.artist}/singles/${payload.title}/${fsPath}`);
-      for await (const chunk of file.content) stream.write(chunk);
-      stream.end();
-    }
-
-    clearTimeout(transfer.timeout);
-    app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
-    if (app.current === 'transfers' && app.views.transfersView) app.views.transfersView.children[unique].reRender(); //Update transfersView if applicable
-    helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
-    log.success('Song downloaded.');
-  }
-  catch (err) {
-    throw err;
   }
 }
 
@@ -395,14 +221,10 @@ module.exports = {
   uploadAlbum,
   startTransfer,
   resumeTransfer,
-  pinSong,
+  pauseTransfer,
   unpinSong,
-  pinAlbum,
   unpinAlbum,
-  resumePin,
-  pausePin,
   getPinned,
-  downloadSong,
   artistExists,
   songExists,
   albumExists,
