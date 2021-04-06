@@ -34,7 +34,6 @@ const startTransfer = async (payload, _options) => {
   const options = _options || {}; //Initialise the options object if not provided
 
   try {
-    log(payload);
     const type = options.download ? 'download' : 'pin';
     const _unique = helpers.transferExists(payload, type); //Check if transfer already exists
     if (_unique) return resumeTransfer(_unique);
@@ -164,7 +163,7 @@ const getPinned = async () => {
     return { albums, songs };
   }
   catch (err) {
-    console.error(err);
+    log.error(err);
   }
 }
 

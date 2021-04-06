@@ -2,7 +2,6 @@ const fsp = require('fs').promises;
 const fs = require('fs');
 const crypto = require('crypto');
 const log = require('./log');
-const pinIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="598.5 258.5 183 183"><path fill="none" stroke="#BBB" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M720 350h0v30l45-45-45-45v30h-30m-30 30h0v-30l-45 45 45 45v-30h30m-30-30h60"/><path fill="none" d="M598.5 258.5h183v183h-183v-183z"/></svg></svg>'
 
 const addSong = async (song, path) => {
   try {
@@ -33,8 +32,7 @@ const addSong = async (song, path) => {
 }
 
 const generateTransferId = () => {
-  //Generate unique ID
-  const unique = crypto.randomBytes(6).toString('base64');
+  const unique = crypto.randomBytes(6).toString('base64');//Generate unique ID
   if (app.transfersStore.get()[unique]) return generateTransferId(); //If the unique ID exists already, create a new one
   return unique;
 }
@@ -53,7 +51,7 @@ const transferTimeout = (unique) => {
       transfer.timeout = transferTimeout(unique);
     }
     catch (err) {
-      console.error(err.message)
+      log.error(err.message)
       if (app.transfersStore.getOne(unique).active) transfer.timeout = transferTimeout(unique);
     }
 
@@ -147,7 +145,7 @@ const writeToDisk = async (transfer) => {
       //Write file to disk
       const fsPath = file.path.slice(file.path.indexOf('/') + 1);
 
-      const path = await createSongFolder(transfer, fsPath); //Create song folder if it doesn't exist yet
+      const path = await fsCreateSongFolder(transfer, fsPath); //Create song folder if it doesn't exist yet
       const stream = fs.createWriteStream(`${path}/${fsPath}`);
       for await (const chunk of file.content) stream.write(chunk);
       stream.end();
@@ -236,7 +234,7 @@ const albumFolderExists = async (transfer) => {
   }
 }
 
-const createSongFolder = async (transfer, fsPath) => {
+const fsCreateSongFolder = async (transfer, fsPath) => {
   try {
     if (transfer.album) {
       const songTitle = fsPath.slice(0, fsPath.indexOf('/'));
