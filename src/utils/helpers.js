@@ -198,7 +198,7 @@ const appendPinIconToSong = (cid) => {
 
   if (app.current === 'album' && songFound && amountPinned === app.songs.length) { //If all songs in album view are pinned, update the pin state of album as well
     const actionBar = app.albums[0].children.actionBar;
-    updatePinnedState(actionBar);
+    if (!actionBar.pinned) updatePinnedState(actionBar);
   }
   if (songFound) return true;
 }
@@ -208,7 +208,7 @@ const appendPinIconToAlbum = (cid) => {
     if (album.data.cid === cid && album.children.actionBar) {
       const actionBar = album.children.actionBar;
 
-      updatePinnedState(actionBar);
+      if (!actionBar.pinned) updatePinnedState(actionBar);
       if (app.current !== 'album') return; //Stop here if not currently in albumView
 
       //Append icon to all songs as well

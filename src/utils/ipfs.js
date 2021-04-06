@@ -394,6 +394,7 @@ module.exports = {
   uploadSingle,
   uploadAlbum,
   startTransfer,
+  resumeTransfer,
   pinSong,
   unpinSong,
   pinAlbum,

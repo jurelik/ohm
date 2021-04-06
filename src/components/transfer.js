@@ -34,11 +34,11 @@ function Transfer(data, unique) {
         case 'pin':
           log('Innitiating transfer..');
           this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
-          await ipfs.resumePin(this.unique);
+          await ipfs.resumeTransfer(this.unique);
         case 'download':
           log('Innitiating transfer..');
           this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
-          await ipfs.resumePin(this.unique);
+          await ipfs.resumeTransfer(this.unique);
       }
     }
     catch (err) {
