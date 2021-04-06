@@ -49,6 +49,7 @@ const startTransfer = async (payload, _options) => {
       title: payload.title,
       artist: payload.artist,
       albumTitle: payload.albumTitle,
+      album: payload.type === 'album' ? true : null,
       path,
       cid: payload.cid,
       type,

@@ -131,7 +131,7 @@ const appendPinIcon = (cid) => {
 }
 
 const createMFSTransferPath = (payload) => {
-  if (payload.album) return `/${payload.artist}/albums`;
+  if (payload.type === 'album') return `/${payload.artist}/albums`;
   if (payload.albumTitle) return `/${payload.artist}/albums/${payload.albumTitle}`;
   return `/${payload.artist}/singles`;
 }
@@ -139,13 +139,16 @@ const createMFSTransferPath = (payload) => {
 const writeToDisk = async (transfer) => {
   try {
     log('Writing to disk...')
+    await fsp.mkdir(`${process.env.HOME}/Documents/ohm${transfer.path}/${transfer.title}`, { recursive: true });
+
     for await (const file of app.ipfs.get(transfer.cid)) {
       if (!file.content) continue;
 
       //Write file to disk
       const fsPath = file.path.slice(file.path.indexOf('/') + 1);
-      await fsp.mkdir(`${process.env.HOME}/Documents/ohm/${transfer.path}/${transfer.title}/files`, { recursive: true });
-      const stream = fs.createWriteStream(`${process.env.HOME}/Documents/ohm/${transfer.path}/${transfer.title}/${fsPath}`);
+
+      const path = await createSongFolder(transfer, fsPath); //Create song folder if it doesn't exist yet
+      const stream = fs.createWriteStream(`${path}/${fsPath}`);
       for await (const chunk of file.content) stream.write(chunk);
       stream.end();
     }
@@ -233,6 +236,24 @@ const albumFolderExists = async (transfer) => {
   }
 }
 
+const createSongFolder = async (transfer, fsPath) => {
+  try {
+    if (transfer.album) {
+      const songTitle = fsPath.slice(0, fsPath.indexOf('/'));
+      const path = `${process.env.HOME}/Documents/ohm${transfer.path}/${transfer.title}/${songTitle}/files`;
+      if (!fs.existsSync(path)) await fsp.mkdir(path, { recursive: true });
+    }
+    else {
+      const path = `${process.env.HOME}/Documents/ohm${transfer.path}/${transfer.title}/files`;
+      if (!fs.existsSync(path)) await fsp.mkdir(path, { recursive: true });
+    }
+
+    return `${process.env.HOME}/Documents/ohm${transfer.path}/${transfer.title}`;
+  }
+  catch (err) {
+    throw err;
+  }
+}
 
 module.exports = {
   addSong,

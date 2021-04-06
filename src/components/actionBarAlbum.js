@@ -19,10 +19,23 @@ function ActionBarAlbum(data) {
         await ipfs.unpinAlbum(this.data)
         this.removePinIcon();
       }
-      else await ipfs.pinAlbum(this.data);
+      else await ipfs.startTransfer(this.data);
     }
     catch (err) {
       console.error(err);
+    }
+  }
+
+  this.handleDownloadClick = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      log('Initiating transfer..');
+      await ipfs.startTransfer(this.data, { download: true });
+    }
+    catch (err) {
+      log.error(err);
     }
   }
 
@@ -92,6 +105,7 @@ function ActionBarAlbum(data) {
 
       //Add listeners
       pin.onclick = this.handlePinClick;
+      download.onclick = this.handleDownloadClick;
 
       return this.el;
     }
