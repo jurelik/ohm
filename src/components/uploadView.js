@@ -75,7 +75,7 @@ function UploadView(data) {
     spinner.className = 'spinner';
     bottomBar.appendChild(spinner);
 
-    return spinner
+    return spinner;
   }
 
   this.display = () => {
