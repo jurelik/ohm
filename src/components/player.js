@@ -9,9 +9,13 @@ function Player() {
 
   this.playIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="408.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M443.75 255c-8.285 0-15 6.716-15 15h0v120c0 8.285 6.715 15 15 15h0l120-60c10-10 10-20 0-30h0l-120-60"/><path fill="none" d="M408.5 238.5h183v183h-183z"/></svg>';
   this.pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="534.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M566 255h0v150h30V255h-30m120 0h0-30v150h30V255"/><path fill="none" d="M534.5 238.5h183v183h-183z"/></svg>'
+  this.loadingIcon = '<div class="spinner"></div>';
+
+  this.handleOnPlay = () => {
+    this.playing = true;
+  }
 
   this.handleOnPlaying = () => {
-    this.playing = true;
     this.handleRemoteTriggers(this.current.id, 'song');
     this.reRender();
   }
@@ -119,6 +123,7 @@ function Player() {
       return this.play();
     }
 
+    this.triggerSpinner();
     //Change the playing state on previous file
     if(this.current && this.playing) this.handleRemoteTriggers(this.current.id, this.current.type);
 
@@ -178,10 +183,17 @@ function Player() {
     this.render();
   }
 
+  this.triggerSpinner = () => {
+    this.el.querySelector('.main-play-button').innerHTML = this.loadingIcon;
+  }
+
   this.render = () => {
     //Create elements
     let playButton = document.createElement('button')
     let titleAndArtist = document.createElement('p');
+
+    //Set class names
+    playButton.className = 'main-play-button';
 
     //Add attributes and innerHTML
     playButton.innerHTML = this.playing ? this.pauseIcon : this.playIcon;
@@ -190,6 +202,7 @@ function Player() {
     //Add listeners
     playButton.onclick = this.handlePlayButton;
     this.audio.onended = this.handleOnEnded;
+    this.audio.onplay = this.handleOnPlay;
     this.audio.onplaying = this.handleOnPlaying;
     this.audio.onpause = this.handleOnPause;
 
