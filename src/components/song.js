@@ -16,7 +16,7 @@ function Song(data, view) {
 
     //this.setPlaying(!this.playing);
     //this.el.querySelector('.playButton').innerHTML = this.playing ? this.pauseIcon : this.playIcon;
-    if (!this.playing) this.el.querySelector('.playButton').innerHTML = this.loadingIcon;
+    if (!this.playing) this.el.querySelector('.play-button').innerHTML = this.loadingIcon;
     this.view === 'albumView' ? app.player.queueFiles(app.views.albumView.data, this.getPosition(), 'song') : app.player.queueFile(this.data);
   }
 
@@ -43,6 +43,9 @@ function Song(data, view) {
 
   this.setPlaying = (value) => {
     this.playing = value;
+
+    if (value) this.el.querySelector('.play-button').innerHTML = this.pauseIcon;
+    else if (!value && this.playing) this.el.querySelector('.play-button').innerHTML = this.playIcon;
   }
 
   this.reRender = () => {
@@ -72,7 +75,7 @@ function Song(data, view) {
       titleAndArtist.classList.add('titleAndArtist');
       tag.classList.add('tag');
       separator.classList.add('separator');
-      playButton.className = 'playButton';
+      playButton.className = 'play-button';
 
       //Add attributes and innerHTML
       artist.innerHTML = this.data.artist;
