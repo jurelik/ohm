@@ -6,6 +6,7 @@ function Player() {
   this.queue = [];
   this.queuePosition = 0;
   this.playing = false;
+  this.loading = false;
 
   this.playIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="408.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M443.75 255c-8.285 0-15 6.716-15 15h0v120c0 8.285 6.715 15 15 15h0l120-60c10-10 10-20 0-30h0l-120-60"/><path fill="none" d="M408.5 238.5h183v183h-183z"/></svg>';
   this.pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="534.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M566 255h0v150h30V255h-30m120 0h0-30v150h30V255"/><path fill="none" d="M534.5 238.5h183v183h-183z"/></svg>'
@@ -35,11 +36,24 @@ function Player() {
     }
   }
 
+  this.interruptLoading = () => {
+    for (const song of app.songs) {
+      if (song.data.id === this.current.id) continue;
+      song.setPlayingState(false);
+    }
+
+    for (const album of app.albums) {
+      if (album.data.id === this.album) continue;
+      album.setPlayingState(false);
+    }
+  }
+
   this.handleOnPlay = () => {
     this.triggerSpinner();
   }
 
   this.handleOnPlaying = () => {
+    this.loading = false;
     this.playing = true;
     this.setPlayIcon();
     this.reRender();
@@ -143,7 +157,6 @@ function Player() {
   }
 
   this.queueFile = (file) => {
-    this.triggerSpinner();
     //Check if file already loaded
     if (this.queue.length === 1 && this.queue[0].id === file.id && this.queue[0].type === file.type) return this.play();
 
@@ -159,6 +172,7 @@ function Player() {
     this.playing = false;
     this.queue = [file];
     this.current = file;
+    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
     this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
     this.play();
   }
@@ -189,7 +203,8 @@ function Player() {
     this.queuePosition = position;
     this.current = files[this.queuePosition];
     this.album = album.id;
-    this.updateSrc();
+    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
+    this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
     this.play();
   }
 
@@ -203,6 +218,7 @@ function Player() {
   }
 
   this.triggerSpinner = () => {
+    this.loading = true;
     this.el.querySelector('.main-play-button').innerHTML = this.loadingIcon;
   }
 

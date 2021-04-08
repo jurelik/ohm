@@ -171,6 +171,11 @@ const pinItem = async (transfer, controller) => {
   }
 }
 
+const childIsPlaying = (song, songs) => { //Check if a song within an album is playing
+  for (let _song of songs) if (_song.id === song.id) return true;
+  return false;
+}
+
 //
 //PRIVATE FUNCTIONS
 //
@@ -264,5 +269,6 @@ module.exports = {
   appendPinIcon,
   createMFSTransferPath,
   writeToDisk,
-  pinItem
+  pinItem,
+  childIsPlaying
 }
