@@ -12,31 +12,70 @@ function Player() {
   this.pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="534.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M566 255h0v150h30V255h-30m120 0h0-30v150h30V255"/><path fill="none" d="M534.5 238.5h183v183h-183z"/></svg>'
   this.loadingIcon = '<div class="spinner"></div>';
 
-  this.setPlayIcon = () => {
-    for (const song of app.songs) {
-      if (song.data.id === this.current.id) song.setPlayingState(true);
-      else song.setPlayingState(false);
+  //EVENT HANDLERS
+  this.handleOnPlay = () => {
+    this.triggerSpinner();
+  }
+
+  this.handleOnPlaying = () => {
+    this.loading = false;
+    this.playing = true;
+    this.setRemotePlayingState(true);
+    this.reRender();
+  }
+
+  this.handleOnPause = (e) => {
+    //Make sure to distinguish between onend and onpause (they both get triggered when an audio element ends playback)
+    if(e.target.ended) return;
+
+    this.playing = false;
+    this.setRemotePlayingState(false);
+    this.reRender();
+  }
+
+  this.handleOnEnded = () => {
+    this.playing = false;
+    this.queuePosition++;
+    if (this.queue.length === 1) {
+      this.setRemotePlayingState(false);
+      return this.reRender();
     }
 
-    for (const album of app.albums) {
-      if (!this.album) album.setPlayingState(false);
-      else if (album.data.id === this.album) album.setPlayingState(true);
-      else album.setPlayingState(false);
+    //Stop playback if this was the last song in the queue
+    if (this.queuePosition > this.queue.length - 1) {
+      this.setRemotePlayingState(false);
+      this.reRender();
+      this.queue = [];
+      return this.queuePosition = 0;
+    }
+
+    //Continue playing if more items are in the queue
+    this.current = this.queue[this.queuePosition];
+    this.updateSrc();
+    this.play();
+  }
+
+  //HELPERS
+  this.setRemotePlayingState = (playing) => { //Update playing state in the currently displayed songs & albums
+    if (playing) {
+      for (const song of app.songs) {
+        if (song.data.id === this.current.id) song.setPlayingState(true);
+        else song.setPlayingState(false);
+      }
+
+      for (const album of app.albums) {
+        if (!this.album) album.setPlayingState(false);
+        else if (album.data.id === this.album) album.setPlayingState(true);
+        else album.setPlayingState(false);
+      }
+    }
+    else {
+      for (const song of app.songs) song.setPlayingState(false);
+      for (const album of app.albums) album.setPlayingState(false);
     }
   }
 
-  this.setPauseIcon = () => {
-    for (const song of app.songs) {
-      if (song.data.id === this.current.id) song.setPlayingState(false);
-    }
-
-    for (const album of app.albums) {
-      if (!this.album) album.setPlayingState(false);
-      else if (album.data.id === this.album) album.setPlayingState(false);
-    }
-  }
-
-  this.interruptLoading = () => {
+  this.interruptLoading = () => { //Interrupt the loading animation in currently displayed songs & albums
     for (const song of app.songs) {
       if (song.data.id === this.current.id) continue;
       song.setPlayingState(false);
@@ -48,105 +87,9 @@ function Player() {
     }
   }
 
-  this.handleOnPlay = () => {
-    this.triggerSpinner();
-  }
-
-  this.handleOnPlaying = () => {
-    this.loading = false;
-    this.playing = true;
-    this.setPlayIcon();
-    this.reRender();
-  }
-
-  this.handleOnPause = (e) => {
-    //Make sure to distinguish between onend and onpause (they both get triggered when an audio element ends playback)
-    if(e.target.ended) {
-      return;
-    }
-
-    this.playing = false;
-    this.setPauseIcon();
-    this.reRender();
-  }
-
-  this.handleOnEnded = () => {
-    this.playing = false;
-    this.handleRemoteTriggers(this.current.id, this.current.type, 'end');
-    this.reRender();
-    if (this.queue.length === 1) return;
-
-    //Continue playing if more items are in the queue
-    this.queuePosition++;
-    if (this.queuePosition > this.queue.length - 1) {
-      this.handleRemoteTriggers(this.current.id, this.current.type, 'endAlbum');
-      this.queue = [];
-      return this.queuePosition = 0;
-    }
-
-    this.current = this.queue[this.queuePosition];
-    this.updateSrc();
-    this.handleRemoteTriggers(this.current.id, this.current.type, 'autoplay');
-    this.play();
-  }
-
-  //this.handleRemoteTriggers = (id, type, triggeredBy) => {
-  //  for (let _view in app.views) {
-  //    let view = app.views[_view];
-  //    if (view === null) {
-  //      continue;
-  //    }
-
-  //    if (_view === 'exploreView' || _view === 'artistView' || _view === 'pinnedView') {
-  //      if (type !== 'song') continue;
-  //      if (view.children.songs[id]) view.children.songs[id].remotePlayButtonTrigger();
-  //      if (triggeredBy === 'main') this.remoteAlbumTrigger(view.children.albums);
-  //      else if (triggeredBy === 'endAlbum') this.remoteAlbumTrigger(view.children.albums);
-  //      else if (triggeredBy === 'whilePlayingAlbum') this.remoteAlbumTrigger(view.children.albums);
-  //      else if (triggeredBy === 'whilePlayingAlbumAlbumPress') this.remoteAlbumTrigger(view.children.albums);
-  //    }
-  //    else if (_view === 'songView') {
-  //      if (type === 'song' && view.children.song.data.id === id) view.children.song.remotePlayButtonTrigger();
-  //      else if (this.isFile(type) && view.children.files[id]) view.children.files[id].remotePlayButtonTrigger();
-  //    }
-  //    else if (_view === 'albumView') {
-  //      if (type !== 'song') continue;
-  //      if (view.children.songs[id] && view.children.album.data.id === this.album && triggeredBy === 'end') view.children.songs[id].remotePlayButtonTrigger();
-  //      if (view.children.songs[id] && view.children.album.data.id === this.album && triggeredBy === 'endAlbum') view.children.album.remotePlayButtonTrigger();
-  //      else if (view.children.songs[id] && triggeredBy === 'album') view.children.songs[id].remotePlayButtonTrigger();
-  //      else if (view.children.songs[id] && triggeredBy === 'song') view.children.album.remotePlayButtonTrigger();
-  //      else if (view.children.songs[id] && triggeredBy === 'autoplay') view.children.songs[id].remotePlayButtonTrigger();
-  //      else if (view.children.songs[id] && triggeredBy === 'whilePlayingSong') {
-  //        view.children.songs[id].remotePlayButtonTrigger();
-  //        view.children.album.remotePlayButtonTrigger();
-  //      }
-  //      else if (view.children.songs[id] && triggeredBy === 'whilePlayingAlbum') {
-  //        view.children.songs[id].remotePlayButtonTrigger();
-  //        view.children.album.remotePlayButtonTrigger();
-  //      }
-  //      else if (view.children.songs[id] && triggeredBy === 'main') {
-  //        view.children.songs[id].remotePlayButtonTrigger();
-  //        view.children.album.remotePlayButtonTrigger();
-  //      }
-  //    }
-  //    else {
-  //      //Remove this error in production
-  //      console.error('view not recognized');
-  //    }
-  //  }
-  //}
-
-  this.remoteAlbumTrigger = (albums) => {
-    if (albums[this.album]) return albums[this.album].remotePlayButtonTrigger();
-  }
-
   this.handlePlayButton = () => {
     this.handleRemoteTriggers(this.current.id, this.current.type, 'main');
     this.play();
-  }
-
-  this.isFile = (type) => {
-    return type === 'original' || type === 'internal' || type === 'external';
   }
 
   this.updateSrc = () => {
@@ -159,14 +102,6 @@ function Player() {
   this.queueFile = (file) => {
     //Check if file already loaded
     if (this.queue.length === 1 && this.queue[0].id === file.id && this.queue[0].type === file.type) return this.play();
-
-    ////Change the playing state on previous file
-    //if(this.current && this.playing) this.handleRemoteTriggers(this.current.id, this.current.type);
-
-    ////If an album was playing before, update playing state
-    //if (this.queue.length > 1 && this.playing) {
-    //  this.handleRemoteTriggers(this.current.id, this.current.type, 'whilePlayingAlbum');
-    //}
 
     this.album = null; //Reset this.album
     this.playing = false;
@@ -192,11 +127,6 @@ function Player() {
 
     //Check if queue is already loaded and we are playing the same song
     if (this.sameQueue(files) && this.queuePosition === position) return this.play();
-
-    //Change the playing state on previous playing
-    //if(this.current && this.playing && this.queue.length === 1) this.handleRemoteTriggers(this.current.id, this.current.type, 'whilePlayingSong');
-    //if(this.current && this.playing && this.queue.length > 1 && triggeredBy === 'song') this.handleRemoteTriggers(this.current.id, this.current.type, 'whilePlayingAlbum');
-    //if(this.current && this.playing && this.queue.length > 1 && triggeredBy === 'album') this.handleRemoteTriggers(this.current.id, this.current.type, 'whilePlayingAlbumAlbumPress');
 
     this.playing = false;
     this.queue = files;

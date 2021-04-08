@@ -14,6 +14,7 @@ function Song(data, view) {
 
   this.handlePlayButton = (e) => {
     e.stopPropagation();
+    console.log(this.loading);
     if (this.loading) return; //Ignore action if we are currently loading a song/album
 
     if (!this.playing) {
