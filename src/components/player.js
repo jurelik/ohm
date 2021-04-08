@@ -59,19 +59,26 @@ function Player() {
   this.setRemotePlayingState = (playing) => { //Update playing state in the currently displayed songs & albums
     if (playing) {
       for (const song of app.songs) {
-        if (song.data.id === this.current.id) song.setPlayingState(true);
+        if (song.data.id === this.current.id && this.current.type === 'song') song.setPlayingState(true);
         else song.setPlayingState(false);
       }
 
       for (const album of app.albums) {
         if (!this.album) album.setPlayingState(false);
-        else if (album.data.id === this.album) album.setPlayingState(true);
+        else if (album.data.id === this.album && this.current.type === 'song') album.setPlayingState(true);
         else album.setPlayingState(false);
+      }
+
+      if (app.files.length === 0) return; //Ignore if no files are displayed
+      for (const file of app.files) {
+        if (file.data.id === this.current.id && file.data.type === this.current.type) file.setPlayingState(true);
+        else file.setPlayingState(false);
       }
     }
     else {
       for (const song of app.songs) song.setPlayingState(false);
       for (const album of app.albums) album.setPlayingState(false);
+      for (const file of app.files) file.setPlayingState(false);
     }
   }
 
@@ -153,8 +160,9 @@ function Player() {
     this.el.querySelector('.main-play-button').innerHTML = this.loadingIcon;
 
     //Update remote songs & albums
-    for (const song of app.songs) if (song.data.id === this.current.id) song.triggerSpinner();
-    for (const album of app.albums) if (album.data.id === this.album) album.triggerSpinner();
+    for (const song of app.songs) if (song.data.id === this.current.id && this.current.type === 'song') song.triggerSpinner();
+    for (const album of app.albums) if (album.data.id === this.album && this.current.type === 'song') album.triggerSpinner();
+    for (const file of app.files) if (file.data.id === this.current.id && file.data.type === this.current.type) file.triggerSpinner();
   }
 
   this.render = () => {

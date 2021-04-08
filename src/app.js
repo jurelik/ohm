@@ -43,6 +43,7 @@ function App() {
   this.current = null;
   this.songs = [];
   this.albums = [];
+  this.files = [];
   this.transfersStore = null;
 
   this.init = () => {
@@ -105,6 +106,7 @@ function App() {
       this.current = view;
       this.songs = []; //Clear song references
       this.albums = []; //Clear album references
+      this.files = []; //Clear files references
 
       switch (view) {
         case 'explore':

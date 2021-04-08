@@ -17,7 +17,6 @@ function Album(data) {
     e.stopPropagation();
     if (this.loading) return; //Ignore action if we are currently loading a song/album
 
-    //if (!this.playing) triggerSpinner()
     app.player.queueFiles(this.data, this.getPosition());
   }
 
@@ -45,17 +44,17 @@ function Album(data) {
     this.playing = value;
   }
 
+  this.triggerSpinner = () => {
+    this.loading = true;
+    this.el.querySelector('.play-button').innerHTML = this.loadingIcon;
+  }
+
   this.getPosition = () => {
     //If this album is currently playing
     if (this.data.songs === app.player.queue) {
       return data.songs.indexOf(app.player.current);
     }
     return 0;
-  }
-
-  this.triggerSpinner = () => {
-    this.loading = true;
-    this.el.querySelector('.play-button').innerHTML = this.loadingIcon;
   }
 
   this.reRender = () => {

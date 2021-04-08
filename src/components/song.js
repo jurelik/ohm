@@ -16,7 +16,6 @@ function Song(data, view) {
     e.stopPropagation();
     if (this.loading) return; //Ignore action if we are currently loading a song/album
 
-    //if (!this.playing) this.triggerSpinner();
     this.view === 'albumView' ? app.player.queueFiles(app.views.albumView.data, this.getPosition()) : app.player.queueFile(this.data);
   }
 
