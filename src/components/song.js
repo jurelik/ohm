@@ -14,13 +14,9 @@ function Song(data, view) {
 
   this.handlePlayButton = (e) => {
     e.stopPropagation();
-    console.log(this.loading);
     if (this.loading) return; //Ignore action if we are currently loading a song/album
 
-    if (!this.playing) {
-      this.loading = true;
-      this.el.querySelector('.play-button').innerHTML = this.loadingIcon;
-    }
+    //if (!this.playing) this.triggerSpinner();
     this.view === 'albumView' ? app.player.queueFiles(app.views.albumView.data, this.getPosition()) : app.player.queueFile(this.data);
   }
 
@@ -48,13 +44,18 @@ function Song(data, view) {
     this.loading = false;
   }
 
-  this.reRender = () => {
-    this.el.innerHTML = '';
-    this.render();
+  this.triggerSpinner = () => {
+    this.loading = true;
+    this.el.querySelector('.play-button').innerHTML = this.loadingIcon;
   }
 
   this.getPosition = () => {
     return app.views.albumView.data.songs.indexOf(this.data);
+  }
+
+  this.reRender = () => {
+    this.el.innerHTML = '';
+    this.render();
   }
 
   this.render = async () => {

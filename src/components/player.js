@@ -148,8 +148,13 @@ function Player() {
   }
 
   this.triggerSpinner = () => {
+    //Update main section
     this.loading = true;
     this.el.querySelector('.main-play-button').innerHTML = this.loadingIcon;
+
+    //Update remote songs & albums
+    for (const song of app.songs) if (song.data.id === this.current.id) song.triggerSpinner();
+    for (const album of app.albums) if (album.data.id === this.album) album.triggerSpinner();
   }
 
   this.render = () => {
