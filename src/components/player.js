@@ -1,3 +1,5 @@
+const log = require('../utils/log');
+
 function Player() {
   this.el = document.querySelector('.player');
   this.audio = document.querySelector('audio');
@@ -95,7 +97,7 @@ function Player() {
   }
 
   this.handlePlayButton = () => {
-    this.handleRemoteTriggers(this.current.id, this.current.type, 'main');
+    if (!this.current) return log.error('Please load a song first');
     this.play();
   }
 
