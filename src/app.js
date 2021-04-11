@@ -4,6 +4,7 @@ const { ipcRenderer } = require('electron');
 const createClient = require('ipfs-http-client');
 
 const Nav = require('./components/nav');
+const LoginView = require('./components/loginView');
 const ExploreView = require('./components/exploreView');
 const SongView = require('./components/songView');
 const AlbumView = require('./components/albumView');
@@ -18,10 +19,10 @@ const Store = require('./components/store');
 function App() {
   this.ipfs;
   this.root = document.querySelector('.root');
-  this.content = document.querySelector('.content');
-  this.nav = new Nav();
-  this.player = new Player();
-  this.header = new Header();
+  this.content;
+  this.nav;
+  this.player;
+  this.header;
   this.views = {
     exploreView: null,
     songView: null,
@@ -31,8 +32,8 @@ function App() {
     pinnedView: null,
     transfersView: null
   }
-  this.GATEWAY;
-  this.URL;
+  this.GATEWAY ='http://localhost:8080';
+  this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://18.132.82.84:3000';
   this.USER_DATA_PATH;
   this.MULTIADDR;
 
@@ -46,21 +47,19 @@ function App() {
   this.files = [];
   this.transfersStore = null;
 
+  this.login = async () => {
+    const login = new LoginView();
+
+    try {
+      await login.init();
+    }
+    catch (err) {
+      console.log(err);
+      login.render();
+    }
+  }
+
   this.init = () => {
-    //Set constants
-    if (process.env.NODE_ENV === 'development') {
-      this.GATEWAY = 'http://localhost:8080';
-      this.URL = 'http://localhost:3000';
-    }
-    else {
-      this.GATEWAY = 'http://localhost:8080';
-      this.URL = 'http://18.132.82.84:3000';
-    }
-
-    this.header.render();
-    this.nav.render();
-    this.player.render();
-
     //Init an ipfs daemon & create an ipfs node
     ipcRenderer.on('daemon-ready', async (e, userDataPath) => {
       try {
@@ -84,7 +83,7 @@ function App() {
         this.transfersStore.init();
         this.initTransfers();
 
-        //Render first content
+        this.buildHTML(); //Render first content
         this.changeView('explore');
         this.addToHistory('explore');
         this.historyIndex = 0;
@@ -161,5 +160,32 @@ function App() {
     for (let unique in transfers) {
       transfers[unique].active = false; //All transfers are paused on app open - ADD OPTION TO DISABLE THIS
     }
+  }
+
+  this.buildHTML = () => {
+    //Build HTML skeleton
+    document.querySelector('.root').innerHTML = `
+    <div class="drag">
+    </div>
+    <div class="header">
+    </div>
+    <div class="main">
+      <div class="nav">
+      </div>
+      <div class="content">
+      </div>
+    </div>
+    <div class="player">
+    </div>
+    <audio></audio>`
+
+    //Initialise main blocks
+    this.content = document.querySelector('.content');
+    this.nav = new Nav();
+    this.player = new Player();
+    this.header = new Header();
+    this.header.render();
+    this.nav.render();
+    this.player.render();
   }
 }

@@ -1,6 +1,26 @@
 const ipfs = require('../utils/ipfs');
 const log = require('../utils/log');
 
+const login = async (payload) => {
+  try {
+    log('Attempting login...');
+    const _res = await fetch(`${app.URL}/api/login`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: payload ? JSON.stringify(payload) : null
+    });
+
+    const res = await _res.json();
+    if (res.type === 'error') throw res.err;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 const upload = async (payload) => {
   let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
 
@@ -73,6 +93,7 @@ const resumeUpload = async (transfer) => {
 }
 
 module.exports = {
+  login,
   upload,
   resumeUpload
 }
