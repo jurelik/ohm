@@ -6,7 +6,7 @@ const login = async (payload) => {
     log('Attempting login...');
     const _res = await fetch(`${app.URL}/api/login`, {
       method: 'POST',
-      credentials: 'include', //Include cookies in request
+      credentials: 'include', //Include cookie
       headers: {
         'Content-Type': 'application/json',
       },

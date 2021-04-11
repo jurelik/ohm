@@ -17,6 +17,7 @@ function Comments(data) {
 
       const _res = await fetch(`${app.URL}/api/comment`, {
         method: 'POST',
+        credentials: 'include', //Include cookie
         headers: {
           'Content-Type': 'application/json'
         },
@@ -30,7 +31,7 @@ function Comments(data) {
       const _data = {
         id: 0,
         content: payload.content,
-        artist: 'antik' //For testing purposes
+        artist: app.artist
       }
 
       //Insert new comment into the DOM

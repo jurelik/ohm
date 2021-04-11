@@ -26,7 +26,7 @@ function LoginView() {
       app.init();
     }
     catch (err) {
-      throw err;
+      log.error(err);
     }
   }
 

@@ -17,6 +17,7 @@ function PinnedView(data) {
 
       const _res = await fetch(`${app.URL}/api/pinned`, {
         method: 'POST',
+        credentials: 'include', //Include cookie
         headers: {
           'Content-Type': 'application/json'
         },
