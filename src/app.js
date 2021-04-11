@@ -2,6 +2,7 @@
 
 const { ipcRenderer } = require('electron');
 const createClient = require('ipfs-http-client');
+const log = require('./utils/log');
 
 const Nav = require('./components/nav');
 const LoginView = require('./components/loginView');
@@ -38,6 +39,7 @@ function App() {
   this.MULTIADDR;
 
   //State
+  this.artist;
   this.playing = false;
   this.history = [];
   this.historyIndex = 0;
@@ -51,10 +53,12 @@ function App() {
     const login = new LoginView();
 
     try {
-      await login.init();
+      await login.init(); //Attempt login with credentials
     }
     catch (err) {
-      console.log(err);
+      log.error(err);
+
+      this.root.innerHTML = '' //Draw login screen
       login.render();
     }
   }
@@ -62,6 +66,7 @@ function App() {
   this.init = () => {
     //Init an ipfs daemon & create an ipfs node
     ipcRenderer.on('daemon-ready', async (e, userDataPath) => {
+      log.success('IPFS daemon initiated.');
       try {
         this.ipfs = createClient();
         this.USER_DATA_PATH = userDataPath;
@@ -91,10 +96,11 @@ function App() {
 
       }
       catch (err) {
-        console.error(err);
+        log.error(err);
       }
     });
 
+    log('Initiating IPFS daemon..');
     ipcRenderer.send('start');
   }
 

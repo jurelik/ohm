@@ -3,6 +3,8 @@ const io = require('../utils/io');
 const log = require('../utils/log');
 
 function LoginView() {
+  this.el = document.createElement('div');
+
   this.getData = () => {
     const data = Array.from(this.el.querySelectorAll('input')).reduce((acc, input) => ({ ...acc, [input.name]: input.value }), {});
 
@@ -29,6 +31,18 @@ function LoginView() {
   }
 
   this.init = async () => {
+    //Create elements
+    let spinner = document.createElement('div');
+
+    //Add classes for styling
+    this.el.className = 'login';
+    spinner.className = 'spinner';
+
+    //Build structure
+    this.el.appendChild(spinner);
+
+    document.querySelector('.root').appendChild(this.el); //Create a spinner while we try to login
+
     try {
       await io.login();
       log.success('Succesfully logged in.');
@@ -40,8 +54,9 @@ function LoginView() {
   }
 
   this.render = () => {
+    this.el.innerHTML = ''; //Clean up this.el
+
     //Create elements
-    this.el = document.createElement('div');
     let artist = document.createElement('input');
     let pw = document.createElement('input');
     let submit = document.createElement('button');

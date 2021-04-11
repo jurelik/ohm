@@ -6,7 +6,7 @@ const login = async (payload) => {
     log('Attempting login...');
     const _res = await fetch(`${app.URL}/api/login`, {
       method: 'POST',
-      credentials: 'include',
+      credentials: 'include', //Include cookies in request
       headers: {
         'Content-Type': 'application/json',
       },
@@ -15,6 +15,8 @@ const login = async (payload) => {
 
     const res = await _res.json();
     if (res.type === 'error') throw res.err;
+
+    app.artist = res.session.artist; //Set global artist value
   }
   catch (err) {
     throw err;
