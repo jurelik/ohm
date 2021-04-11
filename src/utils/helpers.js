@@ -10,7 +10,7 @@ const addSong = async (song, path) => {
 
     //Copy song to MFS
     await app.ipfs.files.mkdir(`${path}${song.title}/files`, { parents: true });
-    await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}${song.title}/antik - ${song.title}.${song.format}`);
+    await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}${song.title}/${app.artist} - ${song.title}.${song.format}`);
 
     //Add files
     for (const file of song.files) {
@@ -18,7 +18,7 @@ const addSong = async (song, path) => {
       const { cid } = await app.ipfs.add({ content: buffer }); //Add song to IPFS
 
       //Copy file to MFS
-      await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}${song.title}/files/antik - ${file.name}.${file.format}`);
+      await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}${song.title}/files/${app.artist} - ${file.name}.${file.format}`);
       file.cid = cid.string;
     }
 

@@ -76,11 +76,11 @@ function App() {
         //Create user folder if it doesn't exist yet
         let initialised = false;
         for await (const file of this.ipfs.files.ls('/')) {
-          if (file.name === 'antik') initialised = true; //For testing purposes
+          if (file.name === app.artist) initialised = true;
         }
         if (!initialised) {
-          await this.ipfs.files.mkdir('/antik/singles', { parents: true });
-          await this.ipfs.files.mkdir('/antik/albums', { parents: true });
+          await this.ipfs.files.mkdir(`/${app.artist}/singles`, { parents: true });
+          await this.ipfs.files.mkdir(`/${app.artist}/singles`, { parents: true });
         }
 
         //Create transfersStore

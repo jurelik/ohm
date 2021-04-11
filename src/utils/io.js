@@ -50,8 +50,8 @@ const upload = async (payload) => {
     if (err === 'album with the same name already exists') throw err;
     if (err === 'single with the same name already exists') throw err;;
 
-    if (payload.album && writtenToMFS) await app.ipfs.files.rm(`/antik/albums/${payload.album.title}`, { recursive: true });
-    else if (payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/antik/singles/${payload.songs[0].title}`, { recursive: true });
+    if (payload.album && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/albums/${payload.album.title}`, { recursive: true });
+    else if (payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/singles/${payload.songs[0].title}`, { recursive: true });
     throw err;
   }
 }
@@ -89,8 +89,8 @@ const resumeUpload = async (transfer) => {
   }
   catch (err) {
     console.error(err);
-    if (transfer.payload.album && writtenToMFS) await app.ipfs.files.rm(`/antik/albums/${transfer.payload.album.title}`, { recursive: true });
-    else if (transfer.payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/antik/singles/${transfer.payload.songs[0].title}`, { recursive: true });
+    if (transfer.payload.album && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/albums/${transfer.payload.album.title}`, { recursive: true });
+    else if (transfer.payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/singles/${transfer.payload.songs[0].title}`, { recursive: true });
   }
 }
 

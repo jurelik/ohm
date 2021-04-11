@@ -4,7 +4,7 @@ const log = require('./log');
 const uploadSingle = async (payload) => {
   try {
     const song = payload.songs[0];
-    await helpers.addSong(song, '/antik/singles/');
+    await helpers.addSong(song, `/${app.artist}/singles`);
   }
   catch (err) {
     throw err;
@@ -14,15 +14,15 @@ const uploadSingle = async (payload) => {
 const uploadAlbum = async (payload) => {
   try {
     const album = payload.album;
-    await app.ipfs.files.mkdir(`/antik/albums/${album.title}`);
+    await app.ipfs.files.mkdir(`/${app.artist}/albums/${album.title}`);
 
     //Add songs
     for (const song of payload.songs) {
-      await helpers.addSong(song,`/antik/albums/${album.title}/`);
+      await helpers.addSong(song,`/${app.artist}/albums/${album.title}/`);
     }
 
     //Get CID of album folder
-    const folder = await app.ipfs.files.stat(`/antik/albums/${album.title}`);
+    const folder = await app.ipfs.files.stat(`/${app.artist}/albums/${album.title}`);
     album.cid = folder.cid.string;
   }
   catch (err) {
