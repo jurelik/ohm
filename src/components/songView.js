@@ -18,7 +18,7 @@ function SongView(data, action) {
       let main = new SongViewMain(data, action);
 
       //Add classes for styling
-      this.el.className = this.action === 'comments' ? 'song-view-comments' : 'song-view-files';
+      this.el.className = `song-view-${this.action}`;
 
       //Add song child for remote control
       this.children.song = song;

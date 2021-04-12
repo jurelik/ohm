@@ -10,7 +10,9 @@ function ActionBarSong(data) {
   this.pinIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="598.5 258.5 183 183"><path fill="none" stroke="#BBB" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M720 350h0v30l45-45-45-45v30h-30m-30 30h0v-30l-45 45 45 45v-30h30m-30-30h60"/><path fill="none" d="M598.5 258.5h183v183h-183v-183z"/></svg></svg>'
 
   this.handleCommentsClick = (e) => {
+    e.preventDefault();
     e.stopPropagation();
+
     app.addToHistory('song', { song: this.data, action: 'comments' });
     app.changeView('song', { song: this.data, action: 'comments' });
   }
@@ -45,6 +47,14 @@ function ActionBarSong(data) {
     }
   }
 
+  this.handleDeleteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    app.addToHistory('song', { song: this.data, action: 'delete' });
+    app.changeView('song', { song: this.data, action: 'delete' });
+  }
+
   this.appendPinIcon = () => {
     const icon = document.createElement('div');
     icon.className = 'pin-icon';
@@ -68,37 +78,16 @@ function ActionBarSong(data) {
     }
   }
 
-  this.checkIfPinned = async () => {
-    try {
-      if (this.data.albumTitle) {
-        if (await ipfs.artistExists(this.data.artist) === false) return false; //Check if artist folder exists
-        if (await ipfs.albumExists(this.data) === false) return false; //Check if album folder exists
-
-        const cid = await ipfs.songInAlbumExists(this.data, this.data.albumTitle); //Get song CID
-        if (!cid || cid !== this.data.cid) return false; //Check if CID matches
-      }
-      else {
-        if (await ipfs.artistExists(this.data.artist) === false) return false; //Check if artist folder exists
-
-        const cid = await ipfs.songExists(this.data); //Get song CID
-        if (!cid || cid !== this.data.cid) return false; //Check if CID matches
-      }
-      return true;
-    }
-    catch (err) {
-      console.error(err)
-    }
-  }
-
   this.render = async () => {
     try {
-      this.pinned = await this.checkIfPinned(); //Check if song is pinned
+      this.pinned = await ipfs.checkIfSongIsPinned(this.data); //Check if song is pinned
 
       //Create elements
       let files = document.createElement('button');
       let comments = document.createElement('button');
       let pin = document.createElement('button');
       let download = document.createElement('button');
+      let _delete = document.createElement('button');
 
       //Add classes for styling
       this.el.className = 'actions';
@@ -109,12 +98,14 @@ function ActionBarSong(data) {
       comments.innerHTML = `${this.data.comments.length} comments`;
       pin.innerHTML = this.pinned ? 'unpin' : 'pin';
       download.innerHTML = 'download';
+      _delete.innerHTML = 'delete';
 
       //Build structure
       this.el.appendChild(files);
       this.el.appendChild(comments);
       this.el.appendChild(pin);
       this.el.appendChild(download);
+      if (app.artist === this.data.artist) this.el.appendChild(_delete);
 
       //Add pin icon if applicable
       if (this.pinned) this.appendPinIcon();
@@ -123,6 +114,7 @@ function ActionBarSong(data) {
       comments.onclick = this.handleCommentsClick;
       pin.onclick = this.handlePinClick;
       download.onclick = this.handleDownloadClick;
+      _delete.onclick = this.handleDeleteClick;
 
       return this.el;
     }

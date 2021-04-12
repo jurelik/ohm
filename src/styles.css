@@ -366,6 +366,11 @@ input[type=file] button {
   overflow: auto;
 }
 
+.song-view-delete {
+  height: 100%;
+  border: 1px solid yellow;
+}
+
 .song-view-main {
   color: #888;
   margin-left: 8px;
@@ -449,6 +454,18 @@ input[type=file] button {
 .comments p {
   color: #eee;
   margin: 0;
+}
+
+.delete {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.delete p {
+  text-align: center;
 }
 
 /*UploadView*/

@@ -18,7 +18,7 @@ const uploadAlbum = async (payload) => {
 
     //Add songs
     for (const song of payload.songs) {
-      await helpers.addSong(song,`/${app.artist}/albums/${album.title}/`);
+      await helpers.addSong(song,`/${app.artist}/albums/${album.title}`);
     }
 
     //Get CID of album folder
@@ -120,21 +120,57 @@ const pauseTransfer = async (unique) => {
   }
 }
 
+const checkIfSongIsPinned = async (data) => {
+  try {
+    if (data.albumTitle) {
+      if (await artistExists(data.artist) === false) return false; //Check if artist folder exists
+      if (await albumExists(data) === false) return false; //Check if album folder exists
+
+      const cid = await songInAlbumExists(data, data.albumTitle); //Get song CID
+      if (!cid || cid !== data.cid) return false; //Check if CID matches
+    }
+    else {
+      if (await artistExists(data.artist) === false) return false; //Check if artist folder exists
+
+      const cid = await songExists(data); //Get song CID
+      if (!cid || cid !== data.cid) return false; //Check if CID matches
+    }
+    return true;
+  }
+  catch (err) {
+    console.error(err)
+  }
+}
+
+const checkIfAlbumIsPinned = async (data) => {
+  try {
+    if (await artistExists(data.artist) === false) return false; //Check if artist folder exists
+    const cid = await albumExists(data) //Get CID
+    if (!cid || cid !== data.cid) return false; //Check if CID matches
+
+    return true;
+  }
+  catch (err) {
+    console.error(err)
+  }
+}
+
 const unpinSong = async (payload) => {
   try {
     const path = payload.albumTitle ? `/${payload.artist}/albums/${payload.albumTitle}/` : `/${payload.artist}/singles/`;
     await app.ipfs.files.rm(`${path}${payload.title}`, { recursive: true });
-    await app.ipfs.pin.rm(`/ipfs/${payload.cid}`, { recursive: true });
+    await helpers.removePin(payload.cid);
     log.success('Song unpinned.');
   }
   catch (err) {
     throw err;
   }
 }
+
 const unpinAlbum = async (payload) => {
   try {
     await app.ipfs.files.rm(`/${payload.artist}/albums/${payload.title}`, { recursive: true });
-    await app.ipfs.pin.rm(`/ipfs/${payload.cid}`, { recursive: true });
+    await helpers.removePin(payload.cid);
     log.success('Album unpinned.');
   }
   catch (err) {
@@ -221,6 +257,8 @@ module.exports = {
   startTransfer,
   resumeTransfer,
   pauseTransfer,
+  checkIfSongIsPinned,
+  checkIfAlbumIsPinned,
   unpinSong,
   unpinAlbum,
   getPinned,

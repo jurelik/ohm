@@ -1,11 +1,11 @@
 const Files = require('./files');
 const Comments = require('./comments');
+const Delete = require('./delete');
 
 function SongViewMain(data, action) {
   this.el = document.createElement('div');
   this.data = data;
   this.action = action;
-  this.state = {};
 
   this.handleFilesClick = () => {
     if (this.action === 'files') return;
@@ -23,12 +23,21 @@ function SongViewMain(data, action) {
     this.render();
   }
 
+  this.handleDeleteClick = () => {
+    if (this.action === 'delete') return;
+    this.action = 'delete';
+    this.el.innerHTML = '';
+    app.views.songView.el.className = 'song-view-delete'; //Change className of songView to account for comment bar height
+    this.render();
+  }
+
   this.render = () => {
+    console.log(this.data)
     //Create elements
     let actionBar = document.createElement('div');
     let actionBarFiles = document.createElement('button');
     let actionBarComments = document.createElement('button');
-    let actionBarPins = document.createElement('button');
+    let actionBarDelete = document.createElement('button');
 
     //Add classes for styling
     this.el.classList.add('song-view-main');
@@ -36,17 +45,18 @@ function SongViewMain(data, action) {
     //Add attributes and innerHTML
     actionBarFiles.innerHTML = 'files';
     actionBarComments.innerHTML = 'comments';
-    actionBarPins.innerHTML = 'pins';
+    actionBarDelete.innerHTML = 'delete';
 
     //Build structure
     this.el.appendChild(actionBar);
     actionBar.appendChild(actionBarFiles);
     actionBar.appendChild(actionBarComments);
-    actionBar.appendChild(actionBarPins);
+    if (app.artist === this.data.artist) actionBar.appendChild(actionBarDelete);
 
     //Add listeners
     actionBarFiles.onclick = this.handleFilesClick;
     actionBarComments.onclick = this.handleCommentsClick;
+    actionBarDelete.onclick = this.handleDeleteClick;
 
     switch (this.action) {
       case 'files':
@@ -59,6 +69,11 @@ function SongViewMain(data, action) {
         this.el.appendChild(comments.render());
         comments.el.querySelector('textarea').focus(); //Focus the input
         actionBarComments.className = 'selected';
+        break;
+      case 'delete':
+        let _delete = new Delete(data);
+        this.el.appendChild(_delete.render());
+        actionBarDelete.className = 'selected';
         break;
       default:
         console.error('wrong action');

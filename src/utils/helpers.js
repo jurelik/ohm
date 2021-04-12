@@ -9,8 +9,8 @@ const addSong = async (song, path) => {
     const { cid } = await app.ipfs.add({ content: buffer }); //Add song to IPFS
 
     //Copy song to MFS
-    await app.ipfs.files.mkdir(`${path}${song.title}/files`, { parents: true });
-    await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}${song.title}/${app.artist} - ${song.title}.${song.format}`);
+    await app.ipfs.files.mkdir(`${path}/${song.title}/files`, { parents: true });
+    await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}/${song.title}/${app.artist} - ${song.title}.${song.format}`);
 
     //Add files
     for (const file of song.files) {
@@ -18,12 +18,12 @@ const addSong = async (song, path) => {
       const { cid } = await app.ipfs.add({ content: buffer }); //Add song to IPFS
 
       //Copy file to MFS
-      await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}${song.title}/files/${app.artist} - ${file.name}.${file.format}`);
+      await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}/${song.title}/files/${app.artist} - ${file.name}.${file.format}`);
       file.cid = cid.string;
     }
 
     //Get CID of folder
-    const folder = await app.ipfs.files.stat(`${path}${song.title}`);
+    const folder = await app.ipfs.files.stat(`${path}/${song.title}`);
     song.cid = folder.cid.string;
   }
   catch (err) {
@@ -171,6 +171,17 @@ const pinItem = async (transfer, controller) => {
   }
 }
 
+const removePin = async (cid) => {
+  try {
+    for await (const pin of app.ipfs.pin.ls({ paths: cid })) {
+      await app.ipfs.pin.rm(pin.cid, { recursive: true }); //Remove pin from IPFS
+    }
+  }
+  catch (err) {
+    return; //Ignore as this means that the file is no longer pinned already
+  }
+}
+
 const childIsPlaying = (song, songs) => { //Check if a song within an album is playing
   for (let _song of songs) if (_song.id === song.id) return true;
   return false;
@@ -270,5 +281,6 @@ module.exports = {
   createMFSTransferPath,
   writeToDisk,
   pinItem,
+  removePin,
   childIsPlaying
 }

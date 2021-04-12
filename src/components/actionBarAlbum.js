@@ -63,23 +63,10 @@ function ActionBarAlbum(data) {
     }
   }
 
-  this.checkIfPinned = async () => {
-    try {
-      if (await ipfs.artistExists(this.data.artist) === false) return false; //Check if artist folder exists
-      const cid = await ipfs.albumExists(this.data) //Get CID
-      if (!cid || cid !== this.data.cid) return false; //Check if CID matches
-
-      return true;
-    }
-    catch (err) {
-      console.error(err)
-    }
-  }
-
   this.render = async () => {
     try {
       //Check if album is pinned
-      this.pinned = await this.checkIfPinned();
+      this.pinned = await ipfs.checkIfAlbumIsPinned();
 
       //Create elements
       let songs = document.createElement('button');

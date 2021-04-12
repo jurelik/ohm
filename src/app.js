@@ -80,7 +80,7 @@ function App() {
         }
         if (!initialised) {
           await this.ipfs.files.mkdir(`/${app.artist}/singles`, { parents: true });
-          await this.ipfs.files.mkdir(`/${app.artist}/singles`, { parents: true });
+          await this.ipfs.files.mkdir(`/${app.artist}/albums`, { parents: true });
         }
 
         //Create transfersStore
