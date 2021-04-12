@@ -173,8 +173,8 @@ const pinItem = async (transfer, controller) => {
 
 const removePin = async (cid) => {
   try {
-    for await (const pin of app.ipfs.pin.ls({ paths: cid })) {
-      await app.ipfs.pin.rm(pin.cid, { recursive: true }); //Remove pin from IPFS
+    for await (const pin of app.ipfs.pin.ls({ type: 'recursive' })) {
+      if (pin.cid.string === cid) await app.ipfs.pin.rm(pin.cid, { recursive: true }); //Remove pin from IPFS
     }
   }
   catch (err) {
