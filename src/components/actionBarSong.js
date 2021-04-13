@@ -66,7 +66,7 @@ function ActionBarSong(data) {
     let _delete = document.createElement('button');
     _delete.innerHTML = 'delete';
     this.el.appendChild(_delete);
-    _delete.onclick = this.handleDownloadClick;
+    _delete.onclick = this.handleDeleteClick;
   }
 
   this.removePinIcon = () => {

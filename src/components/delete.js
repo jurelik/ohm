@@ -1,5 +1,6 @@
 const log = require('../utils/log');
 const ipfs = require('../utils/ipfs');
+const io = require('../utils/io');
 
 function Delete(data) {
   this.el = document.createElement('div');

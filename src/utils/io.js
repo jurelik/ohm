@@ -117,7 +117,7 @@ const deleteSong = async (data) => {
 
 const deleteAlbum = async (data) => {
   try {
-    return console.log(data);
+    console.log(data);
     const _res = await fetch(`${app.URL}/api/deletealbum`, {
       method: 'POST',
       credentials: 'include', //Include cookie
@@ -130,7 +130,7 @@ const deleteAlbum = async (data) => {
     const res = await _res.json();
     if (res.type === 'error') throw res.err;
 
-    //if (await ipfs.checkIfSongIsPinned(data)) await ipfs.unpinSong(data);
+    if (await ipfs.checkIfAlbumIsPinned(data)) await ipfs.unpinAlbum(data);
   }
   catch (err) {
     throw err;

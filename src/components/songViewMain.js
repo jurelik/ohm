@@ -31,19 +31,21 @@ function SongViewMain(data, action) {
     this.render();
   }
 
-  this.appendActionBarDelete = () => {
+  this.appendActionBarDelete = (actionBar) => {
     let actionBarDelete = document.createElement('button');
     actionBarDelete.innerHTML = 'delete';
     actionBar.appendChild(actionBarDelete);
     actionBarDelete.onclick = this.handleDeleteClick;
+
+    return actionBarDelete;
   }
 
   this.render = () => {
-    console.log(this.data)
     //Create elements
     let actionBar = document.createElement('div');
     let actionBarFiles = document.createElement('button');
     let actionBarComments = document.createElement('button');
+    let actionBarDelete;
 
     //Add classes for styling
     this.el.classList.add('song-view-main');
@@ -58,7 +60,7 @@ function SongViewMain(data, action) {
     actionBar.appendChild(actionBarComments);
 
     //Append delete option if applicable
-    if (app.artist === this.data.artist && !this.data.albumTitle) this.appendActionBarDelete();
+    if (app.artist === this.data.artist && !this.data.albumTitle) actionBarDelete = this.appendActionBarDelete(actionBar);
 
     //Add listeners
     actionBarFiles.onclick = this.handleFilesClick;
