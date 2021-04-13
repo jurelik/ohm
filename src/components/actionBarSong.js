@@ -62,6 +62,15 @@ function ActionBarSong(data) {
     this.el.appendChild(icon);
   }
 
+  this.appendDelete = () => {
+    let _delete = document.createElement('button');
+    _delete.innerHTML = 'delete';
+    this.el.appendChild(_delete);
+    _delete.onclick = this.handleDownloadClick;
+
+    return _delete;
+  }
+
   this.removePinIcon = () => {
     this.pinned = false; //Update pinned state
     this.el.querySelector('.pin-icon').remove(); //Remove pin icon
@@ -87,7 +96,6 @@ function ActionBarSong(data) {
       let comments = document.createElement('button');
       let pin = document.createElement('button');
       let download = document.createElement('button');
-      let _delete = document.createElement('button');
 
       //Add classes for styling
       this.el.className = 'actions';
@@ -98,17 +106,16 @@ function ActionBarSong(data) {
       comments.innerHTML = `${this.data.comments.length} comments`;
       pin.innerHTML = this.pinned ? 'unpin' : 'pin';
       download.innerHTML = 'download';
-      _delete.innerHTML = 'delete';
 
       //Build structure
       this.el.appendChild(files);
       this.el.appendChild(comments);
       this.el.appendChild(pin);
       this.el.appendChild(download);
-      if (app.artist === this.data.artist) this.el.appendChild(_delete);
 
-      //Add pin icon if applicable
-      if (this.pinned) this.appendPinIcon();
+      let _delete;
+      if (this.data.artist === app.artist) _delete = this.appendDelete(); //Add delete icon if applicable
+      if (this.pinned) this.appendPinIcon(); //Add pin icon if applicable
 
       //Add listeners
       comments.onclick = this.handleCommentsClick;

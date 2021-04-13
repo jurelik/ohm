@@ -63,10 +63,19 @@ function ActionBarAlbum(data) {
     }
   }
 
+  this.appendDelete = () => {
+    let _delete = document.createElement('button');
+    _delete.innerHTML = 'delete';
+    this.el.appendChild(_delete);
+    _delete.onclick = this.handleDownloadClick;
+
+    return _delete;
+  }
+
   this.render = async () => {
     try {
       //Check if album is pinned
-      this.pinned = await ipfs.checkIfAlbumIsPinned();
+      this.pinned = await ipfs.checkIfAlbumIsPinned(this.data);
 
       //Create elements
       let songs = document.createElement('button');
@@ -87,12 +96,14 @@ function ActionBarAlbum(data) {
       this.el.appendChild(pin);
       this.el.appendChild(download);
 
-      //Add pin icon if applicable
-      if (this.pinned) this.appendPinIcon();
+      let _delete;
+      if (this.data.artist === app.artist) _delete = this.appendDelete(); //Add delete icon if applicable
+      if (this.pinned) this.appendPinIcon(); //Add pin icon if applicable
 
       //Add listeners
       pin.onclick = this.handlePinClick;
       download.onclick = this.handleDownloadClick;
+      _delete.onclick = this.handleDeleteClick;
 
       return this.el;
     }
