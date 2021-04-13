@@ -39,11 +39,55 @@ function ActionBarAlbum(data) {
     }
   }
 
+  this.handleDeleteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (this.el.querySelector('.actions-delete')) return; //Ignore if delete dialog already open
+
+    //Create elements
+    const container = document.createElement('div');
+    const message = document.createElement('p');
+    const yes = document.createElement('button');
+    const no = document.createElement('button');
+
+    //Add classes for styling
+    container.className = 'actions-delete';
+
+    //Add attributes and innerHTML
+    message.innerHTML = 'are you sure:'
+    yes.innerHTML = 'yes'
+    no.innerHTML = 'no'
+
+    //Build structure
+    this.el.appendChild(container);
+    container.appendChild(message);
+    container.appendChild(yes);
+    container.appendChild(no);
+
+    //Add listeners
+    yes.onclick = this.handleDeleteYes;
+    no.onclick = this.handleDeleteNo;
+  }
+
+  this.handleDeleteYes = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+  }
+
+  this.handleDeleteNo = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.el.querySelector('.actions-delete').remove();
+  }
+
   this.appendPinIcon = () => {
     const icon = document.createElement('div');
     icon.className = 'pin-icon';
     icon.innerHTML = this.pinIcon;
-    this.el.appendChild(icon);
+    this.el.querySelector('.actions-inner').appendChild(icon);
   }
 
   this.removePinIcon = () => {
@@ -66,10 +110,8 @@ function ActionBarAlbum(data) {
   this.appendDelete = () => {
     let _delete = document.createElement('button');
     _delete.innerHTML = 'delete';
-    this.el.appendChild(_delete);
-    _delete.onclick = this.handleDownloadClick;
-
-    return _delete;
+    this.el.querySelector('.actions-inner').appendChild(_delete);
+    _delete.onclick = this.handleDeleteClick;
   }
 
   this.render = async () => {
@@ -78,12 +120,14 @@ function ActionBarAlbum(data) {
       this.pinned = await ipfs.checkIfAlbumIsPinned(this.data);
 
       //Create elements
+      let inner = document.createElement('inner');
       let songs = document.createElement('button');
       let pin = document.createElement('button');
       let download = document.createElement('button');
 
       //Add classes for styling
       this.el.className = 'actions';
+      inner.className = 'actions-inner';
       pin.className = 'pin';
 
       //Add attributes and innerHTML
@@ -92,18 +136,17 @@ function ActionBarAlbum(data) {
       download.innerHTML = 'download';
 
       //Build structure
-      this.el.appendChild(songs);
-      this.el.appendChild(pin);
-      this.el.appendChild(download);
+      this.el.appendChild(inner);
+      inner.appendChild(songs);
+      inner.appendChild(pin);
+      inner.appendChild(download);
 
-      let _delete;
-      if (this.data.artist === app.artist) _delete = this.appendDelete(); //Add delete icon if applicable
+      if (this.data.artist === app.artist) this.appendDelete(); //Add delete icon if applicable
       if (this.pinned) this.appendPinIcon(); //Add pin icon if applicable
 
       //Add listeners
       pin.onclick = this.handlePinClick;
       download.onclick = this.handleDownloadClick;
-      _delete.onclick = this.handleDeleteClick;
 
       return this.el;
     }

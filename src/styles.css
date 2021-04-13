@@ -224,6 +224,11 @@ input[type=file] button {
 
 .album .actions {
   display: flex;
+  flex-direction: column;
+}
+
+.album .actions-inner {
+  display: flex;
   flex-direction: row;
   align-items: center;
   font-size: 10px;
@@ -232,9 +237,17 @@ input[type=file] button {
   height: 15px;
 }
 
-.album .actions button {
+.album .actions-inner button {
   padding: 0px;
   margin-right: 10px;
+}
+
+.album .actions-delete {
+  display: flex;
+  flex-direction: row;
+  font-size: 10px;
+  color: #C44;
+  margin-left: 25px;
 }
 
 .album .main .artist {
