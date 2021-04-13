@@ -67,8 +67,6 @@ function ActionBarSong(data) {
     _delete.innerHTML = 'delete';
     this.el.appendChild(_delete);
     _delete.onclick = this.handleDownloadClick;
-
-    return _delete;
   }
 
   this.removePinIcon = () => {
@@ -113,15 +111,13 @@ function ActionBarSong(data) {
       this.el.appendChild(pin);
       this.el.appendChild(download);
 
-      let _delete;
-      if (this.data.artist === app.artist) _delete = this.appendDelete(); //Add delete icon if applicable
+      if (this.data.artist === app.artist && !this.data.albumTitle) this.appendDelete(); //Add delete icon if applicable
       if (this.pinned) this.appendPinIcon(); //Add pin icon if applicable
 
       //Add listeners
       comments.onclick = this.handleCommentsClick;
       pin.onclick = this.handlePinClick;
       download.onclick = this.handleDownloadClick;
-      _delete.onclick = this.handleDeleteClick;
 
       return this.el;
     }

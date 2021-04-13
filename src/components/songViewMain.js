@@ -31,13 +31,19 @@ function SongViewMain(data, action) {
     this.render();
   }
 
+  this.appendActionBarDelete = () => {
+    let actionBarDelete = document.createElement('button');
+    actionBarDelete.innerHTML = 'delete';
+    actionBar.appendChild(actionBarDelete);
+    actionBarDelete.onclick = this.handleDeleteClick;
+  }
+
   this.render = () => {
     console.log(this.data)
     //Create elements
     let actionBar = document.createElement('div');
     let actionBarFiles = document.createElement('button');
     let actionBarComments = document.createElement('button');
-    let actionBarDelete = document.createElement('button');
 
     //Add classes for styling
     this.el.classList.add('song-view-main');
@@ -45,18 +51,18 @@ function SongViewMain(data, action) {
     //Add attributes and innerHTML
     actionBarFiles.innerHTML = 'files';
     actionBarComments.innerHTML = 'comments';
-    actionBarDelete.innerHTML = 'delete';
 
     //Build structure
     this.el.appendChild(actionBar);
     actionBar.appendChild(actionBarFiles);
     actionBar.appendChild(actionBarComments);
-    if (app.artist === this.data.artist) actionBar.appendChild(actionBarDelete);
+
+    //Append delete option if applicable
+    if (app.artist === this.data.artist && !this.data.albumTitle) this.appendActionBarDelete();
 
     //Add listeners
     actionBarFiles.onclick = this.handleFilesClick;
     actionBarComments.onclick = this.handleCommentsClick;
-    actionBarDelete.onclick = this.handleDeleteClick;
 
     switch (this.action) {
       case 'files':
