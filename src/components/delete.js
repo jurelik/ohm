@@ -17,19 +17,8 @@ function Delete(data) {
     e.stopPropagation();
 
     try {
-      const _res = await fetch(`${app.URL}/api/deletesong`, {
-        method: 'POST',
-        credentials: 'include', //Include cookie
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(this.data)
-      });
-
-      const res = await _res.json();
-      if (res.type === 'error') throw res.err;
-
-      if (await ipfs.checkIfSongIsPinned(this.data)) await ipfs.unpinSong(this.data);
+      log('Initiating delete..')
+      await io.deleteSong(this.data);
       log.success('Song successfully deleted.');
     }
     catch (err) {

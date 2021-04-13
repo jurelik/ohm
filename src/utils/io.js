@@ -94,8 +94,53 @@ const resumeUpload = async (transfer) => {
   }
 }
 
+const deleteSong = async (data) => {
+  try {
+    const _res = await fetch(`${app.URL}/api/deletesong`, {
+      method: 'POST',
+      credentials: 'include', //Include cookie
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    const res = await _res.json();
+    if (res.type === 'error') throw res.err;
+
+    if (await ipfs.checkIfSongIsPinned(data)) await ipfs.unpinSong(data);
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const deleteAlbum = async (data) => {
+  try {
+    return console.log(data);
+    const _res = await fetch(`${app.URL}/api/deletealbum`, {
+      method: 'POST',
+      credentials: 'include', //Include cookie
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    const res = await _res.json();
+    if (res.type === 'error') throw res.err;
+
+    //if (await ipfs.checkIfSongIsPinned(data)) await ipfs.unpinSong(data);
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   login,
   upload,
-  resumeUpload
+  resumeUpload,
+  deleteSong,
+  deleteAlbum
 }

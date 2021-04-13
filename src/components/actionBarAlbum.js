@@ -1,4 +1,5 @@
 const ipfs = require('../utils/ipfs');
+const io = require('../utils/io');
 const log = require('../utils/log');
 
 function ActionBarAlbum(data) {
@@ -74,6 +75,14 @@ function ActionBarAlbum(data) {
     e.preventDefault();
     e.stopPropagation();
 
+    try {
+      log('Initiating delete..');
+      await io.deleteAlbum(this.data);
+      log.success('Album successfully deleted.');
+    }
+    catch (err) {
+      log.error(err);
+    }
   }
 
   this.handleDeleteNo = (e) => {
