@@ -94,9 +94,9 @@ const resumeUpload = async (transfer) => {
   }
 }
 
-const deleteSong = async (data) => {
+const deleteItem = async (data) => {
   try {
-    const _res = await fetch(`${app.URL}/api/deletesong`, {
+    const _res = await fetch(`${app.URL}/api/delete`, {
       method: 'POST',
       credentials: 'include', //Include cookie
       headers: {
@@ -108,29 +108,8 @@ const deleteSong = async (data) => {
     const res = await _res.json();
     if (res.type === 'error') throw res.err;
 
-    if (await ipfs.checkIfSongIsPinned(data)) await ipfs.unpinSong(data);
-  }
-  catch (err) {
-    throw err;
-  }
-}
-
-const deleteAlbum = async (data) => {
-  try {
-    console.log(data);
-    const _res = await fetch(`${app.URL}/api/deletealbum`, {
-      method: 'POST',
-      credentials: 'include', //Include cookie
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-
-    const res = await _res.json();
-    if (res.type === 'error') throw res.err;
-
-    if (await ipfs.checkIfAlbumIsPinned(data)) await ipfs.unpinAlbum(data);
+    if (data.type === 'song' && await ipfs.checkIfSongIsPinned(data)) await ipfs.unpinSong(data);
+    if (data.type === 'album' && await ipfs.checkIfAlbumIsPinned(data)) await ipfs.unpinAlbum(data);
   }
   catch (err) {
     throw err;
@@ -141,6 +120,5 @@ module.exports = {
   login,
   upload,
   resumeUpload,
-  deleteSong,
-  deleteAlbum
+  deleteItem
 }

@@ -77,7 +77,7 @@ function ActionBarAlbum(data) {
 
     try {
       log('Initiating delete..');
-      await io.deleteAlbum(this.data);
+      await io.deleteItem(this.data);
       log.success('Album successfully deleted.');
     }
     catch (err) {

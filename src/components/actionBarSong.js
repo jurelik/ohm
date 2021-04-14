@@ -96,7 +96,7 @@ function ActionBarSong(data) {
 
     try {
       log('Initiating delete..');
-      await io.deleteSong(this.data);
+      await io.deleteItem(this.data);
       log.success('Song successfully deleted.');
     }
     catch (err) {
