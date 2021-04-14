@@ -348,6 +348,11 @@ input[type=file] button {
 
 .song .actions {
   display: flex;
+  flex-direction: column;
+}
+
+.song .actions-inner {
+  display: flex;
   flex-direction: row;
   align-items: center;
   font-size: 10px;
@@ -356,17 +361,25 @@ input[type=file] button {
   height: 15px;
 }
 
+.song .actions-inner button {
+  padding: 0px;
+  margin-right: 10px;
+}
+
+.song .actions-delete {
+  display: flex;
+  flex-direction: row;
+  font-size: 10px;
+  color: #C44;
+  margin-left: 25px;
+}
+
 .pin-icon {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: auto;
   margin-right: 5px;
-}
-
-.song .actions button {
-  padding: 0px;
-  margin-right: 10px;
 }
 
 .song-view-files {

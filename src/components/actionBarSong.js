@@ -1,6 +1,6 @@
 const ipfs = require('../utils/ipfs');
+const io = require('../utils/io');
 const log = require('../utils/log');
-const helpers = require('../utils/helpers');
 
 function ActionBarSong(data) {
   this.el = document.createElement('div');
@@ -13,10 +13,7 @@ function ActionBarSong(data) {
     e.preventDefault();
     e.stopPropagation();
 
-    if (app.current === 'song') {
-      app.views.songView.children.main.action = 'files';
-      return app.views.songView.children.main.render(); //Re-render the main area of the songView
-    }
+    if (app.current === 'song') return app.views.songView.children.main.reRender('files'); //Re-render the main area of the songView
 
     app.addToHistory('song', { song: this.data, action: 'files' });
     app.changeView('song', { song: this.data, action: 'files' });
@@ -26,10 +23,7 @@ function ActionBarSong(data) {
     e.preventDefault();
     e.stopPropagation();
 
-    if (app.current === 'song') {
-      app.views.songView.children.main.action = 'comments';
-      return app.views.songView.children.main.render(); //Re-render the main area of the songView
-    }
+    if (app.current === 'song') return app.views.songView.children.main.reRender('comments'); //Re-render the main area of the songView
 
     app.addToHistory('song', { song: this.data, action: 'comments' });
     app.changeView('song', { song: this.data, action: 'comments' });
@@ -69,21 +63,65 @@ function ActionBarSong(data) {
     e.preventDefault();
     e.stopPropagation();
 
-    app.addToHistory('song', { song: this.data, action: 'delete' });
-    app.changeView('song', { song: this.data, action: 'delete' });
+    if (this.el.querySelector('.actions-delete')) return; //Ignore if delete dialog already open
+
+    //Create elements
+    const container = document.createElement('div');
+    const message = document.createElement('p');
+    const yes = document.createElement('button');
+    const no = document.createElement('button');
+
+    //Add classes for styling
+    container.className = 'actions-delete';
+
+    //Add attributes and innerHTML
+    message.innerHTML = 'are you sure:'
+    yes.innerHTML = 'yes'
+    no.innerHTML = 'no'
+
+    //Build structure
+    this.el.appendChild(container);
+    container.appendChild(message);
+    container.appendChild(yes);
+    container.appendChild(no);
+
+    //Add listeners
+    yes.onclick = this.handleDeleteYes;
+    no.onclick = this.handleDeleteNo;
+  }
+
+  this.handleDeleteYes = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      log('Initiating delete..');
+      await io.deleteSong(this.data);
+      log.success('Song successfully deleted.');
+    }
+    catch (err) {
+      log.error(err);
+    }
+  }
+
+  this.handleDeleteNo = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.el.querySelector('.actions-delete').remove();
   }
 
   this.appendPinIcon = () => {
     const icon = document.createElement('div');
     icon.className = 'pin-icon';
     icon.innerHTML = this.pinIcon;
-    this.el.appendChild(icon);
+    this.el.querySelector('.actions-inner').appendChild(icon);
   }
 
   this.appendDelete = () => {
     let _delete = document.createElement('button');
     _delete.innerHTML = 'delete';
-    this.el.appendChild(_delete);
+    this.el.querySelector('.actions-inner').appendChild(_delete);
     _delete.onclick = this.handleDeleteClick;
   }
 
@@ -108,6 +146,7 @@ function ActionBarSong(data) {
       this.pinned = await ipfs.checkIfSongIsPinned(this.data); //Check if song is pinned
 
       //Create elements
+      let inner = document.createElement('inner');
       let files = document.createElement('button');
       let comments = document.createElement('button');
       let pin = document.createElement('button');
@@ -115,6 +154,7 @@ function ActionBarSong(data) {
 
       //Add classes for styling
       this.el.className = 'actions';
+      inner.className = 'actions-inner'
       pin.className = 'pin';
 
       //Add attributes and innerHTML
@@ -124,10 +164,11 @@ function ActionBarSong(data) {
       download.innerHTML = 'download';
 
       //Build structure
-      this.el.appendChild(files);
-      this.el.appendChild(comments);
-      this.el.appendChild(pin);
-      this.el.appendChild(download);
+      this.el.appendChild(inner);
+      inner.appendChild(files);
+      inner.appendChild(comments);
+      inner.appendChild(pin);
+      inner.appendChild(download);
 
       if (this.data.artist === app.artist && !this.data.albumTitle) this.appendDelete(); //Add delete icon if applicable
       if (this.pinned) this.appendPinIcon(); //Add pin icon if applicable
