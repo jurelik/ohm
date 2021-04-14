@@ -72,7 +72,7 @@ function Song(data, view) {
       this.el.classList.add('song');
       main.classList.add('main');
       artist.classList.add('artist');
-      titleAndArtist.classList.add('titleAndArtist');
+      titleAndArtist.classList.add('title-and-artist');
       tag.classList.add('tag');
       separator.classList.add('separator');
       playButton.className = 'play-button';

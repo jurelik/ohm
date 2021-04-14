@@ -209,76 +209,6 @@ input[type=file] button {
 }
 
 /* album element */
-.album {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 5px;
-}
-
-.album .main {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  cursor: pointer;
-}
-
-.album .actions {
-  display: flex;
-  flex-direction: column;
-}
-
-.album .actions-inner {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-size: 10px;
-  color: #888;
-  margin-left: 25px;
-  height: 15px;
-}
-
-.album .actions-inner button {
-  padding: 0px;
-  margin-right: 10px;
-}
-
-.album .actions-delete {
-  display: flex;
-  flex-direction: row;
-  font-size: 10px;
-  color: #C44;
-  margin-left: 25px;
-}
-
-.album .main .artist {
-  width: auto;
-  padding: 0px;
-}
-
-.album .main .titleAndArtist {
-  display: flex;
-  flex-direction: row;
-  align-content: flex-start;
-}
-
-.album .main .tag {
-  display: flex;
-  align-items: center;
-  font-size: 10px;
-  color: #888;
-  margin-left: auto;
-  margin-right: 5px;
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
-.album .main button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 25px;
-}
-
 .album .main .album-icon {
   display: flex;
   justify-content: center;
@@ -299,89 +229,6 @@ input[type=file] button {
 }
 
 /* song element */
-.song {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 5px;
-}
-
-.song .main {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  cursor: pointer;
-}
-
-.song .main .artist {
-  width: auto;
-  padding: 0px;
-}
-
-.song .main .titleAndArtist {
-  display: flex;
-  flex-direction: row;
-  align-content: flex-start;
-}
-
-.song .main .tag {
-  display: flex;
-  align-items: center;
-  font-size: 10px;
-  color: #888;
-  margin-left: auto;
-  margin-right: 5px;
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
-.song .main button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 25px;
-}
-
-.separator {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.song .actions {
-  display: flex;
-  flex-direction: column;
-}
-
-.song .actions-inner {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-size: 10px;
-  color: #888;
-  margin-left: 25px;
-  height: 15px;
-}
-
-.song .actions-inner button {
-  padding: 0px;
-  margin-right: 10px;
-}
-
-.song .actions-delete {
-  display: flex;
-  flex-direction: row;
-  font-size: 10px;
-  color: #C44;
-  margin-left: 25px;
-}
-
-.pin-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-  margin-right: 5px;
-}
-
 .song-view-files {
   height: 100%;
   overflow: auto;
@@ -390,11 +237,6 @@ input[type=file] button {
 .song-view-comments {
   height: calc(100% - 20px);
   overflow: auto;
-}
-
-.song-view-delete {
-  height: 100%;
-  border: 1px solid yellow;
 }
 
 .song-view-main {
@@ -447,6 +289,100 @@ input[type=file] button {
 .song-view-main .selected {
   text-decoration: underline;
   color: #eee;
+}
+
+/*song and album*/
+.song, .album {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+.song .main, .album .main {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  cursor: pointer;
+  height: 20px;
+}
+
+.song .main p, .album .main p {
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.song .main .artist, .album .main .artist {
+  width: auto;
+  padding: 0px;
+}
+
+.song .main button, .album .main button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+}
+
+.title-and-artist {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  align-content: stretch;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  color: #888;
+  margin-left: auto;
+  margin-right: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.separator {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.actions-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  font-size: 10px;
+  color: #888;
+  margin-left: 21px;
+  height: 20px;
+}
+
+.actions-inner button {
+  padding: 0 5px;
+}
+
+.actions-delete {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 10px;
+  color: #C44;
+  margin-left: 25px;
+  height: 20px;
+}
+
+.pin-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 5px;
 }
 
 .file input[type=checkbox] {
