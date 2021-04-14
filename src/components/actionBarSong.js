@@ -9,9 +9,27 @@ function ActionBarSong(data) {
 
   this.pinIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="598.5 258.5 183 183"><path fill="none" stroke="#BBB" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M720 350h0v30l45-45-45-45v30h-30m-30 30h0v-30l-45 45 45 45v-30h30m-30-30h60"/><path fill="none" d="M598.5 258.5h183v183h-183v-183z"/></svg></svg>'
 
+  this.handleFilesClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (app.current === 'song') {
+      app.views.songView.children.main.action = 'files';
+      return app.views.songView.children.main.render(); //Re-render the main area of the songView
+    }
+
+    app.addToHistory('song', { song: this.data, action: 'files' });
+    app.changeView('song', { song: this.data, action: 'files' });
+  }
+
   this.handleCommentsClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (app.current === 'song') {
+      app.views.songView.children.main.action = 'comments';
+      return app.views.songView.children.main.render(); //Re-render the main area of the songView
+    }
 
     app.addToHistory('song', { song: this.data, action: 'comments' });
     app.changeView('song', { song: this.data, action: 'comments' });
@@ -115,6 +133,7 @@ function ActionBarSong(data) {
       if (this.pinned) this.appendPinIcon(); //Add pin icon if applicable
 
       //Add listeners
+      files.onclick = this.handleFilesClick;
       comments.onclick = this.handleCommentsClick;
       pin.onclick = this.handlePinClick;
       download.onclick = this.handleDownloadClick;

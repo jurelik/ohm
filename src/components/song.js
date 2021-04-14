@@ -94,14 +94,9 @@ function Song(data, view) {
       main.appendChild(tag);
 
       //Add action bar
-      if (this.view === 'songView') {
-        //Do nothing
-      }
-      else {
-        let actionBar = new ActionBarSong(this.data);
-        this.children.actionBar = actionBar;
-        this.el.appendChild(await actionBar.render());
-      }
+      let actionBar = new ActionBarSong(this.data);
+      this.children.actionBar = actionBar;
+      this.el.appendChild(await actionBar.render());
 
       //Add listeners
       this.el.onclick = this.handleSongClick;

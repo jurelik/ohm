@@ -7,7 +7,8 @@ function SongView(data, action) {
   this.action = action;
   this.children = {
     song: null,
-    files: {}
+    files: {},
+    main: null
   };
 
   this.render = async () => {
@@ -15,7 +16,7 @@ function SongView(data, action) {
       //Create elements
       let action = this.action || 'files';
       let song = new Song(data, 'songView');
-      let main = new SongViewMain(data, action);
+      this.children.main = new SongViewMain(data, action);
 
       //Add classes for styling
       this.el.className = `song-view-${this.action}`;
@@ -24,7 +25,7 @@ function SongView(data, action) {
       this.children.song = song;
 
       this.el.appendChild(await song.render());
-      this.el.appendChild(main.render());
+      this.el.appendChild(this.children.main.render());
 
       app.content.appendChild(this.el);
       return this.el;
