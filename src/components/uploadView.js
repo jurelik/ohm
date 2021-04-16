@@ -61,7 +61,7 @@ function UploadView(data) {
       log('Beginning upload.')
       await io.upload(payload);
       log.success('Successfully uploaded.');
-      spinner.remove();
+      return this.reset();
     }
     catch (err) {
       log.error(err);
@@ -80,6 +80,16 @@ function UploadView(data) {
 
   this.display = () => {
     return app.content.appendChild(this.el);
+  }
+
+  this.reset = () => { //Reset state and re-render if applicable
+    this.el.innerHTML = '';
+    this.form.innerHTML = '';
+    this.children = [];
+    this.album = null;
+    this.fileCounter = 0;
+    this.songCounter = 0;
+    if (app.current === 'upload') this.render(); //Re-render view if still in uploadView
   }
 
   this.render = () => {
