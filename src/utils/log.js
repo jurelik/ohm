@@ -1,17 +1,7 @@
-const _log = (msg) => {
-  console.log(msg);
-}
-const success = (msg) => {
-  console.log(`✅ %c${msg}`, 'color: #00c30f;');
-}
-
-const error = (msg) => {
-  console.error(msg);
-}
-
-const warn = (msg) => {
-  console.warn(msg);
-}
+const _log = console.log.bind(window.console);
+const success = console.log.bind(window.console, '✅ %c%s', 'color:#00c30f');
+const error = console.error.bind(window.console);
+const warn = console.warn.bind(window.console);
 
 const log = module.exports = _log
 log.success = success;
