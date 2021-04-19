@@ -1,5 +1,6 @@
 const ipfs = require('../utils/ipfs');
 const log = require('../utils/log');
+const helpers = require('../utils/helpers');
 const Album = require('./album');
 const Song = require('./song');
 
@@ -32,6 +33,10 @@ function PinnedView(data) {
     catch (err) {
       log.error(err);
     }
+  }
+
+  this.removeItem = (payload) => {
+    helpers.removeItem(this.data[`${payload.type}s`], this.children, payload);
   }
 
   this.render = async () => {

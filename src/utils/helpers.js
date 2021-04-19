@@ -269,6 +269,33 @@ const fsCreateSongFolder = async (transfer, fsPath) => {
   }
 }
 
+const removeItem = (data, children, payload) => {
+  const _children = payload.type === 'song' ? children.songs : children.albums;
+
+  for (const id in _children) {
+    if (id === payload.id.toString()) {
+      children[`${payload.type}s`][id].el.remove();
+      delete children[id];
+      for (const item of data) if (item.type === payload.type && id === item.id.toString()) return data.splice(data.indexOf(item), 1); //Delete item from this.data of component
+      for (const item of app[`${payload.type}s`]) if (id === item.id.toString()) return data.splice(data.indexOf(item), 1); //Delete item from app.songs / app.albums
+    }
+  }
+  //if (data.type === 'song') {
+  //  const children = this.children.songs
+  //  for (let song in children) {
+  //    if (song === data.id.toString()) {
+  //      children[song].el.remove();
+  //      delete children[song];
+  //      for (let item of this.data) {
+  //        if (item.type === 'song' && item.id.toString() === song) {
+  //          this.data.splice(this.data.indexOf(item), 1);
+  //        }
+  //      }
+  //    }
+  //  }
+  //}
+}
+
 module.exports = {
   addSong,
   generateTransferId,
@@ -282,5 +309,6 @@ module.exports = {
   writeToDisk,
   pinItem,
   removePin,
-  childIsPlaying
+  childIsPlaying,
+  removeItem
 }

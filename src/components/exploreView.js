@@ -1,5 +1,6 @@
 const Song = require('./song');
 const Album = require('./album');
+const helpers = require('../utils/helpers');
 
 function ExploreView() {
   this.el = document.createElement('div');
@@ -26,20 +27,7 @@ function ExploreView() {
   }
 
   this.removeItem = (data) => {
-    if (data.type === 'song') {
-      const children = this.children.songs
-      for (let song in children) {
-        if (song === data.id.toString()) {
-          children[song].el.remove();
-          delete children[song];
-          for (let item of this.data) {
-            if (item.type === 'song' && item.id.toString() === song) {
-              this.data.splice(this.data.indexOf(item), 1);
-            }
-          }
-        }
-      }
-    }
+    helpers.removeItem(this.data, this.children, data);
   }
 
   this.render = async () => {

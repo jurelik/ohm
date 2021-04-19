@@ -104,6 +104,7 @@ function ActionBarSong(data) {
         app.addToHistory('explore');
         app.changeView('explore');
       }
+      else app.views[`${app.current}View`].removeItem(this.data);
     }
     catch (err) {
       log.error(err);
