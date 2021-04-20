@@ -46,12 +46,18 @@ function Transfer(data, unique) {
     }
   }
 
-  this.handleClear = (e) => {
+  this.handleClear = async (e) => {
     e.stopPropagation();
     e.preventDefault();
 
-    app.transfersStore.rm(this.unique);
-    return app.views.transfersView.removeTransfer(this.unique);
+    try {
+      await ipfs.clearTransfer(this.unique);
+
+    }
+    catch (err) {
+      console.error(err);
+    }
+
   }
 
   this.reRender = () => {
