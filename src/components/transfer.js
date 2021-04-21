@@ -35,10 +35,14 @@ function Transfer(data, unique) {
           log('Innitiating transfer..');
           this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
           await ipfs.resumeTransfer(this.unique);
+          break;
         case 'download':
           log('Innitiating transfer..');
           this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
           await ipfs.resumeTransfer(this.unique);
+          break;
+        default:
+          console.error('Unknown command.');
       }
     }
     catch (err) {
@@ -52,7 +56,6 @@ function Transfer(data, unique) {
 
     try {
       await ipfs.clearTransfer(this.unique);
-
     }
     catch (err) {
       console.error(err);

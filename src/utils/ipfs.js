@@ -124,11 +124,11 @@ const clearTransfer = async (unique) => {
   try {
     const transfer = app.transfersStore.getOne(unique);
     if (!transfer.completed) {
-      await helpers.removePin(transfer.cid); //Remove any data saved to IPFS
       if (transfer.active) { //Stop transfer if it is currently active
         transfer.controller.abort();
         clearTimeout(transfer.timeout);
       }
+      await helpers.garbageCollect(); //Remove any data saved to IPFS
     }
 
     app.transfersStore.rm(unique);

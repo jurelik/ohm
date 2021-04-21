@@ -182,6 +182,15 @@ const removePin = async (cid) => {
   }
 }
 
+const garbageCollect = async () => {
+  try {
+    for await (const res of app.ipfs.repo.gc()) continue;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 const childIsPlaying = (song, songs) => { //Check if a song within an album is playing
   for (let _song of songs) if (_song.id === song.id) return true;
   return false;
@@ -309,6 +318,7 @@ module.exports = {
   writeToDisk,
   pinItem,
   removePin,
+  garbageCollect,
   childIsPlaying,
   removeItem
 }
