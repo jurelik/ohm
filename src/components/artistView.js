@@ -1,6 +1,7 @@
 const { testArtist } = require('../testData');
 const Album = require('./album');
 const Song = require('./song');
+const { locationIcon } = require('../utils/svgs');
 
 function ArtistView(data) {
   this.el = document.createElement('div');
@@ -10,7 +11,6 @@ function ArtistView(data) {
     songs: {},
     albums: {}
   };
-  this.locationIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="599 269 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M690.5 435.5c-40-30-60-60-60-90 0-33.137 26.862-60 60-60h0c33.137 0 60 26.863 60 60h0c0 30-20 60-60 90m0-135c-24.854 0-45 20.147-45 45h0c0 24.854 20.146 45 45 45h0c24.853 0 45-20.146 45-45h0c0-24.853-20.147-45-45-45h0"/><path fill="none" d="M599 269h183v183H599V269z"/></svg>'
 
   this.fetch = () => {
     return new Promise(async (resolve, reject) => {
@@ -50,7 +50,7 @@ function ArtistView(data) {
       //Add attributes and innerHTML
       name.innerHTML = this.artist.name;
       bio.innerHTML = this.artist.bio;
-      locationDiv.innerHTML = this.locationIcon;
+      locationDiv.innerHTML = locationIcon;
       location.innerHTML = this.artist.location;
       albums.innerHTML = 'albums:';
       songs.innerHTML = 'songs:';

@@ -1,13 +1,12 @@
 const ipfs = require('../utils/ipfs');
 const io = require('../utils/io');
 const log = require('../utils/log');
+const { pinIcon } = require('../utils/svgs');
 
 function ActionBarAlbum(data) {
   this.el = document.createElement('div');
   this.data = data;
   this.pinned = false;
-
-  this.pinIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="598.5 258.5 183 183"><path fill="none" stroke="#BBB" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M720 350h0v30l45-45-45-45v30h-30m-30 30h0v-30l-45 45 45 45v-30h30m-30-30h60"/><path fill="none" d="M598.5 258.5h183v183h-183v-183z"/></svg></svg>'
 
   this.handlePinClick = async (e) => {
     e.preventDefault();
@@ -95,7 +94,7 @@ function ActionBarAlbum(data) {
   this.appendPinIcon = () => {
     const icon = document.createElement('div');
     icon.className = 'pin-icon';
-    icon.innerHTML = this.pinIcon;
+    icon.innerHTML = pinIcon;
     this.el.querySelector('.actions-inner').appendChild(icon);
   }
 

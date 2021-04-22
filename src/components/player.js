@@ -1,4 +1,5 @@
 const log = require('../utils/log');
+const { playIcon, pauseIcon, loadingIcon } = require('../utils/svgs');
 
 function Player() {
   this.el = document.querySelector('.player');
@@ -9,10 +10,6 @@ function Player() {
   this.queuePosition = 0;
   this.playing = false;
   this.loading = false;
-
-  this.playIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="408.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M443.75 255c-8.285 0-15 6.716-15 15h0v120c0 8.285 6.715 15 15 15h0l120-60c10-10 10-20 0-30h0l-120-60"/><path fill="none" d="M408.5 238.5h183v183h-183z"/></svg>';
-  this.pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="534.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M566 255h0v150h30V255h-30m120 0h0-30v150h30V255"/><path fill="none" d="M534.5 238.5h183v183h-183z"/></svg>'
-  this.loadingIcon = '<div class="spinner"></div>';
 
   //EVENT HANDLERS
   this.handleOnPlay = () => {
@@ -159,7 +156,7 @@ function Player() {
   this.triggerSpinner = () => {
     //Update main section
     this.loading = true;
-    this.el.querySelector('.main-play-button').innerHTML = this.loadingIcon;
+    this.el.querySelector('.main-play-button').innerHTML = loadingIcon;
 
     //Update remote songs & albums
     for (const song of app.songs) if (song.data.id === this.current.id && this.current.type === 'song') song.triggerSpinner();
@@ -176,7 +173,7 @@ function Player() {
     playButton.className = 'main-play-button';
 
     //Add attributes and innerHTML
-    playButton.innerHTML = this.playing ? this.pauseIcon : this.playIcon;
+    playButton.innerHTML = this.playing ? pauseIcon : playIcon;
     titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title || this.current.name}` : 'Load a song';
 
     //Add listeners

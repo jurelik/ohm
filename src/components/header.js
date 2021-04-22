@@ -1,11 +1,9 @@
 const ipfs = require('../utils/ipfs');
 const log = require('../utils/log');
+const { backIcon, forwardIcon, refreshIcon } = require('../utils/svgs');
 
 function Header() {
   this.el = document.querySelector('.header');
-  this.backIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="598.5 268.5 183 183"><path fill="none" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" d="M720 285h0l-60 75 60 75"/><path fill="none" stroke="none" d="M598.5 268.5h183v183h-183v-183z"/></svg>';
-  this.forwardIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="478.5 233.5 183 183"><path fill="none" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" d="M540 250h0l60 75-60 75"/><path fill="none" stroke="none" d="M478.5 233.5h183v183h-183v-183z"/></svg>';
-  this.refreshIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="598 269 183 183"><path fill="none" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" d="M751.321 298.679h0v42.427h-42.427m21.214-21.213c-23.432-23.432-61.422-23.432-84.854 0h0c-23.432 23.432-23.431 61.421 0 84.853h0c23.432 23.432 61.421 23.432 84.854 0h0m21.213-63.64h0l-21.213-21.213"/><path fill="none" d="M598 269h183v183H598V269z"/></svg></svg>'
   this.backButton = null;
   this.forwardButton = null;
 
@@ -104,9 +102,9 @@ function Header() {
     let test = document.createElement('button');
 
     //Add innerHTML
-    back.innerHTML = this.backIcon;
-    forward.innerHTML = this.forwardIcon;
-    refresh.innerHTML = this.refreshIcon;
+    back.innerHTML = backIcon;
+    forward.innerHTML = forwardIcon;
+    refresh.innerHTML = refreshIcon;
     upload.innerHTML = 'upload';
     test.innerHTML = 'test';
 

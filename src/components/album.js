@@ -1,5 +1,6 @@
 const ActionBarAlbum = require('./actionBarAlbum');
 const helpers = require('../utils/helpers');
+const { playIcon, pauseIcon, loadingIcon } = require('../utils/svgs');
 
 function Album(data) {
   this.el = document.createElement('div');
@@ -7,11 +8,6 @@ function Album(data) {
   this.children = {};
   this.playing = app.player.playing && helpers.childIsPlaying(app.player.current, this.data.songs);
   this.loading = false;
-
-  this.playIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="408.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M443.75 255c-8.285 0-15 6.716-15 15h0v120c0 8.285 6.715 15 15 15h0l120-60c10-10 10-20 0-30h0l-120-60"/><path fill="none" d="M408.5 238.5h183v183h-183z"/></svg>';
-  this.pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="534.5 238.5 183 183"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M566 255h0v150h30V255h-30m120 0h0-30v150h30V255"/><path fill="none" d="M534.5 238.5h183v183h-183z"/></svg>'
-  this.albumIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="538.5 238.5 183 183"><path fill="none" stroke="#EEE" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" d="M555 405h105V285h-90c-8.285 0-15 6.716-15 15h0v105m150-150h0-90c-8.285 0-15 6.716-15 15h0v15m60 90h45V255"/><path fill="none" d="M538.5 238.5h183v183h-183v-183z"/></svg></svg>';
-  this.loadingIcon = '<div class="spinner"></div>';
 
   this.handlePlayButton = (e) => {
     e.stopPropagation();
@@ -37,8 +33,8 @@ function Album(data) {
   }
 
   this.setPlayingState = (value) => {
-    if (value) this.el.querySelector('.play-button').innerHTML = this.pauseIcon;
-    else if (!value && (this.playing || this.loading)) this.el.querySelector('.play-button').innerHTML = this.playIcon;
+    if (value) this.el.querySelector('.play-button').innerHTML = pauseIcon;
+    else if (!value && (this.playing || this.loading)) this.el.querySelector('.play-button').innerHTML = playIcon;
 
     this.loading = false;
     this.playing = value;
@@ -46,7 +42,7 @@ function Album(data) {
 
   this.triggerSpinner = () => {
     this.loading = true;
-    this.el.querySelector('.play-button').innerHTML = this.loadingIcon;
+    this.el.querySelector('.play-button').innerHTML = loadingIcon;
   }
 
   this.getPosition = () => {
@@ -89,7 +85,7 @@ function Album(data) {
       separator.innerHTML = '•';
       title.innerHTML = this.data.title;
       tag.innerHTML = '#' + this.data.tags[0];
-      playButton.innerHTML = this.playing ? this.pauseIcon : this.playIcon;
+      playButton.innerHTML = this.playing ? pauseIcon : playIcon;
       albumIcon.innerHTML = this.albumIcon;
 
       //Build structure
