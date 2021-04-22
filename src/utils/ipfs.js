@@ -96,7 +96,7 @@ const resumeTransfer = async (unique) => {
 
     clearTimeout(transfer.timeout);
     app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
-    if (app.current === 'transfers' && app.views.transfers) app.views.transfersView.children[unique].reRender(); //Update transferView if applicable
+    if (app.current === 'transfers' && app.views.transfers) app.views.transfers.children[unique].reRender(); //Update transferView if applicable
     helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
 
     log.success('Transfer succesfully completed.');
@@ -132,7 +132,7 @@ const clearTransfer = async (unique) => {
     }
 
     app.transfersStore.rm(unique);
-    return app.views.transfersView.removeTransfer(unique);
+    return app.views.transfers.removeTransfer(unique);
   }
   catch (err) {
     throw err;
