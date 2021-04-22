@@ -46,7 +46,7 @@ function Files(data) {
       let file = new File(_file);
 
       //Add file child to app.songView for remote control
-      app.views.songView.children.files[_file.id] = file;
+      app.views.song.children.files[_file.id] = file;
 
       this.el.appendChild(file.render());
     }

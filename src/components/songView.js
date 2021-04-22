@@ -15,7 +15,7 @@ function SongView(data, action) {
     try {
       //Create elements
       let action = this.action || 'files';
-      let song = new Song(data, 'songView');
+      let song = new Song(data, 'song');
       this.children.main = new SongViewMain(data, action);
 
       //Add classes for styling

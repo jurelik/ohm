@@ -13,7 +13,7 @@ function ActionBarSong(data) {
     e.preventDefault();
     e.stopPropagation();
 
-    if (app.current === 'song') return app.views.songView.children.main.reRender('files'); //Re-render the main area of the songView
+    if (app.current === 'song') return app.views.song.children.main.reRender('files'); //Re-render the main area of the songView
 
     app.addToHistory('song', { song: this.data, action: 'files' });
     app.changeView('song', { song: this.data, action: 'files' });
@@ -23,7 +23,7 @@ function ActionBarSong(data) {
     e.preventDefault();
     e.stopPropagation();
 
-    if (app.current === 'song') return app.views.songView.children.main.reRender('comments'); //Re-render the main area of the songView
+    if (app.current === 'song') return app.views.song.children.main.reRender('comments'); //Re-render the main area of the songView
 
     app.addToHistory('song', { song: this.data, action: 'comments' });
     app.changeView('song', { song: this.data, action: 'comments' });
@@ -100,11 +100,11 @@ function ActionBarSong(data) {
       log.success('Song successfully deleted.');
 
       if (app.current === 'song') { //Navigate to explore if currently in songView
-        app.views.exploreView.removeItem(this.data);
+        app.views.explore.removeItem(this.data);
         app.addToHistory('explore');
         app.changeView('explore');
       }
-      else app.views[`${app.current}View`].removeItem(this.data);
+      else app.views[app.current].removeItem(this.data);
     }
     catch (err) {
       log.error(err);

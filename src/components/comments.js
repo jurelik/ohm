@@ -13,7 +13,7 @@ function Comments(data) {
     try {
       //Append data to payload
       payload.content = this.el.querySelector('textarea').value;
-      payload.songId = app.views.songView.data.id;
+      payload.songId = app.views.song.data.id;
 
       const _res = await fetch(`${app.URL}/api/comment`, {
         method: 'POST',

@@ -81,7 +81,7 @@ const resumeUpload = async (transfer) => {
     //Handle errors after this point differently as the song/album was already successfully uploaded by this point
     try {
       app.transfersStore.update(unique, { completed: true }); //Update status of transfer to completed
-      if (app.views.transfersView) app.views.transfersView.children[transfer.payload.unique].handleComplete(); //Update status of transfer to completed
+      if (app.views.transfers) app.views.transfers.children[transfer.payload.unique].handleComplete(); //Update status of transfer to completed
     }
     catch (err) {
       console.error(err);

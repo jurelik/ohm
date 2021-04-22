@@ -76,7 +76,7 @@ function ArtistView(data) {
 
       //Add songs
       for (let _song of this.artist.songs) {
-        let song = new Song(_song, 'artistView');
+        let song = new Song(_song, 'artist');
 
         //Add file child to app.songView for remote control
         this.children.songs[_song.id] = song;

@@ -25,13 +25,13 @@ function App() {
   this.player;
   this.header;
   this.views = {
-    exploreView: null,
-    songView: null,
-    albumView: null,
-    artistView: null,
-    uploadView: null,
-    pinnedView: null,
-    transfersView: null
+    explore: null,
+    song: null,
+    album: null,
+    artist: null,
+    upload: null,
+    pinned: null,
+    transfers: null
   }
   this.GATEWAY ='http://localhost:8080';
   this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://18.132.82.84:3000';
@@ -115,28 +115,28 @@ function App() {
 
       switch (view) {
         case 'explore':
-          if (!this.views.exploreView) this.views.exploreView = new ExploreView(); //Prevent unnecessary fetching of data from server
-          return await this.views.exploreView.render();
+          if (!this.views.explore) this.views.explore = new ExploreView(); //Prevent unnecessary fetching of data from server
+          return await this.views.explore.render();
         case 'song':
-          this.views.songView = new SongView(data.song, data.action);
-          return await this.views.songView.render();
+          this.views.song = new SongView(data.song, data.action);
+          return await this.views.song.render();
         case 'album':
-          this.views.albumView = new AlbumView(data.album);
-          return await this.views.albumView.render();
+          this.views.album = new AlbumView(data.album);
+          return await this.views.album.render();
         case 'artist':
-          if (!this.views.artistView || this.views.artistView.data !== data.artist) this.views.artistView = new ArtistView(data.artist); //Prevent unnecessary fetching of data from server
-          return await this.views.artistView.render();
+          if (!this.views.artist || this.views.artist.data !== data.artist) this.views.artist = new ArtistView(data.artist); //Prevent unnecessary fetching of data from server
+          return await this.views.artist.render();
         case 'upload':
-          if (this.views.uploadView) return this.views.uploadView.display(); //Prevent re-render to preserve input state etc.
+          if (this.views.upload) return this.views.upload.display(); //Prevent re-render to preserve input state etc.
 
-          this.views.uploadView = new UploadView();
-          return this.views.uploadView.render();
+          this.views.upload = new UploadView();
+          return this.views.upload.render();
         case 'pinned':
-          this.views.pinnedView = new PinnedView();
-          return await this.views.pinnedView.render();
+          this.views.pinned = new PinnedView();
+          return await this.views.pinned.render();
         case 'transfers':
-          this.views.transfersView = new TransfersView();
-          return await this.views.transfersView.render();
+          this.views.transfers = new TransfersView();
+          return await this.views.transfers.render();
         default:
           return this.content.innerHTML = view;
       }

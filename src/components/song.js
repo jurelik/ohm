@@ -16,12 +16,12 @@ function Song(data, view) {
     e.stopPropagation();
     if (this.loading) return; //Ignore action if we are currently loading a song/album
 
-    this.view === 'albumView' ? app.player.queueFiles(app.views.albumView.data, this.getPosition()) : app.player.queueFile(this.data);
+    this.view === 'album' ? app.player.queueFiles(app.views.album.data, this.getPosition()) : app.player.queueFile(this.data);
   }
 
   this.handleArtistButton = (e) => {
     e.stopPropagation();
-    if (this.view === 'artistView') return; //Prevent clicking artist forever
+    if (this.view === 'artist') return; //Prevent clicking artist forever
 
     app.addToHistory('artist', { artist: this.data.artist });
     app.changeView('artist', { artist: this.data.artist });
@@ -29,7 +29,7 @@ function Song(data, view) {
 
   this.handleSongClick = (e) => {
     e.stopPropagation();
-    if (view === 'songView') return; //Prevent clicking song forever
+    if (view === 'song') return; //Prevent clicking song forever
 
     app.addToHistory('song', { song: this.data, action: 'files' });
     app.changeView('song', { song: this.data, action: 'files' });
@@ -49,7 +49,7 @@ function Song(data, view) {
   }
 
   this.getPosition = () => {
-    return app.views.albumView.data.songs.indexOf(this.data);
+    return app.views.album.data.songs.indexOf(this.data);
   }
 
   this.reRender = () => {

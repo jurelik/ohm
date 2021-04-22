@@ -77,6 +77,15 @@ function Header() {
     }
   }
 
+  this.handleRefresh = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    console.log(app.views);
+    console.log(app.current);
+
+  }
+
   this.handleTest = async () => {
     log(app.current)
   }
@@ -90,6 +99,7 @@ function Header() {
     //Create elements
     let back = document.createElement('button');
     let forward = document.createElement('button');
+    let refresh = document.createElement('button');
     let right = document.createElement('div');
     let upload = document.createElement('button');
     let test = document.createElement('button');
@@ -97,6 +107,7 @@ function Header() {
     //Add innerHTML
     back.innerHTML = this.backIcon;
     forward.innerHTML = this.forwardIcon;
+    refresh.innerHTML = 'refresh';
     upload.innerHTML = 'upload';
     test.innerHTML = 'test';
 
@@ -108,6 +119,7 @@ function Header() {
     //Add listeners
     back.onclick = this.handleBack;
     forward.onclick = this.handleForward;
+    refresh.onclick = this.handleRefresh;
     upload.onclick = this.handleUpload;
     test.onclick = this.handleTest;
 
@@ -117,6 +129,7 @@ function Header() {
 
     this.el.appendChild(back);
     this.el.appendChild(forward);
+    this.el.appendChild(refresh);
     this.el.appendChild(right);
     right.appendChild(upload);
     right.appendChild(test);

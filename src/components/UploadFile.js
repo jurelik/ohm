@@ -10,8 +10,8 @@ function UploadFile(data) {
   this.file = null;
 
   //Add unique id to file and increase fileCounter
-  this.unique = app.views.uploadView.fileCounter;
-  app.views.uploadView.fileCounter++;
+  this.unique = app.views.upload.fileCounter;
+  app.views.upload.fileCounter++;
 
   this.handleTypeChange = (e) => {
     e.stopPropagation();

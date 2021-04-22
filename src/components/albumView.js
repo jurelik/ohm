@@ -34,7 +34,7 @@ function AlbumView(data, action) {
 
       for (let _song of this.data.songs) {
         _song.albumTitle = this.data.title; // Include album title in song data
-        let song = new Song(_song, 'albumView');
+        let song = new Song(_song, 'album');
 
         //Add file child to app.songView for remote control
         this.children.songs[_song.id] = song;

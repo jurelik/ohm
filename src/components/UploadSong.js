@@ -6,8 +6,8 @@ function UploadSong(data) {
   this.children = [];
 
   //Add unique id to file and increase songCounter
-  this.unique = app.views.uploadView.songCounter;
-  app.views.uploadView.songCounter++;
+  this.unique = app.views.upload.songCounter;
+  app.views.upload.songCounter++;
 
   this.handleAddFile = (e) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ function UploadSong(data) {
     e.preventDefault();
     e.stopPropagation();
 
-    return app.views.uploadView.handleRemoveSong(this.unique);
+    return app.views.upload.handleRemoveSong(this.unique);
   }
 
   this.handleRemoveFile = (unique) => {
