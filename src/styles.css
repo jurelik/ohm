@@ -22,10 +22,6 @@ body {
   background-color: #222;
 }
 
-p {
-  margin: 5px 0px;
-}
-
 button {
   font-family: inherit;
   font-size: inherit;
@@ -182,21 +178,16 @@ input[type=file] button {
   align-items: flex-start;
   width: 140px;
   padding-left: 5px;
-  padding-top: 5px;
+  padding-top: 2px;
   color: #888;
 }
 
 .nav button {
-  margin-bottom: 5px;
+  height: 20px;
 }
 
 .nav .selected {
   color: #eee;
-}
-
-.vertical-line {
-  border-left: 2px solid #888;
-  height: 100%;
 }
 
 .content {
@@ -206,6 +197,7 @@ input[type=file] button {
   margin-bottom: 50px;
   padding-left: 5px;
   padding-right: 10px;
+  padding-top: 2px;
 }
 
 .player {
@@ -326,6 +318,7 @@ input[type=file] button {
   align-items: stretch;
   cursor: pointer;
   height: 20px;
+  padding-top: 0;
 }
 
 .song .main p, .album .main p {
