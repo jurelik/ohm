@@ -81,9 +81,7 @@ function Header() {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log(app.views);
-    console.log(app.current);
-
+    if (app.views[app.current].refresh) app.views[app.current].refresh();
   }
 
   this.handleTest = async () => {
