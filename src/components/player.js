@@ -1,5 +1,5 @@
 const log = require('../utils/log');
-const { playIcon, pauseIcon, loadingIcon } = require('../utils/svgs');
+const { playIconBig, pauseIconBig, loadingIcon } = require('../utils/svgs');
 
 function Player() {
   this.el = document.querySelector('.player');
@@ -173,7 +173,7 @@ function Player() {
     playButton.className = 'main-play-button';
 
     //Add attributes and innerHTML
-    playButton.innerHTML = this.playing ? pauseIcon : playIcon;
+    playButton.innerHTML = this.playing ? pauseIconBig : playIconBig;
     titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title || this.current.name}` : 'Load a song';
 
     //Add listeners
