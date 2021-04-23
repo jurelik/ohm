@@ -1,6 +1,6 @@
 const ActionBarAlbum = require('./actionBarAlbum');
 const helpers = require('../utils/helpers');
-const { playIcon, pauseIcon, loadingIcon } = require('../utils/svgs');
+const { playIcon, pauseIcon, albumIcon, loadingIcon } = require('../utils/svgs');
 
 function Album(data) {
   this.el = document.createElement('div');
@@ -68,7 +68,7 @@ function Album(data) {
       let title = document.createElement('p');
       let tag = document.createElement('p');
       let playButton = document.createElement('button');
-      let albumIcon = document.createElement('div');
+      let _albumIcon = document.createElement('div');
 
       //Add classes for styling
       this.el.classList.add('album');
@@ -78,7 +78,7 @@ function Album(data) {
       separator.classList.add('separator');
       tag.classList.add('tag');
       playButton.className = 'play-button';
-      albumIcon.classList.add('album-icon');
+      _albumIcon.classList.add('album-icon');
 
       //Add attributes and innerHTML
       artist.innerHTML = this.data.artist;
@@ -86,13 +86,13 @@ function Album(data) {
       title.innerHTML = this.data.title;
       tag.innerHTML = '#' + this.data.tags[0];
       playButton.innerHTML = this.playing ? pauseIcon : playIcon;
-      albumIcon.innerHTML = this.albumIcon;
+      _albumIcon.innerHTML = albumIcon;
 
       //Build structure
       this.el.appendChild(main);
       main.appendChild(playButton);
       main.appendChild(titleAndArtist);
-      main.appendChild(albumIcon);
+      main.appendChild(_albumIcon);
       titleAndArtist.appendChild(artist);
       titleAndArtist.appendChild(separator);
       titleAndArtist.appendChild(title);

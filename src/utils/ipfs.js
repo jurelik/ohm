@@ -145,7 +145,7 @@ const checkIfSongIsPinned = async (data) => {
       if (await artistExists(data.artist) === false) return false; //Check if artist folder exists
       if (await albumExists(data) === false) return false; //Check if album folder exists
 
-      const cid = await songInAlbumExists(data, data.albumTitle); //Get song CID
+      const cid = await songInAlbumExists(data); //Get song CID
       if (!cid || cid !== data.cid) return false; //Check if CID matches
     }
     else {
@@ -257,9 +257,9 @@ const albumExists = async (data) => {
   }
 }
 
-const songInAlbumExists = async (data, albumTitle) => {
+const songInAlbumExists = async (data) => {
   try {
-    for await (const file of app.ipfs.files.ls(`/${data.artist}/albums/${albumTitle}/`)) {
+    for await (const file of app.ipfs.files.ls(`/${data.artist}/albums/${data.albumTitle}/`)) {
       if (file.name === data.title && file.type === 'directory') return file.cid.string;
     }
     return false;

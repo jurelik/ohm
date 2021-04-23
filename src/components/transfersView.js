@@ -23,29 +23,25 @@ function TransfersView(data) {
     this.transfers = app.transfersStore.get(); //Update state
   }
 
-  this.render = async () => {
-    try {
-      //Create elements
+  this.refresh = () => {
+    this.render();
+  }
 
-      //Add classes for styling
-      this.el.className = 'transfers-view';
+  this.render = () => {
+    this.el.innerHTML = '' //Reset innerHTML
+    //Add classes for styling
+    this.el.className = 'transfers-view';
 
-      //Add attributes and innerHTML
-
-      //Append transfers
-      this.transfers = app.transfersStore.get();
-      for (let unique in this.transfers) {
-        let transfer = new Transfer(this.transfers[unique], unique);
-        this.children[unique] = transfer;
-        this.el.appendChild(transfer.render());
-      }
-
-      app.content.appendChild(this.el);
-      return this.el;
+    //Append transfers
+    this.transfers = app.transfersStore.get();
+    for (let unique in this.transfers) {
+      let transfer = new Transfer(this.transfers[unique], unique);
+      this.children[unique] = transfer;
+      this.el.appendChild(transfer.render());
     }
-    catch (err) {
-      console.error(err);
-    }
+
+    app.content.appendChild(this.el);
+    return this.el;
   }
 }
 

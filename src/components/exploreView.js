@@ -45,9 +45,7 @@ function ExploreView() {
       this.el.innerHTML = ''; //Reset innerHTML
 
       //Fetch data from server on first render
-      if (!this.data) {
-        this.data = await this.fetch();
-      }
+      if (!this.data) this.data = await this.fetch();
 
       this.children = {
         songs: {},

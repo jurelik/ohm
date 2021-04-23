@@ -6,7 +6,7 @@ const Song = require('./song');
 
 function PinnedView(data) {
   this.el = document.createElement('div');
-  this.data = data;
+  this.data = null;
   this.children = {
     songs: {},
     albums: {}
@@ -39,10 +39,21 @@ function PinnedView(data) {
     helpers.removeItem(this.data[`${payload.type}s`], this.children, payload);
   }
 
+  this.refresh = async () => {
+    try {
+      this.data = null;
+      await this.render();
+    }
+    catch (err) {
+      log.error(err);
+    }
+  }
+
   this.render = async () => {
     try {
-      //Get data
-      this.data = await this.init();
+      this.el.innerHTML = ''; //Reset innerHTML
+      log(this.data)
+      if (!this.data) this.data = await this.init(); //Get data
 
       //Create elements
       let albums = document.createElement('p');

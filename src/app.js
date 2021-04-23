@@ -116,7 +116,6 @@ function App() {
     }
   }
 
-
   this.changeView = async (view, data) => {
     try {
       this.content.innerHTML = '';
@@ -145,7 +144,7 @@ function App() {
           this.views.upload = new UploadView();
           return this.views.upload.render();
         case 'pinned':
-          this.views.pinned = new PinnedView();
+          if (!this.views.pinned) this.views.pinned = new PinnedView(); //Prevent unnecessary fetching of data from server
           return await this.views.pinned.render();
         case 'transfers':
           this.views.transfers = new TransfersView();
@@ -178,6 +177,27 @@ function App() {
 
     for (let unique in transfers) {
       transfers[unique].active = false; //All transfers are paused on app open - ADD OPTION TO DISABLE THIS
+    }
+  }
+
+  this.changePassword = async (_old, _new) => {
+    try {
+      const _res = await fetch(`${app.URL}/api/changepassword`, {
+        method: 'POST',
+        credentials: 'include', //Include cookie
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ old: _old, new: _new })
+      });
+
+      const res = await _res.json();
+      if (res.type === 'error') throw res.err;
+
+      log.success('Password successfully changed.');
+    }
+    catch (err) {
+      log.error(err);
     }
   }
 

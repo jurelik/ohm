@@ -11,9 +11,19 @@ function AlbumView(data, action) {
   };
   this.state = {};
 
+  this.refresh = async () => {
+    try {
+      await this.render();
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
 
   this.render = async () => {
     try {
+      this.el.innerHTML = '' //Reset innerHTML
+
       //Create elements
       let album = new Album(this.data, true);
       let description = document.createElement('div');

@@ -11,8 +11,19 @@ function SongView(data, action) {
     main: null
   };
 
+  this.refresh = async () => {
+    try {
+      await this.render();
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
+
   this.render = async () => {
     try {
+      this.el.innerHTML = '' //Reset innerHTML
+
       //Create elements
       let action = this.action || 'files';
       let song = new Song(data, 'song');
