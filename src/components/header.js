@@ -84,7 +84,7 @@ function Header() {
   }
 
   this.handleTest = async () => {
-    log(app.current)
+    app.logout();
   }
 
   this.handleUpload = () => {

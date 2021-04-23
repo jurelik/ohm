@@ -63,9 +63,16 @@ function App() {
     }
   }
 
+  this.logout = async () => {
+    this.root.innerHTML = '';
+    const login = new LoginView();
+    await this.ipfs.stop();
+    login.render();
+  }
+
   this.init = () => {
     //Init an ipfs daemon & create an ipfs node
-    ipcRenderer.on('daemon-ready', async (e, userDataPath) => {
+    ipcRenderer.once('daemon-ready', async (e, userDataPath) => {
       log.success('IPFS daemon initiated.');
       try {
         this.ipfs = createClient();
@@ -93,7 +100,6 @@ function App() {
         this.addToHistory('explore');
         this.historyIndex = 0;
         this.header.backButton.className = 'disabled';
-
       }
       catch (err) {
         log.error(err);
@@ -195,6 +201,7 @@ function App() {
       if (res.type === 'error') throw res.err;
 
       log.success('Password successfully changed.');
+      this.logout();
     }
     catch (err) {
       log.error(err);
@@ -203,7 +210,7 @@ function App() {
 
   this.buildHTML = () => {
     //Build HTML skeleton
-    document.querySelector('.root').innerHTML = `
+    this.root.innerHTML = `
     <div class="drag">
     </div>
     <div class="header">

@@ -73,6 +73,7 @@ const spawnDaemon = (event) => {
 
   daemon.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
+    daemon = null;
   });
 
   daemon.on('error', (err) => {
