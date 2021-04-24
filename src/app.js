@@ -64,10 +64,19 @@ function App() {
   }
 
   this.logout = async () => {
-    this.root.innerHTML = '';
-    const login = new LoginView();
-    await this.ipfs.stop();
-    login.render();
+    try {
+      const _res = await fetch(`${app.URL}/api/logout`); //Logout server-side
+      const res = await _res.json();
+      if (res.type === 'error') throw new Error(err);
+
+      this.root.innerHTML = '';
+      const login = new LoginView();
+      await this.ipfs.stop();
+      login.render();
+    }
+    catch (err) {
+      log.error(err);
+    }
   }
 
   this.init = () => {
