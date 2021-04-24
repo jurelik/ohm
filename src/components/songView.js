@@ -13,6 +13,19 @@ function SongView(data, action) {
 
   this.refresh = async () => {
     try {
+      const _res = await fetch(`${app.URL}/api/song/${this.data.id}`);
+      const res = await _res.json();
+      if (res.type === 'error') throw new Error(res.err);
+
+      //Re-initialize state
+      this.data = res.payload;
+      this.children = {
+        song: null,
+        files: {},
+        main: null
+      }
+      app.songs = []; //Remove old song from global app.songs
+
       await this.render();
     }
     catch (err) {
@@ -26,8 +39,8 @@ function SongView(data, action) {
 
       //Create elements
       let action = this.action || 'files';
-      let song = new Song(data, 'song');
-      this.children.main = new SongViewMain(data, action);
+      let song = new Song(this.data, 'song');
+      this.children.main = new SongViewMain(this.data, action);
 
       //Add classes for styling
       this.el.className = `song-view-${this.action}`;

@@ -52,7 +52,6 @@ function PinnedView(data) {
   this.render = async () => {
     try {
       this.el.innerHTML = ''; //Reset innerHTML
-      log(this.data)
       if (!this.data) this.data = await this.init(); //Get data
 
       //Create elements
