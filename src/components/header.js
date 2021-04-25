@@ -83,26 +83,36 @@ function Header() {
     if (app.views[app.current].refresh) app.views[app.current].refresh();
   }
 
+  this.handleReader = async (reader) => {
+    try {
+      const { done, value } = await reader.read();
+      if (done) return 'done';
+
+      var msg = new TextDecoder().decode(value);
+      log(msg);
+      return await this.handleReader(reader);
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
   this.handleTest = async () => {
-    //app.logout();
     try {
       const _res = await fetch(`${app.URL}/test`);
       const reader = _res.body.getReader();
-      reader.read().then(function processText({ done, value }) {
-          // Result objects contain two properties:
-          // done  - true if the stream has already given you all its data.
-          // value - some data. Always undefined when done is true.
-          if (done) {
-            console.log("Stream complete");
-            return;
-          }
+      const msg = await this.handleReader(reader);
+      log.success(msg)
+      //reader.read().then(function processText({ done, value }) {
+      //  if (done) {
+      //    console.log("Stream complete");
+      //    return;
+      //  }
 
-          // value for fetch streams is a Uint8Array
-          // Read some more, and call this function again
-          var string = new TextDecoder().decode(value);
-          console.log(string)
-          return reader.read().then(processText);
-        });
+      //  var string = new TextDecoder().decode(value);
+      //  console.log(string)
+      //  return reader.read().then(processText);
+      //});
     }
     catch (err) {
       log.error(err)

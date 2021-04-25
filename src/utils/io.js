@@ -23,6 +23,20 @@ const login = async (payload) => {
   }
 }
 
+const handleReader = async (reader, previous) => {
+  try {
+    const { done, value } = await reader.read();
+    var msg = new TextDecoder().decode(value);
+    if (done) return JSON.parse(previous);
+
+    log(msg);
+    return await handleReader(reader, msg);
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 const upload = async (payload) => {
   let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
 
@@ -42,8 +56,9 @@ const upload = async (payload) => {
       },
       body: JSON.stringify(payload)
     });
+    const reader = _res.body.getReader();
+    const res = await handleReader(reader);
 
-    const res = await _res.json();
     if (res.type === 'error') throw res.err;
   }
   catch (err) {
