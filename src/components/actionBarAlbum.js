@@ -78,6 +78,13 @@ function ActionBarAlbum(data) {
       log('Initiating delete..');
       await io.deleteItem(this.data);
       log.success('Album successfully deleted.');
+
+      if (app.current === 'album') { //Navigate to explore if currently in songView
+        app.views.explore.removeItem(this.data);
+        app.addToHistory('explore');
+        app.changeView('explore');
+      }
+      else app.views[app.current].removeItem(this.data);
     }
     catch (err) {
       log.error(err);

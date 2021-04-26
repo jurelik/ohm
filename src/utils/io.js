@@ -1,4 +1,5 @@
 const ipfs = require('../utils/ipfs');
+const helpers = require('../utils/helpers');
 const log = require('../utils/log');
 
 const login = async (payload) => {
@@ -17,20 +18,6 @@ const login = async (payload) => {
     if (res.type === 'error') throw res.err;
 
     app.artist = res.session.artist; //Set global artist value
-  }
-  catch (err) {
-    throw err;
-  }
-}
-
-const handleReader = async (reader, previous) => {
-  try {
-    const { done, value } = await reader.read();
-    var msg = new TextDecoder().decode(value);
-    if (done) return JSON.parse(previous);
-
-    log(msg);
-    return await handleReader(reader, msg);
   }
   catch (err) {
     throw err;
@@ -57,7 +44,7 @@ const upload = async (payload) => {
       body: JSON.stringify(payload)
     });
     const reader = _res.body.getReader();
-    const res = await handleReader(reader);
+    const res = await helpers.handleReader(reader);
 
     if (res.type === 'error') throw res.err;
   }
