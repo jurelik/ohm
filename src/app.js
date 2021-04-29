@@ -187,6 +187,12 @@ function App() {
     });
   }
 
+  this.removeLastFromHistory = () => {
+    app.history.pop(); //Remove current screen from history
+    app.historyIndex--; //Move the history index one number back
+    if (app.historyIndex === 0) app.header.backButton.className = 'disabled'; //Disable back button if we are on last index
+  }
+
   this.initTransfers = () => {
     const transfers = this.transfersStore.get();
 

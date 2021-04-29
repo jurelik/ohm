@@ -100,7 +100,9 @@ function ActionBarSong(data) {
 
       if (app.current === 'song') { //Navigate to explore if currently in songView
         app.views.explore.removeItem(this.data);
-        app.addToHistory('explore');
+        app.removeLastFromHistory();
+
+        if (app.history[app.history.length - 1].type !== 'explore') app.addToHistory('explore'); //Add explore view to history if it wasn't the previous screen
         app.changeView('explore');
       }
       else app.views[app.current].removeItem(this.data);
