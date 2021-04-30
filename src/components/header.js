@@ -99,20 +99,7 @@ function Header() {
 
   this.handleTest = async () => {
     try {
-      const _res = await fetch(`${app.URL}/test`);
-      const reader = _res.body.getReader();
-      const msg = await this.handleReader(reader);
-      log.success(msg)
-      //reader.read().then(function processText({ done, value }) {
-      //  if (done) {
-      //    console.log("Stream complete");
-      //    return;
-      //  }
-
-      //  var string = new TextDecoder().decode(value);
-      //  console.log(string)
-      //  return reader.read().then(processText);
-      //});
+      const _res = await fetch(`${app.URL}/api/logout`);
     }
     catch (err) {
       log.error(err)

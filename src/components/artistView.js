@@ -28,6 +28,22 @@ function ArtistView(data) {
     });
   }
 
+  this.handleFollow = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    try {
+      const _res = await fetch(`${app.URL}/api/follow/${this.artist.id}`);
+      const res = await _res.json();
+      if (res.type === 'error') throw new Error(res.err);
+      console.log(res)
+    }
+    catch (err) {
+      console.error(err);
+    }
+
+  }
+
   this.refresh = async () => {
     try {
       this.artist = null;
@@ -46,6 +62,7 @@ function ArtistView(data) {
 
       //Create elements
       let name = document.createElement('p');
+      let follow = document.createElement('button');
       let bio = document.createElement('p');
       let locationDiv = document.createElement('div');
       let location = document.createElement('p');
@@ -59,6 +76,7 @@ function ArtistView(data) {
 
       //Add attributes and innerHTML
       name.innerHTML = this.artist.name;
+      follow.innerHTML = 'follow';
       bio.innerHTML = this.artist.bio;
       locationDiv.innerHTML = locationIcon;
       location.innerHTML = this.artist.location;
@@ -67,6 +85,7 @@ function ArtistView(data) {
 
       //Build structure
       this.el.appendChild(name);
+      this.el.appendChild(follow);
       this.el.appendChild(locationDiv);
       locationDiv.appendChild(location);
       this.el.appendChild(bio);
@@ -95,6 +114,7 @@ function ArtistView(data) {
       }
 
       //Add listeners
+      follow.onclick = this.handleFollow;
 
       return app.content.appendChild(this.el);
     }
