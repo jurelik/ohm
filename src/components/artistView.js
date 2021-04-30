@@ -20,6 +20,7 @@ function ArtistView(data) {
 
         if (res.type === 'error') return reject(res.err);
 
+        console.log(res.payload)
         resolve(res.payload);
       }
       catch (err) {
@@ -33,15 +34,21 @@ function ArtistView(data) {
     e.preventDefault();
 
     try {
-      const _res = await fetch(`${app.URL}/api/follow/${this.artist.id}`);
+      const following = this.artist.following;
+      let _res;
+
+      if (following) _res = await fetch(`${app.URL}/api/unfollow/${this.artist.id}`);
+      else _res = await fetch(`${app.URL}/api/follow/${this.artist.id}`);
+
       const res = await _res.json();
       if (res.type === 'error') throw new Error(res.err);
-      console.log(res)
+
+      this.artist.following = !following;
+      this.el.querySelector('.follow').innerHTML = this.artist.following ? 'following' : 'follow';
     }
     catch (err) {
       console.error(err);
     }
-
   }
 
   this.refresh = async () => {
@@ -71,12 +78,13 @@ function ArtistView(data) {
 
       //Add classes for styling
       this.el.className = 'artist';
+      follow.className = 'follow';
       locationDiv.className = 'location-div';
       bio.className = 'bio';
 
       //Add attributes and innerHTML
       name.innerHTML = this.artist.name;
-      follow.innerHTML = 'follow';
+      follow.innerHTML = this.artist.following ? 'following': 'follow';
       bio.innerHTML = this.artist.bio;
       locationDiv.innerHTML = locationIcon;
       location.innerHTML = this.artist.location;
