@@ -44,7 +44,12 @@ function ArtistView(data) {
       if (res.type === 'error') throw new Error(res.err);
 
       this.artist.following = !following;
-      this.el.querySelector('.follow').innerHTML = this.artist.following ? 'following' : 'follow';
+
+      //Update DOM
+      const button = this.el.querySelector('.follow');
+      button.innerHTML = this.artist.following ? 'following' : 'follow';
+      if (!this.artist.following) button.classList.remove('following');
+      else button.classList.add('following');
     }
     catch (err) {
       console.error(err);
@@ -68,7 +73,8 @@ function ArtistView(data) {
       if (!this.artist) this.artist = await this.fetch();
 
       //Create elements
-      let name = document.createElement('p');
+      let nameAndFollow = document.createElement('div');
+      let name = document.createElement('div');
       let follow = document.createElement('button');
       let bio = document.createElement('p');
       let locationDiv = document.createElement('div');
@@ -78,7 +84,9 @@ function ArtistView(data) {
 
       //Add classes for styling
       this.el.className = 'artist';
-      follow.className = 'follow';
+      nameAndFollow.className = 'name-and-follow';
+      follow.classList.add('follow');
+      if (this.artist.following) follow.classList.add('following');
       locationDiv.className = 'location-div';
       bio.className = 'bio';
 
@@ -92,8 +100,9 @@ function ArtistView(data) {
       songs.innerHTML = 'songs:';
 
       //Build structure
-      this.el.appendChild(name);
-      this.el.appendChild(follow);
+      this.el.appendChild(nameAndFollow);
+      nameAndFollow.appendChild(name);
+      nameAndFollow.appendChild(follow);
       this.el.appendChild(locationDiv);
       locationDiv.appendChild(location);
       this.el.appendChild(bio);

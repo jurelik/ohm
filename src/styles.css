@@ -404,6 +404,24 @@ input[type=file] button {
   cursor: pointer;
 }
 
+.artist .name-and-follow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.artist .name-and-follow button {
+  border: 1.5px solid #eee;
+  border-radius: 4px;
+  margin-left: 10px;
+}
+
+.artist .name-and-follow .following {
+  background-color: #eee;
+  color: #222;
+}
+
 .artist .bio {
   color: #888;
   margin-bottom: 20px;
