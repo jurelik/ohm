@@ -19,8 +19,6 @@ function ArtistView(data) {
         const res = await _res.json();
 
         if (res.type === 'error') return reject(res.err);
-
-        console.log(res.payload)
         resolve(res.payload);
       }
       catch (err) {

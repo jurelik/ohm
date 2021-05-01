@@ -286,7 +286,6 @@ const removeItem = (data, children, payload) => {
       children[`${payload.type}s`][id].el.remove();
       delete children[id];
       for (const item of data) if (item.type === payload.type && id === item.id.toString()) return data.splice(data.indexOf(item), 1); //Delete item from this.data of component
-      for (const item of app[`${payload.type}s`]) if (id === item.id.toString()) return data.splice(data.indexOf(item), 1); //Delete item from app.songs / app.albums
     }
   }
 }

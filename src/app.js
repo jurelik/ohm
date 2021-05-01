@@ -7,6 +7,7 @@ const log = require('./utils/log');
 const Nav = require('./components/nav');
 const LoginView = require('./components/loginView');
 const ExploreView = require('./components/exploreView');
+const FeedView = require('./components/feedView');
 const SongView = require('./components/songView');
 const AlbumView = require('./components/albumView');
 const ArtistView = require('./components/artistView');
@@ -144,6 +145,9 @@ function App() {
         case 'explore':
           if (!this.views.explore) this.views.explore = new ExploreView(); //Prevent unnecessary fetching of data from server
           return await this.views.explore.render();
+        case 'feed':
+          if (!this.views.feed) this.views.feed = new FeedView(); //Prevent unnecessary fetching of data from server
+          return await this.views.feed.render();
         case 'song':
           this.views.song = new SongView(data.song, data.action);
           return await this.views.song.render();
