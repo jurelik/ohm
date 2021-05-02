@@ -278,7 +278,7 @@ const fsCreateSongFolder = async (transfer, fsPath) => {
   }
 }
 
-const removeItem = (data, children, payload) => {
+const removeItemOld = (data, children, payload) => {
   const _children = payload.type === 'song' ? children.songs : children.albums;
 
   for (const id in _children) {
@@ -288,6 +288,26 @@ const removeItem = (data, children, payload) => {
       for (const item of data) if (item.type === payload.type && id === item.id.toString()) return data.splice(data.indexOf(item), 1); //Delete item from this.data of component
     }
   }
+}
+
+const removeItem = (data) => {
+  const views = [ 'explore', 'feed' ]; //Views to check
+
+  for (const view of views) {
+    const children = app.views[view].children[`${data.type}s`];
+    const _data = app.views[view].data;
+
+    for (const id in children) {
+      if (id === data.id.toString()) {
+        children[id].el.remove(); //Delete from DOM
+        delete children[id];
+
+        for (const item of _data) if (item.type === data.type && id === item.id.toString()) return _data.splice(_data.indexOf(item), 1); //Delete item from this.data of component
+      }
+    }
+  }
+
+  for (const item of app[`${data.type}s`]) if (item.type === data.type && item.id.toString() === data.id) return app[`${data.type}s`].splice(app[`${data.type}s`].indexOf(item), 1); //Delete item from app.songs or app.albums
 }
 
 const handleReader = async (reader, previous) => {
@@ -319,6 +339,7 @@ module.exports = {
   removePin,
   garbageCollect,
   childIsPlaying,
+  removeItemOld,
   removeItem,
   handleReader
 }

@@ -26,10 +26,6 @@ function ExploreView() {
     });
   }
 
-  this.removeItem = (data) => {
-    helpers.removeItem(this.data, this.children, data);
-  }
-
   this.refresh = async () => {
     try {
       this.data = null;

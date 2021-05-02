@@ -27,6 +27,7 @@ function App() {
   this.header;
   this.views = {
     explore: null,
+    feed: null,
     song: null,
     album: null,
     artist: null,

@@ -1,4 +1,5 @@
 const ipfs = require('../utils/ipfs');
+const helpers = require('../utils/helpers');
 const io = require('../utils/io');
 const log = require('../utils/log');
 const { pinIcon } = require('../utils/svgs');
@@ -98,14 +99,16 @@ function ActionBarSong(data) {
       await io.deleteItem(this.data);
       log.success('Song successfully deleted.');
 
+      helpers.removeItem(this.data); //Delete item from explore/feed view and app.songs/app.albums
+
       if (app.current === 'song') { //Navigate to explore if currently in songView
-        app.views.explore.removeItem(this.data);
         app.removeLastFromHistory();
 
         if (app.history[app.history.length - 1].type !== 'explore') app.addToHistory('explore'); //Add explore view to history if it wasn't the previous screen
         app.changeView('explore');
       }
-      else app.views[app.current].removeItem(this.data);
+      console.log(app.songs);
+      console.log(app.views.explore);
     }
     catch (err) {
       log.error(err);
