@@ -35,10 +35,6 @@ function PinnedView(data) {
     }
   }
 
-  this.removeItem = (payload) => {
-    helpers.removeItem(this.data[`${payload.type}s`], this.children, payload);
-  }
-
   this.refresh = async () => {
     try {
       this.data = null;

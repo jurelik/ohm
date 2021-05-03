@@ -196,6 +196,32 @@ const childIsPlaying = (song, songs) => { //Check if a song within an album is p
   return false;
 }
 
+const removeItem = (data) => {
+  const views = [ 'explore', 'feed', 'pinned' ]; //Views to check
+  const appItems = app[`${data.type}s`]; //Either app.songs or app.albums, depending on data.type
+
+  for (const view of views) {
+    if (!app.views[view]) continue; //Continue if one of the views hasn't been initiated yet
+    removeDataAndChildren(view, data); //Remove item from this.data, this.children and this.el of the relevant view
+  }
+
+  for (const item of appItems) if (item.data.type === data.type && item.data.id === data.id) return appItems.splice(appItems.indexOf(item), 1); //Delete item from app.songs or app.albums
+}
+
+const handleReader = async (reader, previous) => {
+  try {
+    const { done, value } = await reader.read();
+    var msg = new TextDecoder().decode(value);
+    if (done) return JSON.parse(previous);
+
+    if (!msg === '{"type":"success"}') log(`Upload progress: ${msg}%`);
+    return await handleReader(reader, msg);
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 //
 //PRIVATE FUNCTIONS
 //
@@ -278,52 +304,24 @@ const fsCreateSongFolder = async (transfer, fsPath) => {
   }
 }
 
-const removeItemOld = (data, children, payload) => {
-  const _children = payload.type === 'song' ? children.songs : children.albums;
+const removeDataAndChildren = (view, data) => {
+  const children = app.views[view].children[`${data.type}s`]; //Choose children.songs or children.albums, depending on item type
+  const _data = app.views[view].data; //Reference for this.data of the chosen view
 
-  for (const id in _children) {
-    if (id === payload.id.toString()) {
-      children[`${payload.type}s`][id].el.remove();
-      delete children[id];
-      for (const item of data) if (item.type === payload.type && id === item.id.toString()) return data.splice(data.indexOf(item), 1); //Delete item from this.data of component
-    }
-  }
-}
+  for (const id in children) {
+    if (id === data.id.toString()) {
+      children[id].el.remove(); //Delete from DOM
+      delete children[id]; //Delete from this.children of view
 
-const removeItem = (data) => {
-  const views = [ 'explore', 'feed' ]; //Views to check
-
-  for (const view of views) {
-    if (!app.views[view]) continue; //Continue if one of the views hasn't been initiated yet
-
-    const children = app.views[view].children[`${data.type}s`];
-    const _data = app.views[view].data;
-
-    for (const id in children) {
-      if (id === data.id.toString()) {
-        children[id].el.remove(); //Delete from DOM
-        delete children[id];
-
-        for (const item of _data) if (item.type === data.type && id === item.id.toString()) _data.splice(_data.indexOf(item), 1); //Delete item from this.data of component
-        break;
+      if (view === 'pinned') {
+        const pinnedData =_data[`${data.type}s`]; //Reference to this.data.songs/albums of pinnedView due to different this.data structure
+        for (const item of pinnedData) if (id === item.id.toString()) pinnedData.splice(pinnedData.indexOf(item), 1); //Delete item from this.data of pinnedView
       }
+      else {
+        for (const item of _data) if (item.type === data.type && id === item.id.toString()) _data.splice(_data.indexOf(item), 1); //Delete item from this.data of view
+      }
+      break;
     }
-  }
-
-  for (const item of app[`${data.type}s`]) if (item.data.type === data.type && item.data.id === data.id) return app[`${data.type}s`].splice(app[`${data.type}s`].indexOf(item), 1); //Delete item from app.songs or app.albums
-}
-
-const handleReader = async (reader, previous) => {
-  try {
-    const { done, value } = await reader.read();
-    var msg = new TextDecoder().decode(value);
-    if (done) return JSON.parse(previous);
-
-    if (!msg === '{"type":"success"}') log(`Upload progress: ${msg}%`);
-    return await handleReader(reader, msg);
-  }
-  catch (err) {
-    throw err;
   }
 }
 
@@ -342,7 +340,6 @@ module.exports = {
   removePin,
   garbageCollect,
   childIsPlaying,
-  removeItemOld,
   removeItem,
   handleReader
 }
