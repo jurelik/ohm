@@ -309,17 +309,18 @@ const removeDataAndChildren = (view, data) => {
   const _data = app.views[view].data; //Reference for this.data of the chosen view
 
   for (const id in children) {
-    if (id === data.id.toString()) {
+    if (id === data.id.toString() && view === 'pinned') {
+      const pinnedData =_data[`${data.type}s`]; //Reference to this.data.songs/albums of pinnedView due to different this.data structure
       children[id].el.remove(); //Delete from DOM
       delete children[id]; //Delete from this.children of view
 
-      if (view === 'pinned') {
-        const pinnedData =_data[`${data.type}s`]; //Reference to this.data.songs/albums of pinnedView due to different this.data structure
-        for (const item of pinnedData) if (id === item.id.toString()) pinnedData.splice(pinnedData.indexOf(item), 1); //Delete item from this.data of pinnedView
-      }
-      else {
-        for (const item of _data) if (item.type === data.type && id === item.id.toString()) _data.splice(_data.indexOf(item), 1); //Delete item from this.data of view
-      }
+      for (const item of pinnedData) if (id === item.id.toString()) pinnedData.splice(pinnedData.indexOf(item), 1); //Delete item from this.data of pinnedView
+      break;
+    }
+    else if (id === data.id.toString()) {
+      children[id].el.remove(); //Delete from DOM
+      delete children[id]; //Delete from this.children of view
+      for (const item of _data) if (item.type === data.type && id === item.id.toString()) _data.splice(_data.indexOf(item), 1); //Delete item from this.data of view
       break;
     }
   }
