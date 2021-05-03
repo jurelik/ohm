@@ -294,6 +294,8 @@ const removeItem = (data) => {
   const views = [ 'explore', 'feed' ]; //Views to check
 
   for (const view of views) {
+    if (!app.views[view]) continue; //Continue if one of the views hasn't been initiated yet
+
     const children = app.views[view].children[`${data.type}s`];
     const _data = app.views[view].data;
 
@@ -302,12 +304,13 @@ const removeItem = (data) => {
         children[id].el.remove(); //Delete from DOM
         delete children[id];
 
-        for (const item of _data) if (item.type === data.type && id === item.id.toString()) return _data.splice(_data.indexOf(item), 1); //Delete item from this.data of component
+        for (const item of _data) if (item.type === data.type && id === item.id.toString()) _data.splice(_data.indexOf(item), 1); //Delete item from this.data of component
+        break;
       }
     }
   }
 
-  for (const item of app[`${data.type}s`]) if (item.type === data.type && item.id.toString() === data.id) return app[`${data.type}s`].splice(app[`${data.type}s`].indexOf(item), 1); //Delete item from app.songs or app.albums
+  for (const item of app[`${data.type}s`]) if (item.data.type === data.type && item.data.id === data.id) return app[`${data.type}s`].splice(app[`${data.type}s`].indexOf(item), 1); //Delete item from app.songs or app.albums
 }
 
 const handleReader = async (reader, previous) => {
