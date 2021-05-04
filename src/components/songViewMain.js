@@ -10,7 +10,8 @@ function SongViewMain(data, action) {
     if (action === this.action) return; //Ignore if we are already on the same view
     this.el.innerHTML = '';
     this.action = action;
-    app.history[app.history.length - 1].data.action = action //Modify history
+    app.history[app.historyIndex].data.action = action; //Modify history
+    app.views[app.current].action = action; //Modify action value in view to handle refresh correctly
     this.render();
   }
 

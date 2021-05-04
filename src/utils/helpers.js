@@ -197,15 +197,11 @@ const childIsPlaying = (song, songs) => { //Check if a song within an album is p
 }
 
 const removeItem = (data) => {
-  const views = [ 'explore', 'feed', 'pinned', 'artist' ]; //Views to check
   const appItems = app[`${data.type}s`]; //Either app.songs or app.albums, depending on data.type
+  const children = app.views[app.current].children[`${data.type}s`]; //Choose children.songs or children.albums, depending on data.type
 
-  for (const view of views) {
-    if (!app.views[view]) continue; //Continue if one of the views hasn't been initiated yet
-    removeDataAndChildren(view, data); //Remove item from this.data, this.children and this.el of the relevant view
-  }
-
-  for (const item of appItems) if (item.data.type === data.type && item.data.id === data.id) return appItems.splice(appItems.indexOf(item), 1); //Delete item from app.songs or app.albums
+  for (const id in children) if (id === data.id.toString()) { children[id].el.remove(); break; } //Delete DOM item from current view
+  for (const item of appItems) if (item.data.type === data.type && item.data.id === data.id) { appItems.splice(appItems.indexOf(item), 1); break; } //Delete item from app.songs or app.albums
 }
 
 const handleReader = async (reader, previous) => {
@@ -301,28 +297,6 @@ const fsCreateSongFolder = async (transfer, fsPath) => {
   }
   catch (err) {
     throw err;
-  }
-}
-
-const removeDataAndChildren = (view, data) => {
-  const children = app.views[view].children[`${data.type}s`]; //Choose children.songs or children.albums, depending on item type
-  const _data = view === 'artist' ? app.views[view].artist : app.views[view].data; //Reference for this.data of the chosen view
-
-  for (const id in children) {
-    if (id === data.id.toString() && (view === 'pinned' || view === 'artist')) {
-      const pinnedData =_data[`${data.type}s`]; //Reference to this.data.songs/albums of pinnedView due to different this.data structure
-      children[id].el.remove(); //Delete from DOM
-      delete children[id]; //Delete from this.children of view
-
-      for (const item of pinnedData) if (id === item.id.toString()) pinnedData.splice(pinnedData.indexOf(item), 1); //Delete item from this.data of pinnedView
-      break;
-    }
-    else if (id === data.id.toString()) {
-      children[id].el.remove(); //Delete from DOM
-      delete children[id]; //Delete from this.children of view
-      for (const item of _data) if (item.type === data.type && id === item.id.toString()) _data.splice(_data.indexOf(item), 1); //Delete item from this.data of view
-      break;
-    }
   }
 }
 

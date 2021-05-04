@@ -144,10 +144,10 @@ function App() {
 
       switch (view) {
         case 'explore':
-          if (!this.views.explore) this.views.explore = new ExploreView(); //Prevent unnecessary fetching of data from server
+          this.views.explore = new ExploreView();
           return await this.views.explore.render();
         case 'feed':
-          if (!this.views.feed) this.views.feed = new FeedView(); //Prevent unnecessary fetching of data from server
+          this.views.feed = new FeedView();
           return await this.views.feed.render();
         case 'song':
           this.views.song = new SongView(data.song, data.action);
@@ -156,7 +156,7 @@ function App() {
           this.views.album = new AlbumView(data.album);
           return await this.views.album.render();
         case 'artist':
-          if (!this.views.artist || this.views.artist.data !== data.artist) this.views.artist = new ArtistView(data.artist); //Prevent unnecessary fetching of data from server
+          this.views.artist = new ArtistView(data.artist);
           return await this.views.artist.render();
         case 'upload':
           if (this.views.upload) return this.views.upload.display(); //Prevent re-render to preserve input state etc.
@@ -164,7 +164,7 @@ function App() {
           this.views.upload = new UploadView();
           return this.views.upload.render();
         case 'pinned':
-          if (!this.views.pinned) this.views.pinned = new PinnedView(); //Prevent unnecessary fetching of data from server
+          this.views.pinned = new PinnedView();
           return await this.views.pinned.render();
         case 'transfers':
           this.views.transfers = new TransfersView();

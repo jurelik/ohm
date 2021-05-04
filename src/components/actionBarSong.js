@@ -99,7 +99,7 @@ function ActionBarSong(data) {
       await io.deleteItem(this.data);
       log.success('Song successfully deleted.');
 
-      helpers.removeItem(this.data); //Delete item from explore/feed view and app.songs/app.albums
+      helpers.removeItem(this.data); //Delete item from current view and app.songs
 
       if (app.current === 'song') { //Navigate to explore if currently in songView
         app.removeLastFromHistory();
