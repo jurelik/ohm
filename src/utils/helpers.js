@@ -197,7 +197,7 @@ const childIsPlaying = (song, songs) => { //Check if a song within an album is p
 }
 
 const removeItem = (data) => {
-  const views = [ 'explore', 'feed', 'pinned' ]; //Views to check
+  const views = [ 'explore', 'feed', 'pinned', 'artist' ]; //Views to check
   const appItems = app[`${data.type}s`]; //Either app.songs or app.albums, depending on data.type
 
   for (const view of views) {
@@ -306,10 +306,10 @@ const fsCreateSongFolder = async (transfer, fsPath) => {
 
 const removeDataAndChildren = (view, data) => {
   const children = app.views[view].children[`${data.type}s`]; //Choose children.songs or children.albums, depending on item type
-  const _data = app.views[view].data; //Reference for this.data of the chosen view
+  const _data = view === 'artist' ? app.views[view].artist : app.views[view].data; //Reference for this.data of the chosen view
 
   for (const id in children) {
-    if (id === data.id.toString() && view === 'pinned') {
+    if (id === data.id.toString() && (view === 'pinned' || view === 'artist')) {
       const pinnedData =_data[`${data.type}s`]; //Reference to this.data.songs/albums of pinnedView due to different this.data structure
       children[id].el.remove(); //Delete from DOM
       delete children[id]; //Delete from this.children of view
