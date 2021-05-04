@@ -86,6 +86,7 @@ function ActionBarAlbum(data) {
         app.removeLastFromHistory();
 
         if (app.history[app.history.length - 1].type !== 'explore') app.addToHistory('explore'); //Add explore view to history if it wasn't the previous screen
+        app.nav.select('explore'); //Select explore on the navbar
         app.changeView('explore');
       }
     }
