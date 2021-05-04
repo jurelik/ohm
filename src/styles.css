@@ -412,13 +412,14 @@ input[type=file] button {
 }
 
 .artist .name-and-follow button {
-  border: 1.5px solid #eee;
+  border: 1.5px solid #bbb;
   border-radius: 4px;
   margin-left: 10px;
+  text-decoration: none;
 }
 
 .artist .name-and-follow .following {
-  background-color: #eee;
+  background-color: #bbb;
   color: #222;
 }
 

@@ -73,7 +73,6 @@ function ArtistView(data) {
       //Create elements
       let nameAndFollow = document.createElement('div');
       let name = document.createElement('div');
-      let follow = document.createElement('button');
       let bio = document.createElement('p');
       let locationDiv = document.createElement('div');
       let location = document.createElement('p');
@@ -83,14 +82,11 @@ function ArtistView(data) {
       //Add classes for styling
       this.el.className = 'artist';
       nameAndFollow.className = 'name-and-follow';
-      follow.classList.add('follow');
-      if (this.artist.following) follow.classList.add('following');
       locationDiv.className = 'location-div';
       bio.className = 'bio';
 
       //Add attributes and innerHTML
       name.innerHTML = this.artist.name;
-      follow.innerHTML = this.artist.following ? 'following': 'follow';
       bio.innerHTML = this.artist.bio;
       locationDiv.innerHTML = locationIcon;
       location.innerHTML = this.artist.location;
@@ -100,11 +96,22 @@ function ArtistView(data) {
       //Build structure
       this.el.appendChild(nameAndFollow);
       nameAndFollow.appendChild(name);
-      nameAndFollow.appendChild(follow);
       this.el.appendChild(locationDiv);
       locationDiv.appendChild(location);
       this.el.appendChild(bio);
       this.el.appendChild(albums);
+
+      //Add follow button
+      if (this.artist.name !== app.artist) {
+        let follow = document.createElement('button');
+        follow.classList.add('follow');
+        if (this.artist.following) follow.classList.add('following');
+        follow.innerHTML = this.artist.following ? 'following': 'follow';
+        nameAndFollow.appendChild(follow);
+
+        //Add listener
+        follow.onclick = this.handleFollow;
+      }
 
       //Add albums
       for (let _album of this.artist.albums) {
@@ -127,9 +134,6 @@ function ArtistView(data) {
 
         this.el.appendChild(await song.render());
       }
-
-      //Add listeners
-      follow.onclick = this.handleFollow;
 
       return app.content.appendChild(this.el);
     }
