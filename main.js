@@ -20,7 +20,7 @@ function createWindow () {
 
   session.defaultSession.cookies.on('changed', (event, cookie, cause) => { //TESTING PURPOSES
     console.log(cause + ' Expiration: ' + cookie.expirationDate + ' ' + Date())
-    session.defaultSession.cookies.get({}).then(cookies => console.log(cookies[0].expirationDate))
+    session.defaultSession.cookies.get({}).then(cookies => { if (cookies[0]) console.log(cookies[0].expirationDate)});
   })
   win.loadFile('src/index.html')
   win.webContents.openDevTools() //Uncomment in production

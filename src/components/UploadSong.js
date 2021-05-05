@@ -98,6 +98,7 @@ function UploadSong(data) {
     fileLabel.innerHTML = 'file:';
     file.setAttribute('type', 'file');
     file.setAttribute('name', 'file');
+    file.setAttribute('accept', 'audio/wav, audio/mpeg');
     addFile.innerHTML = 'add file';
     deleteSong.innerHTML = 'delete song';
 
