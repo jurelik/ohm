@@ -29,6 +29,38 @@ function TransfersView(data) {
 
   this.render = () => {
     this.el.innerHTML = '' //Reset innerHTML
+
+    let table = document.createElement('table');
+    let header = document.createElement('tr');
+    let artistCell = document.createElement('th');
+    let nameCell = document.createElement('th');
+    let typeCell = document.createElement('th');
+    let progressCell = document.createElement('th');
+    let statusCell = document.createElement('th');
+    let resumeCell = document.createElement('th');
+    let clearCell = document.createElement('th');
+
+    this.el.className = 'files';
+
+    artistCell.innerHTML = 'artist';
+    nameCell.innerHTML = 'name';
+    typeCell.innerHTML = 'type';
+    progressCell.innerHTML = 'progress';
+    statusCell.innerHTML = 'status';
+    resumeCell.innerHTML = 'resume';
+    clearCell.innerHTML = 'clear';
+
+    header.appendChild(artistCell);
+    header.appendChild(nameCell);
+    header.appendChild(typeCell);
+    header.appendChild(progressCell);
+    header.appendChild(statusCell);
+    header.appendChild(resumeCell);
+    header.appendChild(clearCell);
+
+    this.el.appendChild(table);
+    table.appendChild(header);
+
     //Add classes for styling
     this.el.className = 'transfers-view';
 
@@ -37,7 +69,7 @@ function TransfersView(data) {
     for (let unique in this.transfers) {
       let transfer = new Transfer(this.transfers[unique], unique);
       this.children[unique] = transfer;
-      this.el.appendChild(transfer.render());
+      table.appendChild(transfer.render());
     }
 
     app.content.appendChild(this.el);

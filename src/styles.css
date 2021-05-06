@@ -527,15 +527,6 @@ input[type=file] button {
   align-items: center;
 }
 
-.transfer {
-  display: flex;
-  flex-direction: row;
-}
-
-.transfer p {
-  margin: 0 5px;
-}
-
 /**Spinner**/
 .spinner {
   content: " ";
@@ -555,4 +546,13 @@ input[type=file] button {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/**Transfers**/
+.transfer button:disabled {
+  color: #888;
+  cursor: default;
+}
+.transfer button:hover:disabled {
+  text-decoration: none;
 }
