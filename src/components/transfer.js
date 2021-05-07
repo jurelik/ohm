@@ -1,6 +1,6 @@
 const ipfs = require('../utils/ipfs');
 const log = require('../utils/log');
-const { pauseIcon, refreshIconSmall } = require('../utils/svgs');
+const { pauseIcon, refreshIconSmall, deleteIcon } = require('../utils/svgs');
 
 function Transfer(data, unique) {
   this.el = document.createElement('tr');
@@ -87,6 +87,7 @@ function Transfer(data, unique) {
     actionsCell.className = 'actions-cell';
     completed.className = 'completed';
     resume.className = 'resume';
+    clear.className = 'clear';
 
     //Add attributes and innerHTML
     artist.innerHTML = this.data.artist;
@@ -95,7 +96,7 @@ function Transfer(data, unique) {
     progress.innerHTML = this.data.progress + '%';
     resume.innerHTML = this.data.active ? pauseIcon : refreshIconSmall;
     resume.disabled = this.data.completed ? true : false;
-    clear.innerHTML = 'clear';
+    clear.innerHTML = deleteIcon;
     completed.innerHTML = this.data.completed ? 'COMPLETED' : 'INCOMPLETE';
 
     //Build structure

@@ -47,7 +47,7 @@ function TransfersView(data) {
     typeCell.innerHTML = 'type';
     progressCell.innerHTML = 'progress';
     statusCell.innerHTML = 'status';
-    actionsCell.innerHTML = '';
+    actionsCell.innerHTML = 'actions';
 
     header.appendChild(artistCell);
     header.appendChild(nameCell);
