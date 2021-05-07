@@ -549,6 +549,10 @@ input[type=file] button {
 }
 
 /**Transfers**/
+.transfers-view .clear-all {
+  margin-top: 20px;
+}
+
 .transfer button:disabled {
   color: #888;
   cursor: default;

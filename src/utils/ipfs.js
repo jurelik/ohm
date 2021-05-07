@@ -139,6 +139,31 @@ const clearTransfer = async (unique) => {
   }
 }
 
+const clearAllTransfers = async () => {
+  try {
+    const transfers = app.transfersStore.get();
+
+    for (const unique in transfers) {
+      const transfer = transfers[unique];
+
+      if (!transfer.completed) {
+        if (transfer.active) { //Stop transfer if it is currently active
+          transfer.controller.abort();
+          clearTimeout(transfer.timeout);
+        }
+        await helpers.garbageCollect(); //Remove any data saved to IPFS
+      }
+
+      app.transfersStore.rm(unique);
+    }
+
+    return app.views.transfers.removeAllTransfers();
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 const checkIfSongIsPinned = async (data) => {
   try {
     if (data.albumTitle) {
@@ -276,6 +301,7 @@ module.exports = {
   resumeTransfer,
   pauseTransfer,
   clearTransfer,
+  clearAllTransfers,
   checkIfSongIsPinned,
   checkIfAlbumIsPinned,
   unpinSong,

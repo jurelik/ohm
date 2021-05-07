@@ -61,7 +61,6 @@ function Transfer(data, unique) {
     catch (err) {
       console.error(err);
     }
-
   }
 
   this.reRender = () => {

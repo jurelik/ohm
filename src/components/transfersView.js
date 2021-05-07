@@ -1,5 +1,6 @@
 const Store = require('./store');
 const Transfer = require('./transfer');
+const ipfs = require('../utils/ipfs');
 
 function TransfersView(data) {
   this.el = document.createElement('div');
@@ -23,6 +24,25 @@ function TransfersView(data) {
     this.transfers = app.transfersStore.get(); //Update state
   }
 
+  this.removeAllTransfers = () => {
+    for (const unique in this.children) this.children[unique].el.remove(); //Remove from DOM
+    this.children = {}; //Re-initialize children
+
+    this.transfers = app.transfersStore.get(); //Update state
+  }
+
+  this.handleClearAll = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    try {
+      await ipfs.clearAllTransfers();
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
+
   this.refresh = () => {
     this.render();
   }
@@ -38,9 +58,11 @@ function TransfersView(data) {
     let progressCell = document.createElement('th');
     let statusCell = document.createElement('th');
     let actionsCell = document.createElement('th');
+    let clearAll = document.createElement('button');
 
     this.el.className = 'files';
     actionsCell.className = 'actions-header';
+    clearAll.className = 'clear-all';
 
     artistCell.innerHTML = 'artist';
     nameCell.innerHTML = 'name';
@@ -48,6 +70,7 @@ function TransfersView(data) {
     progressCell.innerHTML = 'progress';
     statusCell.innerHTML = 'status';
     actionsCell.innerHTML = 'actions';
+    clearAll.innerHTML = 'clear all';
 
     header.appendChild(artistCell);
     header.appendChild(nameCell);
@@ -58,6 +81,7 @@ function TransfersView(data) {
 
     this.el.appendChild(table);
     table.appendChild(header);
+    this.el.appendChild(clearAll);
 
     //Add classes for styling
     this.el.className = 'transfers-view';
@@ -69,6 +93,9 @@ function TransfersView(data) {
       this.children[unique] = transfer;
       table.appendChild(transfer.render());
     }
+
+    //Add listeners
+    clearAll.onclick = this.handleClearAll;
 
     app.content.appendChild(this.el);
     return this.el;
