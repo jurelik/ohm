@@ -37,26 +37,24 @@ function TransfersView(data) {
     let typeCell = document.createElement('th');
     let progressCell = document.createElement('th');
     let statusCell = document.createElement('th');
-    let resumeCell = document.createElement('th');
-    let clearCell = document.createElement('th');
+    let actionsCell = document.createElement('th');
 
     this.el.className = 'files';
+    actionsCell.className = 'actions-header';
 
     artistCell.innerHTML = 'artist';
     nameCell.innerHTML = 'name';
     typeCell.innerHTML = 'type';
     progressCell.innerHTML = 'progress';
     statusCell.innerHTML = 'status';
-    resumeCell.innerHTML = 'resume';
-    clearCell.innerHTML = 'clear';
+    actionsCell.innerHTML = '';
 
     header.appendChild(artistCell);
     header.appendChild(nameCell);
     header.appendChild(typeCell);
     header.appendChild(progressCell);
     header.appendChild(statusCell);
-    header.appendChild(resumeCell);
-    header.appendChild(clearCell);
+    header.appendChild(actionsCell);
 
     this.el.appendChild(table);
     table.appendChild(header);

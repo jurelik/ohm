@@ -549,10 +549,31 @@ input[type=file] button {
 }
 
 /**Transfers**/
+.transfers-view .actions-header {
+  border: 0px;
+}
+
 .transfer button:disabled {
   color: #888;
   cursor: default;
 }
 .transfer button:hover:disabled {
   text-decoration: none;
+}
+
+.transfer .resume {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  stroke: #eee;
+}
+
+.transfer .resume:disabled {
+  stroke: #888;
+}
+
+.transfer .actions-cell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }

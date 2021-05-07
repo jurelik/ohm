@@ -1,6 +1,6 @@
-const io = require('../utils/io');
 const ipfs = require('../utils/ipfs');
 const log = require('../utils/log');
+const { pauseIcon, refreshIconSmall } = require('../utils/svgs');
 
 function Transfer(data, unique) {
   this.el = document.createElement('tr');
@@ -77,14 +77,14 @@ function Transfer(data, unique) {
     const type = document.createElement('td');
     const progress = document.createElement('td');
     const completed = document.createElement('td');
-    const resumeCell = document.createElement('td');
+    const actionsCell = document.createElement('td');
     const resume = document.createElement('button');
-    const clearCell = document.createElement('td');
     const clear = document.createElement('button');
 
     //Add classes for styling
     this.el.className = 'transfer';
     progress.className = 'progress';
+    actionsCell.className = 'actions-cell';
     completed.className = 'completed';
     resume.className = 'resume';
 
@@ -93,7 +93,7 @@ function Transfer(data, unique) {
     title.innerHTML = this.data.title;
     type.innerHTML = this.data.type;
     progress.innerHTML = this.data.progress + '%';
-    resume.innerHTML = this.data.active ? 'pause' : 'resume';
+    resume.innerHTML = this.data.active ? pauseIcon : refreshIconSmall;
     resume.disabled = this.data.completed ? true : false;
     clear.innerHTML = 'clear';
     completed.innerHTML = this.data.completed ? 'COMPLETED' : 'INCOMPLETE';
@@ -104,11 +104,9 @@ function Transfer(data, unique) {
     this.el.appendChild(type);
     this.el.appendChild(progress);
     this.el.appendChild(completed);
-//    if (!this.data.completed) this.el.appendChild(resume);
-    resumeCell.appendChild(resume);
-    this.el.appendChild(resumeCell);
-    clearCell.appendChild(clear);
-    this.el.appendChild(clearCell);
+    actionsCell.appendChild(resume);
+    actionsCell.appendChild(clear);
+    this.el.appendChild(actionsCell);
 
     //Add listeners
     resume.onclick = this.handleResume;
