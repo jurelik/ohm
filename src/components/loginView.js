@@ -21,11 +21,19 @@ function LoginView() {
 
     try {
       const payload = this.getData();
+
+      //Start spinner
+      let spinner = document.createElement('div');
+      spinner.className = 'spinner';
+      this.el.innerHTML = '';
+      this.el.appendChild(spinner);
+
       await io.login(payload);
       log.success('Succesfully logged in.');
       app.init();
     }
     catch (err) {
+      this.render();
       log.error(err);
     }
   }
