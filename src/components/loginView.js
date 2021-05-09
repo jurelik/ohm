@@ -3,7 +3,7 @@ const io = require('../utils/io');
 const log = require('../utils/log');
 
 function LoginView() {
-  this.el = document.createElement('div');
+  this.el = document.createElement('form');
 
   this.getData = () => {
     const data = Array.from(this.el.querySelectorAll('input')).reduce((acc, input) => ({ ...acc, [input.name]: input.value }), {});
@@ -57,22 +57,35 @@ function LoginView() {
     this.el.innerHTML = ''; //Clean up this.el
 
     //Create elements
+    let artistAndPw = document.createElement('div');
     let artist = document.createElement('input');
+    let artistLabel = document.createElement('label');
     let pw = document.createElement('input');
+    let pwLabel = document.createElement('label');
     let submit = document.createElement('button');
 
     //Add classes for styling
     this.el.className = 'login';
+    artistAndPw.className = 'artist-and-pw';
+    pw.className = 'pw';
 
     //Add attributes and innerHTML
     artist.name = 'artist';
+    artist.setAttribute('type', 'text');
+    artist.setAttribute('autofocus', true);
+    artistLabel.innerHTML = 'artist: '
     pw.name = 'pw';
+    pw.setAttribute('type', 'password');
+    pwLabel.innerHTML = 'pw: '
     submit.setAttribute('type', 'submit');
     submit.innerHTML = 'login';
 
     //Build structure
-    this.el.appendChild(artist);
-    this.el.appendChild(pw);
+    this.el.appendChild(artistAndPw);
+    artistAndPw.appendChild(artistLabel);
+    artistLabel.appendChild(artist);
+    artistAndPw.appendChild(pwLabel);
+    pwLabel.appendChild(pw);
     this.el.appendChild(submit);
 
     //Add listeners
