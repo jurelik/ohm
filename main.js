@@ -21,9 +21,13 @@ function createWindow () {
   session.defaultSession.cookies.on('changed', (event, cookie, cause) => { //TESTING PURPOSES
     console.log(cause + ' Expiration: ' + cookie.expirationDate + ' ' + Date())
     session.defaultSession.cookies.get({}).then(cookies => { if (cookies[0]) console.log(cookies[0].expirationDate)});
-  })
-  win.loadFile('src/index.html')
-  win.webContents.openDevTools() //Uncomment in production
+  });
+
+  //Delete in production
+  win.webContents.openDevTools();
+  win.webContents.on('devtools-opened', () => {
+    win.loadFile('src/index.html')
+  });
 }
 
 app.whenReady().then(createWindow)
