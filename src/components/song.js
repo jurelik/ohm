@@ -61,7 +61,7 @@ function Song(data, view) {
       let titleAndArtist = document.createElement('div');
       let artist = document.createElement('button');
       let separator = document.createElement('p');
-      let title = document.createElement('p');
+      let title = document.createElement('div');
       let tag = document.createElement('p');
       let playButton = document.createElement('button');
 
@@ -70,6 +70,7 @@ function Song(data, view) {
       main.classList.add('main');
       artist.classList.add('artist');
       titleAndArtist.classList.add('title-and-artist');
+      title.className = 'title';
       tag.classList.add('tag');
       separator.classList.add('separator');
       playButton.className = 'play-button';

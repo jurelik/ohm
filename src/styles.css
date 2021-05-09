@@ -345,6 +345,13 @@ input[type=file] button {
   flex-direction: row;
   padding: 0;
   align-content: stretch;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tag {
@@ -551,6 +558,12 @@ input[type=file] button {
 /**Transfers**/
 .transfers-view .clear-all {
   margin-top: 20px;
+}
+
+.transfer td {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .transfer button:disabled {

@@ -65,7 +65,7 @@ function Album(data) {
       let titleAndArtist = document.createElement('div');
       let artist = document.createElement('button');
       let separator = document.createElement('p');
-      let title = document.createElement('p');
+      let title = document.createElement('div');
       let tag = document.createElement('p');
       let playButton = document.createElement('button');
       let _albumIcon = document.createElement('div');
@@ -75,6 +75,7 @@ function Album(data) {
       main.classList.add('main');
       artist.classList.add('artist');
       titleAndArtist.classList.add('title-and-artist');
+      title.className = 'title';
       separator.classList.add('separator');
       tag.classList.add('tag');
       playButton.className = 'play-button';
