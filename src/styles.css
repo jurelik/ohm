@@ -79,7 +79,7 @@ input[type=radio] {
 
 input[type=file] {
   font-family: inherit;
-  font-size: inherit;
+  font-size: 10px;;
   color: #eee;
 }
 
@@ -87,6 +87,36 @@ input[type=file] button {
   font-family: inherit;
   font-size: inherit;
   color: #eee;
+}
+
+::-webkit-file-upload-button { /*Input file button styling*/
+  font-family: inherit;
+  font-size: 12px;
+  color: inherit;
+  background: none;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+::-webkit-file-upload-button:hover {
+  background-color: #333;
+}
+
+input[type=submit] {
+  font-family: inherit;
+  font-size: 12px;
+  color: inherit;
+  background: none;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #333;
 }
 
 #first {
@@ -431,9 +461,17 @@ input[type=file] button {
   text-decoration: none;
 }
 
+.artist .name-and-follow button:hover {
+  background-color: #333;
+}
+
 .artist .name-and-follow .following {
   background-color: #bbb;
   color: #222;
+}
+
+.artist .name-and-follow .following:hover {
+  background-color: #ccc;
 }
 
 .artist .bio {
@@ -538,6 +576,11 @@ input[type=file] button {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+}
+
+.upload-bottom-bar .add-song {
+  padding-left: 0px;
 }
 
 /**Spinner**/

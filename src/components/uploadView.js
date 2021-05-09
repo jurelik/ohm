@@ -103,11 +103,12 @@ function UploadView(data) {
     //Add classes for styling
     this.el.className = 'upload';
     bottomBar.className = 'upload-bottom-bar';
+    addSong.className = 'add-song';
 
     //Add attributes and innerHTML
     addSong.innerHTML = 'add song';
-    submit.innerHTML = 'submit';
     submit.setAttribute('type', 'submit');
+    submit.setAttribute('value', 'submit');
 
     //Build structure
     this.el.appendChild(this.form);
