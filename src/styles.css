@@ -602,6 +602,16 @@ input[type=submit]:hover {
   padding-left: 0px;
 }
 
+.upload-bottom-bar .submit-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.upload-bottom-bar .submit-div .spinner {
+  margin-right: 5px;
+}
+
 /**Spinner**/
 .spinner {
   content: " ";
