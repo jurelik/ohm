@@ -71,10 +71,27 @@ input[type=text]:focus, input[type=password]:focus {
   outline: none;
 }
 
-input[type=radio] {
-  padding: 0;
-  margin: 0;
-  margin-right: 2px;
+input[type="radio"] {
+  -webkit-appearance: none;
+  appearance: none;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  padding: 2px;
+  background-clip: content-box;
+  border: 1px solid #bbb;
+  background-color: #222;
+  border-radius: 50%;
+  margin: 0 3px;
+}
+
+/* appearance for checked radiobutton */
+input[type="radio"]:checked {
+  background-color: #eee;
+}
+
+input[type="radio"]:focus {
+  outline: none;
 }
 
 input[type=file] {
@@ -569,7 +586,7 @@ input[type=submit]:hover {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 0 5px;
+  margin-right: 5px;
 }
 
 .upload-bottom-bar {

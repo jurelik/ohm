@@ -107,13 +107,14 @@ function UploadFile(data) {
     let input = document.createElement('input');
 
     //Add classes for styling
-    el.className = name;
+    el.className = 'radio-div';
     input.className = 'file-input';
 
     //Add attributes and innerHTML
     label.setAttribute('for', name);
     label.innerHTML = name;
     input.setAttribute('type', 'radio');
+    input.setAttribute('id', name);
     input.setAttribute('name', 'type-' + this.unique);
     input.setAttribute('value', name);
 
