@@ -61,7 +61,7 @@ function Song(data, view) {
       let titleAndArtist = document.createElement('div');
       let artist = document.createElement('button');
       let separator = document.createElement('p');
-      let title = document.createElement('div');
+      let title = document.createElement('span');
       let tag = document.createElement('p');
       let playButton = document.createElement('button');
 

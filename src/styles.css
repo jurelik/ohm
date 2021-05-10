@@ -83,6 +83,7 @@ input[type="radio"] {
   background-color: #222;
   border-radius: 50%;
   margin: 0 3px;
+  cursor: pointer;
 }
 
 /* appearance for checked radiobutton */
@@ -405,6 +406,7 @@ input[type=submit]:hover {
 .title {
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 20px;
 }
 
 .tag {
