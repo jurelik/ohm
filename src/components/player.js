@@ -6,6 +6,7 @@ function Player() {
   this.audio = document.querySelector('audio');
   this.current = null; //Current song playing
   this.album = null; //Current album ID
+  this.feed = null; //Are we auto-playing a feed?
   this.queue = [];
   this.queuePosition = 0;
   this.playing = false;
@@ -35,9 +36,22 @@ function Player() {
   this.handleOnEnded = () => {
     this.playing = false;
     this.queuePosition++;
-    if (this.queue.length === 1) {
+    if (this.queue.length === 1 && !this.feed) {
       this.setRemotePlayingState(false);
       return this.reRender();
+    }
+    //EXPERIMENTAL
+    else if (this.queue.length === 1 && this.feed) {
+      let index;
+      app.views[this.feed].data.some((file, _index) => {
+        if (file.id === this.current.id && file.type === 'song') {
+          index = _index;
+          return true
+        };
+      });
+
+      this.queue = [];
+      return this.queueFile(app.views[this.feed].data[index + 1]);
     }
 
     //Stop playback if this was the last song in the queue
@@ -144,6 +158,11 @@ function Player() {
     this.play();
   }
 
+  this.queueFileFeed = (file) => {
+    this.feed = app.current;
+    this.queueFile(file);
+  }
+
   this.play = () => {
     this.playing ? this.audio.pause() : this.audio.play();
   }
@@ -166,14 +185,18 @@ function Player() {
 
   this.render = () => {
     //Create elements
+    let backButton = document.createElement('button');
     let playButton = document.createElement('button')
+    let forwardButton = document.createElement('button');
     let titleAndArtist = document.createElement('p');
 
     //Set class names
     playButton.className = 'main-play-button';
 
     //Add attributes and innerHTML
+    backButton.innerHTML = 'back';
     playButton.innerHTML = this.playing ? pauseIconBig : playIconBig;
+    forwardButton.innerHTML = 'forward';
     titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title || this.current.name}` : 'Load a song';
 
     //Add listeners
@@ -183,7 +206,9 @@ function Player() {
     this.audio.onplaying = this.handleOnPlaying;
     this.audio.onpause = this.handleOnPause;
 
+    this.el.appendChild(backButton);
     this.el.appendChild(playButton);
+    this.el.appendChild(forwardButton);
     this.el.appendChild(titleAndArtist);
   }
 
