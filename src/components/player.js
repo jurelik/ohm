@@ -107,9 +107,17 @@ function Player() {
     }
   }
 
+  this.handleBackButton = () => {
+    log('back');
+  }
+
   this.handlePlayButton = () => {
     if (!this.current) return log.error('Please load a song first');
     this.play();
+  }
+
+  this.handleForwardButton = () => {
+    log('forward');
   }
 
   this.updateSrc = () => {
@@ -200,7 +208,9 @@ function Player() {
     titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title || this.current.name}` : 'Load a song';
 
     //Add listeners
+    backButton.onclick = this.handleBackButton;
     playButton.onclick = this.handlePlayButton;
+    forwardButton.onclick = this.handleForwardButton;
     this.audio.onended = this.handleOnEnded;
     this.audio.onplay = this.handleOnPlay;
     this.audio.onplaying = this.handleOnPlaying;
