@@ -1,5 +1,5 @@
 const log = require('../utils/log');
-const { playIconBig, pauseIconBig, loadingIcon } = require('../utils/svgs');
+const { playIconBig, pauseIconBig, loadingIcon, nextIcon, previousIcon } = require('../utils/svgs');
 
 function Player() {
   this.el = document.querySelector('.player');
@@ -97,7 +97,7 @@ function Player() {
 
   this.handleBackButton = () => {
     if (this.queuePosition <= 0) log.error("Can't go further back in time Morty.");
-    else this.queuePosition--;
+    if (this.audio.currentTime < 5 && this.queuePosition > 0) this.queuePosition--;
 
     //Check if we are past the 5 second mark of current song
     if (this.audio.currentTime < 5) {
@@ -246,11 +246,13 @@ function Player() {
 
     //Set class names
     playButton.className = 'main-play-button';
+    backButton.className = 'main-back-button';
+    forwardButton.className = 'main-forward-button';
 
     //Add attributes and innerHTML
-    backButton.innerHTML = 'back';
+    backButton.innerHTML = previousIcon;
     playButton.innerHTML = this.playing ? pauseIconBig : playIconBig;
-    forwardButton.innerHTML = 'forward';
+    forwardButton.innerHTML = nextIcon;
     titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title || this.current.name}` : 'Load a song';
 
     //Add listeners

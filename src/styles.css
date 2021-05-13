@@ -268,7 +268,15 @@ input[type=submit]:hover {
 
 .player button {
   display: flex;
+  margin: 2px;
+}
+
+.player .main-back-button {
   margin-left: 10px;
+}
+
+.player .main-forward-button {
+  margin-right: 10px;
 }
 
 .player .title-and-artist {

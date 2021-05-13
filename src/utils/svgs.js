@@ -24,6 +24,8 @@ const loadingIcon = '<div class="spinner"></div>';
 const playIconBig = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="-100 -100 200 200"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M-56.25-75c-8.285 0-15 6.716-15 15h0V60c0 8.285 6.715 15 15 15h0l120-60c10-10 10-20 0-30h0l-120-60"/></svg>';
 const pauseIconBig = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="-100 -100 200 200"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M-60-75V75h30V-75h-30zm120 0H30V75h30V-75z"/></svg>';
 const deleteIcon = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="-100 -100 200 200"><path fill="none" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" d="M-75-75h0L75 75m-150 0h0L75-75"/></svg>';
+const nextIcon = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="-100 -100 200 200"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M-60-75c-8.285 0-15 6.716-15 15h0V60c0 8.285 6.715 15 15 15h0L60 15h0v60h15V-75H60v60h0L-60-75"/></svg>'
+const previousIcon = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="-100 -100 200 200"><path fill="#EEE" stroke="#EEE" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M75-60c0-8.284-6.716-15-15-15h0L-60-15h0v-60h-15V75h15V15h0L60 75c8.284 0 15-6.715 15-15h0V-60"/></svg>'
 
 module.exports = {
   locationIcon,
@@ -38,5 +40,7 @@ module.exports = {
   loadingIcon,
   playIconBig,
   pauseIconBig,
-  deleteIcon
+  deleteIcon,
+  nextIcon,
+  previousIcon
 }
