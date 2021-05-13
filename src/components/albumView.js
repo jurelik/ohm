@@ -25,7 +25,7 @@ function AlbumView(data, action) {
       this.el.innerHTML = '' //Reset innerHTML
 
       //Create elements
-      let album = new Album(this.data, true);
+      let album = new Album(this.data, 'album');
       let description = document.createElement('div');
 
       //Add classes for styling
