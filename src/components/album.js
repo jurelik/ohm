@@ -13,9 +13,11 @@ function Album(data, view) {
   this.handlePlayButton = (e) => {
     e.stopPropagation();
     if (this.loading) return; //Ignore action if we are currently loading a song/album
+    const position = this.getPosition();
+    console.log(position)
 
-    if (this.view === 'explore' || this.view === 'feed') app.player.queueFeed(this.data)
-    else app.player.queueAlbum(this.data, this.getPosition());
+    if (this.view === 'explore' || this.view === 'feed') app.player.queueFeed(this.data.songs[position])
+    else app.player.queueAlbum(this.data, position);
   }
 
   this.handleArtistButton = (e) => {
@@ -52,6 +54,12 @@ function Album(data, view) {
     if (this.data.songs === app.player.queue) {
       return data.songs.indexOf(app.player.current);
     }
+    else if (app.player.feed) { //Check if the current song in the feed is playing which is contained in this album
+      for (let song of this.data.songs) {
+        if (song.id === app.player.current.id) return this.data.songs.indexOf(song);
+      }
+    }
+
     return 0;
   }
 

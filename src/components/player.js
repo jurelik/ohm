@@ -6,6 +6,7 @@ function Player() {
   this.audio = document.querySelector('audio');
   this.current = null; //Current song playing
   this.album = null; //Current album ID
+  this.feed = false; //Are we playing a feed?
   this.queue = [];
   this.queuePosition = 0;
   this.playing = false;
@@ -119,6 +120,7 @@ function Player() {
     if (this.queue.length === 1 && this.queue[0].id === file.id && this.queue[0].type === file.type) return this.play();
 
     this.album = null; //Reset this.album
+    this.feed = false; //Reset this.feed
     this.playing = false;
     this.queue = [file];
     this.current = file;
@@ -169,6 +171,7 @@ function Player() {
     if (this.sameQueue(feed) && this.queuePosition === position) return this.play();
 
     this.playing = false;
+    this.feed = true; //Set this.feed to active
     this.queue = feed;
     this.queuePosition = position;
     this.current = feed[this.queuePosition];
@@ -185,6 +188,7 @@ function Player() {
     if (this.sameQueue(files) && this.queuePosition === position) return this.play();
 
     this.playing = false;
+    this.feed = false; //Reset this.feed
     this.queue = files;
     this.queuePosition = position;
     this.current = files[this.queuePosition];
