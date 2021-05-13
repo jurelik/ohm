@@ -6,7 +6,6 @@ function Player() {
   this.audio = document.querySelector('audio');
   this.current = null; //Current song playing
   this.album = null; //Current album ID
-  this.feed = null; //Are we auto-playing a feed?
   this.queue = [];
   this.queuePosition = 0;
   this.playing = false;
@@ -36,22 +35,9 @@ function Player() {
   this.handleOnEnded = () => {
     this.playing = false;
     this.queuePosition++;
-    if (this.queue.length === 1 && !this.feed) {
+    if (this.queue.length === 1) {
       this.setRemotePlayingState(false);
       return this.reRender();
-    }
-    //EXPERIMENTAL
-    else if (this.queue.length === 1 && this.feed) {
-      let index;
-      app.views[this.feed].data.some((file, _index) => {
-        if (file.id === this.current.id && file.type === 'song') {
-          index = _index;
-          return true
-        };
-      });
-
-      this.queue = [];
-      return this.queueFile(app.views[this.feed].data[index + 1]);
     }
 
     //Stop playback if this was the last song in the queue
@@ -64,6 +50,7 @@ function Player() {
 
     //Continue playing if more items are in the queue
     this.current = this.queue[this.queuePosition];
+    this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
     this.updateSrc();
     this.play();
   }
@@ -150,6 +137,48 @@ function Player() {
     return true;
   }
 
+  this.deconstructFeed = () => { //Goes over the feed and turns deconstructs albums into songs
+    const feed = app.views[app.current].data;
+    let formatted = [];
+
+    for (let item of feed) {
+      if (item.type === 'album') {
+        for (let song of item.songs) {
+          song.albumId = item.id;
+          formatted.push(song)
+        };
+      }
+      else formatted.push(item);
+    }
+
+    return formatted;
+  }
+
+  this.queueFilesFeed = (song) => {
+    const feed = this.deconstructFeed();
+    let position;
+    console.log(feed)
+
+    feed.some((_song, index) => { //Find position of triggered song in feed
+      if (_song.id === song.id) {
+        position = index;
+        return true;
+      }
+    });
+
+    //Check if queue is already loaded and we are playing the same song
+    if (this.sameQueue(feed) && this.queuePosition === position) return this.play();
+
+    this.playing = false;
+    this.queue = feed;
+    this.queuePosition = position;
+    this.current = feed[this.queuePosition];
+    this.album = this.current.albumId ? this.current.albumId : null;
+    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
+    this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
+    this.play();
+  }
+
   this.queueFiles = (album, position) => {
     let files = album.songs;
 
@@ -164,11 +193,6 @@ function Player() {
     this.interruptLoading(); //Interrupt the loading animation in other songs/albums
     this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
     this.play();
-  }
-
-  this.queueFileFeed = (file) => {
-    this.feed = app.current;
-    this.queueFile(file);
   }
 
   this.play = () => {

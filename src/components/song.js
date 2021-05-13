@@ -13,7 +13,7 @@ function Song(data, view) {
     e.stopPropagation();
     if (this.loading) return; //Ignore action if we are currently loading a song/album
 
-    this.view === 'album' ? app.player.queueFiles(app.views.album.data, this.getPosition()) : app.player.queueFileFeed(this.data);
+    this.view === 'album' ? app.player.queueFiles(app.views.album.data, this.getPosition()) : app.player.queueFilesFeed(this.data);
   }
 
   this.handleArtistButton = (e) => {
