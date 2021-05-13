@@ -100,12 +100,20 @@ function Player() {
   }
 
   this.handlePlayButton = () => {
-    if (!this.current) return log.error('Please load a song first');
+    if (!this.current) return log.error('Please load a song first.');
     this.play();
   }
 
   this.handleForwardButton = () => {
-    log('forward');
+    if (this.queuePosition >= this.queue.length - 1) return log.error('No song left in queue.');
+
+    this.playing = false;
+    this.queuePosition++;
+
+    this.current = this.queue[this.queuePosition];
+    this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
+    this.updateSrc();
+    this.play();
   }
 
   this.updateSrc = () => {
