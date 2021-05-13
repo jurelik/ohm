@@ -2,9 +2,10 @@ const ActionBarAlbum = require('./actionBarAlbum');
 const helpers = require('../utils/helpers');
 const { playIcon, pauseIcon, albumIcon, loadingIcon } = require('../utils/svgs');
 
-function Album(data) {
+function Album(data, view) {
   this.el = document.createElement('div');
   this.data = data;
+  this.view = view; //Where was the album created
   this.children = {};
   this.playing = app.player.playing && helpers.childIsPlaying(app.player.current, this.data.songs);
   this.loading = false;
@@ -13,7 +14,8 @@ function Album(data) {
     e.stopPropagation();
     if (this.loading) return; //Ignore action if we are currently loading a song/album
 
-    app.player.queueFiles(this.data, this.getPosition());
+    if (this.view === 'explore' || this.view === 'feed') app.player.queueFeed(this.data)
+    else app.player.queueAlbum(this.data, this.getPosition());
   }
 
   this.handleArtistButton = (e) => {

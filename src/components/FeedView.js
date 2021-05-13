@@ -51,12 +51,12 @@ function FeedView(data) {
       for (let item of this.data) {
         let el;
         if (item.type === 'song') {
-          let song = new Song(item);
+          let song = new Song(item, 'feed');
           this.children.songs[item.id] = song;
           el = await song.render();
         }
         else if (item.type === 'album') {
-          let album = new Album(item);
+          let album = new Album(item, 'feed');
           this.children.albums[item.id] = album;
           el = await album.render();
         }

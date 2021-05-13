@@ -114,7 +114,7 @@ function Player() {
     return this.audio.setAttribute('src', `${app.GATEWAY}/ipfs/${this.current.cid}`);
   }
 
-  this.queueFile = (file) => {
+  this.queueSong = (file) => {
     //Check if file already loaded
     if (this.queue.length === 1 && this.queue[0].id === file.id && this.queue[0].type === file.type) return this.play();
 
@@ -154,10 +154,9 @@ function Player() {
     return formatted;
   }
 
-  this.queueFilesFeed = (song) => {
+  this.queueFeed = (song) => {
     const feed = this.deconstructFeed();
     let position;
-    console.log(feed)
 
     feed.some((_song, index) => { //Find position of triggered song in feed
       if (_song.id === song.id) {
@@ -179,7 +178,7 @@ function Player() {
     this.play();
   }
 
-  this.queueFiles = (album, position) => {
+  this.queueAlbum = (album, position) => {
     let files = album.songs;
 
     //Check if queue is already loaded and we are playing the same song
