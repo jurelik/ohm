@@ -86,7 +86,11 @@ function App() {
     ipcRenderer.once('daemon-ready', async (e, userDataPath) => {
       log.success('IPFS daemon initiated.');
       try {
-        this.ipfs = createClient();
+        this.ipfs = createClient({
+          headers: {
+            "Clear-Site-Data": ""
+          }
+        });
         this.USER_DATA_PATH = userDataPath;
         const id = await this.getId(); //Get multiaddress for swarm connections
         this.MULTIADDR = id.addresses[4];
