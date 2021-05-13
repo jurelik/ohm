@@ -96,7 +96,18 @@ function Player() {
   }
 
   this.handleBackButton = () => {
-    log('back');
+    if (this.queuePosition <= 0) log.error("Can't go further back in time Morty.");
+    else this.queuePosition--;
+
+    //Check if we are past the 5 second mark of current song
+    if (this.audio.currentTime < 5) {
+      this.current = this.queue[this.queuePosition];
+      this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
+    }
+
+    this.playing = false;
+    this.updateSrc();
+    this.play();
   }
 
   this.handlePlayButton = () => {
