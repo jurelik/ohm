@@ -325,6 +325,8 @@ input[type=submit]:hover {
   justify-content: center;
   align-items: center;
   width: 25px;
+  min-width: 25px;
+  margin-right: 10px;
 }
 
 .albumView .description {
@@ -443,6 +445,9 @@ input[type=submit]:hover {
   padding: 0;
   align-content: stretch;
   overflow: hidden;
+}
+
+.song .title-and-artist {
   margin-right: 10px;
 }
 
