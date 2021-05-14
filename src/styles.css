@@ -263,7 +263,6 @@ input[type=submit]:hover {
   width: 100%;
   height: 50px;
   background-color: #222;
-  border: 1px solid red;
 }
 
 .player button {
@@ -273,10 +272,46 @@ input[type=submit]:hover {
 
 .player .main-back-button {
   margin-left: 10px;
+  stroke: #ccc;
+  fill: #ccc;
+}
+
+.player .main-back-button:enabled:hover {
+  stroke: #eee;
+  fill: #eee;
+}
+
+.player .main-back-button:disabled {
+  stroke: #444;
+  fill: #444;
+  cursor: default;
+}
+
+.player .main-play-button {
+  stroke: #ddd;
+  fill: #ddd;
+}
+
+.player .main-play-button:hover {
+  stroke: #eee;
+  fill: #eee;
 }
 
 .player .main-forward-button {
   margin-right: 10px;
+  stroke: #ccc;
+  fill: #ccc;
+}
+
+.player .main-forward-button:enabled:hover {
+  stroke: #eee;
+  fill: #eee;
+}
+
+.player .main-forward-button:disabled {
+  stroke: #444;
+  fill: #444;
+  cursor: default;
 }
 
 .player .title-and-artist {

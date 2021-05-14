@@ -96,6 +96,7 @@ function Player() {
   }
 
   this.handleBackButton = () => {
+    if (!this.current) return log.error('Please load a song first.');
     if (this.queuePosition <= 0) log.error("Can't go further back in time Morty.");
     if (this.audio.currentTime < 5 && this.queuePosition > 0) this.queuePosition--;
 
@@ -116,6 +117,7 @@ function Player() {
   }
 
   this.handleForwardButton = () => {
+    if (!this.current) return log.error('Please load a song first.');
     if (this.queuePosition >= this.queue.length - 1) return log.error('No song left in queue.');
 
     this.playing = false;
@@ -247,7 +249,9 @@ function Player() {
     //Set class names
     playButton.className = 'main-play-button';
     backButton.className = 'main-back-button';
-    forwardButton.className = 'main-forward-button';
+    forwardButton.classList.add('main-forward-button');
+    if (this.queuePosition >= this.queue.length - 1) forwardButton.disabled = true;
+    if (!this.current) backButton.disabled = true;
 
     //Add attributes and innerHTML
     backButton.innerHTML = previousIcon;
