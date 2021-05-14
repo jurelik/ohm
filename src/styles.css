@@ -288,8 +288,8 @@ input[type=submit]:hover {
 }
 
 .player .main-play-button {
-  stroke: #ddd;
-  fill: #ddd;
+  stroke: #ccc;
+  fill: #ccc;
 }
 
 .player .main-play-button:hover {
@@ -318,6 +318,12 @@ input[type=submit]:hover {
   margin: 0px;
   border: 1px solid yellow;
 }
+
+.player .spinner {
+  width: 15px;
+  height: 15px;
+}
+
 
 /* album element */
 .album .main .album-icon {
@@ -418,6 +424,17 @@ input[type=submit]:hover {
   cursor: pointer;
   height: 20px;
   padding-top: 0;
+}
+
+.song .main .play-button, .album .main .play-button {
+  min-width: 25px;
+  stroke: #ccc;
+  fill: #ccc;
+}
+
+.song .main .play-button:hover, .album .main .play-button:hover {
+  stroke: #eee;
+  fill: #eee;
 }
 
 .song .main p, .album .main p {
