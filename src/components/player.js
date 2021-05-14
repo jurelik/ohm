@@ -36,20 +36,18 @@ function Player() {
   this.handleOnEnded = () => {
     this.playing = false;
     this.queuePosition++;
-    if (this.queue.length === 1) {
+
+    //Stop playback if this was the last song in the queue
+    if (this.queue.length === 1 || this.queuePosition > this.queue.length - 1) {
       this.setRemotePlayingState(false);
+      this.queue = [];
+      this.queuePosition = 0;
+      this.current = null;
       return this.reRender();
     }
 
-    //Stop playback if this was the last song in the queue
-    if (this.queuePosition > this.queue.length - 1) {
-      this.setRemotePlayingState(false);
-      this.reRender();
-      this.queue = [];
-      return this.queuePosition = 0;
-    }
-
     //Continue playing if more items are in the queue
+    console.log('hi')
     this.current = this.queue[this.queuePosition];
     this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
     this.updateSrc();
@@ -138,13 +136,21 @@ function Player() {
 
   this.queueSong = (file) => {
     //Check if file already loaded
-    if (this.queue.length === 1 && this.queue[0].id === file.id && this.queue[0].type === file.type) return this.play();
+    if (this.queue.length === 1 && this.current.id === file.id) return this.play();
 
     this.album = null; //Reset this.album
+    this.queue = [file];
+    this.queuePosition = 0;
+
+    if (this.feed && this.current.id === file.id) {
+      this.current = file;
+      this.feed = false; //Reset this.feed
+      return this.play();
+    }
+
+    this.current = file;
     this.feed = false; //Reset this.feed
     this.playing = false;
-    this.queue = [file];
-    this.current = file;
     this.interruptLoading(); //Interrupt the loading animation in other songs/albums
     this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
     this.play();
@@ -167,7 +173,6 @@ function Player() {
     for (let item of feed) {
       if (item.type === 'album') {
         for (let song of item.songs) {
-          song.albumId = item.id;
           formatted.push(song)
         };
       }
@@ -191,6 +196,25 @@ function Player() {
     //Check if queue is already loaded and we are playing the same song
     if (this.sameQueue(feed) && this.queuePosition === position) return this.play();
 
+    if (!this.feed) { //Check if song/album is already loaded from a different view
+      let _position;
+      let songInQueue = feed.some((song, index) => { //Check if the current song is in this album
+        if (song.id === this.current.id) {
+          _position = index;
+          return true;
+        }
+      });
+
+      if (songInQueue) {
+        this.feed = true; //Reset this.feed
+        this.queue = feed;
+        this.queuePosition = _position;
+        this.current = feed[this.queuePosition];
+        this.album = this.current.albumId ? this.current.albumId : null;
+        return this.play();
+      }
+    }
+
     this.playing = false;
     this.feed = true; //Set this.feed to active
     this.queue = feed;
@@ -207,6 +231,26 @@ function Player() {
 
     //Check if queue is already loaded and we are playing the same song
     if (this.sameQueue(files) && this.queuePosition === position) return this.play();
+
+    if (this.feed) {
+      let _position;
+
+      let songInAlbum = files.some((song, index) => { //Check if the current song is in this album
+        if (song.id === this.current.id) {
+          _position = index;
+          return true;
+        }
+      });
+
+      if (songInAlbum) {
+        this.feed = false; //Reset this.feed
+        this.queue = files;
+        this.queuePosition = _position;
+        this.current = files[this.queuePosition];
+        this.album = album.id;
+        return this.play();
+      }
+    }
 
     this.playing = false;
     this.feed = false; //Reset this.feed
