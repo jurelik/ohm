@@ -275,12 +275,15 @@ function Player() {
     let backButton = document.createElement('button');
     let playButton = document.createElement('button')
     let forwardButton = document.createElement('button');
+    let main = document.createElement('div');
     let titleAndArtist = document.createElement('p');
+    let slider = document.createElement('input');
 
     //Set class names
     playButton.className = 'main-play-button';
     backButton.className = 'main-back-button';
     forwardButton.classList.add('main-forward-button');
+    main.className = 'player-main';
     if (this.queuePosition >= this.queue.length - 1) forwardButton.disabled = true;
     if (!this.current) backButton.disabled = true;
 
@@ -289,6 +292,7 @@ function Player() {
     playButton.innerHTML = this.playing ? pauseIconBig : playIconBig;
     forwardButton.innerHTML = nextIcon;
     titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title || this.current.name}` : 'Load a song';
+    slider.setAttribute('type', 'range');
 
     //Add listeners
     backButton.onclick = this.handleBackButton;
@@ -302,9 +306,10 @@ function Player() {
     this.el.appendChild(backButton);
     this.el.appendChild(playButton);
     this.el.appendChild(forwardButton);
-    this.el.appendChild(titleAndArtist);
+    this.el.appendChild(main);
+    main.appendChild(titleAndArtist);
+    main.appendChild(slider);
   }
-
 }
 
 module.exports = Player;

@@ -270,6 +270,18 @@ input[type=submit]:hover {
   margin: 2px;
 }
 
+.player .player-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.player .player-main input {
+  width: 90%;
+}
+
 .player .main-back-button {
   margin-left: 10px;
   stroke: #ccc;
