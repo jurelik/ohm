@@ -47,10 +47,108 @@ function Player() {
     }
 
     //Continue playing if more items are in the queue
-    console.log('hi')
     this.current = this.queue[this.queuePosition];
     this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
     this.updateSrc();
+    this.play();
+  }
+
+  //BUTTON HANDLERS
+  this.handleBackButton = () => {
+    if (!this.current) return log.error('Please load a song first.');
+    if (this.queuePosition <= 0) log.error("Can't go further back in time Morty.");
+    if (this.audio.currentTime < 5 && this.queuePosition > 0) this.queuePosition--;
+
+    //Check if we are past the 5 second mark of current song
+    if (this.audio.currentTime < 5) {
+      this.current = this.queue[this.queuePosition];
+      this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
+    }
+
+    this.playing = false;
+    this.updateSrc();
+    this.play();
+  }
+
+  this.handlePlayButton = () => {
+    if (!this.current) return log.error('Please load a song first.');
+    this.play();
+  }
+
+  this.handleForwardButton = () => {
+    if (!this.current) return log.error('Please load a song first.');
+    if (this.queuePosition >= this.queue.length - 1) return log.error('No song left in queue.');
+
+    this.playing = false;
+    this.queuePosition++;
+
+    this.current = this.queue[this.queuePosition];
+    this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
+    this.updateSrc();
+    this.play();
+  }
+
+  //QUEUE HANDLERS
+  this.queueSong = (file) => {
+    //Check if file already loaded
+    if (this.queue.length === 1 && this.current.id === file.id) return this.play();
+    const alreadyLoaded = this.feed && this.current.id === file.id; //Is the song already playing in a feed?
+
+    this.album = null; //Reset this.album
+    this.queue = [file];
+    this.queuePosition = 0;
+    this.current = file;
+    this.feed = false; //Reset this.feed
+    if (alreadyLoaded) return this.play(); //Return here if song is already loaded
+
+    this.playing = false;
+    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
+    this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
+    this.play();
+  }
+
+  this.queueFeed = (song) => {
+    const feed = this.deconstructFeed();
+    const position = this.getSongPosition(song, feed); //Position of selected song in feed
+    let _position; //Position of this.current in new feed (if applicable) - means song was loaded in a different view
+
+    //Check if queue is already loaded and we are playing the same song
+    if (this.sameQueue(feed) && this.queuePosition === position) return this.play();
+
+    _position = !this.feed && this.current ? this.checkIfCurrentSongIncluded(feed) : null; //Check if the current song is included in the feed
+
+    this.feed = true; //Set this.feed to active
+    this.queue = feed;
+    this.queuePosition = _position || position;
+    this.current = feed[this.queuePosition];
+    this.album = this.current.albumId ? this.current.albumId : null;
+    if (_position) return this.play(); //Return here if _position was found
+
+    this.playing = false;
+    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
+    this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
+    return this.play();
+  }
+
+  this.queueAlbum = (album, position) => {
+    let files = album.songs;
+    let _position; //Position of this.current in album (if applicable) - means song was loaded in a feed if not null
+
+    //Check if queue is already loaded and we are playing the same song
+    if (this.sameQueue(files) && this.queuePosition === position) return this.play();
+
+    if (this.current) _position = this.checkIfCurrentSongIncluded(files); //Check if the current song is included in the album
+
+    this.feed = false; //Reset this.feed
+    this.queue = files;
+    this.queuePosition = _position || position;
+    this.current = files[this.queuePosition];
+    this.album = album.id;
+    if (_position) return this.play(); //Return here if _position was found
+
+    this.playing = false;
+    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
+    this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
     this.play();
   }
 
@@ -93,63 +191,11 @@ function Player() {
     }
   }
 
-  this.handleBackButton = () => {
-    if (!this.current) return log.error('Please load a song first.');
-    if (this.queuePosition <= 0) log.error("Can't go further back in time Morty.");
-    if (this.audio.currentTime < 5 && this.queuePosition > 0) this.queuePosition--;
-
-    //Check if we are past the 5 second mark of current song
-    if (this.audio.currentTime < 5) {
-      this.current = this.queue[this.queuePosition];
-      this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
-    }
-
-    this.playing = false;
-    this.updateSrc();
-    this.play();
-  }
-
-  this.handlePlayButton = () => {
-    if (!this.current) return log.error('Please load a song first.');
-    this.play();
-  }
-
-  this.handleForwardButton = () => {
-    if (!this.current) return log.error('Please load a song first.');
-    if (this.queuePosition >= this.queue.length - 1) return log.error('No song left in queue.');
-
-    this.playing = false;
-    this.queuePosition++;
-
-    this.current = this.queue[this.queuePosition];
-    this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
-    this.updateSrc();
-    this.play();
-  }
-
   this.updateSrc = () => {
     //If song, artist and title must be included as the CID points to the song parent folder
     if (this.current.type === 'song') return this.audio.setAttribute('src', `${app.GATEWAY}/ipfs/${this.current.cid}/${this.current.artist} - ${this.current.title || this.current.name}.${this.current.format}`);
 
     return this.audio.setAttribute('src', `${app.GATEWAY}/ipfs/${this.current.cid}`);
-  }
-
-  this.queueSong = (file) => {
-    //Check if file already loaded
-    if (this.queue.length === 1 && this.current.id === file.id) return this.play();
-    let alreadyLoaded = this.feed && this.current.id === file.id; //Is the song already playing in a feed?
-
-    this.album = null; //Reset this.album
-    this.queue = [file];
-    this.queuePosition = 0;
-    this.current = file;
-    this.feed = false; //Reset this.feed
-    if (alreadyLoaded) return this.play(); //Return here if song is already loaded
-
-    this.playing = false;
-    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
-    this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
-    this.play();
   }
 
   this.sameQueue = (files) => {
@@ -204,69 +250,6 @@ function Player() {
     return position;
   }
 
-  this.queueFeed = (song) => {
-    const feed = this.deconstructFeed();
-    const position = this.getSongPosition(song, feed); //Position of selected song in feed
-    let _position; //Position of this.current in new feed (if applicable) - means song was loaded in a different view
-
-    //Check if queue is already loaded and we are playing the same song
-    if (this.sameQueue(feed) && this.queuePosition === position) return this.play();
-
-    _position = !this.feed && this.current ? this.checkIfCurrentSongIncluded(feed) : null; //Check if the current song is included in the feed
-
-    if (_position) {
-      this.feed = true; //Set this.feed to active
-      this.queue = feed;
-      this.queuePosition = _position;
-      this.current = feed[this.queuePosition];
-      this.album = this.current.albumId ? this.current.albumId : null;
-      return this.play();
-    }
-
-    this.feed = true; //Set this.feed to active
-    this.queue = feed;
-    this.queuePosition = _position || position;
-    this.current = feed[this.queuePosition];
-    this.album = this.current.albumId ? this.current.albumId : null;
-    if (_position) return this.play(); //Return here if _position was found
-
-    this.playing = false;
-    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
-    this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
-    return this.play();
-  }
-
-  this.queueAlbum = (album, position) => {
-    let files = album.songs;
-    let _position; //Position of this.current in album (if applicable) - means song was loaded in a feed
-
-    //Check if queue is already loaded and we are playing the same song
-    if (this.sameQueue(files) && this.queuePosition === position) return this.play();
-
-    _position = this.feed ? this.checkIfCurrentSongIncluded(files) : null; //Check if the current song is included in the album
-
-    this.feed = false; //Reset this.feed
-    this.queue = files;
-    this.queuePosition = _position || position;
-    this.current = files[this.queuePosition];
-    this.album = album.id;
-    if (_position) return this.play(); //Return here if _position was found
-
-    this.playing = false;
-    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
-    this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
-    this.play();
-  }
-
-  this.play = () => {
-    this.playing ? this.audio.pause() : this.audio.play();
-  }
-
-  this.reRender = () => {
-    this.el.innerHTML = '';
-    this.render();
-  }
-
   this.triggerSpinner = () => {
     //Update main section
     this.loading = true;
@@ -276,6 +259,15 @@ function Player() {
     for (const song of app.songs) if (song.data.id === this.current.id && this.current.type === 'song') song.triggerSpinner();
     for (const album of app.albums) if (album.data.id === this.album && this.current.type === 'song') album.triggerSpinner();
     for (const file of app.files) if (file.data.id === this.current.id && file.data.type === this.current.type) file.triggerSpinner();
+  }
+
+  this.play = () => {
+    this.playing ? this.audio.pause() : this.audio.play();
+  }
+
+  this.reRender = () => {
+    this.el.innerHTML = '';
+    this.render();
   }
 
   this.render = () => {
