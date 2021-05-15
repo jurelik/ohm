@@ -137,19 +137,15 @@ function Player() {
   this.queueSong = (file) => {
     //Check if file already loaded
     if (this.queue.length === 1 && this.current.id === file.id) return this.play();
+    let alreadyLoaded = this.feed && this.current.id === file.id; //Is the song already playing in a feed?
 
     this.album = null; //Reset this.album
     this.queue = [file];
     this.queuePosition = 0;
-
-    if (this.feed && this.current.id === file.id) {
-      this.current = file;
-      this.feed = false; //Reset this.feed
-      return this.play();
-    }
-
     this.current = file;
     this.feed = false; //Reset this.feed
+    if (alreadyLoaded) return this.play(); //Return here if song is already loaded
+
     this.playing = false;
     this.interruptLoading(); //Interrupt the loading animation in other songs/albums
     this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
