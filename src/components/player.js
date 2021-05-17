@@ -53,6 +53,10 @@ function Player() {
     this.play();
   }
 
+  this.handleOnTimeUpdate = () => {
+    this.el.querySelector('.slider').value = this.getSliderValue();
+  }
+
   //BUTTON HANDLERS
   this.handleBackButton = () => {
     if (!this.current) return log.error('Please load a song first.');
@@ -86,6 +90,11 @@ function Player() {
     this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
     this.updateSrc();
     this.play();
+  }
+
+  this.handlePositionChange = (e) => {
+    const percentage = e.target.value / 100;
+    return this.audio.currentTime = this.audio.duration * percentage;
   }
 
   //QUEUE HANDLERS
@@ -261,6 +270,11 @@ function Player() {
     for (const file of app.files) if (file.data.id === this.current.id && file.data.type === this.current.type) file.triggerSpinner();
   }
 
+  this.getSliderValue = () => {
+    if (this.audio.duration) return this.audio.currentTime / this.audio.duration * 100;
+    return 0;
+  }
+
   this.play = () => {
     this.playing ? this.audio.pause() : this.audio.play();
   }
@@ -284,6 +298,7 @@ function Player() {
     backButton.className = 'main-back-button';
     forwardButton.classList.add('main-forward-button');
     main.className = 'player-main';
+    slider.className = 'slider';
     if (this.queuePosition >= this.queue.length - 1) forwardButton.disabled = true;
     if (!this.current) backButton.disabled = true;
 
@@ -293,6 +308,9 @@ function Player() {
     forwardButton.innerHTML = nextIcon;
     titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title || this.current.name}` : 'Load a song';
     slider.setAttribute('type', 'range');
+    slider.setAttribute('step', 'any');
+    slider.setAttribute('max', '100');
+    slider.setAttribute('value', this.getSliderValue());
 
     //Add listeners
     backButton.onclick = this.handleBackButton;
@@ -302,6 +320,8 @@ function Player() {
     this.audio.onplay = this.handleOnPlay;
     this.audio.onplaying = this.handleOnPlaying;
     this.audio.onpause = this.handleOnPause;
+    this.audio.ontimeupdate = this.handleOnTimeUpdate;
+    slider.onchange = this.handlePositionChange;
 
     this.el.appendChild(backButton);
     this.el.appendChild(playButton);
