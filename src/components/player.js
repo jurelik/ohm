@@ -56,6 +56,7 @@ function Player() {
 
   this.handleOnTimeUpdate = () => {
     if (!this.seekClicked) this.el.querySelector('.seek').value = this.getSeekValue();
+    this.updateSeekStyle();
   }
 
   //BUTTON HANDLERS
@@ -95,14 +96,17 @@ function Player() {
 
   this.handleSeekChange = (e) => {
     if (!this.audio.duration) return; //Audio not loaded
-
     this.seekClicked = false;
+    this.updateSeekStyle();
+
+    //Update currentTime
     const percentage = e.target.value / 100;
     return this.audio.currentTime = this.audio.duration * percentage;
   }
 
   this.handleSeekInput = (e) => {
     this.seekClicked = true;
+    this.updateSeekStyle();
   }
 
   //QUEUE HANDLERS
@@ -283,6 +287,12 @@ function Player() {
     return 0;
   }
 
+  this.updateSeekStyle = (seek) => { //Updates background property
+    const el = seek || this.el.querySelector('.seek');
+    const value = (el.value-el.min)/(el.max-el.min)*100
+    el.style.background = 'linear-gradient(to right, #888 0%, #888 ' + value + '%, #444 ' + value + '%, #444 100%)'
+  }
+
   this.play = () => {
     this.playing ? this.audio.pause() : this.audio.play();
   }
@@ -319,6 +329,7 @@ function Player() {
     seek.setAttribute('step', 'any');
     seek.setAttribute('max', '100');
     seek.setAttribute('value', this.getSeekValue());
+    this.updateSeekStyle(seek);
 
     //Add listeners
     backButton.onclick = this.handleBackButton;
