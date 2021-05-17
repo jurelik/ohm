@@ -11,6 +11,7 @@ function Player() {
   this.queuePosition = 0;
   this.playing = false;
   this.loading = false;
+  this.positionClicked = false; //Keep track of user clicking the position slider
 
   //EVENT HANDLERS
   this.handleOnPlay = () => {
@@ -54,7 +55,7 @@ function Player() {
   }
 
   this.handleOnTimeUpdate = () => {
-    this.el.querySelector('.slider').value = this.getSliderValue();
+    if (!this.positionClicked) this.el.querySelector('.slider').value = this.getSliderValue();
   }
 
   //BUTTON HANDLERS
@@ -93,8 +94,13 @@ function Player() {
   }
 
   this.handlePositionChange = (e) => {
+    this.positionClicked = false;
     const percentage = e.target.value / 100;
     return this.audio.currentTime = this.audio.duration * percentage;
+  }
+
+  this.handlePositionInput = (e) => {
+    this.positionClicked = true;
   }
 
   //QUEUE HANDLERS
@@ -322,6 +328,7 @@ function Player() {
     this.audio.onpause = this.handleOnPause;
     this.audio.ontimeupdate = this.handleOnTimeUpdate;
     slider.onchange = this.handlePositionChange;
+    slider.oninput = this.handlePositionInput;
 
     this.el.appendChild(backButton);
     this.el.appendChild(playButton);
