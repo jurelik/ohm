@@ -11,7 +11,7 @@ function Player() {
   this.queuePosition = 0;
   this.playing = false;
   this.loading = false;
-  this.positionClicked = false; //Keep track of user clicking the position slider
+  this.seekClicked = false; //Keep track of user clicking the seek slider
 
   //EVENT HANDLERS
   this.handleOnPlay = () => {
@@ -55,7 +55,7 @@ function Player() {
   }
 
   this.handleOnTimeUpdate = () => {
-    if (!this.positionClicked) this.el.querySelector('.slider').value = this.getSliderValue();
+    if (!this.seekClicked) this.el.querySelector('.seek').value = this.getSeekValue();
   }
 
   //BUTTON HANDLERS
@@ -93,14 +93,16 @@ function Player() {
     this.play();
   }
 
-  this.handlePositionChange = (e) => {
-    this.positionClicked = false;
+  this.handleSeekChange = (e) => {
+    if (!this.audio.duration) return; //Audio not loaded
+
+    this.seekClicked = false;
     const percentage = e.target.value / 100;
     return this.audio.currentTime = this.audio.duration * percentage;
   }
 
-  this.handlePositionInput = (e) => {
-    this.positionClicked = true;
+  this.handleSeekInput = (e) => {
+    this.seekClicked = true;
   }
 
   //QUEUE HANDLERS
@@ -276,7 +278,7 @@ function Player() {
     for (const file of app.files) if (file.data.id === this.current.id && file.data.type === this.current.type) file.triggerSpinner();
   }
 
-  this.getSliderValue = () => {
+  this.getSeekValue = () => {
     if (this.audio.duration) return this.audio.currentTime / this.audio.duration * 100;
     return 0;
   }
@@ -297,14 +299,14 @@ function Player() {
     let forwardButton = document.createElement('button');
     let main = document.createElement('div');
     let titleAndArtist = document.createElement('p');
-    let slider = document.createElement('input');
+    let seek = document.createElement('input');
 
     //Set class names
     playButton.className = 'main-play-button';
     backButton.className = 'main-back-button';
     forwardButton.classList.add('main-forward-button');
     main.className = 'player-main';
-    slider.className = 'slider';
+    seek.className = 'seek';
     if (this.queuePosition >= this.queue.length - 1) forwardButton.disabled = true;
     if (!this.current) backButton.disabled = true;
 
@@ -313,10 +315,10 @@ function Player() {
     playButton.innerHTML = this.playing ? pauseIconBig : playIconBig;
     forwardButton.innerHTML = nextIcon;
     titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title || this.current.name}` : 'Load a song';
-    slider.setAttribute('type', 'range');
-    slider.setAttribute('step', 'any');
-    slider.setAttribute('max', '100');
-    slider.setAttribute('value', this.getSliderValue());
+    seek.setAttribute('type', 'range');
+    seek.setAttribute('step', 'any');
+    seek.setAttribute('max', '100');
+    seek.setAttribute('value', this.getSeekValue());
 
     //Add listeners
     backButton.onclick = this.handleBackButton;
@@ -327,15 +329,15 @@ function Player() {
     this.audio.onplaying = this.handleOnPlaying;
     this.audio.onpause = this.handleOnPause;
     this.audio.ontimeupdate = this.handleOnTimeUpdate;
-    slider.onchange = this.handlePositionChange;
-    slider.oninput = this.handlePositionInput;
+    seek.onchange = this.handleSeekChange;
+    seek.oninput = this.handleSeekInput;
 
     this.el.appendChild(backButton);
     this.el.appendChild(playButton);
     this.el.appendChild(forwardButton);
     this.el.appendChild(main);
     main.appendChild(titleAndArtist);
-    main.appendChild(slider);
+    main.appendChild(seek);
   }
 }
 
