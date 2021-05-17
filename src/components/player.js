@@ -308,7 +308,7 @@ function Player() {
     let playButton = document.createElement('button')
     let forwardButton = document.createElement('button');
     let main = document.createElement('div');
-    let titleAndArtist = document.createElement('p');
+    let titleAndArtist = document.createElement('div');
     let seek = document.createElement('input');
 
     //Set class names
@@ -316,6 +316,7 @@ function Player() {
     backButton.className = 'main-back-button';
     forwardButton.classList.add('main-forward-button');
     main.className = 'player-main';
+    titleAndArtist.className = 'title-and-artist';
     seek.className = 'seek';
     if (this.queuePosition >= this.queue.length - 1) forwardButton.disabled = true;
     if (!this.current) backButton.disabled = true;
