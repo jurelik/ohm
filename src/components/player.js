@@ -109,6 +109,11 @@ function Player() {
     this.updateSeekStyle();
   }
 
+  this.handleVolumeInput = (e) => {
+    this.updateSeekStyle(e.target);
+    return this.audio.volume = e.target.value / 100;
+  }
+
   //QUEUE HANDLERS
   this.queueSong = (file) => {
     //Check if file already loaded
@@ -293,6 +298,10 @@ function Player() {
     el.style.background = 'linear-gradient(to right, #888 0%, #888 ' + value + '%, #444 ' + value + '%, #444 100%)'
   }
 
+  this.getVolumeValue = () => {
+    return this.audio.volume * 100;
+  }
+
   this.play = () => {
     this.playing ? this.audio.pause() : this.audio.play();
   }
@@ -310,6 +319,7 @@ function Player() {
     let main = document.createElement('div');
     let titleAndArtist = document.createElement('div');
     let seek = document.createElement('input');
+    let volume = document.createElement('input');
 
     //Set class names
     playButton.className = 'main-play-button';
@@ -318,6 +328,7 @@ function Player() {
     main.className = 'player-main';
     titleAndArtist.className = 'title-and-artist';
     seek.className = 'seek';
+    volume.className = 'volume';
     if (this.queuePosition >= this.queue.length - 1) forwardButton.disabled = true;
     if (!this.current) backButton.disabled = true;
 
@@ -330,7 +341,12 @@ function Player() {
     seek.setAttribute('step', 'any');
     seek.setAttribute('max', '100');
     seek.setAttribute('value', this.getSeekValue());
+    volume.setAttribute('type', 'range');
+    volume.setAttribute('step', 'any');
+    volume.setAttribute('max', '100');
+    volume.setAttribute('value', this.getVolumeValue());
     this.updateSeekStyle(seek);
+    this.updateSeekStyle(volume);
 
     //Add listeners
     backButton.onclick = this.handleBackButton;
@@ -343,6 +359,7 @@ function Player() {
     this.audio.ontimeupdate = this.handleOnTimeUpdate;
     seek.onchange = this.handleSeekChange;
     seek.oninput = this.handleSeekInput;
+    volume.oninput = this.handleVolumeInput;
 
     this.el.appendChild(backButton);
     this.el.appendChild(playButton);
@@ -350,6 +367,7 @@ function Player() {
     this.el.appendChild(main);
     main.appendChild(titleAndArtist);
     main.appendChild(seek);
+    this.el.appendChild(volume);
   }
 }
 
