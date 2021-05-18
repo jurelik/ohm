@@ -26,6 +26,7 @@ const pauseIconBig = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3
 const deleteIcon = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="-100 -100 200 200"><path fill="none" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" d="M-75-75h0L75 75m-150 0h0L75-75"/></svg>';
 const nextIcon = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="-100 -100 200 200"><path stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M-60-75c-8.285 0-15 6.716-15 15h0V60c0 8.285 6.715 15 15 15h0L60 15h0v60h15V-75H60v60h0L-60-75"/></svg>'
 const previousIcon = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="-100 -100 200 200"><path stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M75-60c0-8.284-6.716-15-15-15h0L-60-15h0v-60h-15V75h15V15h0L60 75c8.284 0 15-6.715 15-15h0V-60"/></svg>'
+const speakerIcon = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="-100 -100 200 200"><path fill="none" stroke="#ddd" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" d="M-7.5-45h0l-30 30h-30v30h30l30 30v-90m30 15c20 20 20 40 0 60m15-90c40 40 40 80 0 120"/></svg>'
 
 module.exports = {
   locationIcon,
@@ -42,5 +43,6 @@ module.exports = {
   pauseIconBig,
   deleteIcon,
   nextIcon,
-  previousIcon
+  previousIcon,
+  speakerIcon
 }

@@ -1,5 +1,5 @@
 const log = require('../utils/log');
-const { playIconBig, pauseIconBig, loadingIcon, nextIcon, previousIcon } = require('../utils/svgs');
+const { playIconBig, pauseIconBig, loadingIcon, nextIcon, previousIcon, speakerIcon } = require('../utils/svgs');
 
 function Player() {
   this.el = document.querySelector('.player');
@@ -320,6 +320,7 @@ function Player() {
     let titleAndArtist = document.createElement('div');
     let seek = document.createElement('input');
     let volume = document.createElement('input');
+    let speaker = document.createElement('div');
 
     //Set class names
     playButton.className = 'main-play-button';
@@ -329,6 +330,7 @@ function Player() {
     titleAndArtist.className = 'title-and-artist';
     seek.className = 'seek';
     volume.className = 'volume';
+    speaker.className = 'speaker';
     if (this.queuePosition >= this.queue.length - 1) forwardButton.disabled = true;
     if (!this.current) backButton.disabled = true;
 
@@ -345,6 +347,7 @@ function Player() {
     volume.setAttribute('step', 'any');
     volume.setAttribute('max', '100');
     volume.setAttribute('value', this.getVolumeValue());
+    speaker.innerHTML = speakerIcon;
     this.updateSeekStyle(seek);
     this.updateSeekStyle(volume);
 
@@ -367,6 +370,7 @@ function Player() {
     this.el.appendChild(main);
     main.appendChild(titleAndArtist);
     main.appendChild(seek);
+    this.el.appendChild(speaker);
     this.el.appendChild(volume);
   }
 }

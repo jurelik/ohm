@@ -362,6 +362,13 @@ input[type=range]::-webkit-slider-thumb {
 .player .volume {
   width: 75px;
   margin-right: 20px;
+  margin-left: 5px;
+}
+
+.player .speaker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-left: 20px;
 }
 
