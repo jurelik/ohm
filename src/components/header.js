@@ -83,6 +83,13 @@ function Header() {
     if (app.views[app.current].refresh) app.views[app.current].refresh();
   }
 
+  this.handleSearch = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    console.log(this.el.querySelector('.search-input').value);
+  }
+
   this.handleReader = async (reader) => {
     try {
       const { done, value } = await reader.read();
@@ -116,6 +123,9 @@ function Header() {
     let back = document.createElement('button');
     let forward = document.createElement('button');
     let refresh = document.createElement('button');
+    let searchContainer = document.createElement('div');
+    let searchInput = document.createElement('input');
+    let searchButton = document.createElement('button');
     let right = document.createElement('div');
     let upload = document.createElement('button');
     let test = document.createElement('button');
@@ -126,12 +136,16 @@ function Header() {
     refresh.innerHTML = refreshIcon;
     upload.innerHTML = 'upload';
     test.innerHTML = 'test';
+    searchButton.innerHTML = 'search';
 
     //Add classes
     forward.classList.add('disabled');
     back.classList.add('disabled');
     refresh.className = 'refresh';
     right.classList.add('header-right');
+    searchInput.setAttribute('type', 'text');
+    searchInput.className = ('search-input');
+    searchButton.setAttribute('type', 'submit');
 
     //Add listeners
     back.onclick = this.handleBack;
@@ -139,6 +153,7 @@ function Header() {
     refresh.onclick = this.handleRefresh;
     upload.onclick = this.handleUpload;
     test.onclick = this.handleTest;
+    searchButton.onclick = this.handleSearch;
 
     //Create reference
     this.backButton = back;
@@ -147,6 +162,9 @@ function Header() {
     this.el.appendChild(back);
     this.el.appendChild(forward);
     this.el.appendChild(refresh);
+    this.el.appendChild(searchContainer);
+    searchContainer.appendChild(searchInput);
+    searchContainer.appendChild(searchButton);
     this.el.appendChild(right);
     right.appendChild(upload);
     right.appendChild(test);
