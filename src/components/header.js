@@ -1,4 +1,4 @@
-const ipfs = require('../utils/ipfs');
+const io = require('../utils/io');
 const log = require('../utils/log');
 const { backIcon, forwardIcon, refreshIcon } = require('../utils/svgs');
 
@@ -83,11 +83,18 @@ function Header() {
     if (app.views[app.current].refresh) app.views[app.current].refresh();
   }
 
-  this.handleSearch = (e) => {
+  this.handleSearch = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log(this.el.querySelector('.search-input').value);
+    try {
+      const res = await io.search({ searchQuery: this.el.querySelector('.search-input').value });
+      console.log(res);
+
+    }
+    catch (err) {
+      log.error(err);
+    }
   }
 
   this.handleReader = async (reader) => {

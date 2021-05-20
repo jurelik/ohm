@@ -118,9 +118,31 @@ const deleteItem = async (data) => {
   }
 }
 
+const search = async (data) => {
+  try {
+    const _res = await fetch(`${app.URL}/api/search`, {
+      method: 'POST',
+      credentials: 'include', //Include cookie
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    const res = await _res.json();
+    if (res.type === 'error') throw res.err;
+
+    return res;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   login,
   upload,
   resumeUpload,
-  deleteItem
+  deleteItem,
+  search
 }
