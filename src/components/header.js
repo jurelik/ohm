@@ -88,7 +88,7 @@ function Header() {
     e.stopPropagation();
 
     try {
-      const res = await io.search({ searchQuery: this.el.querySelector('.search-input').value });
+      const res = await io.search({ searchQuery: this.el.querySelector('.search-input').value, searchCategory: 'artists', searchBy: 'tags' });
       console.log(res);
 
     }

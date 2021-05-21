@@ -14,12 +14,21 @@ const addSong = async (song, path) => {
 
     //Add files
     for (const file of song.files) {
-      const buffer = await fsp.readFile(file.path);
-      const { cid } = await app.ipfs.add({ content: buffer }); //Add song to IPFS
+      if (file.type === 'internal') {
+        const _file = await getFile(file.id);
 
-      //Copy file to MFS
-      await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}/${song.title}/files/${app.artist} - ${file.name}.${file.format}`);
-      file.cid = cid.string;
+        //Copy file to MFS
+        await app.ipfs.files.cp(`/ipfs/${_file.cid}`, `${path}/${song.title}/files/${_file.artist} - ${_file.name}.${_file.format}`);
+        file.cid = _file.cid;
+      }
+      else {
+        const buffer = await fsp.readFile(file.path);
+        const { cid } = await app.ipfs.add({ content: buffer }); //Add song to IPFS
+
+        //Copy file to MFS
+        await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}/${song.title}/files/${app.artist} - ${file.name}.${file.format}`);
+        file.cid = cid.string;
+      }
     }
 
     //Get CID of folder
@@ -294,6 +303,23 @@ const fsCreateSongFolder = async (transfer, fsPath) => {
     }
 
     return `${process.env.HOME}/Documents/ohm${transfer.path}/${transfer.title}`;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+const getFile = async (id) => {
+  try {
+    const _res = await fetch(`${app.URL}/api/file/${id}`, {
+      method: 'GET',
+      credentials: 'include', //Include cookie
+    });
+
+    const res = await _res.json();
+    if (res.type === 'error') throw res.err;
+
+    return res.payload;
   }
   catch (err) {
     throw err;

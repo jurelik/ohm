@@ -56,7 +56,8 @@ function UploadFile(data) {
     const file = Array.from(this.el.querySelectorAll('.file-input')).reduce((acc, input) => {
       if (input.type === 'radio' && input.checked) return { ...acc, type: input.value };
       else if (input.type === 'radio' && !input.checked) return { ...acc };
-      else if (input.type === 'file') return { ...acc, path: input.files[0].path };
+      else if (input.type === 'file' && input.files[0]) return { ...acc, path: input.files[0].path };
+      else if (input.type === 'file' && !input.files[0]) return { ...acc };
 
       return { ...acc, [input.name]: input.value };
     }, {});
@@ -73,7 +74,7 @@ function UploadFile(data) {
 
     //Add properties
     file.cid = null;
-    file.format = file.path.slice(-3);
+    if (file.type !== 'internal') file.format = file.path.slice(-3);
 
     return file;
   }
