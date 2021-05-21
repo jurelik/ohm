@@ -34,6 +34,9 @@ function Header() {
       case 'upload':
         app.historyIndex--;
         return app.changeView(view.type, view.data);
+      case 'search':
+        app.historyIndex--;
+        return app.changeView(view.type, view.data);
       default:
         app.historyIndex--;
         app.nav.select(view.type)
@@ -69,6 +72,9 @@ function Header() {
       case 'upload':
         app.historyIndex++;
         return app.changeView(view.type, view.data);
+      case 'search':
+        app.historyIndex++;
+        return app.changeView(view.type, view.data);
       default:
         app.historyIndex++;
         app.nav.select(view.type)
@@ -83,18 +89,13 @@ function Header() {
     if (app.views[app.current].refresh) app.views[app.current].refresh();
   }
 
-  this.handleSearch = async (e) => {
+  this.handleSearch = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    const searchQuery = this.el.querySelector('.search-input').value;
 
-    try {
-      const res = await io.search({ searchQuery: this.el.querySelector('.search-input').value, searchCategory: 'artists', searchBy: 'tags' });
-      console.log(res);
-
-    }
-    catch (err) {
-      log.error(err);
-    }
+    app.addToHistory('search', { searchQuery });
+    app.changeView('search', { searchQuery });
   }
 
   this.handleReader = async (reader) => {

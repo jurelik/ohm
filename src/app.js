@@ -12,6 +12,7 @@ const SongView = require('./components/songView');
 const AlbumView = require('./components/albumView');
 const ArtistView = require('./components/artistView');
 const UploadView = require('./components/uploadView');
+const SearchView = require('./components/searchView');
 const PinnedView = require('./components/pinnedView');
 const TransfersView = require('./components/transfersView');
 const Player = require('./components/player');
@@ -32,6 +33,7 @@ function App() {
     album: null,
     artist: null,
     upload: null,
+    search: null,
     pinned: null,
     transfers: null
   }
@@ -167,6 +169,9 @@ function App() {
 
           this.views.upload = new UploadView();
           return this.views.upload.render();
+        case 'search':
+          this.views.search = new SearchView(data.searchQuery);
+          return await this.views.search.render();
         case 'pinned':
           this.views.pinned = new PinnedView();
           return await this.views.pinned.render();
