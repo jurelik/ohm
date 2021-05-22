@@ -124,6 +124,8 @@ function SearchView(data) {
       this.children.main = main;
       this.el.appendChild(await main.render());
 
+      document.querySelector('.search-input').value = this.searchQuery; //Update search-input with the current value
+
       //Add listeners
       category.onchange = this.handleSearchChange;
       by.onchange = this.handleSearchChange;
