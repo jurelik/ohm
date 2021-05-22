@@ -9,7 +9,7 @@ function SearchView(data) {
   this.searchQuery = this.data;
   this.results;
   this.children = {
-    main: '',
+    main: null,
   };
 
   this.fetch = () => {
@@ -31,11 +31,9 @@ function SearchView(data) {
 
     this.searchCategory = this.el.querySelector('#category').value;
     this.searchBy = this.el.querySelector('#by').value;
-    this.searchQuery = this.data;
+    this.searchQuery = document.querySelector('.search-input').value;
 
-    console.log(this.searchCategory)
-    console.log(this.searchBy)
-
+    return this.refresh();
   }
 
   this.createSelect = (options) => {
@@ -71,8 +69,13 @@ function SearchView(data) {
 
   this.refresh = async () => {
     try {
-      this.results = null;
-      await this.render();
+      this.results = await this.fetch(); //Re-fetch data
+      this.children.main.el.remove(); //Reset main view
+
+      //Include main view
+      const main = new SearchViewMain(this.results);
+      this.children.main = main;
+      this.el.appendChild(await main.render());
     }
     catch (err) {
       console.error(err);

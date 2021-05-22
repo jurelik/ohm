@@ -90,10 +90,12 @@ function Header() {
   }
 
   this.handleSearch = (e) => {
+    if (app.current === 'search') return app.views.search.handleSearchChange(e);
+
     e.preventDefault();
     e.stopPropagation();
-    const searchQuery = this.el.querySelector('.search-input').value;
 
+    const searchQuery = this.el.querySelector('.search-input').value;
     app.addToHistory('search', { searchQuery });
     app.changeView('search', { searchQuery });
   }
