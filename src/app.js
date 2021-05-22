@@ -147,7 +147,7 @@ function App() {
       this.songs = []; //Clear song references
       this.albums = []; //Clear album references
       this.files = []; //Clear files references
-      document.querySelector('.search-input').value = ''; //Reset search-input
+      if (view !== 'search') document.querySelector('.search-input').value = ''; //Reset search-input
 
       switch (view) {
         case 'explore':
