@@ -96,8 +96,8 @@ function Header() {
     e.stopPropagation();
 
     const searchQuery = this.el.querySelector('.search-input').value;
-    app.addToHistory('search', { searchQuery });
-    app.changeView('search', { searchQuery });
+    app.addToHistory('search', { searchQuery, searchCategory: 'songs', searchBy: 'title' });
+    app.changeView('search', { searchQuery, searchCategory: 'songs', searchBy: 'title' });
   }
 
   this.handleReader = async (reader) => {

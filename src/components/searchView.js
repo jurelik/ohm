@@ -4,9 +4,9 @@ const io = require('../utils/io');
 function SearchView(data) {
   this.el = document.createElement('div');
   this.data = data;
-  this.searchCategory = 'songs';
-  this.searchBy = 'title';
-  this.searchQuery = this.data;
+  this.searchCategory = this.data.searchCategory;
+  this.searchBy = this.data.searchBy;
+  this.searchQuery = this.data.searchQuery;
   this.results;
   this.children = {
     main: null,
@@ -29,9 +29,15 @@ function SearchView(data) {
     e.preventDefault();
     e.stopPropagation();
 
+    //Update all search values
     this.searchCategory = this.el.querySelector('#category').value;
     this.searchBy = this.el.querySelector('#by').value;
     this.searchQuery = document.querySelector('.search-input').value;
+
+    //Modify history
+    app.history[app.historyIndex].data.searchCategory = this.searchCategory;
+    app.history[app.historyIndex].data.searchBy = this.searchBy;
+    app.history[app.historyIndex].data.searchQuery = this.searchQuery;
 
     return this.refresh();
   }
@@ -59,6 +65,10 @@ function SearchView(data) {
       _el.innerHTML = option;
       select.appendChild(_el);
     }
+
+    //Select currently selected options in UI
+    if (options.name === 'category') select.selectedIndex = options.options.indexOf(this.searchCategory);
+    if (options.name === 'by') select.selectedIndex = options.options.indexOf(this.searchBy);
 
     //Build structure
     el.appendChild(label);

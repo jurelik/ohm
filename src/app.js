@@ -170,7 +170,7 @@ function App() {
           this.views.upload = new UploadView();
           return this.views.upload.render();
         case 'search':
-          this.views.search = new SearchView(data.searchQuery);
+          this.views.search = new SearchView(data);
           return await this.views.search.render();
         case 'pinned':
           this.views.pinned = new PinnedView();
