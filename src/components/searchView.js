@@ -15,7 +15,6 @@ function SearchView(data) {
   this.fetch = async () => {
     try {
       const res = await io.search({ searchQuery: this.searchQuery, searchCategory: this.searchCategory, searchBy: this.searchBy });
-      console.log(res.payload)
       return res.payload;
     }
     catch (err) {

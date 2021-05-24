@@ -1,5 +1,6 @@
 const Album = require('./album');
 const Song = require('./song');
+const Artist = require('./artist');
 const { locationIcon } = require('../utils/svgs');
 
 function ArtistView(data) {
@@ -66,51 +67,30 @@ function ArtistView(data) {
   this.render = async () => {
     try {
       this.el.innerHTML = ''; //Reset innerHTML
-      //Fetch if artist is not loaded
-      if (!this.artist) this.artist = await this.fetch();
+
+      if (!this.artist) this.artist = await this.fetch(); //Fetch if artist is not loaded
 
       //Create elements
-      let nameAndFollow = document.createElement('div');
-      let name = document.createElement('div');
       let bio = document.createElement('p');
-      let locationDiv = document.createElement('div');
-      let location = document.createElement('p');
       let albums = document.createElement('p');
       let songs = document.createElement('p');
 
       //Add classes for styling
       this.el.className = 'artist';
-      nameAndFollow.className = 'name-and-follow';
-      locationDiv.className = 'location-div';
       bio.className = 'bio';
 
       //Add attributes and innerHTML
-      name.innerHTML = this.artist.name;
       bio.innerHTML = this.artist.bio;
-      locationDiv.innerHTML = locationIcon;
-      location.innerHTML = this.artist.location;
       albums.innerHTML = 'albums:';
       songs.innerHTML = 'songs:';
 
+      //Add artist
+      let artist = new Artist(this.artist, 'artist');
+      this.el.appendChild(artist.render());
+
       //Build structure
-      this.el.appendChild(nameAndFollow);
-      nameAndFollow.appendChild(name);
-      this.el.appendChild(locationDiv);
-      locationDiv.appendChild(location);
       this.el.appendChild(bio);
       this.el.appendChild(albums);
-
-      //Add follow button
-      if (this.artist.name !== app.artist) {
-        let follow = document.createElement('button');
-        follow.classList.add('follow');
-        if (this.artist.following) follow.classList.add('following');
-        follow.innerHTML = this.artist.following ? 'following': 'follow';
-        nameAndFollow.appendChild(follow);
-
-        //Add listener
-        follow.onclick = this.handleFollow;
-      }
 
       //Add albums
       for (let _album of this.artist.albums) {

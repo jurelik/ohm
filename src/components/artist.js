@@ -1,8 +1,9 @@
 const { locationIcon } = require('../utils/svgs');
 
-function Artist(data) {
+function Artist(data, view) {
   this.el = document.createElement('div');
   this.data = data;
+  this.view = view; //Keep track of where component was created
   this.children = {
     songs: {},
     albums: {}
@@ -50,22 +51,32 @@ function Artist(data) {
     }
   }
 
+  this.handleArtistClick = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    app.addToHistory('artist', { artist: this.data.name });
+    app.changeView('artist', { artist: this.data.name });
+  }
+
   this.render = () => {
     this.el.innerHTML = ''; //Reset innerHTML
 
     //Create elements
     let nameAndFollow = document.createElement('div');
-    let name = document.createElement('div');
+    let name = document.createElement('button');
     let locationDiv = document.createElement('div');
     let location = document.createElement('p');
 
     //Add classes for styling
-    this.el.className = 'artist';
+    this.el.className = 'artist-card';
+    name.className = 'artist-name';
     nameAndFollow.className = 'name-and-follow';
     locationDiv.className = 'location-div';
 
     //Add attributes and innerHTML
     name.innerHTML = this.data.name;
+    if (this.view === 'artist') name.disabled = true;
     locationDiv.innerHTML = locationIcon;
     location.innerHTML = this.data.location;
 
@@ -75,7 +86,10 @@ function Artist(data) {
     this.el.appendChild(locationDiv);
     locationDiv.appendChild(location);
 
-    if (this.data.name === app.artist) return this.el;
+    //Add listener
+    if (this.view !== 'artist') name.onclick = this.handleArtistClick;
+
+    if (this.data.name === app.artist) return this.el; //Return here if we are this is our own profile
 
     //Add follow button
     let follow = document.createElement('button');
@@ -86,6 +100,7 @@ function Artist(data) {
 
     //Add listener
     follow.onclick = this.handleFollow;
+    if (this.view !== 'artist') name.onclick = this.handleArtistClick;
 
     return this.el;
   }
