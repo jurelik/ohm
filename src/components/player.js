@@ -141,7 +141,7 @@ function Player() {
     //Check if queue is already loaded and we are playing the same song
     if (this.sameQueue(feed) && this.queuePosition === position) return this.play();
 
-    _position = !this.feed && this.current ? this.checkIfCurrentSongIncluded(feed) : null; //Check if the current song is included in the feed
+    _position = !this.feed && this.current === song.id ? this.checkIfCurrentSongIncluded(feed) : null; //Check if the current song is included in the feed
 
     this.feed = true; //Set this.feed to active
     this.queue = feed;
