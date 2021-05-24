@@ -118,7 +118,7 @@ function Player() {
   this.queueSong = (file) => {
     //Check if file already loaded
     if (this.queue.length === 1 && this.current.id === file.id) return this.play();
-    const alreadyLoaded = this.feed && this.current.id === file.id; //Is the song already playing in a feed?
+    const alreadyLoaded = (this.feed || this.album) && this.current.id === file.id; //Is the song already playing in a feed or album?
 
     this.album = null; //Reset this.album
     this.queue = [file];
