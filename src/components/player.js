@@ -136,12 +136,12 @@ function Player() {
   this.queueFeed = (song) => {
     const feed = this.deconstructFeed();
     const position = this.getSongPosition(song, feed); //Position of selected song in feed
-    let _position; //Position of this.current in new feed (if applicable) - means song was loaded in a different view
+    let _position = null; //Position of this.current in new feed (if applicable) - means song was loaded in a different view
 
     //Check if queue is already loaded and we are playing the same song
     if (this.sameQueue(feed) && this.queuePosition === position) return this.play();
 
-    _position = !this.feed && this.current === song.id ? this.checkIfCurrentSongIncluded(feed) : null; //Check if the current song is included in the feed
+    if (!this.feed && this.current === song.id) _position = this.checkIfCurrentSongIncluded(feed); //Check if the current song is included in the feed
 
     this.feed = true; //Set this.feed to active
     this.queue = feed;
@@ -158,19 +158,15 @@ function Player() {
 
   this.queueAlbum = (album, position) => {
     let files = album.songs;
-    let _position; //Position of this.current in album (if applicable) - means song was loaded in a feed if not null
 
     //Check if queue is already loaded and we are playing the same song
     if (this.sameQueue(files) && this.queuePosition === position) return this.play();
 
-    if (this.current) _position = this.checkIfCurrentSongIncluded(files); //Check if the current song is included in the album
-
     this.feed = false; //Reset this.feed
     this.queue = files;
-    this.queuePosition = _position || position;
+    this.queuePosition = position;
     this.current = files[this.queuePosition];
     this.album = album.id;
-    if (_position) return this.play(); //Return here if _position was found
 
     this.playing = false;
     this.interruptLoading(); //Interrupt the loading animation in other songs/albums
