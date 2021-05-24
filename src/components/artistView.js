@@ -1,4 +1,3 @@
-const { testArtist } = require('../testData');
 const Album = require('./album');
 const Song = require('./song');
 const { locationIcon } = require('../utils/svgs');

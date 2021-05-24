@@ -1,5 +1,6 @@
 const Song = require('./song');
 const Album = require('./album');
+const Artist = require('./artist');
 
 function SearchViewMain(data, action) {
   this.el = document.createElement('div');
@@ -21,17 +22,24 @@ function SearchViewMain(data, action) {
 
       for (let item of this.data) {
         let el;
-        if (item.type === 'song') {
-          let song = new Song(item, 'search');
-          el = await song.render();
+
+        switch (item.type) {
+          case 'song':
+            let song = new Song(item, 'search');
+            el = await song.render();
+            break;
+          case 'album':
+            let album = new Album(item, 'search');
+            el = await album.render();
+            break;
+          case 'artist':
+            let artist = new Artist(item, 'search');
+            el = artist.render();
+            break;
+          default:
+            continue;
         }
-        else if (item.type === 'album') {
-          let album = new Album(item, 'explore');
-          el = await album.render();
-        }
-        else {
-          continue;
-        }
+
         this.el.appendChild(el);
       }
 

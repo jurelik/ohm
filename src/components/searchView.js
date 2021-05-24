@@ -12,17 +12,15 @@ function SearchView(data) {
     main: null,
   };
 
-  this.fetch = () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const res = await io.search({ searchQuery: this.searchQuery, searchCategory: this.searchCategory, searchBy: this.searchBy });
-        console.log(res)
-        resolve(res.payload);
-      }
-      catch (err) {
-        reject(err);
-      }
-    });
+  this.fetch = async () => {
+    try {
+      const res = await io.search({ searchQuery: this.searchQuery, searchCategory: this.searchCategory, searchBy: this.searchBy });
+      console.log(res.payload)
+      return res.payload;
+    }
+    catch (err) {
+      throw err;
+    }
   }
 
   this.handleSearchChange = (e) => {
