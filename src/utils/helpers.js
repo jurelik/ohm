@@ -207,10 +207,12 @@ const childIsPlaying = (song, songs) => { //Check if a song within an album is p
 
 const removeItem = (data) => {
   const appItems = app[`${data.type}s`]; //Either app.songs or app.albums, depending on data.type
-  const children = app.views[app.current].children[`${data.type}s`]; //Choose children.songs or children.albums, depending on data.type
 
-  for (const id in children) if (id === data.id.toString()) { children[id].el.remove(); break; } //Delete DOM item from current view
-  for (const item of appItems) if (item.data.type === data.type && item.data.id === data.id) { appItems.splice(appItems.indexOf(item), 1); break; } //Delete item from app.songs or app.albums
+  for (const item of appItems) if (item.data.id === data.id) { //Delete item from app.songs or app.albums
+    item.el.remove();
+    appItems.splice(appItems.indexOf(item), 1);
+    break;
+  }
 }
 
 const handleReader = async (reader, previous) => {

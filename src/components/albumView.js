@@ -5,11 +5,6 @@ function AlbumView(data, action) {
   this.el = document.createElement('div');
   this.data = data;
   this.action = action;
-  this.children = {
-    album: null,
-    songs: {}
-  };
-  this.state = {};
 
   this.refresh = async () => {
     try {
@@ -32,9 +27,6 @@ function AlbumView(data, action) {
       this.el.className = 'albumView';
       description.className = 'description';
 
-      //Add song child for remote control
-      this.children.album = album;
-
       //Add attributes and innerHTML
       description.innerHTML = data.description;
 
@@ -45,9 +37,6 @@ function AlbumView(data, action) {
       for (let _song of this.data.songs) {
         _song.albumTitle = this.data.title; // Include album title in song data
         let song = new Song(_song, 'album');
-
-        //Add file child to app.songView for remote control
-        this.children.songs[_song.id] = song;
 
         this.el.appendChild(await song.render());
       }

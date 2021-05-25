@@ -1,16 +1,11 @@
 const ipfs = require('../utils/ipfs');
 const log = require('../utils/log');
-const helpers = require('../utils/helpers');
 const Album = require('./album');
 const Song = require('./song');
 
 function PinnedView(data) {
   this.el = document.createElement('div');
   this.data = null;
-  this.children = {
-    songs: {},
-    albums: {}
-  };
 
   this.init = async () => {
     try {
@@ -65,10 +60,6 @@ function PinnedView(data) {
       this.el.appendChild(albums);
       for (let _album of this.data.albums) {
         let album = new Album(_album);
-
-        //Add file child to app.songView for remote control
-        this.children.albums[_album.id] = album;
-
         this.el.appendChild(await album.render());
       }
 
@@ -76,10 +67,6 @@ function PinnedView(data) {
       this.el.appendChild(songs);
       for (let _song of this.data.songs) {
         let song = new Song(_song);
-
-        //Add file child to app.songView for remote control
-        this.children.songs[_song.id] = song;
-
         this.el.appendChild(await song.render());
       }
 

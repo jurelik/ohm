@@ -1,16 +1,11 @@
 const Album = require('./album');
 const Song = require('./song');
 const Artist = require('./artist');
-const { locationIcon } = require('../utils/svgs');
 
 function ArtistView(data) {
   this.el = document.createElement('div');
   this.data = data;
   this.artist = null;
-  this.children = {
-    songs: {},
-    albums: {}
-  };
 
   this.fetch = () => {
     return new Promise(async (resolve, reject) => {
@@ -95,10 +90,6 @@ function ArtistView(data) {
       //Add albums
       for (let _album of this.artist.albums) {
         let album = new Album(_album, 'artist');
-
-        //Add file child to app.songView for remote control
-        this.children.albums[_album.id] = album;
-
         this.el.appendChild(await album.render());
       }
 
@@ -107,10 +98,6 @@ function ArtistView(data) {
       //Add songs
       for (let _song of this.artist.songs) {
         let song = new Song(_song, 'artist');
-
-        //Add file child to app.songView for remote control
-        this.children.songs[_song.id] = song;
-
         this.el.appendChild(await song.render());
       }
 

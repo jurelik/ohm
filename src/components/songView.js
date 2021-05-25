@@ -6,7 +6,6 @@ function SongView(data, action) {
   this.data = data;
   this.action = action;
   this.children = {
-    song: null,
     files: {},
     main: null
   };
@@ -20,7 +19,6 @@ function SongView(data, action) {
       //Re-initialize state
       this.data = res.payload;
       this.children = {
-        song: null,
         files: {},
         main: null
       }
@@ -44,9 +42,6 @@ function SongView(data, action) {
 
       //Add classes for styling
       this.el.className = `song-view-${this.action}`;
-
-      //Add song child for remote control
-      this.children.song = song;
 
       this.el.appendChild(await song.render());
       this.el.appendChild(this.children.main.render());

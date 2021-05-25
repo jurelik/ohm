@@ -5,7 +5,10 @@ function Song(data, view) {
   this.el = document.createElement('div');
   this.data = data;
   this.view = view;
-  this.children = {};
+  this.children = {
+    actionBar: null
+  };
+
   this.playing = app.player.playing && app.player.current.id === this.data.id;
   this.loading = app.player.loading && app.player.current.id === this.data.id;
 

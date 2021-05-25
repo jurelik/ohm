@@ -1,29 +1,22 @@
 const Song = require('./song');
 const Album = require('./album');
-const helpers = require('../utils/helpers');
 
 function ExploreView() {
   this.el = document.createElement('div');
   this.data = null;
-  this.children = {
-    songs: {},
-    albums: {}
-  };
 
-  this.fetch = () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const _res = await fetch(`${app.URL}/api/latest`);
-        const res = await _res.json();
+  this.fetch = async () => {
+    try {
+      const _res = await fetch(`${app.URL}/api/latest`);
+      const res = await _res.json();
 
-        if (res.type === 'error') return reject(res.err);
+      if (res.type === 'error') throw res.err;
 
-        resolve(res.payload);
-      }
-      catch (err) {
-        reject(err);
-      }
-    });
+      return res.payload;
+    }
+    catch (err) {
+      throw err;
+    }
   }
 
   this.refresh = async () => {
@@ -43,21 +36,14 @@ function ExploreView() {
       //Fetch data from server on first render
       if (!this.data) this.data = await this.fetch();
 
-      this.children = {
-        songs: {},
-        albums: {}
-      };
-
       for (let item of this.data) {
         let el;
         if (item.type === 'song') {
           let song = new Song(item, 'explore');
-          this.children.songs[item.id] = song;
           el = await song.render();
         }
         else if (item.type === 'album') {
           let album = new Album(item, 'explore');
-          this.children.albums[item.id] = album;
           el = await album.render();
         }
         else {

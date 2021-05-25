@@ -1,14 +1,9 @@
 const Song = require('./song');
 const Album = require('./album');
-const helpers = require('../utils/helpers');
 
 function FeedView(data) {
   this.el = document.createElement('div');
   this.data = null;
-  this.children = {
-    songs: {},
-    albums: {}
-  };
 
   this.fetch = () => {
     return new Promise(async (resolve, reject) => {
@@ -43,21 +38,14 @@ function FeedView(data) {
       //Fetch data from server on first render
       if (!this.data) this.data = await this.fetch();
 
-      this.children = {
-        songs: {},
-        albums: {}
-      };
-
       for (let item of this.data) {
         let el;
         if (item.type === 'song') {
           let song = new Song(item, 'feed');
-          this.children.songs[item.id] = song;
           el = await song.render();
         }
         else if (item.type === 'album') {
           let album = new Album(item, 'feed');
-          this.children.albums[item.id] = album;
           el = await album.render();
         }
         else {

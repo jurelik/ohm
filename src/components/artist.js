@@ -4,10 +4,6 @@ function Artist(data, view) {
   this.el = document.createElement('div');
   this.data = data;
   this.view = view; //Keep track of where component was created
-  this.children = {
-    songs: {},
-    albums: {}
-  };
 
   this.fetch = () => {
     return new Promise(async (resolve, reject) => {
