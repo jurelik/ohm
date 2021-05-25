@@ -9,11 +9,7 @@ function File(data) {
   this.handlePlayButton = (e) => {
     e.stopPropagation();
     if (this.loading) return; //Ignore action if we are currently loading a song/album
-    app.player.queueFile(this.data);
-
-    //this.setPlaying(!this.playing);
-    //this.reRender();
-    //app.player.queueFile(this.data);
+    app.player.queueSong(this.data);
   }
 
   this.remotePlayButtonTrigger = () => {

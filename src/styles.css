@@ -583,6 +583,20 @@ input[type=range]::-webkit-slider-thumb {
   cursor: pointer;
 }
 
+.file .play-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  stroke: #ccc;
+  fill: #ccc;
+  width: 15px;
+}
+
+.file .play-button:hover {
+  stroke: #eee;
+  fill: #eee;
+}
+
 .artist-card {
   margin-bottom: 10px;
 }
