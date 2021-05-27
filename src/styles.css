@@ -236,6 +236,15 @@ input[type=range]::-webkit-slider-thumb {
   stroke: #eee;
 }
 
+.header .search {
+  display: flex;
+  align-items: center;
+}
+
+.search .search-input {
+  border-bottom: 1px solid #bbb;
+}
+
 .main {
   display: flex;
   flex-direction: row;

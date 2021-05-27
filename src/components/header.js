@@ -153,6 +153,7 @@ function Header() {
     back.classList.add('disabled');
     refresh.className = 'refresh';
     right.classList.add('header-right');
+    searchContainer.className = ('search');
     searchInput.setAttribute('type', 'text');
     searchInput.className = ('search-input');
     searchButton.setAttribute('type', 'submit');
