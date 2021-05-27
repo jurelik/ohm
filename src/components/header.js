@@ -155,6 +155,7 @@ function Header() {
     right.classList.add('header-right');
     searchContainer.className = ('search');
     searchInput.setAttribute('type', 'search');
+    searchInput.setAttribute('placeholder', 'search');
     searchInput.className = ('search-input');
     searchButton.setAttribute('type', 'submit');
     searchButton.className = ('search-button');
