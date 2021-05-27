@@ -1,6 +1,6 @@
 const io = require('../utils/io');
 const log = require('../utils/log');
-const { backIcon, forwardIcon, refreshIcon } = require('../utils/svgs');
+const { backIcon, forwardIcon, refreshIcon, searchIcon } = require('../utils/svgs');
 
 function Header() {
   this.el = document.querySelector('.header');
@@ -146,7 +146,7 @@ function Header() {
     refresh.innerHTML = refreshIcon;
     upload.innerHTML = 'upload';
     test.innerHTML = 'test';
-    searchButton.innerHTML = 'search';
+    searchButton.innerHTML = searchIcon;
 
     //Add classes
     forward.classList.add('disabled');
@@ -154,9 +154,10 @@ function Header() {
     refresh.className = 'refresh';
     right.classList.add('header-right');
     searchContainer.className = ('search');
-    searchInput.setAttribute('type', 'text');
+    searchInput.setAttribute('type', 'search');
     searchInput.className = ('search-input');
     searchButton.setAttribute('type', 'submit');
+    searchButton.className = ('search-button');
 
     //Add listeners
     back.onclick = this.handleBack;

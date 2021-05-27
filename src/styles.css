@@ -57,7 +57,7 @@ td button {
   display: flex;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=search] {
   font-family: inherit;
   font-size: inherit;
   background-color: #222;
@@ -243,6 +243,13 @@ input[type=range]::-webkit-slider-thumb {
 
 .search .search-input {
   border-bottom: 1px solid #bbb;
+}
+
+.search .search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid red;
 }
 
 .main {
