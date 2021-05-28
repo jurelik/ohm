@@ -51,6 +51,7 @@ function PinnedView(data) {
 
       //Add classes for styling
       this.el.className = 'pinned-view';
+      albums.className = 'pinned-view-albums';
 
       //Add attributes and innerHTML
       albums.innerHTML = 'albums:';

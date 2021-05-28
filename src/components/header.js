@@ -1,4 +1,3 @@
-const io = require('../utils/io');
 const log = require('../utils/log');
 const { backIcon, forwardIcon, refreshIcon, searchIcon } = require('../utils/svgs');
 
@@ -133,7 +132,7 @@ function Header() {
     let back = document.createElement('button');
     let forward = document.createElement('button');
     let refresh = document.createElement('button');
-    let searchContainer = document.createElement('div');
+    let searchContainer = document.createElement('form');
     let searchInput = document.createElement('input');
     let searchButton = document.createElement('button');
     let right = document.createElement('div');
@@ -155,7 +154,7 @@ function Header() {
     right.classList.add('header-right');
     searchContainer.className = ('search');
     searchInput.setAttribute('type', 'search');
-    searchInput.setAttribute('placeholder', 'search');
+    searchInput.setAttribute('placeholder', 'search..');
     searchInput.className = ('search-input');
     searchButton.setAttribute('type', 'submit');
     searchButton.className = ('search-button');

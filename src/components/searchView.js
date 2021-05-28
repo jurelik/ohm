@@ -93,28 +93,31 @@ function SearchView(data) {
     try {
       this.el.innerHTML = ''; //Reset innerHTML
 
-      //Fetch data from server on first render
-      if (!this.results) this.results = await this.fetch();
+      if (!this.results) this.results = await this.fetch(); //Fetch data from server on first render
 
       //Create elements
-      let category = this.createSelect({
+      const container = document.createElement('div');
+      const category = this.createSelect({
         name: 'category',
         type: 'select',
         options: [ 'songs', 'albums', 'artists', 'files' ]
       });
-      let by = this.createSelect({
+      const by = this.createSelect({
         name: 'by',
         type: 'select',
         options: [ 'title', 'tags' ]
       });
 
       //Add classes for styling
+      this.el.className = 'search-view';
+      container.className = 'search-view-options';
 
       //Add attributes and innerHTML
 
       //Build structure
-      this.el.appendChild(category);
-      this.el.appendChild(by);
+      container.appendChild(category);
+      container.appendChild(by);
+      this.el.appendChild(container);
 
       //Include main view
       const main = new SearchViewMain(this.results);
