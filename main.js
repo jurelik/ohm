@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain, session } = require('electron');
+const { app, BrowserWindow, ipcMain, session, Menu, Tray } = require('electron');
 const { spawn } = require('child_process')
 const fs = require('fs');
+let tray = null;
 let daemon = null;
 let userDataPath = null;
 
@@ -30,7 +31,18 @@ function createWindow () {
   });
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  tray = new Tray('src/assets/testTemplate.png');
+  const contextMenu = Menu.buildFromTemplate([
+      { label: 'Item1', type: 'radio' },
+      { label: 'Item2', type: 'radio' },
+      { label: 'Item3', type: 'radio', checked: true },
+      { label: 'Item4', type: 'radio' }
+    ])
+  tray.setToolTip('This is my application.')
+  tray.setContextMenu(contextMenu)
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
