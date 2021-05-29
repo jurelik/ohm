@@ -238,6 +238,48 @@ function App() {
     }
   }
 
+  this.changeLocation = async (location) => {
+    try {
+      const _res = await fetch(`${app.URL}/api/changelocation`, {
+        method: 'POST',
+        credentials: 'include', //Include cookie
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ location })
+      });
+
+      const res = await _res.json();
+      if (res.type === 'error') throw res.err;
+
+      log.success('Location successfully changed.');
+    }
+    catch (err) {
+      log.error(err);
+    }
+  }
+
+  this.changeBio = async (bio) => {
+    try {
+      const _res = await fetch(`${app.URL}/api/changebio`, {
+        method: 'POST',
+        credentials: 'include', //Include cookie
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ bio })
+      });
+
+      const res = await _res.json();
+      if (res.type === 'error') throw res.err;
+
+      log.success('Bio successfully changed.');
+    }
+    catch (err) {
+      log.error(err);
+    }
+  }
+
   this.buildHTML = () => {
     //Build HTML skeleton
     this.root.innerHTML = `
