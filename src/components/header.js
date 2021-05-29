@@ -95,6 +95,8 @@ function Header() {
     e.stopPropagation();
 
     const searchQuery = this.el.querySelector('.search-input').value;
+    if (searchQuery.length === 0) return log.error('The search query is empty.');
+
     app.addToHistory('search', { searchQuery, searchCategory: 'songs', searchBy: 'title' });
     app.changeView('search', { searchQuery, searchCategory: 'songs', searchBy: 'title' });
   }

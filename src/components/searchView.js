@@ -36,6 +36,8 @@ function SearchView(data) {
     app.history[app.historyIndex].data.searchBy = this.searchBy;
     app.history[app.historyIndex].data.searchQuery = this.searchQuery;
 
+    if (this.searchQuery.length === 0) return log.error('The search query is empty.');
+
     return this.refresh();
   }
 
