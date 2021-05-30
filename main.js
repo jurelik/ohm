@@ -34,10 +34,7 @@ function createWindow () {
 app.whenReady().then(() => {
   tray = new Tray('src/assets/testTemplate.png');
   const contextMenu = Menu.buildFromTemplate([
-      { label: 'Item1', type: 'radio' },
-      { label: 'Item2', type: 'radio' },
-      { label: 'Item3', type: 'radio', checked: true },
-      { label: 'Item4', type: 'radio' }
+    { label: 'Quit', type: 'normal', role: 'quit', accelerator: 'CmdOrCtrl+Q' },
     ])
   tray.setToolTip('This is my application.')
   tray.setContextMenu(contextMenu)
