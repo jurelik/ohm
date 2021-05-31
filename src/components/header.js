@@ -115,9 +115,24 @@ function Header() {
     }
   }
 
+  function formatBytes(bytes, decimals = 2) {
+      if (bytes === 0) return '0 Bytes';
+
+      const k = 1024;
+      const dm = decimals < 0 ? 0 : decimals;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
   this.handleTest = async () => {
     try {
-      const _res = await fetch(`${app.URL}/api/logout`);
+      for await (const stats of app.ipfs.stats.bw({ poll: true, interval: '1s' })) {
+        const a = formatBytes(stats.rateIn);
+        console.log(a)
+      }
     }
     catch (err) {
       log.error(err)
