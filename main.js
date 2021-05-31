@@ -4,9 +4,12 @@ const fs = require('fs');
 let tray = null;
 let daemon = null;
 let userDataPath = null;
+let win = null;
 
-function createWindow () {
-  const win = new BrowserWindow({
+function createWindow() {
+  if (win) return; //Ignore if window is already created
+
+  win = new BrowserWindow({
     width: 800,
     height: 360,
     minWidth: 400,
@@ -19,35 +22,41 @@ function createWindow () {
     }
   })
 
+  win.webContents.openDevTools();
+  win.webContents.on('devtools-opened', () => {
+    win.loadFile('src/index.html')
+  });
+  win.once('closed', () => win = null);
+}
+
+function createTray() {
+  tray = new Tray('src/assets/testTemplate.png');
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Open ohm', type: 'normal', click: () => createWindow() },
+    { type: 'separator' },
+    { label: 'Quit', type: 'normal', role: 'quit', accelerator: 'CmdOrCtrl+Q' },
+  ]);
+  tray.setContextMenu(contextMenu)
+}
+
+app.whenReady().then(() => {
   session.defaultSession.cookies.on('changed', (event, cookie, cause) => { //TESTING PURPOSES
     console.log(cause + ' Expiration: ' + cookie.expirationDate + ' ' + Date())
     session.defaultSession.cookies.get({}).then(cookies => { if (cookies[0]) console.log(cookies[0].expirationDate)});
   });
 
-  //Delete in production
-  win.webContents.openDevTools();
-  win.webContents.on('devtools-opened', () => {
-    win.loadFile('src/index.html')
-  });
-}
-
-app.whenReady().then(() => {
-  tray = new Tray('src/assets/testTemplate.png');
-  const contextMenu = Menu.buildFromTemplate([
-    { label: 'Quit', type: 'normal', role: 'quit', accelerator: 'CmdOrCtrl+Q' },
-    ])
-  tray.setToolTip('This is my application.')
-  tray.setContextMenu(contextMenu)
+  createTray();
   createWindow();
 });
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  if (process.platform !== 'darwin') app.quit();
+
+  app.dock.hide();
 })
 
 app.on('will-quit', () => {
+    console.log('yo')
   if (daemon) daemon.kill(); //Kill daemon if running
 })
 
