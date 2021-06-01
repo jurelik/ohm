@@ -227,6 +227,11 @@ select:hover {
   height: 25px;
 }
 
+.header .bw {
+  font-size: 10px;
+  color: #bbb;
+}
+
 .header .header-right {
   display: flex;
   flex-direction: row;

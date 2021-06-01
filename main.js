@@ -56,7 +56,6 @@ app.on('window-all-closed', () => {
 })
 
 app.on('will-quit', () => {
-    console.log('yo')
   if (daemon) daemon.kill(); //Kill daemon if running
 })
 

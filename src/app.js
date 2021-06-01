@@ -3,6 +3,7 @@
 const { ipcRenderer } = require('electron');
 const createClient = require('ipfs-http-client');
 const log = require('./utils/log');
+const helpers = require('./utils/helpers');
 
 const Nav = require('./components/nav');
 const LoginView = require('./components/loginView');
@@ -112,6 +113,8 @@ function App() {
         this.transfersStore.init();
         this.initTransfers();
 
+        this.updateBandwidth(); //Start performing ipfs.stat checks for bandwidth
+
         this.buildHTML(); //Render first content
         this.changeView('explore');
         this.addToHistory('explore');
@@ -213,6 +216,20 @@ function App() {
 
     for (let unique in transfers) {
       transfers[unique].active = false; //All transfers are paused on app open - ADD OPTION TO DISABLE THIS
+    }
+  }
+
+  this.updateBandwidth = async () => {
+    try {
+      for await (const stats of app.ipfs.stats.bw({ poll: true, interval: '1s' })) {
+        const dl = helpers.formatBytes(stats.rateIn);
+        const ul = helpers.formatBytes(stats.rateOut);
+
+        document.querySelector('.bw').innerHTML = `dl: ${dl} | ul: ${ul}`;
+      }
+    }
+    catch (err) {
+      log.error(err)
     }
   }
 

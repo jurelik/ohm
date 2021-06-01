@@ -229,6 +229,18 @@ const handleReader = async (reader, previous) => {
   }
 }
 
+const formatBytes = (bytes, decimals = 2) => { //Taken from https://stackoverflow.com/a/18650828
+  if (!bytes || (bytes.c[0] === 0 & bytes.c.length === 1)) return '0 B/s';
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i] + '/s';
+}
+
 //
 //PRIVATE FUNCTIONS
 //
@@ -344,5 +356,6 @@ module.exports = {
   garbageCollect,
   childIsPlaying,
   removeItem,
-  handleReader
+  handleReader,
+  formatBytes
 }

@@ -115,22 +115,10 @@ function Header() {
     }
   }
 
-  function formatBytes(bytes, decimals = 2) {
-      if (bytes === 0) return '0 Bytes';
-
-      const k = 1024;
-      const dm = decimals < 0 ? 0 : decimals;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-  }
-
   this.handleTest = async () => {
     try {
       for await (const stats of app.ipfs.stats.bw({ poll: true, interval: '1s' })) {
-        const a = formatBytes(stats.rateIn);
+        const a = this.formatBytes(stats.rateIn);
         console.log(a)
       }
     }
@@ -155,6 +143,7 @@ function Header() {
     let right = document.createElement('div');
     let upload = document.createElement('button');
     let test = document.createElement('button');
+    let bw = document.createElement('div');
 
     //Add innerHTML
     back.innerHTML = backIcon;
@@ -175,6 +164,7 @@ function Header() {
     searchInput.className = ('search-input');
     searchButton.setAttribute('type', 'submit');
     searchButton.className = ('search-button');
+    bw.className = 'bw';
 
     //Add listeners
     back.onclick = this.handleBack;
@@ -195,6 +185,7 @@ function Header() {
     searchContainer.appendChild(searchInput);
     searchContainer.appendChild(searchButton);
     this.el.appendChild(right);
+    right.appendChild(bw);
     right.appendChild(upload);
     right.appendChild(test);
   }
