@@ -225,7 +225,8 @@ function App() {
         const dl = helpers.formatBytes(stats.rateIn);
         const ul = helpers.formatBytes(stats.rateOut);
 
-        document.querySelector('.bw').innerHTML = `dl: ${dl} | ul: ${ul}`;
+        document.querySelector('.dl').innerHTML = `dl: ${dl}`;
+        document.querySelector('.ul').innerHTML = `ul: ${ul}`;
       }
     }
     catch (err) {
@@ -301,6 +302,12 @@ function App() {
     //Build HTML skeleton
     this.root.innerHTML = `
     <div class="drag">
+      <div class="bw">
+        <div class="dl">
+        </div>
+        <div class="ul">
+        </div>
+      </div>
     </div>
     <div class="header">
     </div>

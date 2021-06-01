@@ -203,6 +203,22 @@ select:hover {
   -webkit-app-region: drag;
   width: 100%;
   height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 9px;
+  color: #bbb;
+  padding-right: 10px;
+  user-select: none;
+}
+
+.drag .bw {
+  display: flex;
+  align-items: center;
+}
+
+.drag .bw .dl, .drag .bw .ul {
+  width: 95px;
 }
 
 .login {
@@ -225,11 +241,6 @@ select:hover {
   align-items: stretch;
   padding-left: 5px;
   height: 25px;
-}
-
-.header .bw {
-  font-size: 10px;
-  color: #bbb;
 }
 
 .header .header-right {

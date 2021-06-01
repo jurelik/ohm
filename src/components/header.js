@@ -143,7 +143,6 @@ function Header() {
     let right = document.createElement('div');
     let upload = document.createElement('button');
     let test = document.createElement('button');
-    let bw = document.createElement('div');
 
     //Add innerHTML
     back.innerHTML = backIcon;
@@ -164,7 +163,6 @@ function Header() {
     searchInput.className = ('search-input');
     searchButton.setAttribute('type', 'submit');
     searchButton.className = ('search-button');
-    bw.className = 'bw';
 
     //Add listeners
     back.onclick = this.handleBack;
@@ -185,7 +183,6 @@ function Header() {
     searchContainer.appendChild(searchInput);
     searchContainer.appendChild(searchButton);
     this.el.appendChild(right);
-    right.appendChild(bw);
     right.appendChild(upload);
     right.appendChild(test);
   }
