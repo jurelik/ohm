@@ -1,5 +1,6 @@
 const Song = require('./song');
 const Album = require('./album');
+const log = require('../utils/log');
 
 function ExploreView() {
   this.el = document.createElement('div');
@@ -7,7 +8,15 @@ function ExploreView() {
 
   this.fetch = async () => {
     try {
-      const _res = await fetch(`${app.URL}/api/latest`);
+      //const _res = await fetch(`${app.URL}/api/latest`);
+      const _res = await fetch(`${app.URL}/api/latest`, {
+        method: 'POST',
+        credentials: 'include', //Include cookie
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ loadMore: false })
+      });
       const res = await _res.json();
 
       if (res.type === 'error') throw res.err;
@@ -16,6 +25,35 @@ function ExploreView() {
     }
     catch (err) {
       throw err;
+    }
+  }
+
+  this.handleLoadMore = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    try {
+      //const _res = await fetch(`${app.URL}/api/latest`);
+      const _res = await fetch(`${app.URL}/api/latest`, {
+        method: 'POST',
+        credentials: 'include', //Include cookie
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          loadMore: true,
+          lastItem: this.data[this.data.length - 1]
+        })
+      });
+      const res = await _res.json();
+
+      if (res.type === 'error') throw res.err;
+
+      this.data = this.data.concat(res.payload);
+      await this.render();
+    }
+    catch (err) {
+      log.error(err);
     }
   }
 
@@ -51,6 +89,12 @@ function ExploreView() {
         }
         this.el.appendChild(el);
       }
+
+      //Add load more button
+      const loadMore = document.createElement('button');
+      loadMore.innerHTML = 'load more..';
+      loadMore.onclick = this.handleLoadMore;
+      this.el.appendChild(loadMore);
 
       app.content.appendChild(this.el);
     }
