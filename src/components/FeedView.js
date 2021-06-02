@@ -8,7 +8,16 @@ function FeedView(data) {
   this.fetch = () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const _res = await fetch(`${app.URL}/api/feed`);
+        const _res = await fetch(`${app.URL}/api/feed`, {
+          method: 'POST',
+          credentials: 'include', //Include cookie
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            loadMore: false
+          })
+        });
         const res = await _res.json();
 
         if (res.type === 'error') return reject(res.err);
@@ -19,6 +28,58 @@ function FeedView(data) {
         reject(err);
       }
     });
+  }
+
+  this.handleLoadMore = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    try {
+      //const _res = await fetch(`${app.URL}/api/latest`);
+      const _res = await fetch(`${app.URL}/api/feed`, {
+        method: 'POST',
+        credentials: 'include', //Include cookie
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          loadMore: true,
+          lastItem: this.data[this.data.length - 1]
+        })
+      });
+      const res = await _res.json();
+
+      if (res.type === 'error') throw res.err;
+
+      this.data = this.data.concat(res.payload); //Append to this.data
+      await this.append(res.payload); //Append to DOM
+    }
+    catch (err) {
+      log.error(err);
+    }
+  }
+
+  this.append = async (data) => {
+    try {
+      for (let item of data) {
+        let el;
+        if (item.type === 'song') {
+          let song = new Song(item, 'explore');
+          el = await song.render();
+        }
+        else if (item.type === 'album') {
+          let album = new Album(item, 'explore');
+          el = await album.render();
+        }
+        else {
+          continue;
+        }
+        this.el.insertBefore(el, this.el.querySelector('.load-more'));
+      }
+    }
+    catch (err) {
+      throw err;
+    }
   }
 
   this.refresh = async () => {
@@ -53,6 +114,13 @@ function FeedView(data) {
         }
         this.el.appendChild(el);
       }
+
+      //Add load more button
+      const loadMore = document.createElement('button');
+      loadMore.innerHTML = 'load more..';
+      loadMore.className = 'load-more';
+      loadMore.onclick = this.handleLoadMore;
+      this.el.appendChild(loadMore);
 
       app.content.appendChild(this.el);
     }

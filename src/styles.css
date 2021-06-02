@@ -348,6 +348,11 @@ select:hover {
   padding-top: 2px;
 }
 
+.content .load-more {
+  font-size: 10px;
+  padding-left: 0;
+}
+
 .player {
   position: fixed;
   bottom: 0;
