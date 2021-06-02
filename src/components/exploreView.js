@@ -49,8 +49,8 @@ function ExploreView() {
 
       if (res.type === 'error') throw res.err;
 
-      this.data = this.data.concat(res.payload);
-      await this.render();
+      this.data = this.data.concat(res.payload); //Append to this.data
+      await this.append(res.payload); //Append to DOM
     }
     catch (err) {
       log.error(err);
@@ -64,6 +64,29 @@ function ExploreView() {
     }
     catch (err) {
       console.error(err);
+    }
+  }
+
+  this.append = async (data) => {
+    try {
+      for (let item of data) {
+        let el;
+        if (item.type === 'song') {
+          let song = new Song(item, 'explore');
+          el = await song.render();
+        }
+        else if (item.type === 'album') {
+          let album = new Album(item, 'explore');
+          el = await album.render();
+        }
+        else {
+          continue;
+        }
+        this.el.insertBefore(el, this.el.querySelector('.load-more'));
+      }
+    }
+    catch (err) {
+      throw err;
     }
   }
 
@@ -93,6 +116,7 @@ function ExploreView() {
       //Add load more button
       const loadMore = document.createElement('button');
       loadMore.innerHTML = 'load more..';
+      loadMore.className = 'load-more';
       loadMore.onclick = this.handleLoadMore;
       this.el.appendChild(loadMore);
 
