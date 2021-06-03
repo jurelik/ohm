@@ -58,6 +58,7 @@ function Header() {
 
     this.backButton.className = 'enabled';
     let view = app.history[index];
+
     switch (view.type) {
       case 'song':
         app.historyIndex++;
@@ -77,7 +78,7 @@ function Header() {
       default:
         app.historyIndex++;
         app.nav.select(view.type)
-        return app.changeView(view.type);
+        return app.changeView(view.type, view.data);
     }
   }
 

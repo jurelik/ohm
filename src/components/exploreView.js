@@ -21,6 +21,7 @@ function ExploreView(data) {
 
       if (res.type === 'error') throw res.err;
 
+      app.history[app.historyIndex].data = res.payload; //Add data to history
       return res.payload;
     }
     catch (err) {

@@ -1,33 +1,33 @@
 const Song = require('./song');
 const Album = require('./album');
+const log = require('../utils/log');
 
 function FeedView(data) {
   this.el = document.createElement('div');
   this.data = data;
 
-  this.fetch = () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const _res = await fetch(`${app.URL}/api/feed`, {
-          method: 'POST',
-          credentials: 'include', //Include cookie
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            loadMore: false
-          })
-        });
-        const res = await _res.json();
+  this.fetch = async () => {
+    try {
+      const _res = await fetch(`${app.URL}/api/feed`, {
+        method: 'POST',
+        credentials: 'include', //Include cookie
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          loadMore: false
+        })
+      });
+      const res = await _res.json();
 
-        if (res.type === 'error') return reject(res.err);
+      if (res.type === 'error') return reject(res.err);
 
-        resolve(res.payload);
-      }
-      catch (err) {
-        reject(err);
-      }
-    });
+      app.history[app.historyIndex].data = res.payload; //Add data to history
+      return res.payload;
+    }
+    catch (err) {
+      log.error(err);
+    }
   }
 
   this.handleLoadMore = async (e) => {
