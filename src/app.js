@@ -154,10 +154,10 @@ function App() {
 
       switch (view) {
         case 'explore':
-          this.views.explore = new ExploreView();
+          this.views.explore = new ExploreView(data);
           return await this.views.explore.render();
         case 'feed':
-          this.views.feed = new FeedView();
+          this.views.feed = new FeedView(data);
           return await this.views.feed.render();
         case 'song':
           this.views.song = new SongView(data.song, data.action);

@@ -3,7 +3,7 @@ const Album = require('./album');
 
 function FeedView(data) {
   this.el = document.createElement('div');
-  this.data = null;
+  this.data = data;
 
   this.fetch = () => {
     return new Promise(async (resolve, reject) => {
@@ -52,6 +52,7 @@ function FeedView(data) {
       if (res.type === 'error') throw res.err;
 
       this.data = this.data.concat(res.payload); //Append to this.data
+      app.history[app.historyIndex].data = this.data; //Modify history
       await this.append(res.payload); //Append to DOM
     }
     catch (err) {

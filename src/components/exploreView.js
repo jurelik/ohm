@@ -2,9 +2,9 @@ const Song = require('./song');
 const Album = require('./album');
 const log = require('../utils/log');
 
-function ExploreView() {
+function ExploreView(data) {
   this.el = document.createElement('div');
-  this.data = null;
+  this.data = data;
 
   this.fetch = async () => {
     try {
@@ -50,6 +50,7 @@ function ExploreView() {
       if (res.type === 'error') throw res.err;
 
       this.data = this.data.concat(res.payload); //Append to this.data
+      app.history[app.historyIndex].data = this.data; //Modify history
       await this.append(res.payload); //Append to DOM
     }
     catch (err) {
