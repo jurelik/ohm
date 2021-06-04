@@ -2,12 +2,12 @@ const SearchViewMain = require('./searchViewMain');
 const io = require('../utils/io');
 
 function SearchView(data) {
+  console.log(data)
   this.el = document.createElement('div');
   this.data = data;
   this.searchCategory = this.data.searchCategory;
   this.searchBy = this.data.searchBy;
   this.searchQuery = this.data.searchQuery;
-  this.results;
   this.children = {
     main: null,
   };
@@ -39,6 +39,39 @@ function SearchView(data) {
     if (this.searchQuery.length === 0) return log.error('The search query is empty.');
 
     return this.refresh();
+  }
+
+  this.handleLoadMore = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    try {
+      const _res = await fetch(`${app.URL}/api/search`, {
+        method: 'POST',
+        credentials: 'include', //Include cookie
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchQuery: this.searchQuery,
+          searchCategory: this.searchCategory,
+          searchBy: this.searchBy,
+          loadMore: true,
+          lastItem: this.data.results[this.data.results.length - 1]
+        })
+      });
+      const res = await _res.json();
+      console.log(res)
+
+      if (res.type === 'error') throw res.err;
+
+      this.data.results = this.data.results.concat(res.payload); //Append to this.data
+      app.history[app.historyIndex].data.results = this.data.results; //Modify history
+      await this.children.main.append(res.payload); //Append to DOM
+    }
+    catch (err) {
+      log.error(err);
+    }
   }
 
   this.createSelect = (options) => {
@@ -78,11 +111,11 @@ function SearchView(data) {
 
   this.refresh = async () => {
     try {
-      this.results = await this.fetch(); //Re-fetch data
+      this.data.results = await this.fetch(); //Re-fetch data
       this.children.main.el.remove(); //Reset main view
 
       //Include main view
-      const main = new SearchViewMain(this.results);
+      const main = new SearchViewMain(this.data.results);
       this.children.main = main;
       this.el.appendChild(await main.render());
     }
@@ -95,7 +128,7 @@ function SearchView(data) {
     try {
       this.el.innerHTML = ''; //Reset innerHTML
 
-      if (!this.results) this.results = await this.fetch(); //Fetch data from server on first render
+      if (!this.data.results) this.data.results = await this.fetch(); //Fetch data from server on first render
 
       //Create elements
       const container = document.createElement('div');
@@ -122,9 +155,16 @@ function SearchView(data) {
       this.el.appendChild(container);
 
       //Include main view
-      const main = new SearchViewMain(this.results);
+      const main = new SearchViewMain(this.data.results);
       this.children.main = main;
       this.el.appendChild(await main.render());
+
+      //Add load more button
+      const loadMore = document.createElement('button');
+      loadMore.innerHTML = 'load more..';
+      loadMore.className = 'load-more';
+      loadMore.onclick = this.handleLoadMore;
+      this.el.appendChild(loadMore);
 
       document.querySelector('.search-input').value = this.searchQuery; //Update search-input with the current value
 

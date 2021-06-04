@@ -16,6 +16,36 @@ function SearchViewMain(data, action) {
     this.render();
   }
 
+  this.append = async (data) => {
+    try {
+      for (let item of data) {
+        let el;
+        switch (item.type) {
+          case 'song':
+            let song = new Song(item, 'search');
+            el = await song.render();
+            break;
+          case 'album':
+            let album = new Album(item, 'search');
+            el = await album.render();
+            break;
+          case 'artist':
+            let artist = new Artist(item, 'search');
+            el = artist.render();
+            break;
+          default:
+            continue;
+        }
+
+        this.el.insertBefore(el, this.el.querySelector('.load-more'));
+      }
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
+
   this.render = async () => {
     try {
       this.el.className = 'search-view-main';

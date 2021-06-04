@@ -35,7 +35,6 @@ function FeedView(data) {
     e.preventDefault();
 
     try {
-      //const _res = await fetch(`${app.URL}/api/latest`);
       const _res = await fetch(`${app.URL}/api/feed`, {
         method: 'POST',
         credentials: 'include', //Include cookie
@@ -65,11 +64,11 @@ function FeedView(data) {
       for (let item of data) {
         let el;
         if (item.type === 'song') {
-          let song = new Song(item, 'explore');
+          let song = new Song(item, 'feed');
           el = await song.render();
         }
         else if (item.type === 'album') {
-          let album = new Album(item, 'explore');
+          let album = new Album(item, 'feed');
           el = await album.render();
         }
         else {

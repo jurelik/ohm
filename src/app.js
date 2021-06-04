@@ -154,7 +154,6 @@ function App() {
 
       switch (view) {
         case 'explore':
-          console.log(data)
           this.views.explore = new ExploreView(data);
           return await this.views.explore.render();
         case 'feed':
