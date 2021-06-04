@@ -117,7 +117,8 @@ function SearchView(data) {
       //Include main view
       const main = new SearchViewMain(this.data.results);
       this.children.main = main;
-      this.el.appendChild(await main.render());
+      //this.el.appendChild(await main.render());
+      this.el.insertBefore(await main.render(), this.el.querySelector('.load-more'));
     }
     catch (err) {
       console.error(err);
