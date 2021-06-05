@@ -186,6 +186,10 @@ select:hover {
   color: #eee;
 }
 
+select:disabled {
+  color: #888;
+}
+
 #first {
   border: 0px;
 }

@@ -31,6 +31,9 @@ function SearchView(data) {
     this.searchBy = this.el.querySelector('#by').value;
     this.searchQuery = document.querySelector('.search-input').value;
 
+    //Enable/disable tags option depending on whether the category is set to artists
+    this.searchCategory === 'artists' ? this.el.querySelector('#by').disabled = true : this.el.querySelector('#by').disabled = false;
+
     //Modify history
     app.history[app.historyIndex].data.searchCategory = this.searchCategory;
     app.history[app.historyIndex].data.searchBy = this.searchBy;
