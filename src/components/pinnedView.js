@@ -46,30 +46,33 @@ function PinnedView(data) {
       if (!this.data) this.data = await this.init(); //Get data
 
       //Create elements
-      let albums = document.createElement('p');
-      let songs = document.createElement('p');
 
       //Add classes for styling
       this.el.className = 'pinned-view';
-      albums.className = 'pinned-view-albums';
-
       //Add attributes and innerHTML
-      albums.innerHTML = 'albums:';
-      songs.innerHTML = 'songs:';
 
-      //Add albums
-      this.el.appendChild(albums);
-      for (let _album of this.data.albums) {
-        let album = new Album(_album);
-        this.el.appendChild(await album.render());
+      for (let item of this.data) {
+        let el;
+        if (item.type === 'song') {
+          let song = new Song(item, 'pinned');
+          el = await song.render();
+        }
+        else if (item.type === 'album') {
+          let album = new Album(item, 'pinned');
+          el = await album.render();
+        }
+        else {
+          continue;
+        }
+        this.el.appendChild(el);
       }
 
-      //Add songs
-      this.el.appendChild(songs);
-      for (let _song of this.data.songs) {
-        let song = new Song(_song);
-        this.el.appendChild(await song.render());
-      }
+      //Add load more button
+      const loadMore = document.createElement('button');
+      loadMore.innerHTML = 'load more..';
+      loadMore.className = 'load-more';
+      loadMore.onclick = this.handleLoadMore;
+      this.el.appendChild(loadMore);
 
       app.content.appendChild(this.el);
       return this.el;

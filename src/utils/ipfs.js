@@ -231,7 +231,8 @@ const getPinned = async () => {
     for await (const file of app.ipfs.files.ls(`/`)) artists.push(file.name); //Get artists
     for (const artist of artists) {
       for await (const file of app.ipfs.files.ls(`/${artist}/albums`)) { //Get albums
-        albums.push({ artist, title: file.name });
+        const stat = await app.ipfs.files.stat(`/${artist}/albums/${file.name}`);
+        albums.push(stat.cid.string);
       }
       for await (const file of app.ipfs.files.ls(`/${artist}/singles`)) {
         const stat = await app.ipfs.files.stat(`/${artist}/singles/${file.name}`);
