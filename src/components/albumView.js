@@ -41,8 +41,8 @@ function AlbumView(data, action) {
         this.el.appendChild(await song.render());
       }
 
+      app.content.innerHTML = '';
       app.content.appendChild(this.el);
-      return this.el;
     }
     catch (err) {
       console.error(err);

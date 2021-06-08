@@ -121,8 +121,8 @@ function PinnedView(data) {
       loadMore.onclick = this.handleLoadMore;
       this.el.appendChild(loadMore);
 
+      app.content.innerHTML = '';
       app.content.appendChild(this.el);
-      return this.el;
     }
     catch (err) {
       console.error(err);

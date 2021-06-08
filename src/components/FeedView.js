@@ -122,6 +122,7 @@ function FeedView(data) {
       loadMore.onclick = this.handleLoadMore;
       this.el.appendChild(loadMore);
 
+      app.content.innerHTML = '';
       app.content.appendChild(this.el);
     }
     catch (err) {

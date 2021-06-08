@@ -144,7 +144,7 @@ function App() {
 
   this.changeView = async (view, data) => {
     try {
-      this.content.innerHTML = '';
+      //this.content.innerHTML = '';
       this.content.scrollTop = 0;
       this.current = view;
       this.songs = []; //Clear song references

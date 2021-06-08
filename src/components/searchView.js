@@ -176,6 +176,7 @@ function SearchView(data) {
       category.onchange = this.handleSearchChange;
       by.onchange = this.handleSearchChange;
 
+      app.content.innerHTML = '';
       app.content.appendChild(this.el);
     }
     catch (err) {

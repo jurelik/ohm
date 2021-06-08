@@ -97,8 +97,8 @@ function TransfersView(data) {
     //Add listeners
     clearAll.onclick = this.handleClearAll;
 
+    app.content.innerHTML = '';
     app.content.appendChild(this.el);
-    return this.el;
   }
 }
 

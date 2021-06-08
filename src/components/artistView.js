@@ -101,7 +101,8 @@ function ArtistView(data) {
         this.el.appendChild(await song.render());
       }
 
-      return app.content.appendChild(this.el);
+      app.content.innerHTML = '';
+      app.content.appendChild(this.el);
     }
     catch (err) {
       console.error(err)
