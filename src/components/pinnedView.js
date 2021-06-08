@@ -5,7 +5,8 @@ const Song = require('./song');
 
 function PinnedView(data) {
   this.el = document.createElement('div');
-  this.data = null;
+  this.data = data;
+  this.LOAD_MORE_AMOUNT = 2;
 
   this.init = async () => {
     try {
@@ -23,10 +24,53 @@ function PinnedView(data) {
       const res = await _res.json();
       if (res.type === 'error') throw res.err;
 
-      return res.payload;
+      const data = { items: res.payload, amountShown: this.LOAD_MORE_AMOUNT };
+      app.history[app.historyIndex].data = data; //Modify history
+      return data;
     }
     catch (err) {
       log.error(err);
+    }
+  }
+
+  this.handleLoadMore = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    try {
+      if (this.data.amountShown + this.LOAD_MORE_AMOUNT > this.data.items.length) throw new Error('Last item reached.');
+
+      this.data.amountShown += this.LOAD_MORE_AMOUNT; //Append amount of items shown
+      app.history[app.historyIndex].data.amountShown = this.data.amountShown; //Modify history
+      await this.append(); //Append to DOM
+    }
+    catch (err) {
+      log.error(err.message);
+    }
+  }
+
+  this.append = async () => {
+    try {
+      for (let i = this.data.amountShown - this.LOAD_MORE_AMOUNT; i < this.data.amountShown; i++) {
+        let el;
+        let item = this.data.items[i];
+
+        if (item.type === 'song') {
+          let song = new Song(item, 'feed');
+          el = await song.render();
+        }
+        else if (item.type === 'album') {
+          let album = new Album(item, 'feed');
+          el = await album.render();
+        }
+        else {
+          continue;
+        }
+        this.el.insertBefore(el, this.el.querySelector('.load-more'));
+      }
+    }
+    catch (err) {
+      throw err;
     }
   }
 
@@ -49,10 +93,13 @@ function PinnedView(data) {
 
       //Add classes for styling
       this.el.className = 'pinned-view';
+
       //Add attributes and innerHTML
 
-      for (let item of this.data) {
+      for (let i = 0; i < this.data.amountShown; i++) {
+        let item = this.data.items[i];
         let el;
+
         if (item.type === 'song') {
           let song = new Song(item, 'pinned');
           el = await song.render();

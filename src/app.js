@@ -177,7 +177,7 @@ function App() {
           this.views.search = new SearchView(data);
           return await this.views.search.render();
         case 'pinned':
-          this.views.pinned = new PinnedView();
+          this.views.pinned = new PinnedView(data);
           return await this.views.pinned.render();
         case 'transfers':
           this.views.transfers = new TransfersView();
