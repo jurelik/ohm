@@ -83,7 +83,7 @@ ipcMain.on('start', (event) => {
 });
 
 const spawnDaemon = (event) => {
-  daemon = spawn(require('go-ipfs').path(), ['daemon'])
+  daemon = spawn(require('go-ipfs').path(), ['daemon', '--routing=dhtclient'])
 
   daemon.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);
