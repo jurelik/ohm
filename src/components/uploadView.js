@@ -130,6 +130,7 @@ function UploadView(data) {
     addSong.onclick = this.handleAddSong;
     submit.onclick = this.handleSubmit;
 
+    app.content.innerHTML = '';
     app.content.appendChild(this.el);
     return this.children[0].el.querySelector('input').focus(); //Focus the first input
   }

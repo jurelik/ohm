@@ -6,10 +6,10 @@ const log = require('./log');
 const addSong = async (song, path) => {
   try {
     const buffer = await fsp.readFile(song.path);
-    const { cid } = await app.ipfs.add({ content: buffer }); //Add song to IPFS
+    const { cid } = await app.ipfs.add({ content: buffer }, { cidVersion: 1 }); //Add song to IPFS
 
     //Copy song to MFS
-    await app.ipfs.files.mkdir(`${path}/${song.title}/files`, { parents: true });
+    await app.ipfs.files.mkdir(`${path}/${song.title}/files`, { parents: true, cidVersion: 1 });
     await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}/${song.title}/${app.artist} - ${song.title}.${song.format}`);
 
     //Add files
