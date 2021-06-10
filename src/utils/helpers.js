@@ -10,7 +10,7 @@ const addSong = async (song, path) => {
 
     //Copy song to MFS
     await app.ipfs.files.mkdir(`${path}/${song.title}/files`, { parents: true, cidVersion: 1 });
-    await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}/${song.title}/${app.artist} - ${song.title}.${song.format}`);
+    await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}/${song.title}/${app.artist} - ${song.title}.${song.format}`, { cidVersion: 1 });
 
     //Add files
     for (const file of song.files) {
@@ -18,15 +18,15 @@ const addSong = async (song, path) => {
         const _file = await getFile(file.id);
 
         //Copy file to MFS
-        await app.ipfs.files.cp(`/ipfs/${_file.cid}`, `${path}/${song.title}/files/${_file.artist} - ${_file.name}.${_file.format}`);
+        await app.ipfs.files.cp(`/ipfs/${_file.cid}`, `${path}/${song.title}/files/${_file.artist} - ${_file.name}.${_file.format}`, { cidVersion: 1 });
         file.cid = _file.cid;
       }
       else {
         const buffer = await fsp.readFile(file.path);
-        const { cid } = await app.ipfs.add({ content: buffer }); //Add song to IPFS
+        const { cid } = await app.ipfs.add({ content: buffer }, { cidVersion: 1 }); //Add song to IPFS
 
         //Copy file to MFS
-        await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}/${song.title}/files/${app.artist} - ${file.name}.${file.format}`);
+        await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}/${song.title}/files/${app.artist} - ${file.name}.${file.format}`, { cidVersion: 1 });
         file.cid = cid.string;
       }
     }
@@ -112,7 +112,7 @@ const createAlbumFolder = async (transfer) => {
       if (folder.name === transfer.albumTitle) return;
     }
 
-    await app.ipfs.files.mkdir(transfer.path);
+    await app.ipfs.files.mkdir(transfer.path, { cidVersion: 1 });
   }
   catch (err) {
     throw err;
@@ -169,10 +169,10 @@ const writeToDisk = async (transfer) => {
 const pinItem = async (transfer, controller) => {
   try {
     log('Pinning...')
-    await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal });
+    await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal, cidVersion: 1 });
     if (transfer.albumTitle) await createAlbumFolder(transfer); //Create an album folder if needed
     if (transfer.album) await removeExistingAlbumFolder(transfer); //Check if folder exists and remove it
-    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}/${transfer.title}`, { signal: controller.signal, parents: true });
+    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}/${transfer.title}`, { signal: controller.signal, parents: true, cidVersion: 1 });
     log('Successfully pinned item.')
   }
   catch (err) {

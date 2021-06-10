@@ -215,11 +215,9 @@ function Player() {
 
   this.updateSrc = () => {
     //If song, artist and title must be included as the CID points to the song parent folder
-    //if (this.current.type === 'song') return this.audio.setAttribute('src', `${app.GATEWAY}/ipfs/${this.current.cid}/${this.current.artist} - ${this.current.title || this.current.name}.${this.current.format}`);
-    const url = app.GATEWAY.slice(7)
-    if (this.current.type === 'song') return this.audio.setAttribute('src', `http://${this.current.cid}.ipfs.${url}/${this.current.artist} - ${this.current.title || this.current.name}.${this.current.format}`);
+    if (this.current.type === 'song') return this.audio.setAttribute('src', `http://${this.current.cid}.ipfs.${app.GATEWAY}/${this.current.artist} - ${this.current.title || this.current.name}.${this.current.format}`);
 
-    return this.audio.setAttribute('src', `${app.GATEWAY}/ipfs/${this.current.cid}`);
+    return this.audio.setAttribute('src', `http://${this.current.cid}.ipfs.${app.GATEWAY}`);
   }
 
   this.sameQueue = (files) => {

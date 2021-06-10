@@ -38,7 +38,7 @@ function App() {
     pinned: null,
     transfers: null
   }
-  this.GATEWAY ='http://localhost:8080';
+  this.GATEWAY ='localhost:8080';
   this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://18.132.82.84:3000';
   this.USER_DATA_PATH;
   this.MULTIADDR;
@@ -89,11 +89,7 @@ function App() {
     ipcRenderer.once('daemon-ready', async (e, userDataPath) => {
       log.success('IPFS daemon initiated.');
       try {
-        this.ipfs = createClient({
-          headers: {
-            "Clear-Site-Data": ""
-          }
-        });
+        this.ipfs = createClient();
         this.USER_DATA_PATH = userDataPath;
         const id = await this.getId(); //Get multiaddress for swarm connections
         this.MULTIADDR = id.addresses[4];
@@ -104,8 +100,8 @@ function App() {
           if (file.name === app.artist) initialised = true;
         }
         if (!initialised) {
-          await this.ipfs.files.mkdir(`/${app.artist}/singles`, { parents: true });
-          await this.ipfs.files.mkdir(`/${app.artist}/albums`, { parents: true });
+          await this.ipfs.files.mkdir(`/${app.artist}/singles`, { parents: true, cidVersion: 1 });
+          await this.ipfs.files.mkdir(`/${app.artist}/albums`, { parents: true, cidVersion: 1 });
         }
 
         //Create transfersStore

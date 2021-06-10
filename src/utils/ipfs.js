@@ -14,7 +14,7 @@ const uploadSingle = async (payload) => {
 const uploadAlbum = async (payload) => {
   try {
     const album = payload.album;
-    await app.ipfs.files.mkdir(`/${app.artist}/albums/${album.title}`);
+    await app.ipfs.files.mkdir(`/${app.artist}/albums/${album.title}`, { cidVersion: 1 });
 
     //Add songs
     for (const song of payload.songs) {
