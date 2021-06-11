@@ -79,6 +79,7 @@ function UploadView(data) {
   }
 
   this.display = () => {
+    app.content.innerHTML = '';
     return app.content.appendChild(this.el);
   }
 
