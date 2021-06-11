@@ -25,7 +25,7 @@ function Transfer(data, unique) {
 
     try {
       if (this.data.active) { //If active pause
-        this.el.querySelector(`.resume`).innerHTML = 'resume'; //Update DOM
+        this.el.querySelector(`.resume`).innerHTML = refreshIconSmall; //Update DOM
         ipfs.pauseTransfer(this.unique);
         log.success('Successfully paused.');
         return;
@@ -34,12 +34,12 @@ function Transfer(data, unique) {
       switch (this.data.type) {
         case 'pin':
           log('Innitiating transfer..');
-          this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
+          this.el.querySelector(`.resume`).innerHTML = pauseIcon; //Update DOM
           await ipfs.resumeTransfer(this.unique);
           break;
         case 'download':
           log('Innitiating transfer..');
-          this.el.querySelector(`.resume`).innerHTML = 'pause'; //Update DOM
+          this.el.querySelector(`.resume`).innerHTML = pauseIcon; //Update DOM
           await ipfs.resumeTransfer(this.unique);
           break;
         default:
