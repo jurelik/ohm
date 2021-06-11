@@ -291,7 +291,7 @@ select:disabled {
 .header .search {
   display: flex;
   align-items: center;
-  margin-left: 15px;
+  margin-left: 17px;
 }
 
 .search .search-button {

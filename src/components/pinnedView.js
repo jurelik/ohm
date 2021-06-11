@@ -49,6 +49,16 @@ function PinnedView(data) {
     }
   }
 
+  this.handleEmpty = () => {
+    const el = document.createElement('div');
+    el.innerHTML = 'No items found.';
+    el.className = 'test';
+
+    app.content.innerHTML = '';
+    this.el.appendChild(el);
+    return app.content.appendChild(this.el);
+  }
+
   this.append = async () => {
     try {
       for (let i = this.data.amountShown - this.LOAD_MORE_AMOUNT; i < this.data.amountShown; i++) {
@@ -88,6 +98,7 @@ function PinnedView(data) {
     try {
       this.el.innerHTML = ''; //Reset innerHTML
       if (!this.data) this.data = await this.init(); //Get data
+      if (this.data.items.length === 0) return this.handleEmpty(); //Show different view if no items to be shown
 
       //Create elements
 
@@ -97,6 +108,8 @@ function PinnedView(data) {
       //Add attributes and innerHTML
 
       for (let i = 0; i < this.data.amountShown; i++) {
+        if (!this.data.items[i]) break; //Handle scenario when less items shown than this.LOAD_MORE_AMOUNT
+
         let item = this.data.items[i];
         let el;
 
