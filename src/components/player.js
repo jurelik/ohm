@@ -116,8 +116,9 @@ function Player() {
 
   //QUEUE HANDLERS
   this.queueSong = (file) => {
+    console.log(file)
     //Check if file already loaded
-    if (this.queue.length === 1 && this.current.id === file.id) return this.play();
+    if (this.queue.length === 1 && this.current.id === file.id && this.current.type === file.type) return this.play();
     const alreadyLoaded = (this.feed || this.album) && this.current.id === file.id; //Is the song already playing in a feed or album?
 
     this.album = null; //Reset this.album
@@ -141,14 +142,14 @@ function Player() {
     //Check if queue is already loaded and we are playing the same song
     if (this.sameQueue(feed) && this.queuePosition === position) return this.play();
 
-    if (!this.feed && this.current === song.id) _position = this.checkIfCurrentSongIncluded(feed); //Check if the current song is included in the feed
+    if (!this.feed && this.current && this.current.id === song.id) _position = this.checkIfCurrentSongIncluded(feed); //Check if the current song is included in the feed
 
     this.feed = true; //Set this.feed to active
     this.queue = feed;
-    this.queuePosition = _position || position;
+    this.queuePosition = (typeof _position === 'number') ? _position : position; //Use typeof because position 0 is considered a falsy value
     this.current = feed[this.queuePosition];
     this.album = this.current.albumId ? this.current.albumId : null;
-    if (_position) return this.play(); //Return here if _position was found
+    if (typeof _position === 'number') return this.play(); //Return here if _position was found
 
     this.playing = false;
     this.interruptLoading(); //Interrupt the loading animation in other songs/albums
