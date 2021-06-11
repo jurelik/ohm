@@ -53,7 +53,7 @@ function Album(data, view) {
     if (this.data.songs === app.player.queue) {
       return data.songs.indexOf(app.player.current);
     }
-    else if (app.player.feed) { //Check if the current song in the feed is playing which is contained in this album
+    else if (app.player.feed || app.player.album) { //Check if the current song in the feed is playing which is contained in this album
       for (let song of this.data.songs) {
         if (song.id === app.player.current.id) return this.data.songs.indexOf(song);
       }

@@ -116,7 +116,6 @@ function Player() {
 
   //QUEUE HANDLERS
   this.queueSong = (file) => {
-    console.log(file)
     //Check if file already loaded
     if (this.queue.length === 1 && this.current.id === file.id && this.current.type === file.type) return this.play();
     const alreadyLoaded = (this.feed || this.album) && this.current.id === file.id; //Is the song already playing in a feed or album?
@@ -139,9 +138,7 @@ function Player() {
     const position = this.getSongPosition(song, feed); //Position of selected song in feed
     let _position = null; //Position of this.current in new feed (if applicable) - means song was loaded in a different view
 
-    //Check if queue is already loaded and we are playing the same song
-    if (this.sameQueue(feed) && this.queuePosition === position) return this.play();
-
+    if (this.sameQueue(feed) && this.queuePosition === position) return this.play(); //Check if queue is already loaded and we are playing the same song
     if (!this.feed && this.current && this.current.id === song.id) _position = this.checkIfCurrentSongIncluded(feed); //Check if the current song is included in the feed
 
     this.feed = true; //Set this.feed to active
@@ -162,12 +159,14 @@ function Player() {
 
     //Check if queue is already loaded and we are playing the same song
     if (this.sameQueue(files) && this.queuePosition === position) return this.play();
+    const alreadyLoaded = (this.feed || this.album) && this.current.id === files[position].id; //Is the song already playing in a feed or album?
 
     this.feed = false; //Reset this.feed
     this.queue = files;
     this.queuePosition = position;
     this.current = files[this.queuePosition];
     this.album = album.id;
+    if (alreadyLoaded) return this.play(); //Return here if song is already loaded
 
     this.playing = false;
     this.interruptLoading(); //Interrupt the loading animation in other songs/albums
