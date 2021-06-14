@@ -51,7 +51,8 @@ function PinnedView(data) {
 
   this.handleEmpty = () => {
     const el = document.createElement('div');
-    el.innerHTML = 'No items found.';
+    el.innerHTML = 'no items found.';
+    el.className = 'empty';
 
     app.content.innerHTML = '';
     this.el.appendChild(el);

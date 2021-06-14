@@ -60,7 +60,6 @@ function TransfersView(data) {
     let actionsCell = document.createElement('th');
     let clearAll = document.createElement('button');
 
-    this.el.className = 'files';
     actionsCell.className = 'actions-header';
     clearAll.className = 'clear-all';
 

@@ -51,6 +51,7 @@ function File(data) {
 
     //Add classes for styling
     this.el.classList.add('file');
+    playButtonCell.className = 'play-button-cell';
     playButton.className = 'play-button';
 
     //Add attributes and innerHTML

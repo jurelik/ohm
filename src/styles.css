@@ -36,21 +36,23 @@ button:hover, button:active {
   text-decoration: underline;
 }
 
-table {
-  margin-top: 10px;
-}
-
 svg {
   pointer-events: none;
+}
+
+table {
+  border-spacing: 2px 0;
 }
 
 th {
   text-align: left;
   border-bottom: 1px solid #888;
+  height: 20px;
 }
 
 td {
   vertical-align: center;
+  height: 20px;
 }
 
 td button {
@@ -63,6 +65,10 @@ input[type=text], input[type=password], input[type=search] {
   background-color: #222;
   color: #eee;
   border: none;
+}
+
+input[type=search] {
+  padding-left: 5px;
 }
 
 input[type=text]:focus, input[type=password]:focus, input[type=search]:focus {
@@ -290,7 +296,7 @@ select:disabled {
 .header .search {
   display: flex;
   align-items: center;
-  margin-left: 17px;
+  margin-left: 15px;
 }
 
 .search .search-button {
@@ -314,7 +320,6 @@ select:disabled {
   align-items: center;
   margin-bottom: 10px;
   height: 20px;
-  border: 1px solid green;
 }
 
 .main {
@@ -333,12 +338,10 @@ select:disabled {
   padding-left: 5px;
   padding-top: 2px;
   color: #888;
-  border: 1px solid yellow;
 }
 
 .nav button {
   height: 20px;
-  border: 1px solid green;
 }
 
 .nav .selected {
@@ -353,7 +356,6 @@ select:disabled {
   padding-left: 5px;
   padding-right: 10px;
   padding-top: 2px;
-  border: 1px solid red;
 }
 
 .content .load-more {
@@ -672,13 +674,17 @@ select:disabled {
   cursor: pointer;
 }
 
+.file .play-button-cell {
+  width: 20px;
+}
+
 .file .play-button {
+  margin: auto;
   display: flex;
   justify-content: center;
   align-items: center;
   stroke: #ccc;
   fill: #ccc;
-  width: 15px;
 }
 
 .file .play-button:hover {
@@ -736,6 +742,7 @@ select:disabled {
   display: flex;
   flex-direction: row;
   align-items: center;
+  height: 20px;
 }
 
 .artist-card .location-div svg {
@@ -873,6 +880,8 @@ select:disabled {
 /**Transfers**/
 .transfers-view .clear-all {
   margin-top: 20px;
+  padding-left: 0;
+  font-size: 10px;
 }
 
 .transfer td {
@@ -923,4 +932,11 @@ select:disabled {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+/*Empty screen*/
+.empty {
+  display: flex;
+  align-items: center;
+  height: 20px;
 }
