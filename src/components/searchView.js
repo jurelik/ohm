@@ -2,7 +2,6 @@ const SearchViewMain = require('./searchViewMain');
 const io = require('../utils/io');
 
 function SearchView(data) {
-  console.log(data)
   this.el = document.createElement('div');
   this.data = data;
   this.searchCategory = this.data.searchCategory;
@@ -64,7 +63,6 @@ function SearchView(data) {
         })
       });
       const res = await _res.json();
-      console.log(res)
 
       if (res.type === 'error') throw res.err;
 
