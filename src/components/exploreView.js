@@ -1,6 +1,7 @@
 const Song = require('./song');
 const Album = require('./album');
 const log = require('../utils/log');
+const helpers = require('../utils/helpers');
 
 function ExploreView(data) {
   this.el = document.createElement('div');
@@ -96,8 +97,8 @@ function ExploreView(data) {
     try {
       this.el.innerHTML = ''; //Reset innerHTML
 
-      //Fetch data from server on first render
-      if (!this.data) this.data = await this.fetch();
+      if (!this.data) this.data = await this.fetch(); //Fetch data from server on first render
+      if (this.data.length === 0) return helpers.handleEmpty(this.el); //Show different view if no items to be shown
 
       for (let item of this.data) {
         let el;

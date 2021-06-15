@@ -1,5 +1,6 @@
 const ipfs = require('../utils/ipfs');
 const log = require('../utils/log');
+const helpers = require('../utils/helpers');
 const Album = require('./album');
 const Song = require('./song');
 
@@ -49,14 +50,14 @@ function PinnedView(data) {
     }
   }
 
-  this.handleEmpty = () => {
-    const el = document.createElement('div');
-    el.innerHTML = 'no items found.';
-    el.className = 'empty';
+  this.handleEmpty = (el) => {
+    const _el = document.createElement('div');
+    _el.innerHTML = 'no items found.';
+    _el.className = 'empty';
 
     app.content.innerHTML = '';
-    this.el.appendChild(el);
-    return app.content.appendChild(this.el);
+    el.appendChild(_el);
+    return app.content.appendChild(el);
   }
 
   this.append = async () => {
@@ -98,15 +99,12 @@ function PinnedView(data) {
     try {
       this.el.innerHTML = ''; //Reset innerHTML
       if (!this.data) this.data = await this.init(); //Get data
-      if (this.data.items.length === 0) return this.handleEmpty(); //Show different view if no items to be shown
-
-      //Create elements
+      if (this.data.items.length === 0) return helpers.handleEmpty(this.el); //Show different view if no items to be shown
 
       //Add classes for styling
       this.el.className = 'pinned-view';
 
-      //Add attributes and innerHTML
-
+      //Add songs/albums
       for (let i = 0; i < this.data.amountShown; i++) {
         if (!this.data.items[i]) break; //Handle scenario when less items shown than this.LOAD_MORE_AMOUNT
 

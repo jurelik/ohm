@@ -241,6 +241,16 @@ const formatBytes = (bytes, decimals = 2) => { //Taken from https://stackoverflo
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i] + '/s';
 }
 
+const handleEmpty = (el) => {
+  const _el = document.createElement('div');
+  _el.innerHTML = 'no items found';
+  _el.className = 'empty';
+
+  app.content.innerHTML = '';
+  el.appendChild(_el);
+  return app.content.appendChild(el);
+}
+
 //
 //PRIVATE FUNCTIONS
 //
@@ -357,5 +367,6 @@ module.exports = {
   childIsPlaying,
   removeItem,
   handleReader,
-  formatBytes
+  formatBytes,
+  handleEmpty
 }
