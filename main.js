@@ -57,22 +57,22 @@ app.on('window-all-closed', () => {
 })
 
 app.on('will-quit', async (e) => {
-  if (daemon && tempUploadPath) {
+  if (tempUploadPath) { //If a file is currently being uploaded make sure to delete MFS before quitting
     e.preventDefault();
+
     try {
-      if (tempUploadPath) await clearUploadMFS(); //Clear MFS if an upload is currently taking place
-      if (daemon) daemon.kill(); //Kill daemon if running
-      daemon = null; //Prevent infinite loop
-      app.quit();
+      await clearUploadMFS(); //Clear MFS
+      daemon.kill();
     }
     catch (err) {
       console.log(err);
-      if (daemon) daemon.kill(); //Kill daemon if running
-      daemon = null; //Prevent infinite loop
-      app.quit();
+      daemon.kill();
     }
   }
-  else if (daemon) daemon.kill();
+  else if (daemon) {
+    e.preventDefault();
+    daemon.kill();
+  }
 })
 
 app.on('activate', () => {
@@ -110,7 +110,7 @@ const spawnDaemon = (event) => {
   daemon = spawn(require('go-ipfs').path(), ['daemon', '--routing=dhtclient'])
 
   daemon.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
+    console.log(`${data}`);
     if (data.toString().match(/(?:daemon is running|Daemon is ready)/)) {
       event.reply('daemon-ready', userDataPath);
     }
@@ -123,6 +123,7 @@ const spawnDaemon = (event) => {
   daemon.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
     daemon = null;
+    app.quit();
   });
 
   daemon.on('error', (err) => {
@@ -153,23 +154,23 @@ const initRepo = (event) => {
 
 const clearUploadMFS = () => {
   return new Promise((resolve) => {
-    let init = spawn(require('go-ipfs').path(), ['files', 'rm', '-r', tempUploadPath]);
-    console.log(tempUploadPath)
+    let clearMFS = spawn(require('go-ipfs').path(), ['files', 'rm', '-r', tempUploadPath]);
 
-    init.stdout.on('data', (data) => {
+    clearMFS.stdout.on('data', (data) => {
       console.log(`stdout: ${data}`);
     });
 
-    init.stderr.on('data', (data) => {
+    clearMFS.stderr.on('data', (data) => {
       console.error(`stderr: ${data}`);
     });
 
-    init.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
+    clearMFS.on('close', (code) => {
+      console.log(`Successfully stopped current upload.`);
+      tempUploadPath = null; //Reset tempUploadPath
       resolve();
     });
 
-    init.on('error', (err) => {
+    clearMFS.on('error', (err) => {
       console.log(err);
       resolve();
     })
