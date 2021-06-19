@@ -1,4 +1,5 @@
 const ipfs = require('../utils/ipfs');
+const { ipcRenderer } = require('electron');
 const helpers = require('../utils/helpers');
 const log = require('../utils/log');
 
@@ -26,12 +27,14 @@ const login = async (payload) => {
 
 const upload = async (payload) => {
   let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
+  const path = (payload.album) ? `/${app.artist}/albums/${payload.album.title}` : `/${app.artist}/singles/${payload.songs[0].title}`;
 
   try {
     log('Adding to IPFS...');
     if (payload.album) await ipfs.uploadAlbum(payload);
     else await ipfs.uploadSingle(payload);
     writtenToMFS = true; //MFS has been modified
+    ipcRenderer.send('upload-start', path);
     log(`${payload.album ? 'Album' : 'Single'} added to IPFS...`);
 
     //Send payload to server
@@ -43,17 +46,19 @@ const upload = async (payload) => {
       },
       body: JSON.stringify(payload)
     });
+    log('Connection established - Now uploading...');
     const reader = _res.body.getReader();
     const res = await helpers.handleReader(reader);
 
     if (res.type === 'error') throw res.err;
+    ipcRenderer.send('upload-end');
   }
   catch (err) {
+    ipcRenderer.send('upload-end');
     if (err === 'album with the same name already exists') throw err;
     if (err === 'single with the same name already exists') throw err;;
 
-    if (payload.album && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/albums/${payload.album.title}`, { recursive: true });
-    else if (payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/singles/${payload.songs[0].title}`, { recursive: true });
+    if (writtenToMFS) await app.ipfs.files.rm(path, { recursive: true });
     throw err;
   }
 }

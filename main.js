@@ -1,10 +1,11 @@
 const { app, BrowserWindow, ipcMain, session, Menu, Tray } = require('electron');
 const { spawn } = require('child_process')
 const fs = require('fs');
-let tray = null;
-let daemon = null;
+let tray = null; //Menu icon
+let daemon = null; //IPFS daemon
 let userDataPath = null;
-let win = null;
+let tempUploadPath = null; //True while upload is active
+let win = null; //Main window
 
 function createWindow() {
   if (win) return; //Ignore if window is already created
@@ -55,8 +56,23 @@ app.on('window-all-closed', () => {
   app.dock.hide();
 })
 
-app.on('will-quit', () => {
-  if (daemon) daemon.kill(); //Kill daemon if running
+app.on('will-quit', async (e) => {
+  if (daemon && tempUploadPath) {
+    e.preventDefault();
+    try {
+      if (tempUploadPath) await clearUploadMFS(); //Clear MFS if an upload is currently taking place
+      if (daemon) daemon.kill(); //Kill daemon if running
+      daemon = null; //Prevent infinite loop
+      app.quit();
+    }
+    catch (err) {
+      console.log(err);
+      if (daemon) daemon.kill(); //Kill daemon if running
+      daemon = null; //Prevent infinite loop
+      app.quit();
+    }
+  }
+  else if (daemon) daemon.kill();
 })
 
 app.on('activate', () => {
@@ -80,6 +96,14 @@ ipcMain.on('start', (event) => {
   else {
     initRepo(event);
   }
+});
+
+ipcMain.on('upload-start', (event, arg) => { //When upload starts, make note of MFS path so that we can delete it on force close during upload
+  tempUploadPath = arg;
+});
+
+ipcMain.on('upload-end', (event) => { //Reset tempUploadPath when upload ends/fails
+  tempUploadPath = null;
 });
 
 const spawnDaemon = (event) => {
@@ -125,4 +149,29 @@ const initRepo = (event) => {
   init.on('error', (err) => {
     console.log(err)
   })
+}
+
+const clearUploadMFS = () => {
+  return new Promise((resolve) => {
+    let init = spawn(require('go-ipfs').path(), ['files', 'rm', '-r', tempUploadPath]);
+    console.log(tempUploadPath)
+
+    init.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+    });
+
+    init.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+    });
+
+    init.on('close', (code) => {
+      console.log(`child process exited with code ${code}`);
+      resolve();
+    });
+
+    init.on('error', (err) => {
+      console.log(err);
+      resolve();
+    })
+  });
 }
