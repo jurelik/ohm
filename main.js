@@ -6,6 +6,7 @@ let daemon = null; //IPFS daemon
 let userDataPath = null;
 let tempUploadPath = null; //True while upload is active
 let win = null; //Main window
+let quitting = false; //Is the app in the process of quitting
 
 function createWindow() {
   if (win) return; //Ignore if window is already created
@@ -57,6 +58,8 @@ app.on('window-all-closed', () => {
 })
 
 app.on('will-quit', async (e) => {
+  quitting = true;
+
   if (tempUploadPath) { //If a file is currently being uploaded make sure to delete MFS before quitting
     e.preventDefault();
 
@@ -123,7 +126,7 @@ const spawnDaemon = (event) => {
   daemon.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
     daemon = null;
-    app.quit();
+    if (quitting) app.quit();
   });
 
   daemon.on('error', (err) => {

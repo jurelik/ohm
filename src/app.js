@@ -53,6 +53,7 @@ function App() {
   this.albums = [];
   this.files = [];
   this.transfersStore = null;
+  this.bandwidthController = null;
 
   this.login = async () => {
     const login = new LoginView();
@@ -73,6 +74,9 @@ function App() {
       const _res = await fetch(`${app.URL}/api/logout`); //Logout server-side
       const res = await _res.json();
       if (res.type === 'error') throw new Error(err);
+
+      this.bandwidthController.abort(); //Abort updateBandwidth
+      this.bandwidthController = null;
 
       this.root.innerHTML = '';
       const login = new LoginView();
@@ -216,8 +220,10 @@ function App() {
   }
 
   this.updateBandwidth = async () => {
+    this.bandwidthController = new AbortController();
+
     try {
-      for await (const stats of app.ipfs.stats.bw({ poll: true, interval: '1s' })) {
+      for await (const stats of app.ipfs.stats.bw({ poll: true, interval: '1s', signal: this.bandwidthController.signal })) {
         const dl = helpers.formatBytes(stats.rateIn);
         const ul = helpers.formatBytes(stats.rateOut);
 
@@ -226,6 +232,7 @@ function App() {
       }
     }
     catch (err) {
+      if (err.message === 'The user aborted a request.') return;
       log.error(err)
     }
   }
