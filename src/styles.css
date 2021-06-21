@@ -852,6 +852,10 @@ select:disabled {
   margin-right: 5px;
 }
 
+.upload-bottom-bar .submit-div .percentage {
+  margin-right: 5px;
+}
+
 .pinned-view-albums {
   margin-top: 0;
 }

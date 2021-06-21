@@ -12,6 +12,7 @@ function UploadView(data) {
   this.album = null;
   this.fileCounter = 0;
   this.songCounter = 0;
+  this.progress = null;
 
   this.handleAddSong = (e) => {
     e.preventDefault();
@@ -72,10 +73,17 @@ function UploadView(data) {
   this.addSpinner = () => {
     const submitDiv = this.el.querySelector('.submit-div');
     const spinner = document.createElement('div');
+    const percentage = document.createElement('div');
     spinner.className = 'spinner';
+    percentage.className = 'percentage';
     submitDiv.insertBefore(spinner, submitDiv.childNodes[0]);
+    submitDiv.insertBefore(percentage, submitDiv.childNodes[0]);
 
     return spinner;
+  }
+
+  this.updateProgress = (progress) => {
+    this.el.querySelector('.percentage').innerHTML = `${progress}%`;
   }
 
   this.display = () => {

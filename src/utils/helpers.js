@@ -221,8 +221,7 @@ const handleReader = async (reader, previous) => {
     var msg = new TextDecoder().decode(value);
     if (done) return JSON.parse(previous);
 
-    if (!msg.startsWith('{')) log(`Upload progress: ${msg}%`);
-    //if (msg !== '{"type":"success"}') log(`Upload progress: ${msg}%`);
+    if (!msg.startsWith('{')) app.views.upload.updateProgress(msg); //Update progress in DOM
     return await handleReader(reader, msg);
   }
   catch (err) {
