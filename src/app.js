@@ -4,6 +4,7 @@ const { ipcRenderer } = require('electron');
 const createClient = require('ipfs-http-client');
 const log = require('./utils/log');
 const helpers = require('./utils/helpers');
+const { loadingIconSmall } = require('./utils/svgs');
 
 const Nav = require('./components/nav');
 const LoginView = require('./components/loginView');
@@ -144,7 +145,7 @@ function App() {
 
   this.changeView = async (view, data) => {
     try {
-      //this.content.innerHTML = '';
+      this.triggerLoading(true); //Trigger loading indicator
       this.content.scrollTop = 0;
       this.current = view;
       this.songs = []; //Clear song references
@@ -155,36 +156,48 @@ function App() {
       switch (view) {
         case 'explore':
           this.views.explore = new ExploreView(data);
-          return await this.views.explore.render();
+          await this.views.explore.render();
+          break;
         case 'feed':
           this.views.feed = new FeedView(data);
-          return await this.views.feed.render();
+          await this.views.feed.render();
+          break;
         case 'song':
           this.views.song = new SongView(data.song, data.action);
-          return await this.views.song.render();
+          await this.views.song.render();
+          break;
         case 'album':
           this.views.album = new AlbumView(data.album);
-          return await this.views.album.render();
+          await this.views.album.render();
+          break;
         case 'artist':
           this.views.artist = new ArtistView(data.artist);
-          return await this.views.artist.render();
+          await this.views.artist.render();
+          break;
         case 'upload':
           if (this.views.upload) return this.views.upload.display(); //Prevent re-render to preserve input state etc.
 
           this.views.upload = new UploadView();
-          return this.views.upload.render();
+          this.views.upload.render();
+          break;
         case 'search':
           this.views.search = new SearchView(data);
-          return await this.views.search.render();
+          await this.views.search.render();
+          break;
         case 'pinned':
           this.views.pinned = new PinnedView(data);
-          return await this.views.pinned.render();
+          await this.views.pinned.render();
+          break;
         case 'transfers':
           this.views.transfers = new TransfersView();
-          return await this.views.transfers.render();
+          await this.views.transfers.render();
+          break;
         default:
-          return this.content.innerHTML = view;
+          this.content.innerHTML = view;
+          break;
       }
+
+      this.triggerLoading(false); //Stop loading indicator
     }
     catch (err) {
       console.error(err);
@@ -217,6 +230,11 @@ function App() {
     for (let unique in transfers) {
       transfers[unique].active = false; //All transfers are paused on app open - ADD OPTION TO DISABLE THIS
     }
+  }
+
+  this.triggerLoading = (val) => {
+    const el = document.querySelector('.loading');
+    val ? el.innerHTML = loadingIconSmall : el.innerHTML = '';
   }
 
   this.updateBandwidth = async () => {
@@ -310,6 +328,8 @@ function App() {
         </div>
         <div class="ul">
         </div>
+      </div>
+      <div class="loading">
       </div>
     </div>
     <div class="header">

@@ -230,6 +230,12 @@ select:disabled {
   width: 95px;
 }
 
+.drag .loading {
+  display: flex;
+  align-items: center;
+  width: 10px;
+}
+
 .login {
   display: flex;
   flex-direction: column;
@@ -866,6 +872,17 @@ select:disabled {
   display: block;
   width: 12px;
   height: 12px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  border-color: #fff #fff #fff transparent;
+  animation: spinner 1.2s linear infinite;
+}
+
+.spinner-small {
+  content: " ";
+  display: block;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   border: 2px solid #fff;
   border-color: #fff #fff #fff transparent;

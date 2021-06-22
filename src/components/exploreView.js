@@ -9,7 +9,6 @@ function ExploreView(data) {
 
   this.fetch = async () => {
     try {
-      //const _res = await fetch(`${app.URL}/api/latest`);
       const _res = await fetch(`${app.URL}/api/latest`, {
         method: 'POST',
         credentials: 'include', //Include cookie
