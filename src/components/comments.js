@@ -78,6 +78,13 @@ function Comments(data) {
 
     //Add listeners
     container.onsubmit = this.handleSubmit;
+    textarea.addEventListener('keydown', (e) => {
+      const keyCode = e.which || e.keyCode;
+      if (keyCode === 13 && !e.shiftKey) {
+        e.preventDefault();
+        submit.click();
+      }
+    });
 
     return this.el;
   }
