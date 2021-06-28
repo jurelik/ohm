@@ -13,7 +13,7 @@ function Comment(data) {
   this.render = () => {
     //Create elements
     let artist = document.createElement('button');
-    let content = document.createElement('p');
+    let content = document.createElement('pre');
 
     //Add classes for styling
     this.el.classList.add('comment');

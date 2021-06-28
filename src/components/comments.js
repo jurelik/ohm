@@ -63,6 +63,7 @@ function Comments(data) {
     submit.setAttribute('type', 'submit');
     textarea.setAttribute('rows', '1');
     textarea.setAttribute('autofocus', true);
+    textarea.setAttribute('placeholder', 'send comment..');
     marker.innerHTML = '> '
 
     //Build structure
@@ -79,8 +80,7 @@ function Comments(data) {
     //Add listeners
     container.onsubmit = this.handleSubmit;
     textarea.addEventListener('keydown', (e) => {
-      const keyCode = e.which || e.keyCode;
-      if (keyCode === 13 && !e.shiftKey) {
+      if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         submit.click();
       }

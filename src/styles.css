@@ -195,6 +195,15 @@ select:disabled {
   color: #888;
 }
 
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+pre {
+  font-family: inherit;
+}
+
 #first {
   border: 0px;
 }
@@ -547,6 +556,13 @@ select:disabled {
 
 .comment {
   margin: 5px 0;
+}
+
+.comment pre {
+  color: #eee;
+  margin-top: 1px;
+  margin-bottom: 0;
+  padding: 0;
 }
 
 .song-view-main button {
