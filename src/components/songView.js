@@ -34,16 +34,22 @@ function SongView(data, action) {
   this.render = async () => {
     try {
       this.el.innerHTML = '' //Reset innerHTML
+      let action = this.action || 'files';
 
       //Create elements
-      let action = this.action || 'files';
       let song = new Song(this.data, 'song');
       this.children.main = new SongViewMain(this.data, action);
+      let createdAt = document.createElement('div');
 
       //Add classes for styling
       this.el.className = `song-view-${this.action}`;
+      createdAt.className = 'created-at';
+
+      //Add attributes and innerHTML
+      createdAt.innerHTML = this.data.createdAt;
 
       this.el.appendChild(await song.render());
+      this.el.appendChild(createdAt);
       this.el.appendChild(this.children.main.render());
 
       app.content.innerHTML = '';

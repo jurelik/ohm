@@ -493,10 +493,17 @@ pre {
   margin-right: 10px;
 }
 
-.albumView .description {
+.albumView .created-at {
   color: #888;
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+  margin-left: 25px;
+  font-size: 9px;
+}
+
+.albumView .description {
+  color: #888;
+  margin-bottom: 10px;
   margin-left: 25px;
   font-size: 11px;
 }
@@ -506,6 +513,14 @@ pre {
 }
 
 /* song element */
+.song-view-files .created-at, .song-view-comments .created-at {
+  color: #888;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 25px;
+  font-size: 10px;
+}
+
 .song-view-files {
   height: 100%;
   overflow: auto;

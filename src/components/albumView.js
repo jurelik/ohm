@@ -21,17 +21,21 @@ function AlbumView(data, action) {
 
       //Create elements
       let album = new Album(this.data, 'album');
+      let createdAt = document.createElement('div');
       let description = document.createElement('div');
 
       //Add classes for styling
       this.el.className = 'albumView';
+      createdAt.className = 'created-at';
       description.className = 'description';
 
       //Add attributes and innerHTML
-      description.innerHTML = data.description;
+      createdAt.innerHTML = this.data.createdAt;
+      description.innerHTML = this.data.description;
 
       //Build structure
       this.el.appendChild(await album.render());
+      this.el.appendChild(createdAt);
       this.el.appendChild(description);
 
       for (let _song of this.data.songs) {
