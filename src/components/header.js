@@ -164,6 +164,7 @@ function Header() {
     searchInput.className = ('search-input');
     searchButton.setAttribute('type', 'submit');
     searchButton.className = ('search-button');
+    upload.className = 'upload';
 
     //Add listeners
     back.onclick = this.handleBack;

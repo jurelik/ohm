@@ -308,6 +308,17 @@ pre {
   stroke: #eee;
 }
 
+.header .upload {
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.header .upload:hover {
+  background-color: #333;
+}
+
 .header .search {
   display: flex;
   align-items: center;
@@ -495,7 +506,7 @@ pre {
 
 .albumView .created-at {
   color: #888;
-  margin-top: 10px;
+  margin-top: -5px;
   margin-bottom: 5px;
   margin-left: 25px;
   font-size: 9px;
@@ -515,7 +526,7 @@ pre {
 /* song element */
 .song-view-files .created-at, .song-view-comments .created-at {
   color: #888;
-  margin-top: 5px;
+  margin-top: -5px;
   margin-bottom: 5px;
   margin-left: 25px;
   font-size: 10px;
@@ -750,7 +761,7 @@ pre {
 }
 
 .artist-card .name-and-follow .follow {
-  border: 1.5px solid #bbb;
+  border: 1px solid #bbb;
   border-radius: 4px;
   margin-left: 10px;
   text-decoration: none;
