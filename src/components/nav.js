@@ -32,9 +32,15 @@ function Nav() {
 
     this.elements[id].innerHTML = `> ${id}`;
     this.elements[id].className = 'selected';
+    if (this.selected) this.elements[this.selected].innerHTML = this.selected;
+    if (this.selected) this.elements[this.selected].className = null;
+    this.selected = id;
+  }
+
+  this.unselect = () => {
     this.elements[this.selected].innerHTML = this.selected;
     this.elements[this.selected].className = null;
-    this.selected = id;
+    this.selected = null;
   }
 
   this.handleClick = (e) => {

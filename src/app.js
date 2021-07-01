@@ -152,6 +152,7 @@ function App() {
       this.albums = []; //Clear album references
       this.files = []; //Clear files references
       if (view !== 'search') document.querySelector('.search-input').value = ''; //Reset search-input
+      if (!this.nav.names.includes(view)) this.nav.unselect(); //Unselect the current navbar item if we are navigating to a view not listed on it
 
       switch (view) {
         case 'explore':
