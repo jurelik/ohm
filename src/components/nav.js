@@ -38,6 +38,8 @@ function Nav() {
   }
 
   this.unselect = () => {
+    if (!this.selected) return; //Return if no item is selected already
+
     this.elements[this.selected].innerHTML = this.selected;
     this.elements[this.selected].className = null;
     this.selected = null;

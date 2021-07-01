@@ -176,7 +176,7 @@ function App() {
           await this.views.artist.render();
           break;
         case 'upload':
-          if (this.views.upload) return this.views.upload.display(); //Prevent re-render to preserve input state etc.
+          if (this.views.upload) { this.views.upload.display(); break; }; //Prevent re-render to preserve input state etc.
 
           this.views.upload = new UploadView();
           this.views.upload.render();
