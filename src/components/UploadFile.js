@@ -45,6 +45,15 @@ function UploadFile(data) {
     }
   }
 
+  this.handleLicenseChange = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    //Mutually exclusive checkboxes
+    if (e.target.value === 'SA' && document.querySelector('#SA').checked) document.querySelector('#ND').checked = false;
+    if (e.target.value === 'ND' && document.querySelector('#ND').checked) document.querySelector('#SA').checked = false;
+  }
+
   this.handleDeleteFile = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -54,10 +63,14 @@ function UploadFile(data) {
 
   this.getFileData = () => {
     const file = Array.from(this.el.querySelectorAll('.file-input')).reduce((acc, input) => {
+      if (!acc.license) acc.license = [];
+
       if (input.type === 'radio' && input.checked) return { ...acc, type: input.value };
       else if (input.type === 'radio' && !input.checked) return { ...acc };
       else if (input.type === 'file' && input.files[0]) return { ...acc, path: input.files[0].path };
       else if (input.type === 'file' && !input.files[0]) return { ...acc };
+      else if (input.type === 'checkbox' && input.checked) return { ...acc, license: [ ...acc.license, input.value ] }
+      else if (input.type === 'checkbox' && !input.checked) return { ...acc }
 
       return { ...acc, [input.name]: input.value };
     }, {});
