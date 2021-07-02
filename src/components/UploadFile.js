@@ -129,6 +129,34 @@ function UploadFile(data) {
     return el;
   }
 
+  this.createCheckbox = (name) => {
+    //Create elements
+    let el = document.createElement('div')
+    let label = document.createElement('label');
+    let input = document.createElement('input');
+
+    //Add classes for styling
+    el.className = 'checkbox-div';
+    input.className = 'file-input';
+
+    //Add attributes and innerHTML
+    label.setAttribute('for', name);
+    label.innerHTML = name;
+    input.setAttribute('type', 'checkbox');
+    input.setAttribute('id', name);
+    input.setAttribute('name', 'license-' + this.unique);
+    input.setAttribute('value', name);
+
+    //Add listeners
+    input.onchange = this.handleLicenseChange;
+
+    //Build structure
+    el.appendChild(input);
+    el.appendChild(label);
+
+    return el;
+  }
+
   this.render = () => {
     //Create elements
     let legend = document.createElement('legend');
@@ -141,18 +169,26 @@ function UploadFile(data) {
     let id = this.createInput('id', 'text');
     let tags = this.createInput('tags', 'text');
     let info = this.createInput('info', 'text');
+    let licenseDiv = document.createElement('div');
+    let licenseLabel = document.createElement('p');
+    let licenseBY = this.createCheckbox('BY');
+    let licenseNC = this.createCheckbox('NC');
+    let licenseSA = this.createCheckbox('SA');
+    let licenseND = this.createCheckbox('ND');
     let file = this.createInput('file', 'file');
     let deleteFile = document.createElement('button');
 
     //Add classes for styling
     this.el.className = 'upload-file';
     typeDiv.className = 'radio-group-div';
+    licenseDiv.className = 'checkbox-group-div';
     id.querySelector('label').className = 'label-disabled';
 
     //Add attributes and innerHTML
     legend.innerHTML = 'file: '
     typeLabel.innerHTML = 'type: ';
     typeOriginal.querySelector('.file-input').checked = true;
+    licenseLabel.innerHTML = 'license: ';
     id.querySelector('.file-input').disabled = true;
     deleteFile.innerHTML = 'delete file';
 
@@ -161,12 +197,18 @@ function UploadFile(data) {
     typeDiv.appendChild(typeOriginal);
     typeDiv.appendChild(typeInternal);
     typeDiv.appendChild(typeExternal);
+    licenseDiv.appendChild(licenseLabel);
+    licenseDiv.appendChild(licenseBY);
+    licenseDiv.appendChild(licenseNC);
+    licenseDiv.appendChild(licenseSA);
+    licenseDiv.appendChild(licenseND);
     this.el.appendChild(legend);
     this.el.appendChild(typeDiv);
     this.el.appendChild(name);
     this.el.appendChild(id);
     this.el.appendChild(tags);
     this.el.appendChild(info);
+    this.el.appendChild(licenseDiv);
     this.el.appendChild(file);
     this.el.appendChild(deleteFile);
 
