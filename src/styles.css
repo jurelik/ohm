@@ -538,7 +538,13 @@ pre {
 }
 
 .song-view-files .files {
+  margin-top: 7px; /*No idea why this is 7...*/
   padding-left: 0;
+}
+
+.song-view-files .files-empty {
+  margin-left: 8px;
+  margin-top: 10px;
 }
 
 .song-view-comments {
@@ -585,7 +591,8 @@ pre {
 }
 
 .comment {
-  margin: 5px 0;
+  margin-top: 5px;
+  margin-left: 8px;
 }
 
 .comment pre {

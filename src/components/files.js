@@ -6,6 +6,13 @@ function Files(data) {
   this.state = {};
 
   this.render = () => {
+    if (this.data.length === 0) { //Handle 0 files scenario
+      this.el = document.createElement('div');
+      this.el.className = 'files-empty';
+      this.el.innerHTML = 'No files found.'
+      return this.el;
+    }
+
     let header = document.createElement('tr');
     let playCell = document.createElement('th');
     let idCell = document.createElement('th');
