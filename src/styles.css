@@ -537,6 +537,10 @@ pre {
   overflow: auto;
 }
 
+.song-view-files .files {
+  padding-left: 0;
+}
+
 .song-view-comments {
   height: calc(100% - 20px);
   overflow: auto;
@@ -544,7 +548,7 @@ pre {
 
 .song-view-main {
   color: #888;
-  margin-left: 8px;
+  margin-left: 0px;
 }
 
 .song-view-main .comment-container {
@@ -723,7 +727,10 @@ pre {
 }
 
 .file .play-button-cell {
-  width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
 }
 
 .file .play-button {

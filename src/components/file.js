@@ -46,8 +46,6 @@ function File(data) {
     let fileType = document.createElement('td');
     let tags = document.createElement('td');
     let info = document.createElement('td');
-    let checkBoxCell = document.createElement('td');
-    let checkBox = document.createElement('input');
 
     //Add classes for styling
     this.el.classList.add('file');
@@ -63,7 +61,6 @@ function File(data) {
     fileType.innerHTML = data.format;
     tags.innerHTML = data.tags.join(', ');
     info.innerHTML = data.info;
-    checkBox.type = 'checkbox';
 
     //Build structure
     this.el.appendChild(playButtonCell);
@@ -74,9 +71,7 @@ function File(data) {
     this.el.appendChild(fileType);
     this.el.appendChild(tags);
     this.el.appendChild(info);
-    this.el.appendChild(checkBoxCell);
     data.format === 'wav' || data.format === 'mp3' ? playButtonCell.appendChild(playButton) : null;
-    checkBoxCell.appendChild(checkBox);
 
     //Add listeners
     playButton.onclick = this.handlePlayButton;

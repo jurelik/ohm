@@ -15,7 +15,6 @@ function Files(data) {
     let fileTypeCell = document.createElement('th');
     let tagsCell = document.createElement('th');
     let infoCell = document.createElement('th');
-    let downloadCell = document.createElement('th');
 
     this.el.className = 'files';
 
@@ -28,7 +27,6 @@ function Files(data) {
     fileTypeCell.innerHTML = 'format';
     tagsCell.innerHTML = 'tags';
     infoCell.innerHTML = 'info';
-    downloadCell.innerHTML = 'download';
 
     header.appendChild(playCell);
     header.appendChild(idCell);
@@ -38,7 +36,6 @@ function Files(data) {
     header.appendChild(fileTypeCell);
     header.appendChild(tagsCell);
     header.appendChild(infoCell);
-    header.appendChild(downloadCell);
 
     this.el.appendChild(header);
 

@@ -12,6 +12,7 @@ function SongViewMain(data, action) {
     this.action = action;
     app.history[app.historyIndex].data.action = action; //Modify history
     app.views[app.current].action = action; //Modify action value in view to handle refresh correctly
+    app.views.song.el.className = `song-view-${action}`; //Change songView el className appropriately
     this.render();
   }
 
