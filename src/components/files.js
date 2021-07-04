@@ -20,6 +20,7 @@ function Files(data) {
     let artistCell = document.createElement('th');
     let typeCell = document.createElement('th');
     let fileTypeCell = document.createElement('th');
+    let licenseCell = document.createElement('th');
     let tagsCell = document.createElement('th');
     let infoCell = document.createElement('th');
 
@@ -32,6 +33,7 @@ function Files(data) {
     artistCell.innerHTML = 'artist';
     typeCell.innerHTML = 'type';
     fileTypeCell.innerHTML = 'format';
+    licenseCell.innerHTML = 'license';
     tagsCell.innerHTML = 'tags';
     infoCell.innerHTML = 'info';
 
@@ -41,6 +43,7 @@ function Files(data) {
     header.appendChild(artistCell);
     header.appendChild(typeCell);
     header.appendChild(fileTypeCell);
+    header.appendChild(licenseCell);
     header.appendChild(tagsCell);
     header.appendChild(infoCell);
 

@@ -51,7 +51,17 @@ function UploadFile(data) {
 
     //Mutually exclusive checkboxes
     if (e.target.value === 'SA' && document.querySelector('#SA').checked) document.querySelector('#ND').checked = false;
-    if (e.target.value === 'ND' && document.querySelector('#ND').checked) document.querySelector('#SA').checked = false;
+    else if (e.target.value === 'ND' && document.querySelector('#ND').checked) document.querySelector('#SA').checked = false;
+    else if (e.target.value === 'BY' && document.querySelector('#BY').checked) {
+      document.querySelector('#SA').disabled = false;
+      document.querySelector('#NC').disabled = false;
+      document.querySelector('#ND').disabled = false;
+    }
+    else if (e.target.value === 'BY' && !document.querySelector('#BY').checked) {
+      document.querySelector('#SA').disabled = true;
+      document.querySelector('#NC').disabled = true;
+      document.querySelector('#ND').disabled = true;
+    };
   }
 
   this.handleDeleteFile = (e) => {
@@ -69,8 +79,8 @@ function UploadFile(data) {
       else if (input.type === 'radio' && !input.checked) return { ...acc };
       else if (input.type === 'file' && input.files[0]) return { ...acc, path: input.files[0].path };
       else if (input.type === 'file' && !input.files[0]) return { ...acc };
-      else if (input.type === 'checkbox' && input.checked) return { ...acc, license: [ ...acc.license, input.value ] }
-      else if (input.type === 'checkbox' && !input.checked) return { ...acc }
+      else if (input.type === 'checkbox' && input.checked && !input.disabled) return { ...acc, license: [ ...acc.license, input.value ] }
+      else if (input.type === 'checkbox' && (!input.checked || input.disabled)) return { ...acc }
 
       return { ...acc, [input.name]: input.value };
     }, {});
@@ -159,6 +169,7 @@ function UploadFile(data) {
     input.setAttribute('id', name);
     input.setAttribute('name', 'license-' + this.unique);
     input.setAttribute('value', name);
+    if (name !== 'BY') input.disabled = true;
 
     //Add listeners
     input.onchange = this.handleLicenseChange;

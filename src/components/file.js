@@ -30,6 +30,12 @@ function File(data) {
     this.el.querySelector('.play-button').innerHTML = loadingIcon;
   }
 
+  this.formatLicense = (license) => {
+    if (license.length === 0) return 'CC0';
+
+    return `CC ${license.join('-')}`;
+  }
+
   this.reRender = () => {
     this.el.innerHTML = '';
     this.render();
@@ -44,6 +50,7 @@ function File(data) {
     let artist = document.createElement('td');
     let type = document.createElement('td');
     let fileType = document.createElement('td');
+    let license = document.createElement('td');
     let tags = document.createElement('td');
     let info = document.createElement('td');
 
@@ -59,6 +66,7 @@ function File(data) {
     artist.innerHTML = data.artist;
     type.innerHTML = data.type;
     fileType.innerHTML = data.format;
+    license.innerHTML = this.formatLicense(data.license);
     tags.innerHTML = data.tags.join(', ');
     info.innerHTML = data.info;
 
@@ -69,6 +77,7 @@ function File(data) {
     this.el.appendChild(artist);
     this.el.appendChild(type);
     this.el.appendChild(fileType);
+    this.el.appendChild(license);
     this.el.appendChild(tags);
     this.el.appendChild(info);
     data.format === 'wav' || data.format === 'mp3' ? playButtonCell.appendChild(playButton) : null;
