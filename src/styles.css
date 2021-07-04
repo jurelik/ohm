@@ -106,6 +106,38 @@ input[type="radio"]:focus {
   outline: none;
 }
 
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  padding: 2px;
+  background-clip: content-box;
+  border: 1px solid #bbb;
+  background-color: #222;
+  border-radius: 50%;
+  margin: 0 3px;
+  cursor: pointer;
+}
+
+/* appearance for checked radiobutton */
+input[type="checkbox"]:checked {
+  background-color: #eee;
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+}
+
+input[type="checkbox"]:disabled {
+  border: 1px solid #444;
+}
+
+input[type="checkbox"]:disabled:checked {
+  background-color: #444;
+}
+
 input[type=file] {
   font-family: inherit;
   font-size: 10px;;
@@ -729,10 +761,6 @@ pre {
   margin-right: 5px;
 }
 
-.file input[type=checkbox] {
-  cursor: pointer;
-}
-
 .file .play-button-cell {
   display: flex;
   justify-content: center;
@@ -887,6 +915,24 @@ pre {
 }
 
 .radio-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.checkbox-group-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.checkbox-group-div p {
+  margin: 0;
+}
+
+.checkbox-div {
   display: flex;
   flex-direction: row;
   align-items: center;

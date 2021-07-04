@@ -109,7 +109,7 @@ function UploadFile(data) {
     let input = document.createElement('input');
 
     //Add classes for styling
-    input.className = 'file-input';
+    input.className = `file-input`;
 
     //Add attributes and innerHTML
     label.setAttribute('for', name);
@@ -169,7 +169,7 @@ function UploadFile(data) {
     input.setAttribute('id', name);
     input.setAttribute('name', 'license-' + this.unique);
     input.setAttribute('value', name);
-    if (name !== 'BY') input.disabled = true;
+    if (name !== 'BY') input.disabled = true; //Disable all checkboxes except BY on first render
 
     //Add listeners
     input.onchange = this.handleLicenseChange;
