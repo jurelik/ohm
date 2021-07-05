@@ -16,6 +16,7 @@ function UploadFile(data) {
   this.handleTypeChange = (e) => {
     e.stopPropagation();
     e.preventDefault();
+    console.log(e)
 
     if (e.target.value === 'original' || e.target.value === 'external') {
       this.id.querySelector('input').disabled = true;
@@ -29,6 +30,14 @@ function UploadFile(data) {
       this.info.querySelector('label').className = '';
       this.file.querySelector('input').disabled = false;
       this.file.querySelector('label').className = '';
+      this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+        if (checkbox.id === 'BY') checkbox.disabled = false;
+        else if (this.el.querySelector('#BY').checked) checkbox.disabled = false;
+      });
+      this.el.querySelector('.checkbox-group-div p').className = '';
+      this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
+        label.className = '';
+      });
     }
     else if (e.target.value === 'internal') {
       this.id.querySelector('input').disabled = false;
@@ -42,6 +51,13 @@ function UploadFile(data) {
       this.info.querySelector('label').className = 'label-disabled';
       this.file.querySelector('input').disabled = true;
       this.file.querySelector('label').className = 'label-disabled';
+      this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+        checkbox.disabled = true;
+      });
+      this.el.querySelector('.checkbox-group-div p').className = 'label-disabled';
+      this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
+        label.className = 'label-disabled';
+      });
     }
   }
 
@@ -50,17 +66,17 @@ function UploadFile(data) {
     e.preventDefault();
 
     //Mutually exclusive checkboxes
-    if (e.target.value === 'SA' && document.querySelector('#SA').checked) document.querySelector('#ND').checked = false;
-    else if (e.target.value === 'ND' && document.querySelector('#ND').checked) document.querySelector('#SA').checked = false;
-    else if (e.target.value === 'BY' && document.querySelector('#BY').checked) {
-      document.querySelector('#SA').disabled = false;
-      document.querySelector('#NC').disabled = false;
-      document.querySelector('#ND').disabled = false;
+    if (e.target.value === 'SA' && this.el.querySelector(`#SA-${this.unique}`).checked) this.el.querySelector(`#ND-${this.unique}`).checked = false;
+    else if (e.target.value === 'ND' && this.el.querySelector(`#ND-${this.unique}`).checked) this.el.querySelector(`#SA-${this.unique}`).checked = false;
+    else if (e.target.value === 'BY' && this.el.querySelector(`#BY-${this.unique}`).checked) {
+      this.el.querySelector(`#SA-${this.unique}`).disabled = false;
+      this.el.querySelector(`#NC-${this.unique}`).disabled = false;
+      this.el.querySelector(`#ND-${this.unique}`).disabled = false;
     }
-    else if (e.target.value === 'BY' && !document.querySelector('#BY').checked) {
-      document.querySelector('#SA').disabled = true;
-      document.querySelector('#NC').disabled = true;
-      document.querySelector('#ND').disabled = true;
+    else if (e.target.value === 'BY' && !this.el.querySelector(`#BY-${this.unique}`).checked) {
+      this.el.querySelector(`#SA-${this.unique}`).disabled = true;
+      this.el.querySelector(`#NC-${this.unique}`).disabled = true;
+      this.el.querySelector(`#ND-${this.unique}`).disabled = true;
     };
   }
 
@@ -135,10 +151,10 @@ function UploadFile(data) {
     input.className = 'file-input';
 
     //Add attributes and innerHTML
-    label.setAttribute('for', name);
+    label.setAttribute('for', `${name}-${this.unique}`);
     label.innerHTML = name;
     input.setAttribute('type', 'radio');
-    input.setAttribute('id', name);
+    input.setAttribute('id', `${name}-${this.unique}`);
     input.setAttribute('name', 'type-' + this.unique);
     input.setAttribute('value', name);
 
@@ -163,10 +179,10 @@ function UploadFile(data) {
     input.className = 'file-input';
 
     //Add attributes and innerHTML
-    label.setAttribute('for', name);
+    label.setAttribute('for', `${name}-${this.unique}`);
     label.innerHTML = name;
     input.setAttribute('type', 'checkbox');
-    input.setAttribute('id', name);
+    input.setAttribute('id', `${name}-${this.unique}`);
     input.setAttribute('name', 'license-' + this.unique);
     input.setAttribute('value', name);
     if (name !== 'BY') input.disabled = true; //Disable all checkboxes except BY on first render
