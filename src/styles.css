@@ -912,6 +912,11 @@ pre {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin: 5px 0;
+}
+
+.radio-group-div p {
+  margin: 0;
 }
 
 .radio-div {

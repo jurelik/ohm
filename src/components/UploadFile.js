@@ -16,7 +16,6 @@ function UploadFile(data) {
   this.handleTypeChange = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    console.log(e)
 
     if (e.target.value === 'original' || e.target.value === 'external') {
       this.id.querySelector('input').disabled = true;
@@ -31,8 +30,8 @@ function UploadFile(data) {
       this.file.querySelector('input').disabled = false;
       this.file.querySelector('label').className = '';
       this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
-        if (checkbox.id === 'BY') checkbox.disabled = false;
-        else if (this.el.querySelector('#BY').checked) checkbox.disabled = false;
+        if (checkbox.id === `BY-${this.unique}`) checkbox.disabled = false;
+        else if (this.el.querySelector(`#BY-${this.unique}`).checked) checkbox.disabled = false;
       });
       this.el.querySelector('.checkbox-group-div p').className = '';
       this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
