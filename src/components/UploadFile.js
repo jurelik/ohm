@@ -1,3 +1,6 @@
+const { infoIcon } = require('../utils/svgs');
+const { shell } = require('electron');
+
 function UploadFile(data) {
   this.el = document.createElement('fieldset');
   this.data = data;
@@ -29,11 +32,14 @@ function UploadFile(data) {
       this.info.querySelector('label').className = '';
       this.file.querySelector('input').disabled = false;
       this.file.querySelector('label').className = '';
+
       this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
         if (checkbox.id === `BY-${this.unique}`) checkbox.disabled = false;
         else if (this.el.querySelector(`#BY-${this.unique}`).checked) checkbox.disabled = false;
       });
-      this.el.querySelector('.checkbox-group-div p').className = '';
+      this.el.querySelectorAll('.checkbox-group-div p').forEach(p => {
+        p.className = '';
+      });
       this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
         label.className = '';
       });
@@ -50,10 +56,13 @@ function UploadFile(data) {
       this.info.querySelector('label').className = 'label-disabled';
       this.file.querySelector('input').disabled = true;
       this.file.querySelector('label').className = 'label-disabled';
+
       this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
         checkbox.disabled = true;
       });
-      this.el.querySelector('.checkbox-group-div p').className = 'label-disabled';
+      this.el.querySelectorAll('.checkbox-group-div p').forEach(p => {
+        p.className = 'label-disabled';
+      });
       this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
         label.className = 'label-disabled';
       });
@@ -84,6 +93,13 @@ function UploadFile(data) {
     e.stopPropagation();
 
     this.data.handleRemoveFile(this.unique);
+  }
+
+  this.handleLicenseInfo = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    shell.openExternal('https://creativecommons.org/about/cclicenses/');
   }
 
   this.getFileData = () => {
@@ -210,10 +226,12 @@ function UploadFile(data) {
     let info = this.createInput('info', 'text');
     let licenseDiv = document.createElement('div');
     let licenseLabel = document.createElement('p');
+    let licenseCC = document.createElement('p');
     let licenseBY = this.createCheckbox('BY');
     let licenseNC = this.createCheckbox('NC');
     let licenseSA = this.createCheckbox('SA');
     let licenseND = this.createCheckbox('ND');
+    let licenseInfoButton = document.createElement('button');
     let file = this.createInput('file', 'file');
     let deleteFile = document.createElement('button');
 
@@ -222,14 +240,18 @@ function UploadFile(data) {
     typeDiv.className = 'radio-group-div';
     licenseDiv.className = 'checkbox-group-div';
     id.querySelector('label').className = 'label-disabled';
+    licenseInfoButton.className = 'license-info-button'
 
     //Add attributes and innerHTML
     legend.innerHTML = 'file: '
     typeLabel.innerHTML = 'type: ';
     typeOriginal.querySelector('.file-input').checked = true;
     licenseLabel.innerHTML = 'license: ';
+    licenseCC.innerHTML = 'CC- ';
     id.querySelector('.file-input').disabled = true;
     deleteFile.innerHTML = 'delete file';
+    licenseInfoButton.innerHTML = infoIcon;
+    licenseInfoButton.setAttribute('title', 'how do licenses work?');
 
     //Build structure
     typeDiv.appendChild(typeLabel);
@@ -237,10 +259,12 @@ function UploadFile(data) {
     typeDiv.appendChild(typeInternal);
     typeDiv.appendChild(typeExternal);
     licenseDiv.appendChild(licenseLabel);
+    licenseDiv.appendChild(licenseCC);
     licenseDiv.appendChild(licenseBY);
     licenseDiv.appendChild(licenseNC);
     licenseDiv.appendChild(licenseSA);
     licenseDiv.appendChild(licenseND);
+    licenseDiv.appendChild(licenseInfoButton);
     this.el.appendChild(legend);
     this.el.appendChild(typeDiv);
     this.el.appendChild(name);
@@ -260,6 +284,7 @@ function UploadFile(data) {
 
     //Add listeners
     deleteFile.onclick = this.handleDeleteFile;
+    licenseInfoButton.onclick = this.handleLicenseInfo;
 
     return this.el;
   }

@@ -935,6 +935,20 @@ pre {
 
 .checkbox-group-div p {
   margin: 0;
+  margin-right: 5px;
+}
+
+.checkbox-group-div .license-info-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  margin-left: auto;
+  stroke: #bbb;
+}
+
+.checkbox-group-div .license-info-button:hover {
+  stroke: #eee;
 }
 
 .checkbox-div {
