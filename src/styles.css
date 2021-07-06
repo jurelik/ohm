@@ -53,6 +53,7 @@ th {
 td {
   vertical-align: center;
   height: 20px;
+  color: #bbb;
 }
 
 td button {
@@ -763,6 +764,7 @@ pre {
 
 .file .play-button-cell {
   width: 25px;
+  padding-right: 4px; /*Compensate for 2px border-spacing on both sides*/
 }
 
 .file .play-button {
@@ -1023,10 +1025,15 @@ pre {
   font-size: 10px;
 }
 
+.transfers-view th {
+  color: #bbb;
+}
+
 .transfer td {
   max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #eee;
 }
 
 .transfer button:disabled {

@@ -334,7 +334,7 @@ function Player() {
     backButton.innerHTML = previousIcon;
     playButton.innerHTML = this.playing ? pauseIconBig : playIconBig;
     forwardButton.innerHTML = nextIcon;
-    titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title || this.current.name}` : 'Load a song';
+    titleAndArtist.innerHTML = this.current ? `${this.current.artist} - ${this.current.title || this.current.name}` : 'load a song';
     seek.setAttribute('type', 'range');
     seek.setAttribute('step', 'any');
     seek.setAttribute('max', '100');
