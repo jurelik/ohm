@@ -762,9 +762,6 @@ pre {
 }
 
 .file .play-button-cell {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 25px;
 }
 

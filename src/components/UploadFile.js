@@ -247,7 +247,7 @@ function UploadFile(data) {
     typeLabel.innerHTML = 'type: ';
     typeOriginal.querySelector('.file-input').checked = true;
     licenseLabel.innerHTML = 'license: ';
-    licenseCC.innerHTML = 'CC- ';
+    licenseCC.innerHTML = 'CC';
     id.querySelector('.file-input').disabled = true;
     deleteFile.innerHTML = 'delete file';
     licenseInfoButton.innerHTML = infoIcon;
