@@ -17,6 +17,7 @@ const UploadView = require('./components/uploadView');
 const SearchView = require('./components/searchView');
 const PinnedView = require('./components/pinnedView');
 const TransfersView = require('./components/transfersView');
+const FollowingView = require('./components/followingView');
 const Player = require('./components/player');
 const Header = require('./components/header');
 const Store = require('./components/store');
@@ -37,7 +38,8 @@ function App() {
     upload: null,
     search: null,
     pinned: null,
-    transfers: null
+    transfers: null,
+    following: null
   }
   this.GATEWAY ='localhost:8080';
   this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://3.10.107.49:3000';
@@ -192,6 +194,10 @@ function App() {
         case 'transfers':
           this.views.transfers = new TransfersView();
           await this.views.transfers.render();
+          break;
+        case 'following':
+          this.views.following = new FollowingView();
+          await this.views.following.render();
           break;
         default:
           this.content.innerHTML = view;
