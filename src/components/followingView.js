@@ -33,7 +33,7 @@ function FollowingView(data) {
 
     try {
       //const _res = await fetch(`${app.URL}/api/latest`);
-      const _res = await fetch(`${app.URL}/api/latest`, {
+      const _res = await fetch(`${app.URL}/api/following`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {
@@ -76,7 +76,6 @@ function FollowingView(data) {
       this.el.innerHTML = ''; //Reset innerHTML
 
       if (!this.data) this.data = await this.fetch(); //Fetch data from server on first render
-      console.log(this.data)
       if (this.data.length === 0) return helpers.handleEmpty(this.el); //Show different view if no items to be shown
 
       for (let item of this.data) {

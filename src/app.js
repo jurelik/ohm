@@ -196,7 +196,7 @@ function App() {
           await this.views.transfers.render();
           break;
         case 'following':
-          this.views.following = new FollowingView();
+          this.views.following = new FollowingView(data);
           await this.views.following.render();
           break;
         default:
