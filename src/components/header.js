@@ -20,27 +20,9 @@ function Header() {
     this.forwardButton.className = 'enabled';
     let view = app.history[index];
 
-    switch (view.type) {
-      case 'song':
-        app.historyIndex--;
-        return app.changeView(view.type, view.data);
-      case 'album':
-        app.historyIndex--;
-        return app.changeView(view.type, view.data);
-      case 'artist':
-        app.historyIndex--;
-        return app.changeView(view.type, view.data);
-      case 'upload':
-        app.historyIndex--;
-        return app.changeView(view.type, view.data);
-      case 'search':
-        app.historyIndex--;
-        return app.changeView(view.type, view.data);
-      default:
-        app.historyIndex--;
-        app.nav.select(view.type)
-        return app.changeView(view.type, view.data);
-    }
+    app.historyIndex--;
+    if (app.nav.names.includes(view.type)) app.nav.select(view.type);
+    return app.changeView(view.type, view.data);
   }
 
   this.handleForward = () => {
@@ -59,27 +41,9 @@ function Header() {
     this.backButton.className = 'enabled';
     let view = app.history[index];
 
-    switch (view.type) {
-      case 'song':
-        app.historyIndex++;
-        return app.changeView(view.type, view.data);
-      case 'album':
-        app.historyIndex++;
-        return app.changeView(view.type, view.data);
-      case 'artist':
-        app.historyIndex++;
-        return app.changeView(view.type, view.data);
-      case 'upload':
-        app.historyIndex++;
-        return app.changeView(view.type, view.data);
-      case 'search':
-        app.historyIndex++;
-        return app.changeView(view.type, view.data);
-      default:
-        app.historyIndex++;
-        app.nav.select(view.type)
-        return app.changeView(view.type, view.data);
-    }
+    app.historyIndex++;
+    if (app.nav.names.includes(view.type)) app.nav.select(view.type);
+    return app.changeView(view.type, view.data);
   }
 
   this.handleRefresh = (e) => {
