@@ -1,5 +1,5 @@
-const UploadSong = require('./UploadSong');
-const UploadAlbum = require('./UploadAlbum');
+const UploadSong = require('../components/UploadSong');
+const UploadAlbum = require('../components/UploadAlbum');
 const io = require('../utils/io');
 const log = require('../utils/log');
 

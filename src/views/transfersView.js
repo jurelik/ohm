@@ -1,5 +1,5 @@
-const Store = require('./store');
-const Transfer = require('./transfer');
+const Store = require('../components/store');
+const Transfer = require('../components/transfer');
 const ipfs = require('../utils/ipfs');
 
 function TransfersView(data) {

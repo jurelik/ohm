@@ -1,15 +1,13 @@
-const Song = require('./song');
-const Album = require('./album');
-const log = require('../utils/log');
+const Artist = require('../components/artist');
 const helpers = require('../utils/helpers');
 
-function ExploreView(data) {
+function FollowingView(data) {
   this.el = document.createElement('div');
   this.data = data;
 
   this.fetch = async () => {
     try {
-      const _res = await fetch(`${app.URL}/api/latest`, {
+      const _res = await fetch(`${app.URL}/api/following`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {
@@ -35,7 +33,7 @@ function ExploreView(data) {
 
     try {
       //const _res = await fetch(`${app.URL}/api/latest`);
-      const _res = await fetch(`${app.URL}/api/latest`, {
+      const _res = await fetch(`${app.URL}/api/following`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {
@@ -59,31 +57,12 @@ function ExploreView(data) {
     }
   }
 
-  this.refresh = async () => {
-    try {
-      this.data = null;
-      await this.render();
-    }
-    catch (err) {
-      console.error(err);
-    }
-  }
-
   this.append = async (data) => {
     try {
       for (let item of data) {
         let el;
-        if (item.type === 'song') {
-          let song = new Song(item, 'explore');
-          el = await song.render();
-        }
-        else if (item.type === 'album') {
-          let album = new Album(item, 'explore');
-          el = await album.render();
-        }
-        else {
-          continue;
-        }
+        let artist = new Artist(item, 'search');
+        el = artist.render();
         this.el.insertBefore(el, this.el.querySelector('.load-more'));
       }
     }
@@ -101,17 +80,9 @@ function ExploreView(data) {
 
       for (let item of this.data) {
         let el;
-        if (item.type === 'song') {
-          let song = new Song(item, 'explore');
-          el = await song.render();
-        }
-        else if (item.type === 'album') {
-          let album = new Album(item, 'explore');
-          el = await album.render();
-        }
-        else {
-          continue;
-        }
+        let artist = new Artist(item, 'search');
+        el = artist.render();
+
         this.el.appendChild(el);
       }
 
@@ -126,9 +97,9 @@ function ExploreView(data) {
       app.content.appendChild(this.el);
     }
     catch (err) {
-      console.error(err)
+      throw err;
     }
   }
 }
 
-module.exports = ExploreView;
+module.exports = FollowingView;

@@ -1,6 +1,6 @@
-const Album = require('./album');
-const Song = require('./song');
-const Artist = require('./artist');
+const Album = require('../components/album');
+const Song = require('../components/song');
+const Artist = require('../components/artist');
 
 function ArtistView(data) {
   this.el = document.createElement('div');

@@ -1,13 +1,15 @@
-const Artist = require('./artist');
+const Song = require('../components/song');
+const Album = require('../components/album');
+const log = require('../utils/log');
 const helpers = require('../utils/helpers');
 
-function FollowingView(data) {
+function ExploreView(data) {
   this.el = document.createElement('div');
   this.data = data;
 
   this.fetch = async () => {
     try {
-      const _res = await fetch(`${app.URL}/api/following`, {
+      const _res = await fetch(`${app.URL}/api/latest`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {
@@ -33,7 +35,7 @@ function FollowingView(data) {
 
     try {
       //const _res = await fetch(`${app.URL}/api/latest`);
-      const _res = await fetch(`${app.URL}/api/following`, {
+      const _res = await fetch(`${app.URL}/api/latest`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {
@@ -57,12 +59,31 @@ function FollowingView(data) {
     }
   }
 
+  this.refresh = async () => {
+    try {
+      this.data = null;
+      await this.render();
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
+
   this.append = async (data) => {
     try {
       for (let item of data) {
         let el;
-        let artist = new Artist(item, 'search');
-        el = artist.render();
+        if (item.type === 'song') {
+          let song = new Song(item, 'explore');
+          el = await song.render();
+        }
+        else if (item.type === 'album') {
+          let album = new Album(item, 'explore');
+          el = await album.render();
+        }
+        else {
+          continue;
+        }
         this.el.insertBefore(el, this.el.querySelector('.load-more'));
       }
     }
@@ -80,9 +101,17 @@ function FollowingView(data) {
 
       for (let item of this.data) {
         let el;
-        let artist = new Artist(item, 'search');
-        el = artist.render();
-
+        if (item.type === 'song') {
+          let song = new Song(item, 'explore');
+          el = await song.render();
+        }
+        else if (item.type === 'album') {
+          let album = new Album(item, 'explore');
+          el = await album.render();
+        }
+        else {
+          continue;
+        }
         this.el.appendChild(el);
       }
 
@@ -97,9 +126,9 @@ function FollowingView(data) {
       app.content.appendChild(this.el);
     }
     catch (err) {
-      throw err;
+      console.error(err)
     }
   }
 }
 
-module.exports = FollowingView;
+module.exports = ExploreView;

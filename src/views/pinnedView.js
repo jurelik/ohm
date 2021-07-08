@@ -1,8 +1,8 @@
 const ipfs = require('../utils/ipfs');
 const log = require('../utils/log');
 const helpers = require('../utils/helpers');
-const Album = require('./album');
-const Song = require('./song');
+const Album = require('../components/album');
+const Song = require('../components/song');
 
 function PinnedView(data) {
   this.el = document.createElement('div');

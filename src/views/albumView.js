@@ -1,5 +1,5 @@
-const Album = require('./album');
-const Song = require('./song');
+const Album = require('../components/album');
+const Song = require('../components/song');
 
 function AlbumView(data, action) {
   this.el = document.createElement('div');

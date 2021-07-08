@@ -1,5 +1,5 @@
-const Song = require('./song');
-const SongViewMain = require('./songViewMain');
+const Song = require('../components/song');
+const SongViewMain = require('../components/songViewMain');
 
 function SongView(data, action) {
   this.el = document.createElement('div');

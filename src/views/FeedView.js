@@ -1,5 +1,5 @@
-const Song = require('./song');
-const Album = require('./album');
+const Song = require('../components/song');
+const Album = require('../components/album');
 const log = require('../utils/log');
 const helpers = require('../utils/helpers');
 
