@@ -71,6 +71,16 @@ function FollowingView(data) {
     }
   }
 
+  this.refresh = async () => {
+    try {
+      this.data = null;
+      await this.render();
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
+
   this.render = async () => {
     try {
       this.el.innerHTML = ''; //Reset innerHTML
