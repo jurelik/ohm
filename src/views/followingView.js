@@ -77,7 +77,7 @@ function FollowingView(data) {
       await this.render();
     }
     catch (err) {
-      console.error(err);
+      throw err;
     }
   }
 

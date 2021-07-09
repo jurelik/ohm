@@ -27,7 +27,7 @@ function SongView(data, action) {
       await this.render();
     }
     catch (err) {
-      console.error(err);
+      throw err;
     }
   }
 
@@ -56,7 +56,7 @@ function SongView(data, action) {
       app.content.appendChild(this.el);
     }
     catch (err) {
-      console.error(err);
+      throw err;
     }
   }
 }

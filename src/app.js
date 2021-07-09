@@ -72,11 +72,13 @@ function App() {
     }
   }
 
-  this.logout = async () => {
+  this.logout = async (sessionExpired) => {
     try {
-      const _res = await fetch(`${app.URL}/api/logout`); //Logout server-side
-      const res = await _res.json();
-      if (res.type === 'error') throw new Error(err);
+      if (!sessionExpired) {
+        const _res = await fetch(`${app.URL}/api/logout`); //Logout server-side
+        const res = await _res.json();
+        if (res.type === 'error') throw new Error(res.err);
+      }
 
       this.bandwidthController.abort(); //Abort updateBandwidth
       this.bandwidthController = null;
@@ -208,6 +210,7 @@ function App() {
     }
     catch (err) {
       console.error(err);
+      if (err === 'User not authenticated') await this.logout(true);
     }
   }
 
@@ -241,6 +244,8 @@ function App() {
 
   this.triggerLoading = (val) => {
     const el = document.querySelector('.loading');
+    if (!el) return; //Take care of sessionExpired logout scenario where .loading gets deleted
+
     val ? el.innerHTML = loadingIconSmall : el.innerHTML = '';
   }
 

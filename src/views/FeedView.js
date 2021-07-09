@@ -89,7 +89,7 @@ function FeedView(data) {
       await this.render();
     }
     catch (err) {
-      console.error(err);
+      throw err;
     }
   }
 
@@ -127,7 +127,7 @@ function FeedView(data) {
       app.content.appendChild(this.el);
     }
     catch (err) {
-      console.error(err)
+      throw err;
     }
   }
 }

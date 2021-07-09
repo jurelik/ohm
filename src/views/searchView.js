@@ -122,7 +122,7 @@ function SearchView(data) {
       this.el.insertBefore(await main.render(), this.el.querySelector('.load-more'));
     }
     catch (err) {
-      console.error(err);
+      throw err;
     }
   }
 
@@ -178,7 +178,7 @@ function SearchView(data) {
       app.content.appendChild(this.el);
     }
     catch (err) {
-      console.error(err)
+      throw err;
     }
   }
 }

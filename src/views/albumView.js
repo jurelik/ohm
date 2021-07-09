@@ -11,7 +11,7 @@ function AlbumView(data, action) {
       await this.render();
     }
     catch (err) {
-      console.error(err);
+      throw err;
     }
   }
 
@@ -49,7 +49,7 @@ function AlbumView(data, action) {
       app.content.appendChild(this.el);
     }
     catch (err) {
-      console.error(err);
+      throw err;
     }
   }
 }
