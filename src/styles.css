@@ -297,6 +297,7 @@ pre {
   flex-direction: row;
   align-items: stretch;
   padding-left: 5px;
+  padding-right: 10px;
   height: 25px;
 }
 
