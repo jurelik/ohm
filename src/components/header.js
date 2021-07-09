@@ -46,11 +46,18 @@ function Header() {
     return app.changeView(view.type, view.data);
   }
 
-  this.handleRefresh = (e) => {
+  this.handleRefresh = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (app.views[app.current].refresh) app.views[app.current].refresh();
+    try {
+      app.triggerLoading(true); //Trigger loading indicator
+      if (app.views[app.current].refresh) await app.views[app.current].refresh();
+      app.triggerLoading(false); //Trigger loading indicator
+    }
+    catch (err) {
+      throw err;
+    }
   }
 
   this.handleSearch = (e) => {
