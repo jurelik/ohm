@@ -51,28 +51,28 @@ function UploadAlbum(data) {
     //Add classes for styling
     this.el.className = 'upload-album';
     title.className = 'album-input';
+    titleLabel.className = 'label-disabled';
     tags.className = 'album-input';
+    tagsLabel.className = 'label-disabled';
     description.className = 'album-textarea';
+    descriptionDiv.className = 'upload-description';
+    descriptionLabel.className = 'label-disabled';
 
     //Add attributes and innerHTML
     titleLabel.setAttribute('for', 'title');
-    titleLabel.innerHTML = 'album title:';
-    titleLabel.className = 'label-disabled';
+    titleLabel.innerHTML = 'album title: ';
     title.setAttribute('type', 'text');
     title.setAttribute('name', 'title');
     title.disabled = true;
 
     tagsLabel.setAttribute('for', 'tags');
-    tagsLabel.innerHTML = 'album tags:';
-    tagsLabel.className = 'label-disabled';
+    tagsLabel.innerHTML = 'album tags: ';
     tags.setAttribute('type', 'text');
     tags.setAttribute('name', 'tags');
     tags.disabled = true;
 
     descriptionLabel.setAttribute('for', 'description');
-    descriptionLabel.innerHTML = 'album description:';
-    descriptionLabel.className = 'label-disabled';
-    descriptionDiv.className = 'upload-description';
+    descriptionLabel.innerHTML = 'album description: ';
     description.setAttribute('name', 'description');
     description.disabled = true;
 
@@ -86,8 +86,6 @@ function UploadAlbum(data) {
     this.el.appendChild(titleDiv);
     this.el.appendChild(tagsDiv);
     this.el.appendChild(descriptionDiv);
-
-    //Add listeners
 
     return this.el;
   }

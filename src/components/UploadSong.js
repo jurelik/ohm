@@ -75,6 +75,9 @@ function UploadSong(data) {
     let fileDiv = document.createElement('div');
     let fileLabel = document.createElement('label');
     let file = document.createElement('input');
+    let descriptionDiv = document.createElement('div');
+    let descriptionLabel = document.createElement('label');
+    let description = document.createElement('textarea');
     let addFile = document.createElement('button');
     let deleteSong = document.createElement('button');
 
@@ -83,22 +86,28 @@ function UploadSong(data) {
     title.className = 'song-input';
     tags.className = 'song-input';
     file.className = 'song-input';
+    fileDiv.className = 'song-file-div';
+    description.className = 'song-textarea';
 
     //Add attributes and innerHTML
     legend.innerHTML = 'song: ';
     titleLabel.setAttribute('for', 'title');
-    titleLabel.innerHTML = 'title:';
+    titleLabel.innerHTML = 'title: ';
     title.setAttribute('type', 'text');
     title.setAttribute('name', 'title');
     tagsLabel.setAttribute('for', 'tags');
-    tagsLabel.innerHTML = 'tags:';
+    tagsLabel.innerHTML = 'tags: ';
     tags.setAttribute('type', 'text');
     tags.setAttribute('name', 'tags');
     fileLabel.setAttribute('for', 'tags');
-    fileLabel.innerHTML = 'file:';
+    fileLabel.innerHTML = 'file: ';
     file.setAttribute('type', 'file');
     file.setAttribute('name', 'file');
     file.setAttribute('accept', 'audio/mpeg');
+    descriptionLabel.setAttribute('for', 'description');
+    descriptionLabel.innerHTML = 'description:';
+    descriptionDiv.className = 'upload-description';
+    description.setAttribute('name', 'description');
     addFile.innerHTML = 'add file';
     deleteSong.innerHTML = 'delete song';
 
@@ -109,10 +118,13 @@ function UploadSong(data) {
     tagsDiv.appendChild(tags);
     fileDiv.appendChild(fileLabel);
     fileDiv.appendChild(file);
+    descriptionDiv.appendChild(descriptionLabel);
+    descriptionDiv.appendChild(description);
     this.el.appendChild(legend);
     this.el.appendChild(titleDiv);
     this.el.appendChild(tagsDiv);
     this.el.appendChild(fileDiv);
+    this.el.appendChild(descriptionDiv);
     this.el.appendChild(addFile);
     this.el.appendChild(deleteSong);
 

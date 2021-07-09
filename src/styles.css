@@ -78,36 +78,12 @@ input[type=text]:focus, input[type=password]:focus, input[type=search]:focus {
   outline: none;
 }
 
-input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webkit-search-decoration { /*remove clear button from search bar*/
+input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-search-decoration { /*remove clear button from search bar*/
   -webkit-appearance: none;
   appearance: none;
 }
 
-input[type="radio"] {
-  -webkit-appearance: none;
-  appearance: none;
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  padding: 2px;
-  background-clip: content-box;
-  border: 1px solid #bbb;
-  background-color: #222;
-  border-radius: 50%;
-  margin: 0 3px;
-  cursor: pointer;
-}
-
-/* appearance for checked radiobutton */
-input[type="radio"]:checked {
-  background-color: #eee;
-}
-
-input[type="radio"]:focus {
-  outline: none;
-}
-
-input[type="checkbox"] {
+input[type=radio] {
   -webkit-appearance: none;
   appearance: none;
   display: inline-block;
@@ -123,19 +99,43 @@ input[type="checkbox"] {
 }
 
 /* appearance for checked radiobutton */
-input[type="checkbox"]:checked {
+input[type=radio]:checked {
   background-color: #eee;
 }
 
-input[type="checkbox"]:focus {
+input[type=radio]:focus {
   outline: none;
 }
 
-input[type="checkbox"]:disabled {
+input[type=checkbox] {
+  -webkit-appearance: none;
+  appearance: none;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  padding: 2px;
+  background-clip: content-box;
+  border: 1px solid #bbb;
+  background-color: #222;
+  border-radius: 50%;
+  margin: 0 3px;
+  cursor: pointer;
+}
+
+/* appearance for checked radiobutton */
+input[type=checkbox]:checked {
+  background-color: #eee;
+}
+
+input[type=checkbox]:focus {
+  outline: none;
+}
+
+input[type=checkbox]:disabled {
   border: 1px solid #444;
 }
 
-input[type="checkbox"]:disabled:checked {
+input[type=checkbox]:disabled:checked {
   background-color: #444;
 }
 
@@ -877,6 +877,10 @@ pre {
   font-size: 11px;
 }
 
+.upload-song .song-file-div {
+  margin: 5px 0;
+}
+
 .upload-file {
   padding: 5px;
   margin: 10px 5px;
@@ -885,6 +889,7 @@ pre {
 .upload-description {
   display: flex;
   flex-direction: column;
+  margin-top: 1px; /*because of weird label behaviour*/
 }
 
 .album-textarea {
@@ -896,11 +901,21 @@ pre {
   margin-bottom: 10px;
   resize: vertical;
 }
+
+.song-textarea {
+  border: 2px groove #bbb;
+  background-color: #222;
+  color: #eee;
+  margin: 0 2px;
+  margin-top: 5px;
+  resize: vertical;
+}
+
 .album-textarea:disabled {
   background-color: #333;
 }
 
-.album-textarea:focus {
+.album-textarea:focus, .song-textarea:focus {
   outline: none;
 }
 
