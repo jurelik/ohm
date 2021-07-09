@@ -182,7 +182,7 @@ const checkIfSongIsPinned = async (data) => {
     return true;
   }
   catch (err) {
-    console.error(err)
+    log.error(err)
   }
 }
 
@@ -195,7 +195,7 @@ const checkIfAlbumIsPinned = async (data) => {
     return true;
   }
   catch (err) {
-    console.error(err)
+    log.error(err)
   }
 }
 

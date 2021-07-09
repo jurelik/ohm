@@ -1,3 +1,4 @@
+const log = require('../utils/log');
 const ActionBarSong = require('./actionBarSong');
 const { playIcon, pauseIcon, loadingIcon } = require('../utils/svgs');
 
@@ -112,7 +113,7 @@ function Song(data, view) {
       return this.el;
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 }

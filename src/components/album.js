@@ -1,5 +1,6 @@
-const ActionBarAlbum = require('./actionBarAlbum');
+const log = require('../utils/log');
 const helpers = require('../utils/helpers');
+const ActionBarAlbum = require('./actionBarAlbum');
 const { playIcon, pauseIcon, albumIcon, loadingIcon } = require('../utils/svgs');
 
 function Album(data, view) {
@@ -122,7 +123,7 @@ function Album(data, view) {
       return this.el;
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 }

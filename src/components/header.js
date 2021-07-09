@@ -9,7 +9,7 @@ function Header() {
   this.handleBack = () => {
     let index = app.historyIndex - 1;
 
-    if (index < 0) return console.log('at first index already'); //Handle first item in list
+    if (index < 0) return log('at first index already'); //Handle first item in list
     if (index === 0) this.backButton.className = 'disabled'; //Handle index at 0
 
     this.forwardButton.className = 'enabled';
@@ -23,7 +23,7 @@ function Header() {
   this.handleForward = () => {
     let index = app.historyIndex + 1;
 
-    if (index > app.history.length - 1) return console.log('at last index already') //Handle last item in list
+    if (index > app.history.length - 1) return log('at last index already') //Handle last item in list
     if (index === app.history.length - 1) this.forwardButton.className = 'disabled'; //Handle index at last position
 
     this.backButton.className = 'enabled';
@@ -44,7 +44,7 @@ function Header() {
       app.triggerLoading(false); //Trigger loading indicator
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
       if (err === 'User not authenticated') await app.logout(true);
     }
   }

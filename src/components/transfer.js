@@ -43,11 +43,11 @@ function Transfer(data, unique) {
           await ipfs.resumeTransfer(this.unique);
           break;
         default:
-          console.error('Unknown command.');
+          log.error('Unknown command.');
       }
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 
@@ -59,7 +59,7 @@ function Transfer(data, unique) {
       await ipfs.clearTransfer(this.unique);
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 

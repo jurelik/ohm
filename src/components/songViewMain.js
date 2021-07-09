@@ -1,3 +1,4 @@
+const log = require('../utils/log');
 const Files = require('./files');
 const Comments = require('./comments');
 
@@ -30,7 +31,7 @@ function SongViewMain(data, action) {
         comments.el.querySelector('textarea').focus(); //Focus the input
         break;
       default:
-        console.error('wrong action');
+        log.error('wrong action');
         break;
     }
 

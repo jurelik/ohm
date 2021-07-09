@@ -192,7 +192,7 @@ function ActionBarSong(data) {
       return this.el;
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 }

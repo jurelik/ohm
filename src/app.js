@@ -209,7 +209,7 @@ function App() {
       this.triggerLoading(false); //Stop loading indicator
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
       if (err === 'User not authenticated') await this.logout(true);
     }
   }

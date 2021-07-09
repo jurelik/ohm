@@ -23,7 +23,7 @@ function ActionBarAlbum(data) {
       else await ipfs.startTransfer(this.data);
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 
@@ -170,7 +170,7 @@ function ActionBarAlbum(data) {
       return this.el;
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 }

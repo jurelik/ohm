@@ -65,12 +65,8 @@ const upload = async (payload) => {
 
 const resumeUpload = async (transfer) => {
   try {
-    if (transfer.payload.album) {
-      unique = await ipfs.reUploadAlbum(transfer.payload);
-    }
-    else {
-      unique = await ipfs.reUploadSingle(transfer.payload);
-    }
+    if (transfer.payload.album) unique = await ipfs.reUploadAlbum(transfer.payload);
+    else unique = await ipfs.reUploadSingle(transfer.payload);
 
     writtenToMFS = true; //MFS has been modified
     //Send payload to server
@@ -91,11 +87,11 @@ const resumeUpload = async (transfer) => {
       if (app.views.transfers) app.views.transfers.children[transfer.payload.unique].handleComplete(); //Update status of transfer to completed
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
   catch (err) {
-    console.error(err);
+    log.error(err);
     if (transfer.payload.album && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/albums/${transfer.payload.album.title}`, { recursive: true });
     else if (transfer.payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/singles/${transfer.payload.songs[0].title}`, { recursive: true });
   }

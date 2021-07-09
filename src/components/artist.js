@@ -1,3 +1,4 @@
+const log = require('../utils/log');
 const { locationIcon } = require('../utils/svgs');
 
 function Artist(data, view) {
@@ -43,7 +44,7 @@ function Artist(data, view) {
       else button.classList.add('following');
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 

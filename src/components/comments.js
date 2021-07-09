@@ -1,3 +1,4 @@
+const log = require('../utils/log');
 let Comment = require('./comment');
 
 function Comments(data) {
@@ -42,7 +43,7 @@ function Comments(data) {
       this.el.querySelector('textarea').value = ''; //Reset comment field to empty
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 

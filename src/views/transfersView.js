@@ -1,6 +1,6 @@
-const Store = require('../components/store');
-const Transfer = require('../components/transfer');
+const log = require('../utils/log');
 const ipfs = require('../utils/ipfs');
+const Transfer = require('../components/transfer');
 
 function TransfersView(data) {
   this.el = document.createElement('div');
@@ -39,7 +39,7 @@ function TransfersView(data) {
       await ipfs.clearAllTransfers();
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 

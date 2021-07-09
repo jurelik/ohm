@@ -1,3 +1,4 @@
+const log = require('../utils/log');
 const Album = require('../components/album');
 const Song = require('../components/song');
 const Artist = require('../components/artist');
@@ -45,7 +46,7 @@ function ArtistView(data) {
       else button.classList.add('following');
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
     }
   }
 
