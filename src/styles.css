@@ -286,6 +286,11 @@ pre {
   height: 100%;
 }
 
+.login .logo-div {
+  padding: 10px;
+  margin-top: -20px;
+}
+
 .login .artist-and-pw {
   display: flex;
   flex-direction: column;

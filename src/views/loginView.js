@@ -1,6 +1,7 @@
 const { session } = require('electron');
 const io = require('../utils/io');
 const log = require('../utils/log');
+const { logo } = require('../utils/svgs');
 
 function LoginView() {
   this.el = document.createElement('form');
@@ -65,6 +66,7 @@ function LoginView() {
     this.el.innerHTML = ''; //Clean up this.el
 
     //Create elements
+    let logoDiv = document.createElement('div');
     let artistAndPw = document.createElement('div');
     let artist = document.createElement('input');
     let artistLabel = document.createElement('label');
@@ -74,10 +76,12 @@ function LoginView() {
 
     //Add classes for styling
     this.el.className = 'login';
+    logoDiv.className = 'logo-div';
     artistAndPw.className = 'artist-and-pw';
     pw.className = 'pw';
 
     //Add attributes and innerHTML
+    logoDiv.innerHTML = logo;
     artist.name = 'artist';
     artist.setAttribute('type', 'text');
     artist.setAttribute('autofocus', true);
@@ -89,6 +93,7 @@ function LoginView() {
     submit.innerHTML = 'login';
 
     //Build structure
+    this.el.appendChild(logoDiv);
     this.el.appendChild(artistAndPw);
     artistAndPw.appendChild(artistLabel);
     artistLabel.appendChild(artist);
