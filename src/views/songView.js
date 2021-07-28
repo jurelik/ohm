@@ -40,16 +40,20 @@ function SongView(data, action) {
       let song = new Song(this.data, 'song');
       this.children.main = new SongViewMain(this.data, action);
       let createdAt = document.createElement('div');
+      let description = document.createElement('div');
 
       //Add classes for styling
       this.el.className = `song-view-${this.action}`;
       createdAt.className = 'created-at';
+      description.className = 'description';
 
       //Add attributes and innerHTML
       createdAt.innerHTML = this.data.createdAt;
+      description.innerHTML = this.data.description;
 
       this.el.appendChild(await song.render());
       this.el.appendChild(createdAt);
+      this.el.appendChild(description);
       this.el.appendChild(this.children.main.render());
 
       app.content.innerHTML = '';

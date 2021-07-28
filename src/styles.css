@@ -566,6 +566,13 @@ pre {
   font-size: 10px;
 }
 
+.song-view-files .description, .song-view-comments .description {
+  color: #888;
+  margin-bottom: 10px;
+  margin-left: 25px;
+  font-size: 11px;
+}
+
 .song-view-files {
   height: 100%;
   overflow: auto;
