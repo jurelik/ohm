@@ -6,6 +6,7 @@ const log = require('../utils/log');
 const login = async (payload) => {
   try {
     log('Attempting login...');
+    log(app.URL);
     const _res = await fetch(`${app.URL}/api/login`, {
       method: 'POST',
       credentials: 'include', //Include cookie
