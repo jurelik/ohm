@@ -25,7 +25,7 @@ function AlbumView(data, action) {
       let description = document.createElement('div');
 
       //Add classes for styling
-      this.el.className = 'albumView';
+      this.el.className = 'album-view';
       createdAt.className = 'created-at';
       description.className = 'description';
 

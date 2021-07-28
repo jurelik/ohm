@@ -538,7 +538,7 @@ pre {
   margin-right: 10px;
 }
 
-.albumView .created-at {
+.album-view .created-at {
   color: #888;
   margin-top: -5px;
   margin-bottom: 5px;
@@ -546,14 +546,14 @@ pre {
   font-size: 9px;
 }
 
-.albumView .description {
+.album-view .description {
   color: #888;
   margin-bottom: 10px;
   margin-left: 25px;
   font-size: 11px;
 }
 
-.albumView .song {
+.album-view .song {
   margin-left: 18px;
 }
 
