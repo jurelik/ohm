@@ -286,9 +286,12 @@ pre {
   height: 100%;
 }
 
-.login .logo-div {
-  padding: 10px;
-  margin-top: -20px;
+.login .main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-height: 75px;
 }
 
 .login .artist-and-pw {

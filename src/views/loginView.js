@@ -26,8 +26,8 @@ function LoginView() {
       //Start spinner
       let spinner = document.createElement('div');
       spinner.className = 'spinner';
-      this.el.innerHTML = '';
-      this.el.appendChild(spinner);
+      document.querySelector('.main').innerHTML = '';
+      document.querySelector('.main').appendChild(spinner);
 
       await io.login(payload);
       log.success('Succesfully logged in.');
@@ -41,14 +41,21 @@ function LoginView() {
 
   this.init = async () => {
     //Create elements
+    let main = document.createElement('div');
     let spinner = document.createElement('div');
+    let logoDiv = document.createElement('div');
 
     //Add classes for styling
     this.el.className = 'login';
+    main.className = 'main';
     spinner.className = 'spinner';
+    logoDiv.className = 'logo-div'
+    logoDiv.innerHTML = logo;
 
     //Build structure
-    this.el.appendChild(spinner);
+    this.el.appendChild(logoDiv);
+    this.el.appendChild(main);
+    main.appendChild(spinner);
 
     document.querySelector('.root').appendChild(this.el); //Create a spinner while we try to login
 
@@ -66,6 +73,7 @@ function LoginView() {
     this.el.innerHTML = ''; //Clean up this.el
 
     //Create elements
+    let main = document.createElement('div');
     let logoDiv = document.createElement('div');
     let artistAndPw = document.createElement('div');
     let artist = document.createElement('input');
@@ -76,6 +84,7 @@ function LoginView() {
 
     //Add classes for styling
     this.el.className = 'login';
+    main.className = 'main';
     logoDiv.className = 'logo-div';
     artistAndPw.className = 'artist-and-pw';
     pw.className = 'pw';
@@ -94,12 +103,13 @@ function LoginView() {
 
     //Build structure
     this.el.appendChild(logoDiv);
-    this.el.appendChild(artistAndPw);
+    this.el.appendChild(main);
+    main.appendChild(artistAndPw);
     artistAndPw.appendChild(artistLabel);
     artistLabel.appendChild(artist);
     artistAndPw.appendChild(pwLabel);
     pwLabel.appendChild(pw);
-    this.el.appendChild(submit);
+    main.appendChild(submit);
 
     //Add listeners
     submit.onclick = this.handleLogin;
