@@ -13,7 +13,6 @@ function Album(data, view) {
 
   this.handlePlayButton = (e) => {
     e.stopPropagation();
-    if (this.loading) return; //Ignore action if we are currently loading a song/album
     const position = this.getPosition();
 
     if (this.view === 'explore' || this.view === 'feed') app.player.queueFeed(this.data.songs[position])
