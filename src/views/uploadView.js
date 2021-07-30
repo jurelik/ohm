@@ -98,6 +98,7 @@ function UploadView(data) {
     this.album = null;
     this.fileCounter = 0;
     this.songCounter = 0;
+    app.content.scrollTop = 0;
     if (app.current === 'upload') this.render(); //Re-render view if still in uploadView
     else app.views.upload = null; //Reset otherwise
   }
