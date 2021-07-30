@@ -22,7 +22,7 @@ function AlbumView(data, action) {
       //Create elements
       let album = new Album(this.data, 'album');
       let createdAt = document.createElement('div');
-      let description = document.createElement('div');
+      let description = document.createElement('pre');
 
       //Add classes for styling
       this.el.className = 'album-view';

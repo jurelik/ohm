@@ -67,7 +67,7 @@ function ArtistView(data) {
       if (!this.artist) this.artist = await this.fetch(); //Fetch if artist is not loaded
 
       //Create elements
-      let bio = document.createElement('p');
+      let bio = document.createElement('pre');
       let albums = document.createElement('p');
       let songs = document.createElement('p');
 
