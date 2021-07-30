@@ -308,7 +308,10 @@ function Player() {
   }
 
   this.play = () => {
-    this.playing ? this.audio.pause() : this.audio.play();
+    if (this.playing) return this.audio.pause();
+
+    const playPromise = this.audio.play()
+    if (playPromise !== null) playPromise.catch(() => { /* discard runtime error */ });
   }
 
   this.reRender = () => {
