@@ -15,13 +15,11 @@ function Song(data, view) {
 
   this.handlePlayButton = (e) => {
     e.stopPropagation();
-    if (this.loading) return; //Ignore action if we are currently loading a song/album
+    //if (this.loading) return; //Ignore action if we are currently loading a song/album
 
     if (this.view === 'album') app.player.queueAlbum(app.views.album.data, this.getPosition());
     else if (this.view === 'explore' || this.view === 'feed') app.player.queueFeed(this.data);
     else app.player.queueSong(this.data);
-
-    //this.view === 'album' ? app.player.queueFiles(app.views.album.data, this.getPosition()) : app.player.queueFilesFeed(this.data);
   }
 
   this.handleArtistButton = (e) => {
@@ -88,7 +86,8 @@ function Song(data, view) {
       separator.innerHTML = '•';
       title.innerHTML = this.data.title;
       tag.innerHTML = '#' + this.data.tags[0];
-      playButton.innerHTML = this.playing ? pauseIcon : playIcon;
+      if (this.loading) playButton.innerHTML = loadingIcon;
+      else playButton.innerHTML = this.playing ? pauseIcon : playIcon;
 
       //Build structure
       this.el.appendChild(main);

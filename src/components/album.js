@@ -9,7 +9,7 @@ function Album(data, view) {
   this.view = view; //Where was the album created
   this.children = {};
   this.playing = app.player.playing && helpers.childIsPlaying(app.player.current, this.data.songs);
-  this.loading = false;
+  this.loading = app.player.loading && helpers.childIsPlaying(app.player.current, this.data.songs);
 
   this.handlePlayButton = (e) => {
     e.stopPropagation();
@@ -96,7 +96,8 @@ function Album(data, view) {
       separator.innerHTML = '•';
       title.innerHTML = this.data.title;
       tag.innerHTML = '#' + this.data.tags[0];
-      playButton.innerHTML = this.playing ? pauseIcon : playIcon;
+      if (this.loading) playButton.innerHTML = loadingIcon;
+      else playButton.innerHTML = this.playing ? pauseIcon : playIcon;
       _albumIcon.innerHTML = albumIcon;
 
       //Build structure
