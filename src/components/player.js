@@ -203,7 +203,7 @@ function Player() {
     }
   }
 
-  this.interruptLoading = () => { //Interrupt the loading animation in currently displayed songs & albums
+  this.interruptLoading = () => { //Interrupt the loading animation in currently displayed songs, albums & files
     for (const song of app.songs) {
       if (song.data.id === this.current.id) continue;
       song.setPlayingState(false);
@@ -212,6 +212,13 @@ function Player() {
     for (const album of app.albums) {
       if (album.data.id === this.album) continue;
       album.setPlayingState(false);
+    }
+
+    if (app.current === 'song' && app.views.song.action === 'files') {
+      for (const id in app.views.song.children.files) {
+        if (id === this.current.id) continue;
+        app.views.song.children.files[id].setPlayingState(false);
+      }
     }
   }
 

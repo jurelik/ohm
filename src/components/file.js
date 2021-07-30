@@ -4,11 +4,10 @@ function File(data) {
   this.el = document.createElement('tr');
   this.data = data;
   this.playing = app.player.playing && app.player.current === this.data;
-  this.loading = app.player.playing && app.player.current.id === this.data.id && app.player.current.type === this.data.type;
+  this.loading = app.player.loading && app.player.current.id === this.data.id && app.player.current.type === this.data.type;
 
   this.handlePlayButton = (e) => {
     e.stopPropagation();
-    if (this.loading) return; //Ignore action if we are currently loading a song/album
     app.player.queueSong(this.data);
   }
 
@@ -60,7 +59,8 @@ function File(data) {
     playButton.className = 'play-button';
 
     //Add attributes and innerHTML
-    playButton.innerHTML = this.playing ? pauseIcon : playIcon;
+    if (this.loading) playButton.innerHTML = loadingIcon;
+    else playButton.innerHTML = this.playing ? pauseIcon : playIcon;
     id.innerHTML = data.id;
     name.innerHTML = data.name;
     artist.innerHTML = data.artist;
