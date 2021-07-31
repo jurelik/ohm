@@ -1,3 +1,5 @@
+'use strict';
+
 const Artist = require('../components/artist');
 const helpers = require('../utils/helpers');
 

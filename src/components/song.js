@@ -1,3 +1,5 @@
+'use strict';
+
 const log = require('../utils/log');
 const ActionBarSong = require('./actionBarSong');
 const { playIcon, pauseIcon, loadingIcon } = require('../utils/svgs');

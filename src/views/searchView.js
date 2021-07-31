@@ -1,3 +1,5 @@
+'use strict';
+
 const SearchViewMain = require('../components/searchViewMain');
 const io = require('../utils/io');
 

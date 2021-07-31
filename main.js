@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, session, Menu, Tray } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron');
 const { spawn } = require('child_process')
 const fs = require('fs');
 let tray = null; //Menu icon

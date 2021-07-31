@@ -1,3 +1,5 @@
+'use strict';
+
 const File = require('./file');
 
 function Files(data) {

@@ -1,3 +1,5 @@
+'use strict';
+
 const Song = require('./song');
 const Album = require('./album');
 const Artist = require('./artist');

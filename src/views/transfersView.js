@@ -1,3 +1,5 @@
+'use strict';
+
 const log = require('../utils/log');
 const ipfs = require('../utils/ipfs');
 const Transfer = require('../components/transfer');

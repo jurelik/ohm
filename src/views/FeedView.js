@@ -1,3 +1,5 @@
+'use strict';
+
 const Song = require('../components/song');
 const Album = require('../components/album');
 const log = require('../utils/log');

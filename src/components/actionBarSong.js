@@ -1,3 +1,5 @@
+'use strict';
+
 const ipfs = require('../utils/ipfs');
 const helpers = require('../utils/helpers');
 const io = require('../utils/io');

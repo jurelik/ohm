@@ -1,4 +1,5 @@
-const { session } = require('electron');
+'use strict';
+
 const io = require('../utils/io');
 const log = require('../utils/log');
 const { logo } = require('../utils/svgs');

@@ -1,3 +1,5 @@
+'use strict';
+
 const ipfs = require('../utils/ipfs');
 const { ipcRenderer } = require('electron');
 const helpers = require('../utils/helpers');

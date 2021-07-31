@@ -1,3 +1,5 @@
+'use strict';
+
 const log = require('../utils/log');
 const Files = require('./files');
 const Comments = require('./comments');

@@ -1,3 +1,5 @@
+'use strict';
+
 function Comment(data) {
   this.el = document.createElement('div');
   this.data = data;

@@ -1,3 +1,5 @@
+'use strict';
+
 const fsp = require('fs').promises;
 const fs = require('fs');
 const crypto = require('crypto');

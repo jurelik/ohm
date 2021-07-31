@@ -1,3 +1,5 @@
+'use strict';
+
 const UploadFile = require('./UploadFile');
 
 function UploadSong(data) {

@@ -1,3 +1,5 @@
+'use strict';
+
 const { playIcon, pauseIcon, loadingIcon } = require('../utils/svgs');
 
 function File(data) {

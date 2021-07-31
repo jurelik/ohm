@@ -1,3 +1,5 @@
+'use strict';
+
 const { infoIcon } = require('../utils/svgs');
 const { shell } = require('electron');
 

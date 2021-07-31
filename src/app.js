@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const { ipcRenderer } = require('electron');
 const { create } = require('ipfs-http-client');

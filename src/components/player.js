@@ -1,3 +1,5 @@
+'use strict';
+
 const log = require('../utils/log');
 const { playIconBig, pauseIconBig, loadingIcon, nextIcon, previousIcon, speakerIcon } = require('../utils/svgs');
 

@@ -1,3 +1,5 @@
+'use strict';
+
 const UploadSong = require('../components/UploadSong');
 const UploadAlbum = require('../components/UploadAlbum');
 const io = require('../utils/io');

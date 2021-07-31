@@ -1,3 +1,5 @@
+'use strict';
+
 const log = require('../utils/log');
 const helpers = require('../utils/helpers');
 const ActionBarAlbum = require('./actionBarAlbum');

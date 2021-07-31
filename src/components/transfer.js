@@ -1,3 +1,5 @@
+'use strict';
+
 const ipfs = require('../utils/ipfs');
 const log = require('../utils/log');
 const { pauseIcon, refreshIconSmall, deleteIcon } = require('../utils/svgs');

@@ -1,3 +1,5 @@
+'use strict';
+
 const Song = require('../components/song');
 const SongViewMain = require('../components/songViewMain');
 

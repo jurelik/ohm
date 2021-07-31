@@ -1,3 +1,5 @@
+'use strict';
+
 function UploadAlbum(data) {
   this.el = document.createElement('div');
   this.data = data;
