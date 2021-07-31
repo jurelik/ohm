@@ -12,6 +12,7 @@ function PinnedView(data) {
   this.init = async () => {
     try {
       const payload = await ipfs.getPinned();
+      console.log(payload)
 
       const _res = await fetch(`${app.URL}/api/pinned`, {
         method: 'POST',

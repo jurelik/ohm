@@ -20,10 +20,10 @@
   },
   "homepage": "https://github.com/jurelik/ohm#readme",
   "devDependencies": {
-    "electron": "^11.3.0",
-    "go-ipfs": "^0.8.0"
+    "electron": "^13.1.7",
+    "go-ipfs": "^0.9.1"
   },
   "dependencies": {
-    "ipfs-http-client": "^49.0.4"
+    "ipfs-http-client": "^51.0.1"
   }
 }

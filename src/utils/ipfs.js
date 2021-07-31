@@ -23,7 +23,7 @@ const uploadAlbum = async (payload) => {
 
     //Get CID of album folder
     const folder = await app.ipfs.files.stat(`/${app.artist}/albums/${album.title}`);
-    album.cid = folder.cid.string;
+    album.cid = folder.cid.toString();
   }
   catch (err) {
     throw err;
@@ -232,11 +232,11 @@ const getPinned = async () => {
     for (const artist of artists) {
       for await (const file of app.ipfs.files.ls(`/${artist}/albums`)) { //Get albums
         const stat = await app.ipfs.files.stat(`/${artist}/albums/${file.name}`);
-        albums.push(stat.cid.string);
+        albums.push(stat.cid.toString());
       }
       for await (const file of app.ipfs.files.ls(`/${artist}/singles`)) {
         const stat = await app.ipfs.files.stat(`/${artist}/singles/${file.name}`);
-        songs.push(stat.cid.string);
+        songs.push(stat.cid.toString());
       }
     }
 
@@ -262,7 +262,7 @@ const artistExists = async (artist) => {
 const songExists = async (data) => {
   try {
     for await (const file of app.ipfs.files.ls(`/${data.artist}/singles/`)) {
-      if (file.name === data.title && file.type === 'directory') return file.cid.string;
+      if (file.name === data.title && file.type === 'directory') return file.cid.toString();
     }
     return false;
   }
@@ -274,7 +274,7 @@ const songExists = async (data) => {
 const albumExists = async (data) => {
   try {
     for await (const file of app.ipfs.files.ls(`/${data.artist}/albums/`)) {
-      if (file.name === (data.albumTitle || data.title) && file.type === 'directory') return file.cid.string;
+      if (file.name === (data.albumTitle || data.title) && file.type === 'directory') return file.cid.toString();
     }
     return false;
   }
@@ -286,7 +286,7 @@ const albumExists = async (data) => {
 const songInAlbumExists = async (data) => {
   try {
     for await (const file of app.ipfs.files.ls(`/${data.artist}/albums/${data.albumTitle}/`)) {
-      if (file.name === data.title && file.type === 'directory') return file.cid.string;
+      if (file.name === data.title && file.type === 'directory') return file.cid.toString();
     }
     return false;
   }

@@ -10,7 +10,7 @@ const addSong = async (song, path) => {
 
     //Copy song to MFS
     await app.ipfs.files.mkdir(`${path}/${song.title}/files`, { parents: true, cidVersion: 1 });
-    await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}/${song.title}/${app.artist} - ${song.title}.${song.format}`, { cidVersion: 1 });
+    await app.ipfs.files.cp(`/ipfs/${cid.toString()}`, `${path}/${song.title}/${app.artist} - ${song.title}.${song.format}`, { cidVersion: 1 });
 
     //Add files
     for (const file of song.files) {
@@ -26,14 +26,14 @@ const addSong = async (song, path) => {
         const { cid } = await app.ipfs.add({ content: buffer }, { cidVersion: 1 }); //Add song to IPFS
 
         //Copy file to MFS
-        await app.ipfs.files.cp(`/ipfs/${cid.string}`, `${path}/${song.title}/files/${app.artist} - ${file.name}.${file.format}`, { cidVersion: 1 });
-        file.cid = cid.string;
+        await app.ipfs.files.cp(`/ipfs/${cid.toString()}`, `${path}/${song.title}/files/${app.artist} - ${file.name}.${file.format}`, { cidVersion: 1 });
+        file.cid = cid.toString();
       }
     }
 
     //Get CID of folder
     const folder = await app.ipfs.files.stat(`${path}/${song.title}`);
-    song.cid = folder.cid.string;
+    song.cid = folder.cid.toString();
   }
   catch (err) {
     throw err;
@@ -94,7 +94,7 @@ const folderExists = async (transfer) => {
       if (folder.name === transfer.title) {
         //Check if CIDs are equal
         const { cid } = await app.ipfs.files.stat(`${transfer.path}/${transfer.title}`);
-        if (cid.string === transfer.cid) return true;
+        if (cid.toString() === transfer.cid) return true;
       }
     }
 
@@ -183,7 +183,7 @@ const pinItem = async (transfer, controller) => {
 const removePin = async (cid) => {
   try {
     for await (const pin of app.ipfs.pin.ls({ type: 'recursive' })) {
-      if (pin.cid.string === cid) await app.ipfs.pin.rm(pin.cid, { recursive: true }); //Remove pin from IPFS
+      if (pin.cid.toString() === cid) await app.ipfs.pin.rm(pin.cid, { recursive: true }); //Remove pin from IPFS
     }
   }
   catch (err) {

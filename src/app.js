@@ -1,7 +1,7 @@
 'use strict'
 
 const { ipcRenderer } = require('electron');
-const createClient = require('ipfs-http-client');
+const { create } = require('ipfs-http-client');
 const log = require('./utils/log');
 const helpers = require('./utils/helpers');
 const { loadingIconSmall } = require('./utils/svgs');
@@ -98,7 +98,7 @@ function App() {
     ipcRenderer.once('daemon-ready', async (e, userDataPath) => {
       log.success('IPFS daemon initiated.');
       try {
-        this.ipfs = createClient();
+        this.ipfs = create();
         this.USER_DATA_PATH = userDataPath;
         const id = await this.getId(); //Get multiaddress for swarm connections
         this.MULTIADDR = id.addresses[4];
@@ -253,9 +253,9 @@ function App() {
     this.bandwidthController = new AbortController();
 
     try {
-      for await (const stats of app.ipfs.stats.bw({ poll: true, interval: '1s', signal: this.bandwidthController.signal })) {
-        const dl = helpers.formatBytes(stats.rateIn);
-        const ul = helpers.formatBytes(stats.rateOut);
+      for await (const stats of app.ipfs.stats.bw({ poll: true, interval: '1s', signal: this.bandwidthController })) {
+        const dl = helpers.formatBytes(parseInt(stats.rateIn));
+        const ul = helpers.formatBytes(parseInt(stats.rateOut));
 
         document.querySelector('.dl').textContent = `dl: ${dl}`;
         document.querySelector('.ul').textContent = `ul: ${ul}`;
