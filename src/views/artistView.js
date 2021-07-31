@@ -75,7 +75,7 @@ function ArtistView(data) {
       this.el.className = 'artist';
       bio.className = 'bio';
 
-      //Add attributes and innerHTML
+      //Add attributes and innerHTML/textContent
       bio.textContent = this.artist.bio;
       albums.textContent = 'albums:';
       songs.textContent = 'songs:';

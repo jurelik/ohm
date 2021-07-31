@@ -47,7 +47,7 @@ function SongView(data, action) {
       createdAt.className = 'created-at';
       description.className = 'description';
 
-      //Add attributes and innerHTML
+      //Add attributes and innerHTML/textContent
       createdAt.textContent = this.data.createdAt;
       description.textContent = this.data.description;
 

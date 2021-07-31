@@ -29,7 +29,7 @@ function AlbumView(data, action) {
       createdAt.className = 'created-at';
       description.className = 'description';
 
-      //Add attributes and textContent
+      //Add attributes and innerHTML/textContent
       createdAt.textContent = this.data.createdAt;
       description.textContent = this.data.description;
 

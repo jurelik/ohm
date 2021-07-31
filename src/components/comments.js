@@ -59,7 +59,7 @@ function Comments(data) {
     container.className = 'comment-container';
     marker.className = 'marker';
 
-    //Add attributes and textContent
+    //Add attributes and innerHTML/textContent
     submit.textContent = 'submit';
     submit.setAttribute('type', 'submit');
     textarea.setAttribute('rows', '1');

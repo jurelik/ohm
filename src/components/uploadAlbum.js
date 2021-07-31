@@ -58,7 +58,7 @@ function UploadAlbum(data) {
     descriptionDiv.className = 'upload-description';
     descriptionLabel.className = 'label-disabled';
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     titleLabel.setAttribute('for', 'title');
     titleLabel.textContent = 'album title: ';
     title.setAttribute('type', 'text');

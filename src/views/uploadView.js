@@ -118,7 +118,7 @@ function UploadView(data) {
     submitDiv.className = 'submit-div';
     addSong.className = 'add-song';
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     addSong.textContent = 'add song';
     submit.setAttribute('type', 'submit');
     submit.setAttribute('value', 'submit');

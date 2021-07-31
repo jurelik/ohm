@@ -142,7 +142,7 @@ function UploadFile(data) {
     //Add classes for styling
     input.className = `file-input`;
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     label.setAttribute('for', name);
     label.textContent = name + ': ';
     input.setAttribute('type', type);
@@ -165,7 +165,7 @@ function UploadFile(data) {
     el.className = 'radio-div';
     input.className = 'file-input';
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     label.setAttribute('for', `${name}-${this.unique}`);
     label.textContent = name;
     input.setAttribute('type', 'radio');
@@ -193,7 +193,7 @@ function UploadFile(data) {
     el.className = 'checkbox-div';
     input.className = 'file-input';
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     label.setAttribute('for', `${name}-${this.unique}`);
     label.textContent = name;
     input.setAttribute('type', 'checkbox');
@@ -242,7 +242,7 @@ function UploadFile(data) {
     id.querySelector('label').className = 'label-disabled';
     licenseInfoButton.className = 'license-info-button'
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     legend.textContent = 'file: '
     typeLabel.textContent = 'type: ';
     typeOriginal.querySelector('.file-input').checked = true;

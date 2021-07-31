@@ -71,7 +71,7 @@ function Artist(data, view) {
     nameAndFollow.className = 'name-and-follow';
     locationDiv.className = 'location-div';
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     name.textContent = this.data.name;
     if (this.view === 'artist') name.disabled = true;
     locationDiv.innerHTML = locationIcon;

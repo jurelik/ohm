@@ -55,7 +55,7 @@ function ActionBarAlbum(data) {
     //Add classes for styling
     container.className = 'actions-delete';
 
-    //Add attributes and textContent
+    //Add attributes and innerHTML/textContent
     message.textContent = 'are you sure:'
     yes.textContent = 'yes'
     no.textContent = 'no'
@@ -149,7 +149,7 @@ function ActionBarAlbum(data) {
       inner.className = 'actions-inner';
       pin.className = 'pin';
 
-      //Add attributes and textContent
+      //Add attributes and innerHTML/textContent
       songs.textContent = `${this.data.songs.length} songs`;
       pin.textContent = this.pinned ? 'unpin' : 'pin';
       download.textContent = 'download';

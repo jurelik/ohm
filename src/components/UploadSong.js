@@ -89,7 +89,7 @@ function UploadSong(data) {
     fileDiv.className = 'song-file-div';
     description.className = 'song-textarea';
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     legend.textContent = 'song: ';
     titleLabel.setAttribute('for', 'title');
     titleLabel.textContent = 'title: ';

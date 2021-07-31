@@ -342,7 +342,7 @@ function Player() {
     if (this.queuePosition >= this.queue.length - 1) forwardButton.disabled = true;
     if (!this.current) backButton.disabled = true;
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     backButton.innerHTML = previousIcon;
     playButton.innerHTML = this.playing ? pauseIconBig : playIconBig;
     forwardButton.innerHTML = nextIcon;

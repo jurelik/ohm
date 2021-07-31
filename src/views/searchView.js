@@ -84,7 +84,7 @@ function SearchView(data) {
     //Add classes for styling
     select.className = 'search-select';
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     label.setAttribute('for', options.name);
     label.textContent = options.name + ': ';
     select.setAttribute('type', options.type);
@@ -148,8 +148,6 @@ function SearchView(data) {
       //Add classes for styling
       this.el.className = 'search-view';
       container.className = 'search-view-options';
-
-      //Add attributes and innerHTML
 
       //Build structure
       container.appendChild(category);

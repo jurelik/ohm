@@ -89,7 +89,7 @@ function LoginView() {
     artistAndPw.className = 'artist-and-pw';
     pw.className = 'pw';
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     logoDiv.innerHTML = logo;
     artist.name = 'artist';
     artist.setAttribute('type', 'text');

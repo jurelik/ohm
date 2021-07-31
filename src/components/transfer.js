@@ -88,7 +88,7 @@ function Transfer(data, unique) {
     resume.className = 'resume';
     clear.className = 'clear';
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     artist.textContent = this.data.artist;
     title.textContent = this.data.title;
     type.textContent = this.data.type;

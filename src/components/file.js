@@ -58,7 +58,7 @@ function File(data) {
     playButtonCell.className = 'play-button-cell';
     playButton.className = 'play-button';
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     if (this.loading) playButton.innerHTML = loadingIcon;
     else playButton.innerHTML = this.playing ? pauseIcon : playIcon;
     id.textContent = data.id;

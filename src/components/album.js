@@ -90,7 +90,7 @@ function Album(data, view) {
       playButton.className = 'play-button';
       _albumIcon.classList.add('album-icon');
 
-      //Add attributes and innerHTML
+      //Add attributes and innerHTML/textContent
       artist.textContent = this.data.artist;
       separator.textContent = '•';
       title.textContent = this.data.title;

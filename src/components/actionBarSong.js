@@ -74,7 +74,7 @@ function ActionBarSong(data) {
     //Add classes for styling
     container.className = 'actions-delete';
 
-    //Add attributes and innerHTML
+    //Add attributes and innerHTML/textContent
     message.textContent = 'are you sure:'
     yes.textContent = 'yes'
     no.textContent = 'no'
@@ -167,7 +167,7 @@ function ActionBarSong(data) {
       inner.className = 'actions-inner'
       pin.className = 'pin';
 
-      //Add attributes and innerHTML
+      //Add attributes and innerHTML/textContent
       files.textContent = `${this.data.files.length} files`;
       comments.textContent = `${this.data.comments.length} comments`;
       pin.textContent = this.pinned ? 'unpin' : 'pin';

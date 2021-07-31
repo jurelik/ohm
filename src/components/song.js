@@ -80,7 +80,7 @@ function Song(data, view) {
       separator.classList.add('separator');
       playButton.className = 'play-button';
 
-      //Add attributes and innerHTML
+      //Add attributes and innerHTML/textContent
       artist.textContent = this.data.artist;
       separator.textContent = '•';
       title.textContent = this.data.title;
