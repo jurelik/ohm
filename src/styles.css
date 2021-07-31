@@ -1081,9 +1081,11 @@ pre {
   align-items: center;
   justify-content: center;
   stroke: #bbb;
+  fill: #bbb;
+  width: 30px;
 }
 
-.transfer .refresh:hover {
+.transfer .resume:hover {
   stroke: #eee;
 }
 
@@ -1099,6 +1101,7 @@ pre {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 30px;
   stroke: #bbb;
 }
 
@@ -1109,7 +1112,8 @@ pre {
 .transfer .actions-cell {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
+  justify-content: center;
 }
 
 /*Empty screen*/
