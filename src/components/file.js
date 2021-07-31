@@ -8,7 +8,7 @@ function File(data) {
 
   this.handlePlayButton = (e) => {
     e.stopPropagation();
-    app.player.queueSong(this.data);
+    app.player.queueItem(this.data);
   }
 
   this.remotePlayButtonTrigger = () => {

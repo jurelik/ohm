@@ -18,7 +18,7 @@ function Song(data, view) {
 
     if (this.view === 'album') app.player.queueAlbum(app.views.album.data, this.getPosition());
     else if (this.view === 'explore' || this.view === 'feed') app.player.queueFeed(this.data);
-    else app.player.queueSong(this.data);
+    else app.player.queueItem(this.data);
   }
 
   this.handleArtistButton = (e) => {

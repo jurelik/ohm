@@ -117,21 +117,21 @@ function Player() {
   }
 
   //QUEUE HANDLERS
-  this.queueSong = (file) => {
-    if (this.current && this.current.id === file.id && this.loading) return this.audio.pause(); //Check if we are just aborting a song load
-    if (this.queue.length === 1 && this.current.id === file.id && this.current.type === file.type) return this.play(); //Check if file already loaded
-    const alreadyLoaded = (this.feed || this.album) && this.current.id === file.id; //Is the song already playing in a feed or album?
+  this.queueItem = (item) => {
+    if (this.current && this.current.id === item.id && this.loading) return this.audio.pause(); //Check if we are just aborting an item load
+    if (this.queue.length === 1 && this.current.id === item.id && this.current.type === item.type) return this.play(); //Check if item already loaded
+    const alreadyLoaded = (this.feed || this.album) && this.current.id === item.id; //Is the item already playing in a feed or album?
 
     this.album = null; //Reset this.album
-    this.queue = [file];
+    this.queue = [item];
     this.queuePosition = 0;
-    this.current = file;
+    this.current = item;
     this.feed = false; //Reset this.feed
-    if (alreadyLoaded) return this.play(); //Return here if song is already loaded
+    if (alreadyLoaded) return this.play(); //Return here if item is already loaded
 
     this.playing = false;
-    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
-    this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
+    this.interruptLoading(); //Interrupt the loading animation in other songs/albums/files
+    this.updateSrc(); //This makes the audio element reload so check if item is already loaded before triggering
     this.play();
   }
 
@@ -153,7 +153,7 @@ function Player() {
     if (typeof _position === 'number') return this.play(); //Return here if _position was found
 
     this.playing = false;
-    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
+    this.interruptLoading(); //Interrupt the loading animation in other songs/albums/files
     this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
     return this.play();
   }
@@ -171,7 +171,7 @@ function Player() {
     if (alreadyLoaded) return this.play(); //Return here if song is already loaded
 
     this.playing = false;
-    this.interruptLoading(); //Interrupt the loading animation in other songs/albums
+    this.interruptLoading(); //Interrupt the loading animation in other songs/albums/files
     this.updateSrc(); //This makes the audio element reload so check if file is already loaded before triggering
     this.play();
   }
