@@ -41,7 +41,7 @@ function ArtistView(data) {
 
       //Update DOM
       const button = this.el.querySelector('.follow');
-      button.innerHTML = this.artist.following ? 'following' : 'follow';
+      button.textContent = this.artist.following ? 'following' : 'follow';
       if (!this.artist.following) button.classList.remove('following');
       else button.classList.add('following');
     }
@@ -76,9 +76,9 @@ function ArtistView(data) {
       bio.className = 'bio';
 
       //Add attributes and innerHTML
-      bio.innerHTML = this.artist.bio;
-      albums.innerHTML = 'albums:';
-      songs.innerHTML = 'songs:';
+      bio.textContent = this.artist.bio;
+      albums.textContent = 'albums:';
+      songs.textContent = 'songs:';
 
       //Add artist
       let artist = new Artist(this.artist, 'artist');

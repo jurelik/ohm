@@ -202,7 +202,7 @@ function App() {
           await this.views.transfers.render();
           break;
         default:
-          this.content.innerHTML = view;
+          this.content.textContent = 'view not found';
           break;
       }
 
@@ -257,8 +257,8 @@ function App() {
         const dl = helpers.formatBytes(stats.rateIn);
         const ul = helpers.formatBytes(stats.rateOut);
 
-        document.querySelector('.dl').innerHTML = `dl: ${dl}`;
-        document.querySelector('.ul').innerHTML = `ul: ${ul}`;
+        document.querySelector('.dl').textContent = `dl: ${dl}`;
+        document.querySelector('.ul').textContent = `ul: ${ul}`;
       }
     }
     catch (err) {

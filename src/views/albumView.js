@@ -29,9 +29,9 @@ function AlbumView(data, action) {
       createdAt.className = 'created-at';
       description.className = 'description';
 
-      //Add attributes and innerHTML
-      createdAt.innerHTML = this.data.createdAt;
-      description.innerHTML = this.data.description;
+      //Add attributes and textContent
+      createdAt.textContent = this.data.createdAt;
+      description.textContent = this.data.description;
 
       //Build structure
       this.el.appendChild(await album.render());

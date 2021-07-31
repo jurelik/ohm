@@ -94,12 +94,12 @@ function LoginView() {
     artist.name = 'artist';
     artist.setAttribute('type', 'text');
     artist.setAttribute('autofocus', true);
-    artistLabel.innerHTML = 'artist: '
+    artistLabel.textContent = 'artist: '
     pw.name = 'pw';
     pw.setAttribute('type', 'password');
-    pwLabel.innerHTML = 'pw: '
+    pwLabel.textContent = 'pw: '
     submit.setAttribute('type', 'submit');
-    submit.innerHTML = 'login';
+    submit.textContent = 'login';
 
     //Build structure
     this.el.appendChild(logoDiv);

@@ -18,9 +18,9 @@ function Comment(data) {
     //Add classes for styling
     this.el.classList.add('comment');
 
-    //Add attributes and innerHTML
-    artist.innerHTML = this.data.artist + ':';
-    content.innerHTML = this.data.content;
+    //Add attributes and textContent
+    artist.textContent = this.data.artist + ':';
+    content.textContent = this.data.content;
 
     //Build structure
     this.el.appendChild(artist);

@@ -243,7 +243,7 @@ const formatBytes = (bytes, decimals = 2) => { //Taken from https://stackoverflo
 
 const handleEmpty = (el) => {
   const _el = document.createElement('div');
-  _el.innerHTML = 'no items found';
+  _el.textContent = 'no items found';
   _el.className = 'empty';
 
   app.content.innerHTML = '';
@@ -256,7 +256,7 @@ const handleEmpty = (el) => {
 //
 const updatePinnedState = (actionBar) => {
   actionBar.pinned = true; //Update pinned state
-  actionBar.el.querySelector('.pin').innerHTML = 'unpin'; //Update .pin element
+  actionBar.el.querySelector('.pin').textContent = 'unpin'; //Update .pin element
   actionBar.appendPinIcon(); //Append pin icon
 }
 

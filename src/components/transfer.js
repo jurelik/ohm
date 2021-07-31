@@ -9,13 +9,13 @@ function Transfer(data, unique) {
 
   this.update = (value) => {
     this.data = app.transfersStore.getOne(this.unique); //Update data
-    if (value === 'progress') this.el.querySelector(`.${value}`).innerHTML = this.data[value] + '%'; //Update DOM
-    else this.el.querySelector(`.${value}`).innerHTML = this.data[value]; //Update DOM
+    if (value === 'progress') this.el.querySelector(`.${value}`).textContent = this.data[value] + '%'; //Update DOM
+    else this.el.querySelector(`.${value}`).textContent = this.data[value]; //Update DOM
   }
 
   this.handleComplete = () => {
     this.data.completed = true;
-    this.el.querySelector('.completed').innerHTML = 'COMPLETED';
+    this.el.querySelector('.completed').textContent = 'COMPLETED';
     this.el.querySelector('button').remove();
   }
 
@@ -89,14 +89,14 @@ function Transfer(data, unique) {
     clear.className = 'clear';
 
     //Add attributes and innerHTML
-    artist.innerHTML = this.data.artist;
-    title.innerHTML = this.data.title;
-    type.innerHTML = this.data.type;
-    progress.innerHTML = this.data.progress + '%';
+    artist.textContent = this.data.artist;
+    title.textContent = this.data.title;
+    type.textContent = this.data.type;
+    progress.textContent = this.data.progress + '%';
     resume.innerHTML = this.data.active ? pauseIcon : refreshIconSmall;
     resume.disabled = this.data.completed ? true : false;
     clear.innerHTML = deleteIcon;
-    completed.innerHTML = this.data.completed ? 'COMPLETED' : 'INCOMPLETE';
+    completed.textContent = this.data.completed ? 'COMPLETED' : 'INCOMPLETE';
 
     //Build structure
     this.el.appendChild(artist);

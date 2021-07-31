@@ -118,7 +118,7 @@ function FeedView(data) {
 
       //Add load more button
       const loadMore = document.createElement('button');
-      loadMore.innerHTML = 'load more..';
+      loadMore.textContent = 'load more..';
       loadMore.className = 'load-more';
       loadMore.onclick = this.handleLoadMore;
       this.el.appendChild(loadMore);

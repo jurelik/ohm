@@ -39,7 +39,7 @@ function Artist(data, view) {
 
       //Update DOM
       const button = this.el.querySelector('.follow');
-      button.innerHTML = this.data.following ? 'following' : 'follow';
+      button.textContent = this.data.following ? 'following' : 'follow';
       if (!this.data.following) button.classList.remove('following');
       else button.classList.add('following');
     }
@@ -72,10 +72,10 @@ function Artist(data, view) {
     locationDiv.className = 'location-div';
 
     //Add attributes and innerHTML
-    name.innerHTML = this.data.name;
+    name.textContent = this.data.name;
     if (this.view === 'artist') name.disabled = true;
     locationDiv.innerHTML = locationIcon;
-    location.innerHTML = this.data.location;
+    location.textContent = this.data.location;
 
     //Build structure
     this.el.appendChild(nameAndFollow);
@@ -92,7 +92,7 @@ function Artist(data, view) {
     let follow = document.createElement('button');
     follow.classList.add('follow');
     if (this.data.following) follow.classList.add('following');
-    follow.innerHTML = this.data.following ? 'following': 'follow';
+    follow.textContent = this.data.following ? 'following': 'follow';
     nameAndFollow.appendChild(follow);
 
     //Add listener

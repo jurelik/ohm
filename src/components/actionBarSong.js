@@ -75,9 +75,9 @@ function ActionBarSong(data) {
     container.className = 'actions-delete';
 
     //Add attributes and innerHTML
-    message.innerHTML = 'are you sure:'
-    yes.innerHTML = 'yes'
-    no.innerHTML = 'no'
+    message.textContent = 'are you sure:'
+    yes.textContent = 'yes'
+    no.textContent = 'no'
 
     //Build structure
     this.el.appendChild(container);
@@ -130,7 +130,7 @@ function ActionBarSong(data) {
 
   this.appendDelete = () => {
     let _delete = document.createElement('button');
-    _delete.innerHTML = 'delete';
+    _delete.textContent = 'delete';
     this.el.querySelector('.actions-inner').appendChild(_delete);
     _delete.onclick = this.handleDeleteClick;
   }
@@ -138,7 +138,7 @@ function ActionBarSong(data) {
   this.removePinIcon = () => {
     this.pinned = false; //Update pinned state
     this.el.querySelector('.pin-icon').remove(); //Remove pin icon
-    this.el.querySelector('.pin').innerHTML = 'pin' //Update pin
+    this.el.querySelector('.pin').textContent = 'pin' //Update pin
 
     //Update album pin state if applicable
     if (this.data.albumTitle && app.current === 'album') {
@@ -147,7 +147,7 @@ function ActionBarSong(data) {
 
       actionBar.pinned = false; //Update pinned state
       actionBar.el.querySelector('.pin-icon').remove(); //Remove pin icon
-      actionBar.el.querySelector('.pin').innerHTML = 'pin' //Update pin
+      actionBar.el.querySelector('.pin').textContent = 'pin' //Update pin
     }
   }
 
@@ -168,10 +168,10 @@ function ActionBarSong(data) {
       pin.className = 'pin';
 
       //Add attributes and innerHTML
-      files.innerHTML = `${this.data.files.length} files`;
-      comments.innerHTML = `${this.data.comments.length} comments`;
-      pin.innerHTML = this.pinned ? 'unpin' : 'pin';
-      download.innerHTML = 'download';
+      files.textContent = `${this.data.files.length} files`;
+      comments.textContent = `${this.data.comments.length} comments`;
+      pin.textContent = this.pinned ? 'unpin' : 'pin';
+      download.textContent = 'download';
 
       //Build structure
       this.el.appendChild(inner);

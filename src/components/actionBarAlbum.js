@@ -55,10 +55,10 @@ function ActionBarAlbum(data) {
     //Add classes for styling
     container.className = 'actions-delete';
 
-    //Add attributes and innerHTML
-    message.innerHTML = 'are you sure:'
-    yes.innerHTML = 'yes'
-    no.innerHTML = 'no'
+    //Add attributes and textContent
+    message.textContent = 'are you sure:'
+    yes.textContent = 'yes'
+    no.textContent = 'no'
 
     //Build structure
     this.el.appendChild(container);
@@ -111,7 +111,7 @@ function ActionBarAlbum(data) {
 
   this.removePinIcon = () => {
     this.pinned = false; //Update pin state
-    this.el.querySelector('.pin').innerHTML = 'pin'; //Update .pin element
+    this.el.querySelector('.pin').textContent = 'pin'; //Update .pin element
     this.el.querySelector('.pin-icon').remove(); //Remove pin icon
 
     //Remove pin icon from songs if in albumView
@@ -120,7 +120,7 @@ function ActionBarAlbum(data) {
         const actionBar = song.children.actionBar;
 
         actionBar.pinned = false; //Update pinned state
-        actionBar.el.querySelector('.pin').innerHTML = 'pin'; //Update .pin element
+        actionBar.el.querySelector('.pin').textContent = 'pin'; //Update .pin element
         actionBar.removePinIcon(); //Remove icon
       }
     }
@@ -128,7 +128,7 @@ function ActionBarAlbum(data) {
 
   this.appendDelete = () => {
     let _delete = document.createElement('button');
-    _delete.innerHTML = 'delete';
+    _delete.textContent = 'delete';
     this.el.querySelector('.actions-inner').appendChild(_delete);
     _delete.onclick = this.handleDeleteClick;
   }
@@ -149,10 +149,10 @@ function ActionBarAlbum(data) {
       inner.className = 'actions-inner';
       pin.className = 'pin';
 
-      //Add attributes and innerHTML
-      songs.innerHTML = `${this.data.songs.length} songs`;
-      pin.innerHTML = this.pinned ? 'unpin' : 'pin';
-      download.innerHTML = 'download';
+      //Add attributes and textContent
+      songs.textContent = `${this.data.songs.length} songs`;
+      pin.textContent = this.pinned ? 'unpin' : 'pin';
+      download.textContent = 'download';
 
       //Build structure
       this.el.appendChild(inner);

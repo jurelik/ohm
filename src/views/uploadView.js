@@ -83,7 +83,7 @@ function UploadView(data) {
   }
 
   this.updateProgress = (progress) => {
-    this.el.querySelector('.percentage').innerHTML = `${progress}%`;
+    this.el.querySelector('.percentage').textContent = `${progress}%`;
   }
 
   this.display = () => {
@@ -119,7 +119,7 @@ function UploadView(data) {
     addSong.className = 'add-song';
 
     //Add attributes and innerHTML
-    addSong.innerHTML = 'add song';
+    addSong.textContent = 'add song';
     submit.setAttribute('type', 'submit');
     submit.setAttribute('value', 'submit');
 

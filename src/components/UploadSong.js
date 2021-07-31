@@ -90,26 +90,26 @@ function UploadSong(data) {
     description.className = 'song-textarea';
 
     //Add attributes and innerHTML
-    legend.innerHTML = 'song: ';
+    legend.textContent = 'song: ';
     titleLabel.setAttribute('for', 'title');
-    titleLabel.innerHTML = 'title: ';
+    titleLabel.textContent = 'title: ';
     title.setAttribute('type', 'text');
     title.setAttribute('name', 'title');
     tagsLabel.setAttribute('for', 'tags');
-    tagsLabel.innerHTML = 'tags: ';
+    tagsLabel.textContent = 'tags: ';
     tags.setAttribute('type', 'text');
     tags.setAttribute('name', 'tags');
     fileLabel.setAttribute('for', 'tags');
-    fileLabel.innerHTML = 'file: ';
+    fileLabel.textContent = 'file: ';
     file.setAttribute('type', 'file');
     file.setAttribute('name', 'file');
     file.setAttribute('accept', 'audio/mpeg');
     descriptionLabel.setAttribute('for', 'description');
-    descriptionLabel.innerHTML = 'description:';
+    descriptionLabel.textContent = 'description:';
     descriptionDiv.className = 'upload-description';
     description.setAttribute('name', 'description');
-    addFile.innerHTML = 'add file';
-    deleteSong.innerHTML = 'delete song';
+    addFile.textContent = 'add file';
+    deleteSong.textContent = 'delete song';
 
     //Build structure
     titleDiv.appendChild(titleLabel);

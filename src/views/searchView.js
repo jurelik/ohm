@@ -86,7 +86,7 @@ function SearchView(data) {
 
     //Add attributes and innerHTML
     label.setAttribute('for', options.name);
-    label.innerHTML = options.name + ': ';
+    label.textContent = options.name + ': ';
     select.setAttribute('type', options.type);
     select.setAttribute('name', options.name);
     select.setAttribute('id', options.name);
@@ -95,7 +95,7 @@ function SearchView(data) {
     for (let option of options.options) {
       let _el = document.createElement('option');
       _el.setAttribute('value', option);
-      _el.innerHTML = option;
+      _el.textContent = option;
       select.appendChild(_el);
     }
 
@@ -163,7 +163,7 @@ function SearchView(data) {
 
       //Add load more button
       const loadMore = document.createElement('button');
-      loadMore.innerHTML = 'load more..';
+      loadMore.textContent = 'load more..';
       loadMore.className = 'load-more';
       loadMore.onclick = this.handleLoadMore;
       this.el.appendChild(loadMore);

@@ -63,13 +63,13 @@ function TransfersView(data) {
     actionsCell.className = 'actions-header';
     clearAll.className = 'clear-all';
 
-    artistCell.innerHTML = 'artist';
-    nameCell.innerHTML = 'name';
-    typeCell.innerHTML = 'type';
-    progressCell.innerHTML = 'progress';
-    statusCell.innerHTML = 'status';
-    actionsCell.innerHTML = 'actions';
-    clearAll.innerHTML = 'clear all';
+    artistCell.textContent = 'artist';
+    nameCell.textContent = 'name';
+    typeCell.textContent = 'type';
+    progressCell.textContent = 'progress';
+    statusCell.textContent = 'status';
+    actionsCell.textContent = 'actions';
+    clearAll.textContent = 'clear all';
 
     header.appendChild(artistCell);
     header.appendChild(nameCell);

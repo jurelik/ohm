@@ -144,7 +144,7 @@ function UploadFile(data) {
 
     //Add attributes and innerHTML
     label.setAttribute('for', name);
-    label.innerHTML = name + ': ';
+    label.textContent = name + ': ';
     input.setAttribute('type', type);
     input.setAttribute('name', name);
 
@@ -167,7 +167,7 @@ function UploadFile(data) {
 
     //Add attributes and innerHTML
     label.setAttribute('for', `${name}-${this.unique}`);
-    label.innerHTML = name;
+    label.textContent = name;
     input.setAttribute('type', 'radio');
     input.setAttribute('id', `${name}-${this.unique}`);
     input.setAttribute('name', 'type-' + this.unique);
@@ -195,7 +195,7 @@ function UploadFile(data) {
 
     //Add attributes and innerHTML
     label.setAttribute('for', `${name}-${this.unique}`);
-    label.innerHTML = name;
+    label.textContent = name;
     input.setAttribute('type', 'checkbox');
     input.setAttribute('id', `${name}-${this.unique}`);
     input.setAttribute('name', 'license-' + this.unique);
@@ -243,14 +243,14 @@ function UploadFile(data) {
     licenseInfoButton.className = 'license-info-button'
 
     //Add attributes and innerHTML
-    legend.innerHTML = 'file: '
-    typeLabel.innerHTML = 'type: ';
+    legend.textContent = 'file: '
+    typeLabel.textContent = 'type: ';
     typeOriginal.querySelector('.file-input').checked = true;
-    licenseLabel.innerHTML = 'license: ';
-    licenseCC.innerHTML = 'CC';
+    licenseLabel.textContent = 'license: ';
+    licenseCC.textContent = 'CC';
     id.querySelector('.file-input').disabled = true;
-    deleteFile.innerHTML = 'delete file';
-    licenseInfoButton.innerHTML = infoIcon;
+    deleteFile.textContent = 'delete file';
+    licenseInfoButton.textContent = infoIcon;
     licenseInfoButton.setAttribute('title', 'how do licenses work?');
 
     //Build structure

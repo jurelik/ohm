@@ -60,19 +60,19 @@ function UploadAlbum(data) {
 
     //Add attributes and innerHTML
     titleLabel.setAttribute('for', 'title');
-    titleLabel.innerHTML = 'album title: ';
+    titleLabel.textContent = 'album title: ';
     title.setAttribute('type', 'text');
     title.setAttribute('name', 'title');
     title.disabled = true;
 
     tagsLabel.setAttribute('for', 'tags');
-    tagsLabel.innerHTML = 'album tags: ';
+    tagsLabel.textContent = 'album tags: ';
     tags.setAttribute('type', 'text');
     tags.setAttribute('name', 'tags');
     tags.disabled = true;
 
     descriptionLabel.setAttribute('for', 'description');
-    descriptionLabel.innerHTML = 'album description: ';
+    descriptionLabel.textContent = 'album description: ';
     description.setAttribute('name', 'description');
     description.disabled = true;
 

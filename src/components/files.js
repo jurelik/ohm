@@ -9,7 +9,7 @@ function Files(data) {
     if (this.data.length === 0) { //Handle 0 files scenario
       this.el = document.createElement('div');
       this.el.className = 'files-empty';
-      this.el.innerHTML = 'No files found.'
+      this.el.textContent = 'No files found.'
       return this.el;
     }
 
@@ -26,16 +26,16 @@ function Files(data) {
 
     this.el.className = 'files';
 
-    playCell.innerHTML = '';
+    playCell.textContent = '';
     playCell.setAttribute('id', 'first');
-    idCell.innerHTML = 'id';
-    nameCell.innerHTML = 'name';
-    artistCell.innerHTML = 'artist';
-    typeCell.innerHTML = 'type';
-    fileTypeCell.innerHTML = 'format';
-    licenseCell.innerHTML = 'license';
-    tagsCell.innerHTML = 'tags';
-    infoCell.innerHTML = 'info';
+    idCell.textContent = 'id';
+    nameCell.textContent = 'name';
+    artistCell.textContent = 'artist';
+    typeCell.textContent = 'type';
+    fileTypeCell.textContent = 'format';
+    licenseCell.textContent = 'license';
+    tagsCell.textContent = 'tags';
+    infoCell.textContent = 'info';
 
     header.appendChild(playCell);
     header.appendChild(idCell);

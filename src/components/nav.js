@@ -14,7 +14,7 @@ function Nav() {
       let el = document.createElement('button');
       el.setAttribute('id', name);
       el.setAttribute('type', 'button');
-      el.innerHTML = first ? `> ${name}` : `  ${name}`;
+      el.textContent = first ? `> ${name}` : `  ${name}`;
       first ? el.className = 'selected' : null;
       el.onclick = this.handleClick;
       this.el.appendChild(el);
@@ -30,9 +30,9 @@ function Nav() {
     //Check if same item
     if (this.selected === id) return;
 
-    this.elements[id].innerHTML = `> ${id}`;
+    this.elements[id].textContent = `> ${id}`;
     this.elements[id].className = 'selected';
-    if (this.selected) this.elements[this.selected].innerHTML = this.selected;
+    if (this.selected) this.elements[this.selected].textContent = this.selected;
     if (this.selected) this.elements[this.selected].className = null;
     this.selected = id;
   }
@@ -40,7 +40,7 @@ function Nav() {
   this.unselect = () => {
     if (!this.selected) return; //Return if no item is selected already
 
-    this.elements[this.selected].innerHTML = this.selected;
+    this.elements[this.selected].textContent = this.selected;
     this.elements[this.selected].className = null;
     this.selected = null;
   }

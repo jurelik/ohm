@@ -61,14 +61,14 @@ function File(data) {
     //Add attributes and innerHTML
     if (this.loading) playButton.innerHTML = loadingIcon;
     else playButton.innerHTML = this.playing ? pauseIcon : playIcon;
-    id.innerHTML = data.id;
-    name.innerHTML = data.name;
-    artist.innerHTML = data.artist;
-    type.innerHTML = data.type;
-    fileType.innerHTML = data.format;
-    license.innerHTML = this.formatLicense(data.license);
-    tags.innerHTML = data.tags.join(', ');
-    info.innerHTML = data.info;
+    id.textContent = data.id;
+    name.textContent = data.name;
+    artist.textContent = data.artist;
+    type.textContent = data.type;
+    fileType.textContent = data.format;
+    license.textContent = this.formatLicense(data.license);
+    tags.textContent = data.tags.join(', ');
+    info.textContent = data.info;
 
     //Build structure
     this.el.appendChild(playButtonCell);

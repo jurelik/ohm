@@ -81,10 +81,10 @@ function Song(data, view) {
       playButton.className = 'play-button';
 
       //Add attributes and innerHTML
-      artist.innerHTML = this.data.artist;
-      separator.innerHTML = '•';
-      title.innerHTML = this.data.title;
-      tag.innerHTML = '#' + this.data.tags[0];
+      artist.textContent = this.data.artist;
+      separator.textContent = '•';
+      title.textContent = this.data.title;
+      tag.textContent = '#' + this.data.tags[0];
       if (this.loading) playButton.innerHTML = loadingIcon;
       else playButton.innerHTML = this.playing ? pauseIcon : playIcon;
 

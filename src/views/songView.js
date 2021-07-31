@@ -48,8 +48,8 @@ function SongView(data, action) {
       description.className = 'description';
 
       //Add attributes and innerHTML
-      createdAt.innerHTML = this.data.createdAt;
-      description.innerHTML = this.data.description;
+      createdAt.textContent = this.data.createdAt;
+      description.textContent = this.data.description;
 
       this.el.appendChild(await song.render());
       this.el.appendChild(createdAt);

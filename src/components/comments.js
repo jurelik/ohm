@@ -59,13 +59,13 @@ function Comments(data) {
     container.className = 'comment-container';
     marker.className = 'marker';
 
-    //Add attributes and innerHTML
-    submit.innerHTML = 'submit';
+    //Add attributes and textContent
+    submit.textContent = 'submit';
     submit.setAttribute('type', 'submit');
     textarea.setAttribute('rows', '1');
     textarea.setAttribute('autofocus', true);
     textarea.setAttribute('placeholder', 'send comment..');
-    marker.innerHTML = '> '
+    marker.textContent = '> '
 
     //Build structure
     for (let _comment of this.data) {

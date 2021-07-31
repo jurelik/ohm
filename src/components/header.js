@@ -96,7 +96,7 @@ function Header() {
     back.innerHTML = backIcon;
     forward.innerHTML = forwardIcon;
     refresh.innerHTML = refreshIcon;
-    upload.innerHTML = 'upload';
+    upload.textContent = 'upload';
     searchButton.innerHTML = searchIcon;
 
     //Add classes
