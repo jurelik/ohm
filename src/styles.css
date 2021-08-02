@@ -1116,6 +1116,22 @@ pre {
   justify-content: center;
 }
 
+/**Settings**/
+.settings-view .setting {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 20px;
+}
+
+.settings-view .setting div {
+  white-space: pre;
+}
+
+.settings-view .setting div[contenteditable='true'] {
+  color: #bbb;
+}
+
 /*Empty screen*/
 .empty {
   display: flex;

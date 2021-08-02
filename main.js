@@ -8,6 +8,11 @@ let tempUploadPath = null; //True while upload is active
 let win = null; //Main window
 let quitting = false; //Is the app in the process of quitting
 
+const DEFAULT_SETTINGS = {
+  DOWNLOAD_PATH: `${process.env.HOME}/Documents/ohm`,
+  IPFS_API_PORT: 5001
+}
+
 function createWindow() {
   if (win) return; //Ignore if window is already created
 
@@ -85,7 +90,8 @@ app.on('activate', () => {
 ipcMain.on('start', (event) => {
   //Check if config / transfers files exist
   userDataPath = app.getPath('userData');
-  if (!fs.existsSync(`${userDataPath}/transfers.json`)) fs.writeFileSync(`${userDataPath}/transfers.json`,'{}');
+  if (!fs.existsSync(`${userDataPath}/transfers.json`)) fs.writeFileSync(`${userDataPath}/transfers.json`, '{}');
+  if (!fs.existsSync(`${userDataPath}/settings.json`)) fs.writeFileSync(`${userDataPath}/settings.json`, JSON.stringify(DEFAULT_SETTINGS, null, 2));
 
   if (daemon) return event.reply('daemon-ready', userDataPath); //Check if daemon is already running
 

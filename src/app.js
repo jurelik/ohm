@@ -58,6 +58,7 @@ function App() {
   this.albums = [];
   this.files = [];
   this.transfersStore = null;
+  this.settingsStore = null;
   this.bandwidthController = null;
 
   this.login = async () => {
@@ -119,6 +120,10 @@ function App() {
         this.transfersStore = new Store({ name: 'transfers' });
         this.transfersStore.init();
         this.initTransfers();
+
+        //Create settingsStore
+        this.settingsStore = new Store({ name: 'settings' });
+        this.settingsStore.init();
 
         this.updateBandwidth(); //Start performing ipfs.stat checks for bandwidth
 
