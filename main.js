@@ -35,7 +35,8 @@ function createWindow() {
 function createTray() {
   tray = new Tray('src/assets/testTemplate.png');
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Open ohm', type: 'normal', click: () => createWindow() },
+    { label: 'Open ohm', type: 'normal', click: createWindow },
+    { label: 'Settings', type: 'normal', click: openSettings, accelerator: 'CmdOrCtrl+S' },
     { type: 'separator' },
     { label: 'Quit', type: 'normal', role: 'quit', accelerator: 'CmdOrCtrl+Q' },
   ]);
@@ -175,3 +176,5 @@ const clearUploadMFS = () => {
     })
   });
 }
+
+const openSettings = () => win.webContents.send('open-settings');

@@ -18,6 +18,7 @@ const SearchView = require('./views/searchView');
 const PinnedView = require('./views/pinnedView');
 const FollowingView = require('./views/followingView');
 const TransfersView = require('./views/transfersView');
+const SettingsView = require('./views/settingsView');
 const Player = require('./components/player');
 const Header = require('./components/header');
 const Store = require('./components/store');
@@ -39,7 +40,8 @@ function App() {
     search: null,
     pinned: null,
     following: null,
-    transfers: null
+    transfers: null,
+    settings: null
   }
   this.GATEWAY ='localhost:8080';
   this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://3.10.107.49:3000';
@@ -132,6 +134,7 @@ function App() {
     });
 
     log('Initiating IPFS daemon..');
+    ipcRenderer.on('open-settings', this.openSettings); //Add listener for the open-settings command
     ipcRenderer.send('start');
   }
 
@@ -201,6 +204,10 @@ function App() {
           this.views.transfers = new TransfersView();
           await this.views.transfers.render();
           break;
+        case 'settings':
+          this.views.settings = new SettingsView();
+          this.views.settings.render();
+          break;
         default:
           this.content.textContent = 'view not found';
           break;
@@ -265,6 +272,11 @@ function App() {
       if (err.message === 'The user aborted a request.') return;
       log.error(err)
     }
+  }
+
+  this.openSettings = () => {
+    this.addToHistory('settings');
+    this.changeView('settings');
   }
 
   this.changePassword = async (_old, _new) => {
