@@ -252,7 +252,7 @@ function UploadFile(data) {
     licenseCC.textContent = 'CC';
     id.querySelector('.file-input').disabled = true;
     deleteFile.textContent = 'delete file';
-    licenseInfoButton.textContent = infoIcon;
+    licenseInfoButton.innerHTML = infoIcon;
     licenseInfoButton.setAttribute('title', 'how do licenses work?');
 
     //Build structure

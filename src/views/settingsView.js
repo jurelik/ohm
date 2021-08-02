@@ -11,7 +11,8 @@ function SettingsView(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    let settings = {};
+    //Parse all settings into an object
+    const settings = {};
     const query = this.el.querySelectorAll('div[contenteditable="true"]')
     for (const setting of query) settings[setting.id] = setting.textContent;
 
