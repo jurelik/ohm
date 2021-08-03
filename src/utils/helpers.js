@@ -148,7 +148,8 @@ const createMFSTransferPath = (payload) => {
 const writeToDisk = async (transfer) => {
   try {
     log('Writing to disk...')
-    await fsp.mkdir(`${process.env.HOME}/Documents/ohm${transfer.path}/${transfer.title}`, { recursive: true });
+    const downloadPath = app.settingsStore.getOne('DOWNLOAD_PATH');
+    await fsp.mkdir(`${downloadPath}${transfer.path}/${transfer.title}`, { recursive: true });
 
     for await (const file of app.ipfs.get(transfer.cid)) {
       if (!file.content) continue;
@@ -318,17 +319,19 @@ const albumFolderExists = async (transfer) => {
 
 const fsCreateSongFolder = async (transfer, fsPath) => {
   try {
+    const downloadPath = app.settingsStore.getOne('DOWNLOAD_PATH');
+
     if (transfer.album) {
       const songTitle = fsPath.slice(0, fsPath.indexOf('/'));
-      const path = `${process.env.HOME}/Documents/ohm${transfer.path}/${transfer.title}/${songTitle}/files`;
+      const path = `${downloadPath}${transfer.path}/${transfer.title}/${songTitle}/files`;
       if (!fs.existsSync(path)) await fsp.mkdir(path, { recursive: true });
     }
     else {
-      const path = `${process.env.HOME}/Documents/ohm${transfer.path}/${transfer.title}/files`;
+      const path = `${downloadPath}${transfer.path}/${transfer.title}/files`;
       if (!fs.existsSync(path)) await fsp.mkdir(path, { recursive: true });
     }
 
-    return `${process.env.HOME}/Documents/ohm${transfer.path}/${transfer.title}`;
+    return `${downloadPath}${transfer.path}/${transfer.title}`;
   }
   catch (err) {
     throw err;
