@@ -30,6 +30,7 @@ function createWindow() {
     }
   })
 
+  app.dock.show();
   win.webContents.openDevTools();
   win.webContents.on('devtools-opened', () => {
     win.loadFile('src/index.html')
@@ -184,6 +185,8 @@ const clearUploadMFS = () => {
 }
 
 const openSettings = () => {
+  if (!win) return;
+
   win.show();
   win.webContents.send('open-settings');
 }
