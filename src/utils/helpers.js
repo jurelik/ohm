@@ -156,13 +156,13 @@ const writeToDisk = async (transfer) => {
 
       //Write file to disk
       const fsPath = file.path.slice(file.path.indexOf('/') + 1);
-
       const path = await fsCreateSongFolder(transfer, fsPath); //Create song folder if it doesn't exist yet
+
       const stream = fs.createWriteStream(`${path}/${fsPath}`);
       for await (const chunk of file.content) stream.write(chunk);
       stream.end();
     }
-    log('Successfully downloaded item.')
+    log.success('Successfully downloaded item.')
   }
   catch (err) {
     throw err;

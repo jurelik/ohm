@@ -14,7 +14,7 @@ const DEFAULT_SETTINGS = {
 }
 
 function createWindow() {
-  if (win) return; //Ignore if window is already created
+  if (win) return win.show(); //Ignore if window is already created
 
   win = new BrowserWindow({
     width: 800,
@@ -183,4 +183,7 @@ const clearUploadMFS = () => {
   });
 }
 
-const openSettings = () => win.webContents.send('open-settings');
+const openSettings = () => {
+  win.show();
+  win.webContents.send('open-settings');
+}
