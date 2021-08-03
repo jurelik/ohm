@@ -101,8 +101,18 @@ function App() {
     ipcRenderer.once('daemon-ready', async (e, userDataPath) => {
       log.success('IPFS daemon initiated.');
       try {
-        this.ipfs = create();
         this.USER_DATA_PATH = userDataPath;
+
+        //Create settingsStore
+        this.settingsStore = new Store({ name: 'settings' });
+        this.settingsStore.init();
+
+        this.ipfs = create({
+          protocol: this.settingsStore.getOne('IPFS_PROTOCOL'),
+          host: this.settingsStore.getOne('IPFS_HOST'),
+          port: this.settingsStore.getOne('IPFS_PORT'),
+          apiPath: this.settingsStore.getOne('IPFS_PATH'),
+        });
         const id = await this.getId(); //Get multiaddress for swarm connections
         this.MULTIADDR = id.addresses[4];
 
@@ -120,10 +130,6 @@ function App() {
         this.transfersStore = new Store({ name: 'transfers' });
         this.transfersStore.init();
         this.initTransfers();
-
-        //Create settingsStore
-        this.settingsStore = new Store({ name: 'settings' });
-        this.settingsStore.init();
 
         this.updateBandwidth(); //Start performing ipfs.stat checks for bandwidth
 

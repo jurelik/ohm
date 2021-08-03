@@ -10,7 +10,10 @@ let quitting = false; //Is the app in the process of quitting
 
 const DEFAULT_SETTINGS = {
   DOWNLOAD_PATH: `${process.env.HOME}/Documents/ohm`,
-  IPFS_API_PORT: 5001
+  IPFS_PROTOCOL: 'http',
+  IPFS_HOST: 'localhost',
+  IPFS_PORT: 5001,
+  IPFS_PATH: 'api/v0'
 }
 
 function createWindow() {
@@ -42,7 +45,7 @@ function createTray() {
   tray = new Tray('src/assets/testTemplate.png');
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Open ohm', type: 'normal', click: createWindow },
-    { label: 'Settings', type: 'normal', click: openSettings, accelerator: 'CmdOrCtrl+S' },
+    { label: 'Settings', type: 'normal', click: openSettings },
     { type: 'separator' },
     { label: 'Quit', type: 'normal', role: 'quit', accelerator: 'CmdOrCtrl+Q' },
   ]);
