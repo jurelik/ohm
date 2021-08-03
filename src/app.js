@@ -164,7 +164,6 @@ function App() {
   this.changeView = async (view, data) => {
     try {
       this.triggerLoading(true); //Trigger loading indicator
-      this.content.scrollTop = 0;
       this.current = view;
       this.songs = []; //Clear song references
       this.albums = []; //Clear album references

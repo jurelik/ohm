@@ -110,6 +110,7 @@ input[type=radio]:checked {
 
 input[type=radio]:focus {
   outline: none;
+  border: 1px solid #eee;
 }
 
 input[type=checkbox] {
@@ -127,13 +128,14 @@ input[type=checkbox] {
   cursor: pointer;
 }
 
-/* appearance for checked radiobutton */
+/* appearance for checked checkbox */
 input[type=checkbox]:checked {
   background-color: #eee;
 }
 
 input[type=checkbox]:focus {
   outline: none;
+  border: 1px solid #eee;
 }
 
 input[type=checkbox]:disabled {
@@ -153,8 +155,10 @@ input[type=file] {
 input[type=file]:focus {
   border: none;
   outline: none;
-  border-radius: 2px;
-  box-shadow: 0 0 1px #bbb;
+}
+
+input[type=file]:focus::-webkit-file-upload-button {
+  border: 1px solid #ddd;
 }
 
 input[type=file] button {
@@ -205,13 +209,13 @@ input[type=range] {
   -webkit-appearance: none;
 }
 
-input[type=range]:focus {
-  border: 1px solid #ccc;
+input[type=range]:focus::-webkit-slider-thumb {
+  background-color: #eee;
 }
 
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  background: #eee;
+  background: #ccc;
   height: 10px;
   width: 10px;
   border-radius: 50%;
@@ -1036,6 +1040,10 @@ pre {
 
 .checkbox-group-div .license-info-button:hover {
   stroke: #eee;
+}
+
+.checkbox-group-div .license-info-button:focus {
+  stroke: #ddd;
 }
 
 .checkbox-div {
