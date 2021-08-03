@@ -99,8 +99,8 @@ function Player() {
   }
 
   this.handleSeekChange = (e) => {
-    if (!this.audio.duration) return; //Audio not loaded
     this.seekClicked = false;
+    if (!this.audio.duration) return; //Audio not loaded
     this.updateSeekStyle();
 
     //Update currentTime

@@ -12,9 +12,9 @@ function Header() {
     let index = app.historyIndex - 1;
 
     if (index < 0) return log('at first index already'); //Handle first item in list
-    if (index === 0) this.backButton.className = 'disabled'; //Handle index at 0
+    if (index === 0) this.backButton.disabled = true; //Handle index at 0
 
-    this.forwardButton.className = 'enabled';
+    this.forwardButton.disabled = false;
     let view = app.history[index];
 
     app.historyIndex--;
@@ -26,9 +26,9 @@ function Header() {
     let index = app.historyIndex + 1;
 
     if (index > app.history.length - 1) return log('at last index already') //Handle last item in list
-    if (index === app.history.length - 1) this.forwardButton.className = 'disabled'; //Handle index at last position
+    if (index === app.history.length - 1) this.forwardButton.disabled = true; //Handle index at last position
 
-    this.backButton.className = 'enabled';
+    this.backButton.disabled = false;
     let view = app.history[index];
 
     app.historyIndex++;
@@ -102,8 +102,8 @@ function Header() {
     searchButton.innerHTML = searchIcon;
 
     //Add classes
-    forward.classList.add('disabled');
-    back.classList.add('disabled');
+    forward.disabled = true;
+    back.disabled = true;;
     refresh.className = 'refresh';
     right.classList.add('header-right');
     searchContainer.className = ('search');

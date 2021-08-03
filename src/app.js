@@ -137,7 +137,7 @@ function App() {
         this.changeView('explore');
         this.addToHistory('explore');
         this.historyIndex = 0;
-        this.header.backButton.className = 'disabled';
+        this.header.backButton.disabled = true;
       }
       catch (err) {
         log.error(err);
@@ -233,8 +233,8 @@ function App() {
   }
 
   this.addToHistory = (type, data) => {
-    this.header.backButton.className = 'enabled';
-    this.header.forwardButton.className = 'disabled';
+    this.header.backButton.disabled = false;
+    this.header.forwardButton.disabled = true;
     this.historyIndex++;
 
     //Clear all history above current index
@@ -247,9 +247,9 @@ function App() {
   }
 
   this.removeLastFromHistory = () => {
-    app.history.pop(); //Remove current screen from history
-    app.historyIndex--; //Move the history index one number back
-    if (app.historyIndex === 0) app.header.backButton.className = 'disabled'; //Disable back button if we are on last index
+    this.history.pop(); //Remove current screen from history
+    this.historyIndex--; //Move the history index one number back
+    if (this.historyIndex === 0) this.header.backButton.disabled = true; //Disable back button if we are on last index
   }
 
   this.initTransfers = () => {
