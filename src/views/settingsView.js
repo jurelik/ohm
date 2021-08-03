@@ -13,8 +13,8 @@ function SettingsView(data) {
 
     //Parse all settings into an object
     const settings = {};
-    const query = this.el.querySelectorAll('div[contenteditable="true"]')
-    for (const setting of query) settings[setting.id] = setting.textContent;
+    const query = this.el.querySelectorAll('input[type="text"]')
+    for (const setting of query) settings[setting.id] = setting.value;
 
     app.settingsStore.set(settings);
     log.success('Settings successfully changed.');
@@ -24,16 +24,16 @@ function SettingsView(data) {
     //Create elements
     const el = document.createElement('div');
     const _name = document.createElement('div');
-    const _value = document.createElement('div');
+    const _value = document.createElement('input');
 
     //Add classes for styling
     el.className = 'setting';
 
     //Add attributes and innerHTML/textContent
     _name.textContent = name + ': ';
-    _value.textContent = value;
+    _value.value = value;
     _value.setAttribute('id', `${name}`);
-    _value.setAttribute('contenteditable', 'true');
+    _value.setAttribute('type', `text`);
 
     //Build structure
     el.appendChild(_name);
