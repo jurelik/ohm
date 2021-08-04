@@ -1150,23 +1150,15 @@ pre {
   width: 30px;
 }
 
-.transfer .resume:hover {
+.transfer .resume:enabled:hover {
   stroke: #eee;
 }
 
-.transfer .resume:focus {
+.transfer .resume:enabled:focus {
   stroke: #eee;
 }
 
 .transfer .resume:disabled {
-  stroke: #666;
-}
-
-.transfer .resume:hover:disabled {
-  stroke: #666;
-}
-
-.transfer .resume:focus:disabled {
   stroke: #666;
 }
 
