@@ -102,10 +102,10 @@ function App() {
 
   this.init = () => {
     //Init an ipfs daemon & create an ipfs node
-    ipcRenderer.once('daemon-ready', async (e, userDataPath) => {
+    ipcRenderer.once('daemon-ready', async (e, data) => {
       log.success('IPFS daemon initiated.');
       try {
-        this.USER_DATA_PATH = userDataPath;
+        this.USER_DATA_PATH = data.userDataPath;
 
         //Create settingsStore
         this.settingsStore = new Store({ name: 'settings' });
@@ -138,8 +138,8 @@ function App() {
         this.updateBandwidth(); //Start performing ipfs.stat checks for bandwidth
 
         this.buildHTML(); //Render first content
-        this.changeView('explore');
-        this.addToHistory('explore');
+        this.changeView(data.view);
+        this.addToHistory(data.view);
         this.historyIndex = 0;
         this.header.backButton.disabled = true;
       }

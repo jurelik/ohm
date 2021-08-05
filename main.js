@@ -6,6 +6,7 @@ let daemon = null; //IPFS daemon
 let userDataPath = null;
 let tempUploadPath = null; //True while upload is active
 let win = null; //Main window
+let view = null; //Which view should we open with ('explore' being default)
 let quitting = false; //Is the app in the process of quitting
 
 const DEFAULT_SETTINGS = {
@@ -97,7 +98,10 @@ ipcMain.on('start', (event) => {
   if (!fs.existsSync(`${userDataPath}/transfers.json`)) fs.writeFileSync(`${userDataPath}/transfers.json`, '{}');
   if (!fs.existsSync(`${userDataPath}/settings.json`)) fs.writeFileSync(`${userDataPath}/settings.json`, JSON.stringify(DEFAULT_SETTINGS, null, 2));
 
-  if (daemon) return event.reply('daemon-ready', userDataPath); //Check if daemon is already running
+  if (daemon) { //Check if daemon is already running
+    event.reply('daemon-ready', { userDataPath, view: view || 'explore' });
+    return view = null; //Reset view to null
+  }
 
   //Check if the repo exists already
   if (fs.existsSync(`/Users/${process.env.USER}/.ohm-ipfs`)) {
@@ -122,7 +126,7 @@ const spawnDaemon = (event) => {
   daemon.stdout.on('data', (data) => {
     console.log(`${data}`);
     if (data.toString().match(/(?:daemon is running|Daemon is ready)/)) {
-      event.reply('daemon-ready', userDataPath);
+      event.reply('daemon-ready', { userDataPath, view: 'explore' });
     }
   });
 
@@ -188,7 +192,10 @@ const clearUploadMFS = () => {
 }
 
 const openSettings = () => {
-  if (!win) return;
+  if (!win) {
+    view = 'settings';
+    return createWindow();
+  }
 
   win.show();
   win.webContents.send('open-settings');
