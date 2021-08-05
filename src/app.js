@@ -61,6 +61,10 @@ function App() {
   this.settingsStore = null;
   this.bandwidthController = null;
 
+  this.hello = () => {
+    this.bandwidthController.abort();
+  }
+
   this.login = async () => {
     const login = new LoginView();
 
@@ -270,7 +274,7 @@ function App() {
     this.bandwidthController = new AbortController();
 
     try {
-      for await (const stats of app.ipfs.stats.bw({ poll: true, interval: '1s', signal: this.bandwidthController })) {
+      for await (const stats of app.ipfs.stats.bw({ poll: true, interval: '1s', signal: this.bandwidthController.signal })) {
         const dl = helpers.formatBytes(parseInt(stats.rateIn));
         const ul = helpers.formatBytes(parseInt(stats.rateOut));
 
