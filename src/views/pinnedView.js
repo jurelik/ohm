@@ -42,13 +42,16 @@ function PinnedView(data) {
 
     try {
       if (this.data.amountShown + this.LOAD_MORE_AMOUNT > this.data.items.length) throw new Error('Last item reached.');
+      app.triggerLoading(true); //Trigger loading indicator
 
       this.data.amountShown += this.LOAD_MORE_AMOUNT; //Append amount of items shown
       app.history[app.historyIndex].data.amountShown = this.data.amountShown; //Modify history
       await this.append(); //Append to DOM
+      app.triggerLoading(false); //Trigger loading indicator
     }
     catch (err) {
       log.error(err.message);
+      app.triggerLoading(false); //Trigger loading indicator
     }
   }
 

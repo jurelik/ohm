@@ -61,10 +61,6 @@ function App() {
   this.settingsStore = null;
   this.bandwidthController = null;
 
-  this.hello = () => {
-    this.bandwidthController.abort();
-  }
-
   this.login = async () => {
     const login = new LoginView();
 

@@ -38,6 +38,7 @@ function FeedView(data) {
     e.preventDefault();
 
     try {
+      app.triggerLoading(true); //Trigger loading indicator
       const _res = await fetch(`${app.URL}/api/feed`, {
         method: 'POST',
         credentials: 'include', //Include cookie
@@ -56,9 +57,11 @@ function FeedView(data) {
       this.data = this.data.concat(res.payload); //Append to this.data
       app.history[app.historyIndex].data = this.data; //Modify history
       await this.append(res.payload); //Append to DOM
+      app.triggerLoading(false); //Trigger loading indicator
     }
     catch (err) {
       log.error(err);
+      app.triggerLoading(false); //Trigger loading indicator
     }
   }
 

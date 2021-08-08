@@ -301,6 +301,8 @@ pre {
   display: flex;
   align-items: center;
   width: 10px;
+  height: 10px;
+  margin-bottom: 3px;
 }
 
 .login {
