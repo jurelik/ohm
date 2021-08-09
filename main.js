@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, MenuItem, Tray } = require('electron');
 const { spawn } = require('child_process')
 const fs = require('fs');
 let tray = null; //Menu icon
@@ -6,6 +6,7 @@ let daemon = null; //IPFS daemon
 let userDataPath = null;
 let tempUploadPath = null; //True while upload is active
 let win = null; //Main window
+const runningMenuItem = new MenuItem({ label: 'Daemon is running...', type: 'normal', enabled: false });
 let view = null; //Which view should we open with ('explore' being default)
 let quitting = false; //Is the app in the process of quitting
 
@@ -44,12 +45,7 @@ function createWindow() {
 
 function createTray() {
   tray = new Tray('src/assets/testTemplate.png');
-  const contextMenu = Menu.buildFromTemplate([
-    { label: 'Open ohm', type: 'normal', click: createWindow },
-    { label: 'Settings', type: 'normal', click: openSettings },
-    { type: 'separator' },
-    { label: 'Quit', type: 'normal', role: 'quit', accelerator: 'CmdOrCtrl+Q' },
-  ]);
+  const contextMenu = Menu.buildFromTemplate(menuTemplate(false));
   tray.setContextMenu(contextMenu)
 }
 
@@ -127,6 +123,10 @@ const spawnDaemon = (event) => {
     console.log(`${data}`);
     if (data.toString().match(/(?:daemon is running|Daemon is ready)/)) {
       event.reply('daemon-ready', { userDataPath, view: 'explore' });
+
+      //Update tray
+      const contextMenu = Menu.buildFromTemplate(menuTemplate(true));
+      tray.setContextMenu(contextMenu)
     }
   });
 
@@ -137,7 +137,12 @@ const spawnDaemon = (event) => {
   daemon.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
     daemon = null;
-    if (quitting) app.quit();
+
+    if (quitting) return app.quit();
+
+    //Update tray
+    const contextMenu = Menu.buildFromTemplate(menuTemplate(false));
+    tray.setContextMenu(contextMenu)
   });
 
   daemon.on('error', (err) => {
@@ -199,4 +204,14 @@ const openSettings = () => {
 
   win.show();
   win.webContents.send('open-settings');
+}
+
+const menuTemplate = (running) => {
+  return [
+    { label: running ? 'Daemon is running...' : 'Daemon is not running...', type: 'normal', enabled: false },
+    { label: 'Open ohm', type: 'normal', click: createWindow },
+    { label: 'Settings', type: 'normal', click: openSettings },
+    { type: 'separator' },
+    { label: 'Quit', type: 'normal', role: 'quit', accelerator: 'CmdOrCtrl+Q' },
+  ];
 }
