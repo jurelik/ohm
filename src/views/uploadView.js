@@ -15,6 +15,7 @@ function UploadView(data) {
   this.fileCounter = 0;
   this.songCounter = 0;
   this.progress = null;
+  this.submitting = false; //Prevent submitting twice
 
   this.handleAddSong = (e) => {
     e.preventDefault();
@@ -49,8 +50,10 @@ function UploadView(data) {
   this.handleSubmit = async (e) => {
     e.stopPropagation();
     e.preventDefault();
+    if (this.submitting) return log.error('Already uploading.');
 
     const spinner = this.addSpinner(); //Add spinner
+    this.submitting = true;
 
     try {
       let payload = {
@@ -68,6 +71,7 @@ function UploadView(data) {
     }
     catch (err) {
       log.error(err);
+      this.submitting = false;
       spinner.remove();
     }
   }
@@ -100,6 +104,7 @@ function UploadView(data) {
     this.album = null;
     this.fileCounter = 0;
     this.songCounter = 0;
+    this.submitting = false;
     app.content.scrollTop = 0;
     if (app.current === 'upload') this.render(); //Re-render view if still in uploadView
     else app.views.upload = null; //Reset otherwise
