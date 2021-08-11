@@ -44,7 +44,7 @@ function App() {
     settings: null
   }
   this.GATEWAY ='localhost:8080';
-  this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://3.10.107.49:3000';
+  this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : `http://3.10.107.49:${process.env.NODE_ENV === 'test' ? 3001 : 3000}`;
   this.USER_DATA_PATH;
   this.MULTIADDR;
 
