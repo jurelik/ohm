@@ -353,6 +353,30 @@ function App() {
     }
   }
 
+  this.createArtist = async (artist, pw, secret) => { //Admin function for the time being
+    try {
+      const payload = JSON.stringify({ artist, pw, secret });
+
+      const _res = await fetch(`${app.URL}/api/register`, {
+        method: 'POST',
+        credentials: 'include', //Include cookie
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: payload
+      });
+
+      const res = await _res.json();
+      if (res.type === 'error') throw res.err;
+
+      log.success('Successfully created artist.');
+
+    }
+    catch (err) {
+      log.error(err);
+    }
+  }
+
   this.buildHTML = () => {
     //Build HTML skeleton
     this.root.innerHTML = `
