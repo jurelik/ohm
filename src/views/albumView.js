@@ -8,6 +8,22 @@ function AlbumView(data, action) {
   this.data = data;
   this.action = action;
 
+  this.init = async () => {
+    try {
+      const _res = await fetch(`${app.URL}/api/album/${this.data.id}`);
+      const res = await _res.json();
+      if (res.type === 'error') throw new Error(res.err);
+
+      //Re-initialize state
+      this.data = res.payload;
+      app.albums = []; //Remove old albums from global app.albums
+      app.history[app.historyIndex].data.album = res.payload; //Add data to history
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
   this.refresh = async () => {
     try {
       await this.render();
@@ -20,6 +36,7 @@ function AlbumView(data, action) {
   this.render = async () => {
     try {
       this.el.innerHTML = '' //Reset innerHTML
+      if (typeof this.data.songs !== 'object') await this.init();
 
       //Create elements
       let album = new Album(this.data, 'album');

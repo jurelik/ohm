@@ -170,8 +170,8 @@ function ActionBarSong(data) {
       pin.className = 'pin';
 
       //Add attributes and innerHTML/textContent
-      files.textContent = `${this.data.files.length} files`;
-      comments.textContent = `${this.data.comments.length} comments`;
+      files.textContent = `${this.data.files.length || this.data.files} files`;
+      comments.textContent = `${this.data.comments.length || this.data.comments} comments`;
       pin.textContent = this.pinned ? 'unpin' : 'pin';
       download.textContent = 'download';
 

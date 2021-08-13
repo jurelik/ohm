@@ -152,7 +152,7 @@ function ActionBarAlbum(data) {
       pin.className = 'pin';
 
       //Add attributes and innerHTML/textContent
-      songs.textContent = `${this.data.songs.length} songs`;
+      songs.textContent = `${this.data.songs.length || this.data.songs} songs`;
       pin.textContent = this.pinned ? 'unpin' : 'pin';
       download.textContent = 'download';
 

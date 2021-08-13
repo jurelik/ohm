@@ -12,6 +12,22 @@ function SongView(data, action) {
     main: null
   };
 
+  this.init = async () => {
+    try {
+      const _res = await fetch(`${app.URL}/api/song/${this.data.id}`);
+      const res = await _res.json();
+      if (res.type === 'error') throw new Error(res.err);
+
+      //Re-initialize state
+      this.data = res.payload;
+      app.songs = []; //Remove old song from global app.songs
+      app.history[app.historyIndex].data.song = res.payload; //Add data to history
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
   this.refresh = async () => {
     try {
       const _res = await fetch(`${app.URL}/api/song/${this.data.id}`);
@@ -25,6 +41,7 @@ function SongView(data, action) {
         main: null
       }
       app.songs = []; //Remove old song from global app.songs
+      app.history[app.historyIndex].data.song = res.payload; //Add data to history
 
       await this.render();
     }
@@ -37,6 +54,7 @@ function SongView(data, action) {
     try {
       this.el.innerHTML = '' //Reset innerHTML
       let action = this.action || 'files';
+      if (typeof this.data.files !== 'object' || typeof this.data.comments !== 'object') await this.init();
 
       //Create elements
       let song = new Song(this.data, 'song');
