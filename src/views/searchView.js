@@ -23,26 +23,34 @@ function SearchView(data) {
     }
   }
 
-  this.handleSearchChange = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  this.handleSearchChange = async (e) => {
+    try {
+      e.preventDefault();
+      e.stopPropagation();
 
-    //Update all search values
-    this.searchCategory = this.el.querySelector('#category').value;
-    this.searchBy = this.el.querySelector('#by').value;
-    this.searchQuery = document.querySelector('.search-input').value;
+      app.triggerLoading(true); //Trigger loading indicator
 
-    //Enable/disable tags option depending on whether the category is set to artists
-    this.searchCategory === 'artists' ? this.el.querySelector('#by').disabled = true : this.el.querySelector('#by').disabled = false;
+      //Update all search values
+      this.searchCategory = this.el.querySelector('#category').value;
+      this.searchBy = this.el.querySelector('#by').value;
+      this.searchQuery = document.querySelector('.search-input').value;
 
-    //Modify history
-    app.history[app.historyIndex].data.searchCategory = this.searchCategory;
-    app.history[app.historyIndex].data.searchBy = this.searchBy;
-    app.history[app.historyIndex].data.searchQuery = this.searchQuery;
+      //Enable/disable tags option depending on whether the category is set to artists
+      this.searchCategory === 'artists' ? this.el.querySelector('#by').disabled = true : this.el.querySelector('#by').disabled = false;
 
-    if (this.searchQuery.length === 0) return log.error('The search query is empty.');
+      //Modify history
+      app.history[app.historyIndex].data.searchCategory = this.searchCategory;
+      app.history[app.historyIndex].data.searchBy = this.searchBy;
+      app.history[app.historyIndex].data.searchQuery = this.searchQuery;
 
-    return this.refresh();
+      if (this.searchQuery.length === 0) throw('The search query is empty.');
+
+      await this.refresh();
+      return app.triggerLoading(false); //Trigger loading indicator
+    }
+    catch (err) {
+      log.error(err);
+    }
   }
 
   this.handleLoadMore = async (e) => {

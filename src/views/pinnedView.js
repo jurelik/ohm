@@ -32,7 +32,7 @@ function PinnedView(data) {
       return data;
     }
     catch (err) {
-      log.error(err);
+      throw(err);
     }
   }
 
