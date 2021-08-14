@@ -54,27 +54,29 @@ function UploadAlbum(data) {
     this.el.className = 'upload-album';
     title.className = 'album-input';
     titleLabel.className = 'label-disabled';
+    titleDiv.className = 'album-title-div';
     tags.className = 'album-input';
     tagsLabel.className = 'label-disabled';
+    tagsDiv.className = 'album-tags-div';
     description.className = 'album-textarea';
     descriptionDiv.className = 'upload-description';
     descriptionLabel.className = 'label-disabled';
 
     //Add attributes and innerHTML/textContent
     titleLabel.setAttribute('for', 'title');
-    titleLabel.textContent = 'album title: ';
+    titleLabel.textContent = 'album title:';
     title.setAttribute('type', 'text');
     title.setAttribute('name', 'title');
     title.disabled = true;
 
     tagsLabel.setAttribute('for', 'tags');
-    tagsLabel.textContent = 'album tags: ';
+    tagsLabel.textContent = 'album tags:';
     tags.setAttribute('type', 'text');
     tags.setAttribute('name', 'tags');
     tags.disabled = true;
 
     descriptionLabel.setAttribute('for', 'description');
-    descriptionLabel.textContent = 'album description: ';
+    descriptionLabel.textContent = 'album description:';
     description.setAttribute('name', 'description');
     description.disabled = true;
 

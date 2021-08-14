@@ -86,23 +86,25 @@ function UploadSong(data) {
     //Add classes for styling
     this.el.className = 'upload-song';
     title.className = 'song-input';
+    titleDiv.className = 'song-title-div';
     tags.className = 'song-input';
+    tagsDiv.className = 'song-tags-div';
     file.className = 'song-input';
     fileDiv.className = 'song-file-div';
     description.className = 'song-textarea';
 
     //Add attributes and innerHTML/textContent
-    legend.textContent = 'song: ';
+    legend.textContent = 'song:';
     titleLabel.setAttribute('for', 'title');
-    titleLabel.textContent = 'title: ';
+    titleLabel.textContent = 'title:';
     title.setAttribute('type', 'text');
     title.setAttribute('name', 'title');
     tagsLabel.setAttribute('for', 'tags');
-    tagsLabel.textContent = 'tags: ';
+    tagsLabel.textContent = 'tags:';
     tags.setAttribute('type', 'text');
     tags.setAttribute('name', 'tags');
     fileLabel.setAttribute('for', 'tags');
-    fileLabel.textContent = 'file: ';
+    fileLabel.textContent = 'file:';
     file.setAttribute('type', 'file');
     file.setAttribute('name', 'file');
     file.setAttribute('accept', 'audio/mpeg');

@@ -142,11 +142,12 @@ function UploadFile(data) {
     let input = document.createElement('input');
 
     //Add classes for styling
+    el.className = `file-${name}-div`
     input.className = `file-input`;
 
     //Add attributes and innerHTML/textContent
     label.setAttribute('for', name);
-    label.textContent = name + ': ';
+    label.textContent = name + ':';
     input.setAttribute('type', type);
     input.setAttribute('name', name);
 
@@ -245,10 +246,10 @@ function UploadFile(data) {
     licenseInfoButton.className = 'license-info-button'
 
     //Add attributes and innerHTML/textContent
-    legend.textContent = 'file: '
-    typeLabel.textContent = 'type: ';
+    legend.textContent = 'file:'
+    typeLabel.textContent = 'type:';
     typeOriginal.querySelector('.file-input').checked = true;
-    licenseLabel.textContent = 'license: ';
+    licenseLabel.textContent = 'license:';
     licenseCC.textContent = 'CC';
     id.querySelector('.file-input').disabled = true;
     deleteFile.textContent = 'delete file';

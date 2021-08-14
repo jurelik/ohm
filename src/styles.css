@@ -979,9 +979,31 @@ pre {
 }
 
 /*UploadView*/
+.upload-album input {
+  flex: 1;
+  margin-left: 5px;
+}
+
+.upload-album .album-title-div, .upload-album .album-tags-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .upload-song {
   padding: 5px;
   margin-bottom: 10px;
+}
+
+.upload-song input {
+  flex: 1;
+  margin-left: 5px;
+}
+
+.upload-song .song-title-div, .upload-song .song-tags-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .upload-song button {
@@ -998,6 +1020,17 @@ pre {
 .upload-file {
   padding: 5px;
   margin: 10px 5px;
+}
+
+.upload-file input {
+  flex: 1;
+  margin-left: 5px;
+}
+
+.upload-file .file-name-div, .upload-file .file-id-div, .upload-file .file-tags-div, .upload-file .file-info-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .upload-description {
