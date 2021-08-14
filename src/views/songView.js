@@ -2,6 +2,7 @@
 
 const Song = require('../components/song');
 const SongViewMain = require('../components/songViewMain');
+const Tag = require('../components/tag');
 
 function SongView(data, action) {
   this.el = document.createElement('div');
@@ -60,19 +61,29 @@ function SongView(data, action) {
       let song = new Song(this.data, 'song');
       this.children.main = new SongViewMain(this.data, action);
       let createdAt = document.createElement('div');
+      let tags = document.createElement('div');
       let description = document.createElement('pre');
 
       //Add classes for styling
       this.el.className = `song-view-${this.action}`;
       createdAt.className = 'created-at';
+      tags.className = 'tags';
       description.className = 'description';
 
       //Add attributes and innerHTML/textContent
       createdAt.textContent = this.data.createdAt;
       description.textContent = this.data.description;
 
+      //Add tags
+      for (let tag of this.data.tags) {
+        const el = new Tag({ name: tag, type: 'song' });
+        tags.appendChild(el.render());
+      }
+
+      //Build structure
       this.el.appendChild(await song.render());
       this.el.appendChild(createdAt);
+      this.el.appendChild(tags);
       this.el.appendChild(description);
       this.el.appendChild(this.children.main.render());
 

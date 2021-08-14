@@ -624,7 +624,6 @@ pre {
 .song-view-files .created-at, .song-view-comments .created-at {
   color: #888;
   margin-top: -5px;
-  margin-bottom: 5px;
   margin-left: 25px;
   font-size: 10px;
 }
@@ -634,6 +633,21 @@ pre {
   margin-bottom: 10px;
   margin-left: 25px;
   font-size: 11px;
+}
+
+.song-view-files .tags, .song-view-comments .tags {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin-left: 25px;
+  margin-right: 5px;
+  height: 20px;
+  overflow: auto;
+}
+
+.song-view-files .tags::-webkit-scrollbar, .song-view-comments .tags::-webkit-scrollbar {
+  display: none;
 }
 
 .song-view-files {
@@ -794,6 +808,16 @@ pre {
   margin-right: 5px;
   margin-top: 0px;
   margin-bottom: 0px;
+  white-space: nowrap;
+}
+
+.tags .tag {
+  margin: 0;
+  padding: 0 5px;
+}
+
+.tags .tag:first-child {
+  padding-left: 0;
 }
 
 .separator {
