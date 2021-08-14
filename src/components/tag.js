@@ -1,7 +1,5 @@
 'use strict';
 
-const log = require('../utils/log');
-
 function Tag(data) {
   this.el = document.createElement('button');
   this.data = data;
@@ -10,21 +8,20 @@ function Tag(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    log('hi');
+    if (app.current === 'search') return app.views.search.handleSearchChange(e);
+
+    app.addToHistory('search', { searchQuery: this.data.name, searchCategory: `${this.data.type}s`, searchBy: 'tags' });
+    app.changeView('search', { searchQuery: this.data.name, searchCategory: `${this.data.type}s`, searchBy: 'tags' });
   }
 
   this.render = () => {
     this.el.innerHTML = ''; //Reset innerHTML
-
-    //Create elements
 
     //Add classes for styling
     this.el.className = 'tag';
 
     //Add attributes and innerHTML/textContent
     this.el.textContent = `#${this.data.name}`;
-
-    //Build structure
 
     //Add listener
     this.el.onclick = this.handleClick;

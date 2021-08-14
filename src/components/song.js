@@ -2,6 +2,7 @@
 
 const log = require('../utils/log');
 const ActionBarSong = require('./actionBarSong');
+const Tag = require('./tag');
 const { playIcon, pauseIcon, loadingIcon } = require('../utils/svgs');
 
 function Song(data, view) {
@@ -69,7 +70,8 @@ function Song(data, view) {
       let artist = document.createElement('button');
       let separator = document.createElement('p');
       let title = document.createElement('span');
-      let tag = document.createElement('p');
+      let tag = new Tag({ name: this.data.tags[0], type: 'song' });
+      let tagEl = tag.render();
       let playButton = document.createElement('button');
 
       //Add classes for styling
@@ -78,7 +80,6 @@ function Song(data, view) {
       artist.classList.add('artist');
       titleAndArtist.classList.add('title-and-artist');
       title.className = 'title';
-      tag.classList.add('tag');
       separator.classList.add('separator');
       playButton.className = 'play-button';
 
@@ -86,7 +87,6 @@ function Song(data, view) {
       artist.textContent = this.data.artist;
       separator.textContent = '•';
       title.textContent = this.data.title;
-      tag.textContent = '#' + this.data.tags[0];
       if (this.loading) playButton.innerHTML = loadingIcon;
       else playButton.innerHTML = this.playing ? pauseIcon : playIcon;
 
@@ -97,7 +97,7 @@ function Song(data, view) {
       titleAndArtist.appendChild(artist);
       titleAndArtist.appendChild(separator);
       titleAndArtist.appendChild(title);
-      main.appendChild(tag);
+      main.appendChild(tagEl);
 
       //Add action bar
       let actionBar = new ActionBarSong(this.data);

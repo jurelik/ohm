@@ -2,6 +2,7 @@
 
 const Album = require('../components/album');
 const Song = require('../components/song');
+const Tag = require('../components/tag');
 
 function AlbumView(data, action) {
   this.el = document.createElement('div');
@@ -41,20 +42,29 @@ function AlbumView(data, action) {
       //Create elements
       let album = new Album(this.data, 'album');
       let createdAt = document.createElement('div');
+      let tags = document.createElement('div');
       let description = document.createElement('pre');
 
       //Add classes for styling
       this.el.className = 'album-view';
       createdAt.className = 'created-at';
+      tags.className = 'tags';
       description.className = 'description';
 
       //Add attributes and innerHTML/textContent
       createdAt.textContent = this.data.createdAt;
       description.textContent = this.data.description;
 
+      //Add tags
+      for (let tag of this.data.tags) {
+        const el = new Tag({ name: tag, type: 'album' });
+        tags.appendChild(el.render());
+      }
+
       //Build structure
       this.el.appendChild(await album.render());
       this.el.appendChild(createdAt);
+      this.el.appendChild(tags);
       this.el.appendChild(description);
 
       for (let _song of this.data.songs) {

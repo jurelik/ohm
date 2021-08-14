@@ -3,6 +3,7 @@
 const log = require('../utils/log');
 const helpers = require('../utils/helpers');
 const ActionBarAlbum = require('./actionBarAlbum');
+const Tag = require('./tag');
 const { playIcon, pauseIcon, albumIcon, loadingIcon } = require('../utils/svgs');
 
 function Album(data, view) {
@@ -77,7 +78,7 @@ function Album(data, view) {
       let artist = document.createElement('button');
       let separator = document.createElement('p');
       let title = document.createElement('div');
-      let tag = document.createElement('p');
+      let tag = new Tag({ name: this.data.tags[0], type: 'album' });
       let playButton = document.createElement('button');
       let _albumIcon = document.createElement('div');
 
@@ -88,7 +89,6 @@ function Album(data, view) {
       titleAndArtist.classList.add('title-and-artist');
       title.className = 'title';
       separator.classList.add('separator');
-      tag.classList.add('tag');
       playButton.className = 'play-button';
       _albumIcon.classList.add('album-icon');
 
@@ -96,7 +96,6 @@ function Album(data, view) {
       artist.textContent = this.data.artist;
       separator.textContent = '•';
       title.textContent = this.data.title;
-      tag.textContent = '#' + this.data.tags[0];
       if (this.loading) playButton.innerHTML = loadingIcon;
       else playButton.innerHTML = this.playing ? pauseIcon : playIcon;
       _albumIcon.innerHTML = albumIcon;
@@ -109,7 +108,7 @@ function Album(data, view) {
       titleAndArtist.appendChild(artist);
       titleAndArtist.appendChild(separator);
       titleAndArtist.appendChild(title);
-      main.appendChild(tag);
+      main.appendChild(tag.render());
 
       //Add action bar
       let actionBar = new ActionBarAlbum(this.data);

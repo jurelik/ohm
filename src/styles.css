@@ -604,9 +604,23 @@ pre {
 .album-view .created-at {
   color: #888;
   margin-top: -5px;
-  margin-bottom: 5px;
   margin-left: 25px;
   font-size: 9px;
+}
+
+.album-view .tags {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin-left: 25px;
+  margin-right: 5px;
+  height: 20px;
+  overflow: auto;
+}
+
+.album-view .tags::-webkit-scrollbar {
+  display: none;
 }
 
 .album-view .description {
@@ -747,6 +761,10 @@ pre {
 }
 
 .song .main .play-button, .album .main .play-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
   min-width: 25px;
   stroke: #ccc;
   fill: #ccc;
@@ -770,15 +788,8 @@ pre {
 }
 
 .song .main .artist, .album .main .artist {
-  width: auto;
   padding: 0px;
-}
-
-.song .main button, .album .main button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 25px;
+  padding-right: 5px;
 }
 
 .title-and-artist {
@@ -809,6 +820,7 @@ pre {
   margin-top: 0px;
   margin-bottom: 0px;
   white-space: nowrap;
+  padding-right: 0;
 }
 
 .tags .tag {
@@ -821,7 +833,6 @@ pre {
 }
 
 .separator {
-  margin-left: 5px;
   margin-right: 5px;
 }
 
