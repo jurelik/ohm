@@ -146,6 +146,7 @@ function App() {
 
     log('Initiating IPFS daemon..');
     ipcRenderer.on('open-settings', this.openSettings); //Add listener for the open-settings command
+    ipcRenderer.on('ipfs-error', this.handleIPFSError); //Add listener for the open-settings command
     ipcRenderer.send('start');
   }
 
@@ -287,6 +288,10 @@ function App() {
   this.openSettings = () => {
     this.addToHistory('settings');
     this.changeView('settings');
+  }
+
+  this.handleIPFSError = (event, err) => {
+    log.error(`IPFS Error: ${err}`);
   }
 
   this.changePassword = async (_old, _new) => {

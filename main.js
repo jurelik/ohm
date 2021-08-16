@@ -132,6 +132,7 @@ const spawnDaemon = (event) => {
 
   daemon.stderr.on('data', (data) => {
     console.error(`stderr: ${data}`);
+    win.webContents.send('ipfs-error', data);
   });
 
   daemon.on('close', (code) => {
