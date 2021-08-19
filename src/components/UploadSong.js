@@ -1,6 +1,6 @@
 'use strict';
 
-const UploadFile = require('./UploadFile');
+const UploadFile = require('./uploadFile');
 
 function UploadSong(data) {
   this.el = document.createElement('fieldset');
