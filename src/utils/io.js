@@ -9,7 +9,7 @@ const login = async (payload) => {
   try {
     log('Attempting login...');
     log(app.URL);
-    const _res = await fetch(`${app.URL}/api/login`, {
+    const _res = await fetch(`${app.URL}/login`, {
       method: 'POST',
       credentials: 'include', //Include cookie
       headers: {
@@ -42,7 +42,7 @@ const upload = async (payload) => {
 
     //Send payload to server
     log('Sending to mothership...');
-    const _res = await fetch(`${app.URL}/api/upload`, {
+    const _res = await fetch(`${app.URL}/upload`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -73,7 +73,7 @@ const resumeUpload = async (transfer) => {
 
     writtenToMFS = true; //MFS has been modified
     //Send payload to server
-    const _res = await fetch(`${app.URL}/api/upload`, {
+    const _res = await fetch(`${app.URL}/upload`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ const resumeUpload = async (transfer) => {
 
 const deleteItem = async (data) => {
   try {
-    const _res = await fetch(`${app.URL}/api/delete`, {
+    const _res = await fetch(`${app.URL}/delete`, {
       method: 'POST',
       credentials: 'include', //Include cookie
       headers: {
@@ -124,7 +124,7 @@ const deleteItem = async (data) => {
 
 const search = async (data) => {
   try {
-    const _res = await fetch(`${app.URL}/api/search`, {
+    const _res = await fetch(`${app.URL}/search`, {
       method: 'POST',
       credentials: 'include', //Include cookie
       headers: {

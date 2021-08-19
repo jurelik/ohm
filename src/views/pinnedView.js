@@ -15,7 +15,7 @@ function PinnedView(data) {
     try {
       const payload = await ipfs.getPinned();
 
-      const _res = await fetch(`${app.URL}/api/pinned`, {
+      const _res = await fetch(`${app.URL}/pinned`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {

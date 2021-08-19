@@ -340,7 +340,7 @@ const fsCreateSongFolder = async (transfer, fsPath) => {
 
 const getFile = async (id) => {
   try {
-    const _res = await fetch(`${app.URL}/api/file/${id}`, {
+    const _res = await fetch(`${app.URL}/file/${id}`, {
       method: 'GET',
       credentials: 'include', //Include cookie
     });

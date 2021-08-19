@@ -18,7 +18,7 @@ function Comments(data) {
       payload.content = this.el.querySelector('textarea').value;
       payload.songId = app.views.song.data.id;
 
-      const _res = await fetch(`${app.URL}/api/comment`, {
+      const _res = await fetch(`${app.URL}/comment`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {

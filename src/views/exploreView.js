@@ -11,7 +11,7 @@ function ExploreView(data) {
 
   this.fetch = async () => {
     try {
-      const _res = await fetch(`${app.URL}/api/latest`, {
+      const _res = await fetch(`${app.URL}/latest`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {
@@ -37,7 +37,7 @@ function ExploreView(data) {
 
     try {
       app.triggerLoading(true); //Trigger loading indicator
-      const _res = await fetch(`${app.URL}/api/latest`, {
+      const _res = await fetch(`${app.URL}/latest`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {

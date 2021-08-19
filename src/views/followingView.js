@@ -9,7 +9,7 @@ function FollowingView(data) {
 
   this.fetch = async () => {
     try {
-      const _res = await fetch(`${app.URL}/api/following`, {
+      const _res = await fetch(`${app.URL}/following`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {
@@ -35,7 +35,7 @@ function FollowingView(data) {
 
     try {
       app.triggerLoading(true); //Trigger loading indicator
-      const _res = await fetch(`${app.URL}/api/following`, {
+      const _res = await fetch(`${app.URL}/following`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {

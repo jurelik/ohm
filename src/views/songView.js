@@ -15,7 +15,7 @@ function SongView(data, action) {
 
   this.init = async () => {
     try {
-      const _res = await fetch(`${app.URL}/api/song/${this.data.id}`);
+      const _res = await fetch(`${app.URL}/song/${this.data.id}`);
       const res = await _res.json();
       if (res.type === 'error') throw new Error(res.err);
 
@@ -31,7 +31,7 @@ function SongView(data, action) {
 
   this.refresh = async () => {
     try {
-      const _res = await fetch(`${app.URL}/api/song/${this.data.id}`);
+      const _res = await fetch(`${app.URL}/song/${this.data.id}`);
       const res = await _res.json();
       if (res.type === 'error') throw new Error(res.err);
 

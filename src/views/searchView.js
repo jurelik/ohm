@@ -58,7 +58,7 @@ function SearchView(data) {
     e.preventDefault();
 
     try {
-      const _res = await fetch(`${app.URL}/api/search`, {
+      const _res = await fetch(`${app.URL}/search`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {

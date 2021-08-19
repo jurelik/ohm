@@ -44,7 +44,7 @@ function App() {
     settings: null
   }
   this.GATEWAY ='localhost:8080';
-  this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : `http://3.10.107.49:${process.env.NODE_ENV === 'test' ? 3001 : 3000}`;
+  this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : `https://api.ohm.rip${process.env.NODE_ENV === 'test' ? 3001 : ''}`;
   this.USER_DATA_PATH;
   this.MULTIADDR;
 
@@ -78,7 +78,7 @@ function App() {
   this.logout = async (sessionExpired) => {
     try {
       if (!sessionExpired) {
-        const _res = await fetch(`${app.URL}/api/logout`); //Logout server-side
+        const _res = await fetch(`${app.URL}/logout`); //Logout server-side
         const res = await _res.json();
         if (res.type === 'error') throw new Error(res.err);
       }
@@ -296,7 +296,7 @@ function App() {
 
   this.changePassword = async (_old, _new) => {
     try {
-      const _res = await fetch(`${app.URL}/api/changepassword`, {
+      const _res = await fetch(`${app.URL}/changepassword`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {
@@ -318,7 +318,7 @@ function App() {
 
   this.changeLocation = async (location) => {
     try {
-      const _res = await fetch(`${app.URL}/api/changelocation`, {
+      const _res = await fetch(`${app.URL}/changelocation`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {
@@ -339,7 +339,7 @@ function App() {
 
   this.changeBio = async (bio) => {
     try {
-      const _res = await fetch(`${app.URL}/api/changebio`, {
+      const _res = await fetch(`${app.URL}/changebio`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {
@@ -362,7 +362,7 @@ function App() {
     try {
       const payload = JSON.stringify({ artist, pw, secret });
 
-      const _res = await fetch(`${app.URL}/api/register`, {
+      const _res = await fetch(`${app.URL}/register`, {
         method: 'POST',
         credentials: 'include', //Include cookie
         headers: {

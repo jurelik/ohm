@@ -13,7 +13,7 @@ function ArtistView(data) {
   this.fetch = () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const _res = await fetch(`${app.URL}/api/artist/${this.data}`);
+        const _res = await fetch(`${app.URL}/artist/${this.data}`);
         const res = await _res.json();
 
         if (res.type === 'error') return reject(res.err);
@@ -33,8 +33,8 @@ function ArtistView(data) {
       const following = this.artist.following;
       let _res;
 
-      if (following) _res = await fetch(`${app.URL}/api/unfollow/${this.artist.id}`);
-      else _res = await fetch(`${app.URL}/api/follow/${this.artist.id}`);
+      if (following) _res = await fetch(`${app.URL}/unfollow/${this.artist.id}`);
+      else _res = await fetch(`${app.URL}/follow/${this.artist.id}`);
 
       const res = await _res.json();
       if (res.type === 'error') throw new Error(res.err);
