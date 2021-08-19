@@ -291,7 +291,7 @@ function App() {
   }
 
   this.handleIPFSError = (event, err) => {
-    log.error(`IPFS Error: ${err}`);
+    log.error(`IPFS Error: ${Buffer.from(err)}`);
   }
 
   this.changePassword = async (_old, _new) => {

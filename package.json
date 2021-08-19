@@ -5,9 +5,9 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "IPFS_PATH=/Users/$USER/.ohm-ipfs NODE_ENV=production electron .",
-    "dev": "IPFS_PATH=/Users/$USER/.ohm-ipfs NODE_ENV=development electron .",
-    "test-server": "IPFS_PATH=/Users/$USER/.ohm-ipfs NODE_ENV=test electron ."
+    "start": "IPFS_PATH=$HOME/.ohm-ipfs NODE_ENV=production electron .",
+    "dev": "IPFS_PATH=$HOME/.ohm-ipfs NODE_ENV=development electron .",
+    "test-server": "IPFS_PATH=$HOME/$USER/.ohm-ipfs NODE_ENV=test electron ."
   },
   "repository": {
     "type": "git",

@@ -28,6 +28,7 @@ function createWindow() {
     minHeight: 300,
     backgroundColor: "#222",
     titleBarStyle: 'hidden',
+    autoHideMenuBar: true,
     trafficLightPosition: { x: 9, y: 6 },
     webPreferences: {
       nodeIntegration: true,
@@ -35,7 +36,7 @@ function createWindow() {
     }
   })
 
-  app.dock.show();
+  if (process.platform === 'darwin') app.dock.show();
   win.webContents.openDevTools();
   win.webContents.on('devtools-opened', () => {
     win.loadFile('src/index.html')
@@ -100,7 +101,8 @@ ipcMain.on('start', (event) => {
   }
 
   //Check if the repo exists already
-  if (fs.existsSync(`/Users/${process.env.USER}/.ohm-ipfs`)) {
+  console.log(process.env.HOME)
+  if (fs.existsSync(`${process.env.HOME}/.ohm-ipfs`)) {
     spawnDaemon(event);
   }
   else {
