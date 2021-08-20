@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "IPFS_PATH=$HOME/.ohm-ipfs NODE_ENV=production electron .",
     "dev": "IPFS_PATH=$HOME/.ohm-ipfs NODE_ENV=development electron .",
-    "test-server": "IPFS_PATH=$HOME/$USER/.ohm-ipfs NODE_ENV=test electron ."
+    "test-server": "IPFS_PATH=$HOME/.ohm-ipfs NODE_ENV=test electron ."
   },
   "repository": {
     "type": "git",

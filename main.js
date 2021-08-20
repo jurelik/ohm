@@ -101,7 +101,6 @@ ipcMain.on('start', (event) => {
   }
 
   //Check if the repo exists already
-  console.log(process.env.HOME)
   if (fs.existsSync(`${process.env.HOME}/.ohm-ipfs`)) {
     spawnDaemon(event);
   }
