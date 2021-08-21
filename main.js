@@ -56,9 +56,7 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-
-  app.dock.hide();
+  if (process.platform === 'darwin') app.dock.hide();
 })
 
 app.on('will-quit', async (e) => {

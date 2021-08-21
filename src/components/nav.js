@@ -6,26 +6,6 @@ function Nav() {
   this.elements = {};
   this.selected = 'explore';
 
-  this.render = () => {
-    let first = true;
-
-    for (let name of this.names) {
-      //Create nav button
-      let el = document.createElement('button');
-      el.setAttribute('id', name);
-      el.setAttribute('type', 'button');
-      el.textContent = first ? `> ${name}` : `  ${name}`;
-      first ? el.className = 'selected' : null;
-      el.onclick = this.handleClick;
-      this.el.appendChild(el);
-
-      //Store reference
-      this.elements[name] = el;
-
-      first = false;
-    }
-  }
-
   this.select = (id) => {
     //Check if same item
     if (this.selected === id) return;
@@ -52,6 +32,37 @@ function Nav() {
     this.select(e.target.id);
     app.addToHistory(e.target.id);
     app.changeView(e.target.id);
+  }
+
+  this.render = () => {
+    let first = true;
+
+    for (let name of this.names) {
+      //Create nav button
+      let el = document.createElement('button');
+      el.setAttribute('id', name);
+      el.setAttribute('type', 'button');
+      el.textContent = first ? `> ${name}` : `  ${name}`;
+      first ? el.className = 'selected' : null;
+      el.onclick = this.handleClick;
+      this.el.appendChild(el);
+
+      //Store reference
+      this.elements[name] = el;
+
+      first = false;
+    }
+    const bw = document.createElement('div');
+    const ul = document.createElement('div');
+    const dl = document.createElement('div');
+
+    bw.className = 'bw';
+    dl.className = 'dl';
+    ul.className = 'ul';
+
+    bw.appendChild(dl);
+    bw.appendChild(ul);
+    this.el.appendChild(bw);
   }
 }
 

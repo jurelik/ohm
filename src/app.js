@@ -385,16 +385,9 @@ function App() {
   this.buildHTML = () => {
     //Build HTML skeleton
     this.root.innerHTML = `
-    <div class="drag">
-      <div class="bw">
-        <div class="dl">
-        </div>
-        <div class="ul">
-        </div>
-      </div>
-      <div class="loading">
-      </div>
-    </div>
+    ${process.platform === 'darwin' ?
+    `<div class="drag">
+    </div>` : '' }
     <div class="header">
     </div>
     <div class="main">

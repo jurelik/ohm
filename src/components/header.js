@@ -92,6 +92,7 @@ function Header() {
     let searchInput = document.createElement('input');
     let searchButton = document.createElement('button');
     let right = document.createElement('div');
+    let loading = document.createElement('div');
     let upload = document.createElement('button');
 
     //Add innerHTML
@@ -112,6 +113,7 @@ function Header() {
     searchInput.className = ('search-input');
     searchButton.setAttribute('type', 'submit');
     searchButton.className = ('search-button');
+    loading.className = 'loading';
     upload.className = 'upload';
 
     //Add listeners
@@ -132,6 +134,7 @@ function Header() {
     searchContainer.appendChild(searchInput);
     searchContainer.appendChild(searchButton);
     this.el.appendChild(right);
+    right.appendChild(loading);
     right.appendChild(upload);
   }
 }
