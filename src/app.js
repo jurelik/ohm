@@ -4,7 +4,7 @@ const { ipcRenderer } = require('electron');
 const { create } = require('ipfs-http-client');
 const log = require('./utils/log');
 const helpers = require('./utils/helpers');
-const { loadingIconSmall } = require('./utils/svgs');
+const { loadingIcon } = require('./utils/svgs');
 
 const Nav = require('./components/nav');
 const LoginView = require('./views/loginView');
@@ -264,7 +264,7 @@ function App() {
     const el = document.querySelector('.loading');
     if (!el) return; //Take care of sessionExpired logout scenario where .loading gets deleted
 
-    val ? el.innerHTML = loadingIconSmall : el.innerHTML = '';
+    val ? el.innerHTML = loadingIcon : el.innerHTML = '';
   }
 
   this.updateBandwidth = async () => {

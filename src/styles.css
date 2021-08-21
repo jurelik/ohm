@@ -9,6 +9,20 @@
   box-sizing: inherit;
 }
 
+*::-webkit-scrollbar { /*Custom scrollbar*/
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #222;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #111;
+  border-radius: 20px;
+  border: 3px solid #222;
+}
+
 html {
   background-color: #222;
   box-sizing: border-box;
@@ -466,8 +480,11 @@ pre {
   overflow-y: auto;
   margin-bottom: 50px;
   padding-left: 5px;
-  padding-right: 10px;
   padding-top: 2px;
+}
+
+.content>* {
+  width: calc(100vw - 140px + 14px);
 }
 
 .content .load-more {
@@ -670,7 +687,6 @@ pre {
 
 .song-view-files {
   height: 100%;
-  overflow: auto;
 }
 
 .song-view-files .files {
@@ -685,7 +701,8 @@ pre {
 
 .song-view-comments {
   height: calc(100% - 20px);
-  overflow: auto;
+  padding-bottom: 5px;
+  overflow-y: auto;
 }
 
 .song-view-main {
@@ -693,7 +710,7 @@ pre {
   margin-left: 0px;
 }
 
-.song-view-main .comment-container {
+.comment-container {
   display: flex;
   align-items: center;
   position: absolute;
@@ -1164,17 +1181,6 @@ pre {
   display: block;
   width: 12px;
   height: 12px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  border-color: #fff #fff #fff transparent;
-  animation: spinner 1.2s linear infinite;
-}
-
-.spinner-small {
-  content: " ";
-  display: block;
-  width: 8px;
-  height: 8px;
   border-radius: 50%;
   border: 2px solid #fff;
   border-color: #fff #fff #fff transparent;
