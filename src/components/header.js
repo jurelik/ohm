@@ -103,6 +103,7 @@ function Header() {
     searchButton.innerHTML = searchIcon;
 
     //Add classes
+    if (process.platform === 'darwin') this.el.classList.add('darwin');
     forward.disabled = true;
     back.disabled = true;;
     refresh.className = 'refresh';

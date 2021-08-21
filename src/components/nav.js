@@ -52,6 +52,8 @@ function Nav() {
 
       first = false;
     }
+
+    //Create bandwidth div
     const bw = document.createElement('div');
     const ul = document.createElement('div');
     const dl = document.createElement('div');
