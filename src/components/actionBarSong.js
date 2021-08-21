@@ -155,6 +155,7 @@ function ActionBarSong(data) {
 
   this.render = async () => {
     try {
+      console.log(this.data.files.length)
       this.pinned = await ipfs.checkIfSongIsPinned(this.data); //Check if song is pinned
 
       //Create elements
@@ -170,8 +171,8 @@ function ActionBarSong(data) {
       pin.className = 'pin';
 
       //Add attributes and innerHTML/textContent
-      files.textContent = `${this.data.files.length || this.data.files} files`;
-      comments.textContent = `${this.data.comments.length || this.data.comments} comments`;
+      files.textContent = `${typeof this.data.files === 'object' ? this.data.files.length : this.data.files} files`;
+      comments.textContent = `${typeof this.data.comments === 'object' ? this.data.comments.length : this.data.comments} comments`;
       pin.textContent = this.pinned ? 'unpin' : 'pin';
       download.textContent = 'download';
 
