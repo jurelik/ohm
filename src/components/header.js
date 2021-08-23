@@ -91,6 +91,7 @@ function Header() {
     let searchContainer = document.createElement('form');
     let searchInput = document.createElement('input');
     let searchButton = document.createElement('button');
+    let left = document.createElement('div');
     let right = document.createElement('div');
     let loading = document.createElement('div');
     let upload = document.createElement('button');
@@ -107,6 +108,7 @@ function Header() {
     forward.disabled = true;
     back.disabled = true;;
     refresh.className = 'refresh';
+    left.classList.add('header-left');
     right.classList.add('header-right');
     searchContainer.className = ('search');
     searchInput.setAttribute('type', 'search');
@@ -128,9 +130,10 @@ function Header() {
     this.backButton = back;
     this.forwardButton = forward;
 
-    this.el.appendChild(back);
-    this.el.appendChild(forward);
-    this.el.appendChild(refresh);
+    this.el.appendChild(left);
+    left.appendChild(back);
+    left.appendChild(forward);
+    left.appendChild(refresh);
     this.el.appendChild(searchContainer);
     searchContainer.appendChild(searchInput);
     searchContainer.appendChild(searchButton);
