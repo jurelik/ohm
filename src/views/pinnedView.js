@@ -24,6 +24,7 @@ function PinnedView(data) {
         body: JSON.stringify(payload)
       });
 
+      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
       const res = await _res.json();
       if (res.type === 'error') throw res.err;
 

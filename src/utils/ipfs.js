@@ -184,7 +184,7 @@ const checkIfSongIsPinned = async (data) => {
     return true;
   }
   catch (err) {
-    log.error(err)
+    log.error(err.message);
   }
 }
 
@@ -197,7 +197,7 @@ const checkIfAlbumIsPinned = async (data) => {
     return true;
   }
   catch (err) {
-    log.error(err)
+    log.error(err.message)
   }
 }
 
@@ -245,7 +245,7 @@ const getPinned = async () => {
     return { albums, songs };
   }
   catch (err) {
-    log.error(err);
+    log.error(err.message);
   }
 }
 

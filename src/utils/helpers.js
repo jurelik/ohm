@@ -345,8 +345,9 @@ const getFile = async (id) => {
       credentials: 'include', //Include cookie
     });
 
+    if(_res.status !== 200) throw new Error('FETCH_ERR');
     const res = await _res.json();
-    if (res.type === 'error') throw res.err;
+    if (res.type === 'error') throw new Error(res.err);
 
     return res.payload;
   }

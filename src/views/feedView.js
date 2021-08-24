@@ -21,8 +21,9 @@ function FeedView(data) {
           loadMore: false
         })
       });
-      const res = await _res.json();
 
+      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      const res = await _res.json();
       if (res.type === 'error') return reject(res.err);
 
       app.history[app.historyIndex].data = res.payload; //Add data to history
@@ -50,8 +51,9 @@ function FeedView(data) {
           lastItem: this.data[this.data.length - 1]
         })
       });
-      const res = await _res.json();
 
+      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      const res = await _res.json();
       if (res.type === 'error') throw res.err;
 
       this.data = this.data.concat(res.payload); //Append to this.data

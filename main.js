@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, MenuItem, Tray } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, MenuItem, Tray, nativeTheme } = require('electron');
 const { spawn } = require('child_process')
 const fs = require('fs');
 let tray = null; //Menu icon
@@ -20,6 +20,7 @@ const DEFAULT_SETTINGS = {
 
 function createWindow() {
   if (win) return win.show(); //Ignore if window is already created
+  console.log(nativeTheme.shouldUseDarkColors);
 
   win = new BrowserWindow({
     width: 800,

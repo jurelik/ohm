@@ -79,6 +79,8 @@ function App() {
     try {
       if (!sessionExpired) {
         const _res = await fetch(`${app.URL}/logout`); //Logout server-side
+
+        if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
         const res = await _res.json();
         if (res.type === 'error') throw new Error(res.err);
       }
@@ -305,6 +307,7 @@ function App() {
         body: JSON.stringify({ old: _old, new: _new })
       });
 
+      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
       const res = await _res.json();
       if (res.type === 'error') throw res.err;
 
@@ -327,6 +330,7 @@ function App() {
         body: JSON.stringify({ location })
       });
 
+      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
       const res = await _res.json();
       if (res.type === 'error') throw res.err;
 
@@ -348,6 +352,7 @@ function App() {
         body: JSON.stringify({ bio })
       });
 
+      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
       const res = await _res.json();
       if (res.type === 'error') throw res.err;
 
@@ -371,6 +376,7 @@ function App() {
         body: payload
       });
 
+      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
       const res = await _res.json();
       if (res.type === 'error') throw res.err;
 

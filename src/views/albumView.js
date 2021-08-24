@@ -12,6 +12,8 @@ function AlbumView(data, action) {
   this.init = async () => {
     try {
       const _res = await fetch(`${app.URL}/album/${this.data.id}`);
+
+      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
       const res = await _res.json();
       if (res.type === 'error') throw new Error(res.err);
 

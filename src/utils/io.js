@@ -8,7 +8,6 @@ const log = require('../utils/log');
 const login = async (payload) => {
   try {
     log('Attempting login...');
-    log(app.URL);
     const _res = await fetch(`${app.URL}/login`, {
       method: 'POST',
       credentials: 'include', //Include cookie
@@ -18,8 +17,9 @@ const login = async (payload) => {
       body: payload ? JSON.stringify(payload) : null
     });
 
+    if(_res.status !== 200) throw new Error('FETCH_ERR');
     const res = await _res.json();
-    if (res.type === 'error') throw res.err;
+    if (res.type === 'error') throw new Error(res.err);
 
     app.artist = res.session.artist; //Set global artist value
   }
@@ -53,13 +53,13 @@ const upload = async (payload) => {
     const reader = _res.body.getReader();
     const res = await helpers.handleReader(reader);
 
-    if (res.type === 'error') throw res.err;
+    if (res.type === 'error') throw new Error(res.err);
     ipcRenderer.send('upload-end');
   }
   catch (err) {
     ipcRenderer.send('upload-end');
-    if (err === 'album with the same name already exists') throw err;
-    if (err === 'single with the same name already exists') throw err;;
+    if (err.message === 'album with the same name already exists') throw err;
+    if (err.message === 'single with the same name already exists') throw err;;
 
     if (writtenToMFS) await app.ipfs.files.rm(path, { recursive: true });
     throw err;
@@ -81,8 +81,9 @@ const resumeUpload = async (transfer) => {
       body: JSON.stringify(transfer.payload)
     });
 
+    if(_res.status !== 200) throw new Error('FETCH_ERR');
     const res = await _res.json();
-    if (res.type === 'error') throw res.err;
+    if (res.type === 'error') throw new Error(res.err);
 
     //Handle errors after this point differently as the song/album was already successfully uploaded by this point
     try {
@@ -90,11 +91,11 @@ const resumeUpload = async (transfer) => {
       if (app.views.transfers) app.views.transfers.children[transfer.payload.unique].handleComplete(); //Update status of transfer to completed
     }
     catch (err) {
-      log.error(err);
+      log.error(err.message);
     }
   }
   catch (err) {
-    log.error(err);
+    if (err.message !== 'FETCH_ERR') log.error(err.message); //Ignore FETCH_ERR as chromium displays it automatically
     if (transfer.payload.album && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/albums/${transfer.payload.album.title}`, { recursive: true });
     else if (transfer.payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/singles/${transfer.payload.songs[0].title}`, { recursive: true });
   }
@@ -111,8 +112,9 @@ const deleteItem = async (data) => {
       body: JSON.stringify(data)
     });
 
+    if(_res.status !== 200) throw new Error('FETCH_ERR');
     const res = await _res.json();
-    if (res.type === 'error') throw res.err;
+    if (res.type === 'error') throw new Error(res.err);
 
     if (data.type === 'song' && await ipfs.checkIfSongIsPinned(data)) await ipfs.unpinSong(data);
     if (data.type === 'album' && await ipfs.checkIfAlbumIsPinned(data)) await ipfs.unpinAlbum(data);
@@ -133,8 +135,9 @@ const search = async (data) => {
       body: JSON.stringify(data)
     });
 
+    if(_res.status !== 200) throw new Error('FETCH_ERR');
     const res = await _res.json();
-    if (res.type === 'error') throw res.err;
+    if (res.type === 'error') throw new Error(res.err);
 
     return res;
   }

@@ -12,6 +12,7 @@ function Artist(data, view) {
     return new Promise(async (resolve, reject) => {
       try {
         const _res = await fetch(`${app.URL}/artist/${this.data}`);
+        if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
         const res = await _res.json();
 
         if (res.type === 'error') return reject(res.err);
@@ -34,6 +35,7 @@ function Artist(data, view) {
       if (following) _res = await fetch(`${app.URL}/unfollow/${this.data.id}`);
       else _res = await fetch(`${app.URL}/follow/${this.data.id}`);
 
+      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
       const res = await _res.json();
       if (res.type === 'error') throw new Error(res.err);
 

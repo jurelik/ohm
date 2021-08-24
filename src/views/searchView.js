@@ -72,8 +72,9 @@ function SearchView(data) {
           lastItem: this.data.results[this.data.results.length - 1]
         })
       });
-      const res = await _res.json();
 
+      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      const res = await _res.json();
       if (res.type === 'error') throw res.err;
 
       this.data.results = this.data.results.concat(res.payload); //Append to this.data
