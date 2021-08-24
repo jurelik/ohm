@@ -8,22 +8,6 @@ function Artist(data, view) {
   this.data = data;
   this.view = view; //Keep track of where component was created
 
-  this.fetch = () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const _res = await fetch(`${app.URL}/artist/${this.data}`);
-        if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
-        const res = await _res.json();
-
-        if (res.type === 'error') return reject(res.err);
-        resolve(res.payload);
-      }
-      catch (err) {
-        reject(err);
-      }
-    });
-  }
-
   this.handleFollow = async (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -35,7 +19,7 @@ function Artist(data, view) {
       if (following) _res = await fetch(`${app.URL}/unfollow/${this.data.id}`);
       else _res = await fetch(`${app.URL}/follow/${this.data.id}`);
 
-      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
       const res = await _res.json();
       if (res.type === 'error') throw new Error(res.err);
 
@@ -48,7 +32,7 @@ function Artist(data, view) {
       else button.classList.add('following');
     }
     catch (err) {
-      log.error(err);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
   }
 

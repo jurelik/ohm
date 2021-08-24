@@ -17,7 +17,7 @@ const login = async (payload) => {
       body: payload ? JSON.stringify(payload) : null
     });
 
-    if(_res.status !== 200) throw new Error('FETCH_ERR');
+    if (_res.status !== 200) throw new Error('FETCH_ERR');
     const res = await _res.json();
     if (res.type === 'error') throw new Error(res.err);
 
@@ -81,7 +81,7 @@ const resumeUpload = async (transfer) => {
       body: JSON.stringify(transfer.payload)
     });
 
-    if(_res.status !== 200) throw new Error('FETCH_ERR');
+    if (_res.status !== 200) throw new Error('FETCH_ERR');
     const res = await _res.json();
     if (res.type === 'error') throw new Error(res.err);
 
@@ -95,7 +95,7 @@ const resumeUpload = async (transfer) => {
     }
   }
   catch (err) {
-    if (err.message !== 'FETCH_ERR') log.error(err.message); //Ignore FETCH_ERR as chromium displays it automatically
+    if (err.message !== 'FETCH_ERR') log.error(err.message);
     if (transfer.payload.album && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/albums/${transfer.payload.album.title}`, { recursive: true });
     else if (transfer.payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/singles/${transfer.payload.songs[0].title}`, { recursive: true });
   }
@@ -112,7 +112,7 @@ const deleteItem = async (data) => {
       body: JSON.stringify(data)
     });
 
-    if(_res.status !== 200) throw new Error('FETCH_ERR');
+    if (_res.status !== 200) throw new Error('FETCH_ERR');
     const res = await _res.json();
     if (res.type === 'error') throw new Error(res.err);
 
@@ -135,7 +135,7 @@ const search = async (data) => {
       body: JSON.stringify(data)
     });
 
-    if(_res.status !== 200) throw new Error('FETCH_ERR');
+    if (_res.status !== 200) throw new Error('FETCH_ERR');
     const res = await _res.json();
     if (res.type === 'error') throw new Error(res.err);
 

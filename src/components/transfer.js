@@ -49,7 +49,7 @@ function Transfer(data, unique) {
       }
     }
     catch (err) {
-      log.error(err);
+      log.error(err.message);
     }
   }
 
@@ -61,7 +61,7 @@ function Transfer(data, unique) {
       await ipfs.clearTransfer(this.unique);
     }
     catch (err) {
-      log.error(err);
+      log.error(err.message);
     }
   }
 

@@ -70,7 +70,7 @@ function UploadView(data) {
       return this.reset();
     }
     catch (err) {
-      log.error(err);
+      log.error(err.message);
       this.submitting = false;
       spinner.remove();
     }

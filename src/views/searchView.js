@@ -49,7 +49,7 @@ function SearchView(data) {
       return app.triggerLoading(false); //Trigger loading indicator
     }
     catch (err) {
-      log.error(err);
+      log.error(err.message);
     }
   }
 
@@ -73,16 +73,16 @@ function SearchView(data) {
         })
       });
 
-      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
       const res = await _res.json();
-      if (res.type === 'error') throw res.err;
+      if (res.type === 'error') throw new Error(res.err);
 
       this.data.results = this.data.results.concat(res.payload); //Append to this.data
       app.history[app.historyIndex].data.results = this.data.results; //Modify history
       await this.children.main.append(res.payload); //Append to DOM
     }
     catch (err) {
-      log.error(err);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
   }
 

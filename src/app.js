@@ -68,7 +68,7 @@ function App() {
       await login.init(); //Attempt login with credentials
     }
     catch (err) {
-      log.error(err);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
 
       this.root.innerHTML = '' //Draw login screen
       login.render();
@@ -80,7 +80,7 @@ function App() {
       if (!sessionExpired) {
         const _res = await fetch(`${app.URL}/logout`); //Logout server-side
 
-        if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+        if (_res.status !== 200) throw new Error('FETCH_ERR');
         const res = await _res.json();
         if (res.type === 'error') throw new Error(res.err);
       }
@@ -94,7 +94,7 @@ function App() {
       login.render();
     }
     catch (err) {
-      log.error(err);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
   }
 
@@ -142,7 +142,7 @@ function App() {
         this.header.backButton.disabled = true;
       }
       catch (err) {
-        log.error(err);
+        if (err.message !== 'FETCH_ERR') log.error(err.message);
       }
     });
 
@@ -222,15 +222,15 @@ function App() {
           this.views.settings.render();
           break;
         default:
-          this.content.textContent = 'view not found';
+          this.content.textContent = 'View not found.';
           break;
       }
 
       this.triggerLoading(false); //Stop loading indicator
     }
     catch (err) {
-      log.error(err);
-      if (err === 'User not authenticated') await this.logout(true);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message === 'User not authenticated') await this.logout(true);
     }
   }
 
@@ -283,7 +283,7 @@ function App() {
     }
     catch (err) {
       if (err.message === 'The user aborted a request.') return;
-      log.error(err)
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
   }
 
@@ -307,15 +307,15 @@ function App() {
         body: JSON.stringify({ old: _old, new: _new })
       });
 
-      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
       const res = await _res.json();
-      if (res.type === 'error') throw res.err;
+      if (res.type === 'error') throw new Error(res.err);
 
       log.success('Password successfully changed.');
       this.logout();
     }
     catch (err) {
-      log.error(err);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
   }
 
@@ -330,14 +330,14 @@ function App() {
         body: JSON.stringify({ location })
       });
 
-      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
       const res = await _res.json();
-      if (res.type === 'error') throw res.err;
+      if (res.type === 'error') throw new Error(res.err);
 
       log.success('Location successfully changed.');
     }
     catch (err) {
-      log.error(err);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
   }
 
@@ -352,14 +352,14 @@ function App() {
         body: JSON.stringify({ bio })
       });
 
-      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
       const res = await _res.json();
-      if (res.type === 'error') throw res.err;
+      if (res.type === 'error') throw new Error(res.err);
 
       log.success('Bio successfully changed.');
     }
     catch (err) {
-      log.error(err);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
   }
 
@@ -376,15 +376,15 @@ function App() {
         body: payload
       });
 
-      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
       const res = await _res.json();
-      if (res.type === 'error') throw res.err;
+      if (res.type === 'error') throw new Error(res.err);
 
       log.success('Successfully created artist.');
 
     }
     catch (err) {
-      log.error(err);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
   }
 

@@ -25,7 +25,7 @@ function ActionBarAlbum(data) {
       else await ipfs.startTransfer(this.data);
     }
     catch (err) {
-      log.error(err);
+      log.error(err.message);
     }
   }
 
@@ -38,7 +38,7 @@ function ActionBarAlbum(data) {
       await ipfs.startTransfer(this.data, { download: true });
     }
     catch (err) {
-      log.error(err);
+      log.error(err.message);
     }
   }
 
@@ -93,7 +93,7 @@ function ActionBarAlbum(data) {
       }
     }
     catch (err) {
-      log.error(err);
+      log.error(err.message);
     }
   }
 
@@ -172,7 +172,7 @@ function ActionBarAlbum(data) {
       return this.el;
     }
     catch (err) {
-      log.error(err);
+      log.error(err.message);
     }
   }
 }

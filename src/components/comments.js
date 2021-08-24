@@ -27,9 +27,9 @@ function Comments(data) {
         body: JSON.stringify(payload)
       });
 
-      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
       const res = await _res.json();
-      if (res.type === 'error') throw res.err;
+      if (res.type === 'error') throw new Error(res.err);
 
       //Create new comment data
       const _data = {
@@ -46,7 +46,7 @@ function Comments(data) {
       this.el.querySelector('textarea').value = ''; //Reset comment field to empty
     }
     catch (err) {
-      log.error(err);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
   }
 

@@ -20,9 +20,9 @@ function ExploreView(data) {
         body: JSON.stringify({ loadMore: false })
       });
 
-      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
       const res = await _res.json();
-      if (res.type === 'error') throw res.err;
+      if (res.type === 'error') throw new Error(res.err);
 
       app.history[app.historyIndex].data = res.payload; //Add data to history
       return res.payload;
@@ -50,9 +50,9 @@ function ExploreView(data) {
         })
       });
 
-      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
       const res = await _res.json();
-      if (res.type === 'error') throw res.err;
+      if (res.type === 'error') throw new Error(res.err);
 
       this.data = this.data.concat(res.payload); //Append to this.data
       app.history[app.historyIndex].data = this.data; //Modify history
@@ -60,7 +60,7 @@ function ExploreView(data) {
       app.triggerLoading(false); //Trigger loading indicator
     }
     catch (err) {
-      log.error(err);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
       app.triggerLoading(false); //Trigger loading indicator
     }
   }

@@ -24,16 +24,16 @@ function PinnedView(data) {
         body: JSON.stringify(payload)
       });
 
-      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
       const res = await _res.json();
-      if (res.type === 'error') throw res.err;
+      if (res.type === 'error') throw new Error(res.err);
 
       const data = { items: res.payload, amountShown: this.LOAD_MORE_AMOUNT };
       app.history[app.historyIndex].data = data; //Modify history
       return data;
     }
     catch (err) {
-      throw(err);
+      throw err;
     }
   }
 

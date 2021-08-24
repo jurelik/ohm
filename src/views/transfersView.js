@@ -41,7 +41,7 @@ function TransfersView(data) {
       await ipfs.clearAllTransfers();
     }
     catch (err) {
-      log.error(err);
+      log.error(err.message);
     }
   }
 

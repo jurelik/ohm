@@ -124,7 +124,7 @@ function Album(data, view) {
       return this.el;
     }
     catch (err) {
-      log.error(err);
+      log.error(err.message);
     }
   }
 }

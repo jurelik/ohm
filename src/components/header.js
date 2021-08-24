@@ -46,8 +46,8 @@ function Header() {
       app.triggerLoading(false); //Trigger loading indicator
     }
     catch (err) {
-      log.error(err);
-      if (err === 'User not authenticated') await app.logout(true);
+      log.error(err.message);
+      if (err.message === 'User not authenticated') await app.logout(true);
     }
   }
 

@@ -10,21 +10,19 @@ function ArtistView(data) {
   this.data = data;
   this.artist = null;
 
-  this.fetch = () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const _res = await fetch(`${app.URL}/artist/${this.data}`);
+  this.fetch = async () => {
+    try {
+      const _res = await fetch(`${app.URL}/artist/${this.data}`);
 
-        if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
-        const res = await _res.json();
-        if (res.type === 'error') return reject(res.err);
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
+      const res = await _res.json();
+      if (res.type === 'error') throw new Error(res.err);
 
-        resolve(res.payload);
-      }
-      catch (err) {
-        reject(err);
-      }
-    });
+      return res.payload;
+    }
+    catch (err) {
+      throw err;
+    }
   }
 
   this.handleFollow = async (e) => {
@@ -38,7 +36,7 @@ function ArtistView(data) {
       if (following) _res = await fetch(`${app.URL}/unfollow/${this.artist.id}`);
       else _res = await fetch(`${app.URL}/follow/${this.artist.id}`);
 
-      if(_res.status !== 200) throw `${_res.status}: ${_res.statusText}`;
+      if (_res.status !== 200) throw new Error('FETCH_ERR');
       const res = await _res.json();
       if (res.type === 'error') throw new Error(res.err);
 
@@ -51,7 +49,7 @@ function ArtistView(data) {
       else button.classList.add('following');
     }
     catch (err) {
-      log.error(err);
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
   }
 

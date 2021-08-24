@@ -33,7 +33,7 @@ function SongViewMain(data, action) {
         comments.el.querySelector('textarea').focus(); //Focus the input
         break;
       default:
-        log.error('wrong action');
+        log.error('Action not recognized.');
         break;
     }
 
