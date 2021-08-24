@@ -155,7 +155,6 @@ function ActionBarSong(data) {
 
   this.render = async () => {
     try {
-      console.log(this.data.files.length)
       this.pinned = await ipfs.checkIfSongIsPinned(this.data); //Check if song is pinned
 
       //Create elements
