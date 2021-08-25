@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, Menu, MenuItem, Tray, nativeTheme } = require('electron');
 const { spawn } = require('child_process')
+const path = require('path');
 const fs = require('fs');
 let tray = null; //Menu icon
 let daemon = null; //IPFS daemon
@@ -27,6 +28,7 @@ function createWindow() {
     minWidth: 480,
     minHeight: 300,
     backgroundColor: "#222",
+    icon: path.join(`${__dirname}/src/assets/icon/`, { darwin: 'icon.icns', linux: 'icon.png', win32: 'icon.ico'  }[process.platform] || 'icon.ico'),
     titleBarStyle: 'hidden',
     autoHideMenuBar: true,
     trafficLightPosition: { x: 9, y: 6 },
