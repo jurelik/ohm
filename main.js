@@ -20,7 +20,6 @@ const DEFAULT_SETTINGS = {
 
 function createWindow() {
   if (win) return win.show(); //Ignore if window is already created
-  console.log(nativeTheme.shouldUseDarkColors);
 
   win = new BrowserWindow({
     width: 800,
@@ -43,12 +42,6 @@ function createWindow() {
     win.loadFile('src/index.html')
   });
   win.once('closed', () => win = null);
-}
-
-function createTray() {
-  tray = new Tray('src/assets/testTemplate.png');
-  const contextMenu = Menu.buildFromTemplate(menuTemplate(false));
-  tray.setContextMenu(contextMenu)
 }
 
 app.whenReady().then(() => {
@@ -216,3 +209,22 @@ const menuTemplate = (running) => {
     { label: 'Quit', type: 'normal', role: 'quit', accelerator: 'CmdOrCtrl+Q' },
   ];
 }
+
+const createTray = () => {
+  const trayIconPath = getTrayIconPath();
+  tray = new Tray(trayIconPath);
+  const contextMenu = Menu.buildFromTemplate(menuTemplate(false));
+  tray.setContextMenu(contextMenu)
+}
+
+const getTrayIconPath = () => {
+  switch (process.platform) {
+    case 'darwin':
+      return `src/assets/tray/testTemplate.png`
+    case 'linux':
+      return `src/assets/tray/${process.platform}/${nativeTheme.shouldUseDarkColors ? 'dark' : 'light'}/testTemplate.png`
+    default:
+      return `src/assets/tray/testTemplate.png`
+  }
+}
+
