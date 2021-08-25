@@ -3,10 +3,9 @@ const { spawn } = require('child_process')
 const fs = require('fs');
 let tray = null; //Menu icon
 let daemon = null; //IPFS daemon
-let userDataPath = null;
+const userDataPath = app.getPath('userData'); //Check if config / transfers files exist
 let tempUploadPath = null; //True while upload is active
 let win = null; //Main window
-const runningMenuItem = new MenuItem({ label: 'Daemon is running...', type: 'normal', enabled: false });
 let view = null; //Which view should we open with ('explore' being default)
 let quitting = false; //Is the app in the process of quitting
 
@@ -15,7 +14,8 @@ const DEFAULT_SETTINGS = {
   IPFS_PROTOCOL: 'http',
   IPFS_HOST: 'localhost',
   IPFS_PORT: 5001,
-  IPFS_PATH: 'api/v0'
+  IPFS_PATH: 'api/v0',
+  OS_THEME: ''
 }
 
 function createWindow() {
@@ -82,8 +82,6 @@ app.on('activate', () => {
 
 //IPC events
 ipcMain.on('start', (event) => {
-  //Check if config / transfers files exist
-  userDataPath = app.getPath('userData');
   if (!fs.existsSync(`${userDataPath}/transfers.json`)) fs.writeFileSync(`${userDataPath}/transfers.json`, '{}');
   if (!fs.existsSync(`${userDataPath}/settings.json`)) fs.writeFileSync(`${userDataPath}/settings.json`, JSON.stringify(DEFAULT_SETTINGS, null, 2));
 
@@ -220,11 +218,17 @@ const createTray = () => {
 const getTrayIconPath = () => {
   switch (process.platform) {
     case 'darwin':
-      return `src/assets/tray/testTemplate.png`
+      return `src/assets/tray/testTemplate.png`;
     case 'linux':
-      return `src/assets/tray/${process.platform}/testTemplate${nativeTheme.shouldUseDarkColors ? 'Dark' : 'Light'}.png`
+      if (fs.existsSync(`${userDataPath}/settings.json`)) { //Check if user decided to overwrite default tray icon color
+        const { OS_THEME } = JSON.parse(fs.readFileSync(`${userDataPath}/settings.json`));
+        if ( OS_THEME === 'dark' ) return `src/assets/tray/linux/testTemplateDark.png`;
+        else if ( OS_THEME === 'light' ) return `src/assets/tray/linux/testTemplateLight.png`;
+      }
+
+      return `src/assets/tray/linux/testTemplate${nativeTheme.shouldUseDarkColors ? 'Dark' : 'Light'}.png`;
     default:
-      return `src/assets/tray/testTemplate.png`
+      return `src/assets/tray/testTemplate.png`;
   }
 }
 
