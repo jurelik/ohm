@@ -218,15 +218,15 @@ const createTray = () => {
 const getTrayIconPath = () => {
   switch (process.platform) {
     case 'darwin':
-      return `src/assets/tray/trayLight.png`;
+      return `src/assets/tray/trayLightTemplate.png`;
     case 'linux':
       if (fs.existsSync(`${userDataPath}/settings.json`)) { //Check if user decided to overwrite default tray icon color
         const { OS_THEME } = JSON.parse(fs.readFileSync(`${userDataPath}/settings.json`));
         if ( OS_THEME === 'dark' ) return `src/assets/tray/trayDark.png`;
-        else if ( OS_THEME === 'light' ) return `src/assets/tray/trayLight.png`;
+        else if ( OS_THEME === 'light' ) return `src/assets/tray/trayLightTemplate.png`;
       }
 
-      return `src/assets/tray/tray${nativeTheme.shouldUseDarkColors ? 'Dark' : 'Light'}.png`;
+      return `src/assets/tray/tray${nativeTheme.shouldUseDarkColors ? 'Dark' : 'LightTemplate'}.png`;
     default:
       return `src/assets/tray/trayLight.png`;
   }
