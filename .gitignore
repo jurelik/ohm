@@ -7,6 +7,3 @@ tags.temp
 .env.development
 .env.production
 .DS_Store
-/src/assets/tray/testTemplate@5x.png
-/src/assets/tray/linux/testTemplateDark@5x.png
-/src/assets/tray/linux/testTemplateLight@5x.png

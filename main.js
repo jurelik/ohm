@@ -15,7 +15,7 @@ const DEFAULT_SETTINGS = {
   IPFS_HOST: 'localhost',
   IPFS_PORT: 5001,
   IPFS_PATH: 'api/v0',
-  OS_THEME: ''
+  OS_THEME: 'system'
 }
 
 function createWindow() {
@@ -218,17 +218,17 @@ const createTray = () => {
 const getTrayIconPath = () => {
   switch (process.platform) {
     case 'darwin':
-      return `src/assets/tray/testTemplate.png`;
+      return `src/assets/tray/trayLight.png`;
     case 'linux':
       if (fs.existsSync(`${userDataPath}/settings.json`)) { //Check if user decided to overwrite default tray icon color
         const { OS_THEME } = JSON.parse(fs.readFileSync(`${userDataPath}/settings.json`));
-        if ( OS_THEME === 'dark' ) return `src/assets/tray/linux/testTemplateDark.png`;
-        else if ( OS_THEME === 'light' ) return `src/assets/tray/linux/testTemplateLight.png`;
+        if ( OS_THEME === 'dark' ) return `src/assets/tray/trayDark.png`;
+        else if ( OS_THEME === 'light' ) return `src/assets/tray/trayLight.png`;
       }
 
-      return `src/assets/tray/linux/testTemplate${nativeTheme.shouldUseDarkColors ? 'Dark' : 'Light'}.png`;
+      return `src/assets/tray/tray${nativeTheme.shouldUseDarkColors ? 'Dark' : 'Light'}.png`;
     default:
-      return `src/assets/tray/testTemplate.png`;
+      return `src/assets/tray/trayLight.png`;
   }
 }
 
