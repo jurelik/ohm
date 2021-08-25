@@ -222,7 +222,7 @@ const getTrayIconPath = () => {
     case 'darwin':
       return `src/assets/tray/testTemplate.png`
     case 'linux':
-      return `src/assets/tray/${process.platform}/${nativeTheme.shouldUseDarkColors ? 'dark' : 'light'}/testTemplate.png`
+      return `src/assets/tray/${process.platform}/testTemplate${nativeTheme.shouldUseDarkColors ? 'Dark' : 'Light'}.png`
     default:
       return `src/assets/tray/testTemplate.png`
   }
