@@ -1,14 +1,17 @@
 {
   "name": "ohm",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=production electron .",
     "dev": "NODE_ENV=development electron .",
-    "test-server": "NODE_ENV=test electron .",
-    "build_osx": "electron-packager . ohm --platform=darwin --arch=x64 --out ~/Documents/ --overwrite --icon=./src/assets/icon/icon.icns ; echo 'Built for OSX'"
+    "test_server": "NODE_ENV=test electron .",
+    "build_osx": "electron-packager . ohm --platform=darwin --arch=x64 --out ~/Documents/ --overwrite --icon=./src/assets/icon/icon.icns ; echo 'Built for OSX'",
+    "build_linux": "electron-packager . ohm --platform=linux  --arch=x64 --out ~/Documents/ --overwrite --icon=./src/assets/icon/icon.png ; echo 'Built for LINUX'",
+    "build_win": "electron-packager . ohm --platform=win32  --arch=x64 --out ~/Documents/ --overwrite --icon=./src/assets/icon/icon.ico ; echo 'Built for WIN'",
+    "build": "npm run clean ; npm run build_osx ; npm run build_linux ; npm run build_win ; echo 'Built for OSX, LINUX and WIN'"
   },
   "repository": {
     "type": "git",
