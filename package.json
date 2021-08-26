@@ -5,9 +5,10 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "IPFS_PATH=$HOME/.ohm-ipfs NODE_ENV=production electron .",
-    "dev": "IPFS_PATH=$HOME/.ohm-ipfs NODE_ENV=development electron .",
-    "test-server": "IPFS_PATH=$HOME/.ohm-ipfs NODE_ENV=test electron ."
+    "start": "NODE_ENV=production electron .",
+    "dev": "NODE_ENV=development electron .",
+    "test-server": "NODE_ENV=test electron .",
+    "build_osx": "electron-packager . ohm --platform=darwin --arch=x64 --out ~/Documents/ --overwrite --icon=./src/assets/icon/icon.icns ; echo 'Built for OSX'"
   },
   "repository": {
     "type": "git",
@@ -21,9 +22,10 @@
   "homepage": "https://github.com/jurelik/ohm#readme",
   "devDependencies": {
     "electron": "^13.1.7",
-    "go-ipfs": "^0.9.1"
+    "electron-packager": "^15.3.0"
   },
   "dependencies": {
+    "go-ipfs": "^0.9.1",
     "ipfs-http-client": "^51.0.1"
   }
 }

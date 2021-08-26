@@ -84,6 +84,7 @@ app.on('activate', () => {
 
 //IPC events
 ipcMain.on('start', (event) => {
+  process.env.IPFS_PATH = `${process.env.HOME}/.ohm-ipfs`; //Set IPFS_PATH
   if (!fs.existsSync(`${userDataPath}/transfers.json`)) fs.writeFileSync(`${userDataPath}/transfers.json`, '{}');
   if (!fs.existsSync(`${userDataPath}/settings.json`)) fs.writeFileSync(`${userDataPath}/settings.json`, JSON.stringify(DEFAULT_SETTINGS, null, 2));
 
@@ -220,17 +221,17 @@ const createTray = () => {
 const getTrayIconPath = () => {
   switch (process.platform) {
     case 'darwin':
-      return `src/assets/tray/trayLightTemplate.png`;
+      return `${__dirname}/src/assets/tray/trayLightTemplate.png`;
     case 'linux':
       if (fs.existsSync(`${userDataPath}/settings.json`)) { //Check if user decided to overwrite default tray icon color
         const { OS_THEME } = JSON.parse(fs.readFileSync(`${userDataPath}/settings.json`));
-        if ( OS_THEME === 'dark' ) return `src/assets/tray/trayDark.png`;
-        else if ( OS_THEME === 'light' ) return `src/assets/tray/trayLightTemplate.png`;
+        if ( OS_THEME === 'dark' ) return `${__dirname}/src/assets/tray/trayDark.png`;
+        else if ( OS_THEME === 'light' ) return `${__dirname}/src/assets/tray/trayLightTemplate.png`;
       }
 
-      return `src/assets/tray/tray${nativeTheme.shouldUseDarkColors ? 'Dark' : 'LightTemplate'}.png`;
+      return `${__dirname}/src/assets/tray/tray${nativeTheme.shouldUseDarkColors ? 'Dark' : 'LightTemplate'}.png`;
     default:
-      return `src/assets/tray/trayLight.png`;
+      return `${__dirname}/src/assets/tray/trayLight.png`;
   }
 }
 
