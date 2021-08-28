@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, Menu, Tray, nativeTheme } = require('electron');
 const { spawn } = require('child_process')
+const os = require('os');
 const path = require('path');
 const fs = require('fs');
 let tray = null; //Menu icon
@@ -11,7 +12,7 @@ let view = null; //Which view should we open with ('explore' being default)
 let quitting = false; //Is the app in the process of quitting
 
 const DEFAULT_SETTINGS = {
-  DOWNLOAD_PATH: path.join(process.env.HOME, 'Documents', 'ohm'),
+  DOWNLOAD_PATH: path.join(os.homedir(), 'Documents', 'ohm'),
   IPFS_PROTOCOL: 'http',
   IPFS_HOST: 'localhost',
   IPFS_PORT: 5001,
@@ -84,7 +85,7 @@ app.on('activate', () => {
 
 //IPC events
 ipcMain.on('start', (event) => {
-  process.env.IPFS_PATH = path.join(process.env.HOME, '.ohm-ipfs'); //Set IPFS_PATH
+  process.env.IPFS_PATH = path.join(os.homedir(), '.ohm-ipfs'); //Set IPFS_PATH
   if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}');
   if (!fs.existsSync(path.join(userDataPath, 'settings.json'))) fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(DEFAULT_SETTINGS, null, 2));
 
