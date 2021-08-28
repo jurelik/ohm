@@ -11,7 +11,7 @@ let view = null; //Which view should we open with ('explore' being default)
 let quitting = false; //Is the app in the process of quitting
 
 const DEFAULT_SETTINGS = {
-  DOWNLOAD_PATH: `${process.env.HOME}/Documents/ohm`,
+  DOWNLOAD_PATH: path.join(process.env.HOME, 'Documents', 'ohm'),
   IPFS_PROTOCOL: 'http',
   IPFS_HOST: 'localhost',
   IPFS_PORT: 5001,
@@ -28,7 +28,7 @@ function createWindow() {
     minWidth: 480,
     minHeight: 300,
     backgroundColor: "#222",
-    icon: path.join(`${__dirname}/src/assets/icon/`, { darwin: 'icon.icns', linux: 'icon.png', win32: 'icon.ico'  }[process.platform] || 'icon.ico'),
+    icon: path.join(__dirname, 'src', 'assets', 'icon', { darwin: 'icon.icns', linux: 'icon.png', win32: 'icon.ico'  }[process.platform] || 'icon.ico'),
     titleBarStyle: 'hidden',
     autoHideMenuBar: true,
     trafficLightPosition: { x: 9, y: 6 },
@@ -84,9 +84,9 @@ app.on('activate', () => {
 
 //IPC events
 ipcMain.on('start', (event) => {
-  process.env.IPFS_PATH = `${process.env.HOME}/.ohm-ipfs`; //Set IPFS_PATH
-  if (!fs.existsSync(`${userDataPath}/transfers.json`)) fs.writeFileSync(`${userDataPath}/transfers.json`, '{}');
-  if (!fs.existsSync(`${userDataPath}/settings.json`)) fs.writeFileSync(`${userDataPath}/settings.json`, JSON.stringify(DEFAULT_SETTINGS, null, 2));
+  process.env.IPFS_PATH = path.join(process.env.HOME, '.ohm-ipfs'); //Set IPFS_PATH
+  if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}');
+  if (!fs.existsSync(path.join(userDataPath, 'settings.json'))) fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(DEFAULT_SETTINGS, null, 2));
 
   if (daemon) { //Check if daemon is already running
     event.reply('daemon-ready', { userDataPath, view: view || 'explore' });
@@ -94,7 +94,7 @@ ipcMain.on('start', (event) => {
   }
 
   //Check if the repo exists already
-  if (fs.existsSync(`${process.env.HOME}/.ohm-ipfs`)) {
+  if (fs.existsSync(process.env.IPFS_PATH)) {
     spawnDaemon(event);
   }
   else {
@@ -221,17 +221,17 @@ const createTray = () => {
 const getTrayIconPath = () => {
   switch (process.platform) {
     case 'darwin':
-      return `${__dirname}/src/assets/tray/trayLightTemplate.png`;
+      return path.join(__dirname, 'src', 'assets', 'tray', 'trayLightTemplate.png');
     case 'linux':
-      if (fs.existsSync(`${userDataPath}/settings.json`)) { //Check if user decided to overwrite default tray icon color
-        const { OS_THEME } = JSON.parse(fs.readFileSync(`${userDataPath}/settings.json`));
-        if ( OS_THEME === 'dark' ) return `${__dirname}/src/assets/tray/trayDark.png`;
-        else if ( OS_THEME === 'light' ) return `${__dirname}/src/assets/tray/trayLightTemplate.png`;
+      if (fs.existsSync(path.join(userDataPath, 'settings.json'))) { //Check if user decided to overwrite default tray icon color
+        const { OS_THEME } = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+        if ( OS_THEME === 'dark' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayDark.png');
+        else if ( OS_THEME === 'light' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayLightTemplate.png');
       }
 
-      return `${__dirname}/src/assets/tray/tray${nativeTheme.shouldUseDarkColors ? 'Dark' : 'LightTemplate'}.png`;
+      return path.join(__dirname, 'src', 'assets', 'tray', `tray${nativeTheme.shouldUseDarkColors ? 'Dark' : 'LightTemplate'}.png`);
     default:
-      return `${__dirname}/src/assets/tray/trayLight.png`;
+      return path.join(__dirname, 'src', 'assets', 'tray', 'trayLightTemplate.png');
   }
 }
 
