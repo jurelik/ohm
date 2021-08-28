@@ -1,13 +1,14 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 
 function Store(opts) {
   this.path = null;
   this.data = null;
 
   this.init = () => {
-    this.path = `${app.USER_DATA_PATH}/${opts.name}.json`;
+    this.path = path.join(app.USER_DATA_PATH, `${opts.name}.json`);
     this.data = JSON.parse(fs.readFileSync(this.path));
   }
 

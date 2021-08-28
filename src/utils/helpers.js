@@ -2,6 +2,7 @@
 
 const fsp = require('fs').promises;
 const fs = require('fs');
+const path = require('path');
 const crypto = require('crypto');
 const log = require('./log');
 
@@ -145,20 +146,26 @@ const createMFSTransferPath = (payload) => {
   return `/${payload.artist}/singles`;
 }
 
+const createFSPath = (downloadPath, transfer) => {
+  const transferPath = transfer.path.split('/');
+  return path.join(downloadPath, ...transferPath, transfer.title);
+}
+
 const writeToDisk = async (transfer) => {
   try {
     log('Writing to disk...')
     const downloadPath = app.settingsStore.getOne('DOWNLOAD_PATH');
-    await fsp.mkdir(`${downloadPath}${transfer.path}/${transfer.title}`, { recursive: true });
+    const downloadPathFull = createFSPath(downloadPath, transfer)
+    await fsp.mkdir(downloadPathFull, { recursive: true });
 
     for await (const file of app.ipfs.get(transfer.cid)) {
       if (!file.content) continue;
 
       //Write file to disk
-      const fsPath = file.path.slice(file.path.indexOf('/') + 1);
-      const path = await fsCreateSongFolder(transfer, fsPath); //Create song folder if it doesn't exist yet
+      const filePath = file.path.slice(file.path.indexOf('/') + 1); //Get rid of first /
+      await fsCreateSongFolder(transfer, filePath); //Create song folder if it doesn't exist yet
 
-      const stream = fs.createWriteStream(`${path}/${fsPath}`);
+      const stream = fs.createWriteStream(path.join(downloadPathFull, filePath));
       for await (const chunk of file.content) stream.write(chunk);
       stream.end();
     }
@@ -317,21 +324,19 @@ const albumFolderExists = async (transfer) => {
   }
 }
 
-const fsCreateSongFolder = async (transfer, fsPath) => {
+const fsCreateSongFolder = async (transfer, filePath) => {
   try {
     const downloadPath = app.settingsStore.getOne('DOWNLOAD_PATH');
 
     if (transfer.album) {
-      const songTitle = fsPath.slice(0, fsPath.indexOf('/'));
-      const path = `${downloadPath}${transfer.path}/${transfer.title}/${songTitle}/files`;
-      if (!fs.existsSync(path)) await fsp.mkdir(path, { recursive: true });
+      const songTitle = filePath.slice(0, filePath.indexOf('/'));
+      const _path = path.join(createFSPath(downloadPath, transfer), songTitle, 'files')
+      if (!fs.existsSync(_path)) await fsp.mkdir(_path, { recursive: true });
     }
     else {
-      const path = `${downloadPath}${transfer.path}/${transfer.title}/files`;
-      if (!fs.existsSync(path)) await fsp.mkdir(path, { recursive: true });
+      const _path = path.join(createFSPath(downloadPath, transfer), 'files');
+      if (!fs.existsSync(_path)) await fsp.mkdir(_path, { recursive: true });
     }
-
-    return `${downloadPath}${transfer.path}/${transfer.title}`;
   }
   catch (err) {
     throw err;
