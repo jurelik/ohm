@@ -104,24 +104,20 @@ function App() {
       log.success('IPFS daemon initiated.');
       try {
         this.USER_DATA_PATH = data.userDataPath;
-        console.log('a')
 
         //Create settingsStore
         this.settingsStore = new Store({ name: 'settings' });
         this.settingsStore.init();
 
-        console.log('b')
         this.ipfs = create({
           protocol: this.settingsStore.getOne('IPFS_PROTOCOL'),
           host: this.settingsStore.getOne('IPFS_HOST'),
           port: this.settingsStore.getOne('IPFS_PORT'),
           apiPath: this.settingsStore.getOne('IPFS_PATH'),
         });
-        console.log('bb')
         const id = await this.getId(); //Get multiaddress for swarm connections
         this.MULTIADDR = id.addresses[4];
 
-        console.log('c')
         //Create user folder if it doesn't exist yet
         let initialised = false;
         for await (const file of this.ipfs.files.ls('/')) {
@@ -132,16 +128,13 @@ function App() {
           await this.ipfs.files.mkdir(`/${app.artist}/albums`, { parents: true, cidVersion: 1 });
         }
 
-        console.log('d')
         //Create transfersStore
         this.transfersStore = new Store({ name: 'transfers' });
         this.transfersStore.init();
         this.initTransfers();
 
-        console.log('e')
         this.updateBandwidth(); //Start performing ipfs.stat checks for bandwidth
 
-        console.log('f')
         this.buildHTML(); //Render first content
         this.changeView(data.view);
         this.addToHistory(data.view);
@@ -162,7 +155,6 @@ function App() {
   this.getId = async () => {
     try {
       const id = await this.ipfs.id();
-      console.log(id);
       const a = id.addresses[4].toString().split('/');
       if (a[3] !== 'tcp') return await this.getId(); //Check to see if the tcp adress is in the right position and if not, run the same function again
       return id;
