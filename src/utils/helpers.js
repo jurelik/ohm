@@ -261,6 +261,12 @@ const handleEmpty = (el) => {
   return app.content.appendChild(el);
 }
 
+const timerPromise = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(), ms);
+  });
+}
+
 //
 //PRIVATE FUNCTIONS
 //
@@ -379,5 +385,6 @@ module.exports = {
   removeItem,
   handleReader,
   formatBytes,
-  handleEmpty
+  handleEmpty,
+  timerPromise
 }

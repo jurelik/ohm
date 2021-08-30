@@ -156,7 +156,10 @@ function App() {
     try {
       const id = await this.ipfs.id();
       const a = id.addresses[4].toString().split('/');
-      if (a[3] !== 'tcp') return await this.getId(); //Check to see if the tcp adress is in the right position and if not, run the same function again
+      if (a[3] !== 'tcp') {
+        await helpers.timerPromise(1000);
+        return await this.getId(); //Check to see if the tcp adress is in the right position and if not, run the same function again
+      }
       return id;
     }
     catch (err) {
