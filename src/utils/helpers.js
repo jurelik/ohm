@@ -267,6 +267,13 @@ const timerPromise = (ms) => {
   });
 }
 
+const allowedFormat = (string) => {
+  if (string.length === 0) return false;
+
+  const regex = /^\w+$/;
+  return regex.test(string);
+}
+
 //
 //PRIVATE FUNCTIONS
 //
@@ -386,5 +393,6 @@ module.exports = {
   handleReader,
   formatBytes,
   handleEmpty,
-  timerPromise
+  timerPromise,
+  allowedFormat
 }

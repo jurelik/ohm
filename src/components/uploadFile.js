@@ -120,9 +120,10 @@ function UploadFile(data) {
 
     //Handle empty fields
     if (file.type === 'original' || file.type === 'external') {
-      if (file.name === '') throw 'file name is missing';
-      if (file.path === '') throw 'file is missing';
-      if (file.tags === '') throw 'file tags are missing';
+      if (file.name === '') throw new Error('File name is missing.');
+      if (file.path === '') throw new Error('File is missing.');
+      if (file.tags === '') throw new Error('File tags are missing.');
+      if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check for bad characters
     }
     else if (file.type === 'internal') {
       if (file.id === '') throw 'file id is missing';

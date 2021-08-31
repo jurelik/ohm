@@ -1,6 +1,7 @@
 'use strict';
 
 const UploadFile = require('./uploadFile');
+const helpers = require('../utils/helpers');
 
 function UploadSong(data) {
   this.el = document.createElement('fieldset');
@@ -50,9 +51,10 @@ function UploadSong(data) {
     }, {});
 
     //Handle empty fields
-    if (song.title === '') throw 'song title is missing'
-    if (!song.path) throw 'song file is missing'
-    if (song.tags === '') throw 'song tags are missing'
+    if (song.title === '') throw new Error('Song title is missing.');
+    if (!song.path) throw new Error('Song file is missing.');
+    if (song.tags === '') throw new Error('Song tags are missing.');
+    if (!helpers.allowedFormat(song.title)) throw new Error('Song title can only include letters, numbers and underscores.'); //Check for bad characters
 
     //Add files
     song.files = [];
