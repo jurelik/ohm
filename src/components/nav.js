@@ -31,7 +31,7 @@ function Nav() {
 
     this.select(e.target.id);
     app.addToHistory(e.target.id);
-    app.changeView(e.target.id);
+    app.changeView(e.target.id, null, true);
   }
 
   this.render = () => {

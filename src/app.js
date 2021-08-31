@@ -167,7 +167,7 @@ function App() {
     }
   }
 
-  this.changeView = async (view, data) => {
+  this.changeView = async (view, data, scrollTop) => {
     try {
       this.triggerLoading(true); //Trigger loading indicator
       this.current = view;
@@ -229,6 +229,7 @@ function App() {
           break;
       }
 
+      if (scrollTop) app.content.scrollTop = 0;
       this.triggerLoading(false); //Stop loading indicator
     }
     catch (err) {
