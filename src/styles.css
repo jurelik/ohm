@@ -377,10 +377,6 @@ pre {
   margin-left: auto;
 }
 
-.header>button {
-  border: 1px solid yellow;
-}
-
 .header button {
   display: flex;
   align-items: center;
@@ -403,6 +399,7 @@ pre {
   align-items: center;
   justify-content: center;
   stroke: #444;
+  cursor: default;
 }
 
 .header .refresh {

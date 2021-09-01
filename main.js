@@ -231,6 +231,14 @@ const getTrayIconPath = () => {
       }
 
       return path.join(__dirname, 'src', 'assets', 'tray', `tray${nativeTheme.shouldUseDarkColors ? 'Dark' : 'LightTemplate'}.png`);
+    case 'win32':
+      if (fs.existsSync(path.join(userDataPath, 'settings.json'))) { //Check if user decided to overwrite default tray icon color
+        const { OS_THEME } = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+        if ( OS_THEME === 'dark' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayDark.png');
+        else if ( OS_THEME === 'light' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayLightTemplate.png');
+      }
+
+      return path.join(__dirname, 'src', 'assets', 'tray', `trayDark.png`);
     default:
       return path.join(__dirname, 'src', 'assets', 'tray', 'trayLightTemplate.png');
   }
