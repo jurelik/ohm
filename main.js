@@ -216,6 +216,7 @@ const createTray = () => {
   const trayIconPath = getTrayIconPath();
   tray = new Tray(trayIconPath);
   const contextMenu = Menu.buildFromTemplate(menuTemplate(false));
+  if (process.platform === 'linux') tray.setToolTip('ohm'); //Set tooltip if on linux
   tray.setContextMenu(contextMenu)
 }
 
