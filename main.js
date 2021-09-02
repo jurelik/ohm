@@ -69,6 +69,8 @@ function createWindow() {
 app.whenReady().then(() => {
   //Get user settings
   if (fs.existsSync(path.join(userDataPath, 'settings.json'))) settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+
+  //Register global shortcuts
   globalShortcut.register('CommandOrControl+Q', app.quit);
 
   createTray();
