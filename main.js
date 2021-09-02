@@ -13,6 +13,7 @@ let quitting = false; //Is the app in the process of quitting
 let settings = null; //User settings
 
 const DEFAULT_SETTINGS = {
+  OHM_SERVER: 'api.ohm.rip',
   DOWNLOAD_PATH: path.join(os.homedir(), 'Documents', 'ohm'),
   OPEN_DEV: 'false',
   WIDTH: 640,
@@ -28,8 +29,8 @@ function createWindow() {
   if (win) return win.show(); //Ignore if window is already created
 
   win = new BrowserWindow({
-    width: settings && settings.WIDTH ? settings.WIDTH : 640,
-    height: settings && settings.HEIGHT ? settings.HEIGHT : 360,
+    width: parseInt(settings.WIDTH),
+    height: parseInt(settings.HEIGHT),
     minWidth: 480,
     minHeight: 300,
     backgroundColor: "#222",
@@ -69,6 +70,10 @@ function createWindow() {
 app.whenReady().then(() => {
   //Get user settings
   if (fs.existsSync(path.join(userDataPath, 'settings.json'))) settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+  else {
+    fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(DEFAULT_SETTINGS, null, 2));
+    settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+  }
 
   //Register global shortcuts
   globalShortcut.register('CommandOrControl+Q', app.quit);
@@ -112,10 +117,6 @@ app.on('activate', () => {
 ipcMain.on('start', (event) => {
   process.env.IPFS_PATH = path.join(os.homedir(), '.ohm-ipfs'); //Set IPFS_PATH
   if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}');
-  if (!settings) { //Init settings
-    fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(DEFAULT_SETTINGS, null, 2));
-    settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
-  }
 
   if (daemon) { //Check if daemon is already running
     event.reply('daemon-ready', { userDataPath, view: view || 'explore' });
@@ -135,8 +136,12 @@ ipcMain.on('upload-start', (event, arg) => { //When upload starts, make note of 
   tempUploadPath = arg;
 });
 
-ipcMain.on('upload-end', (event) => { //Reset tempUploadPath when upload ends/fails
+ipcMain.on('upload-end', event => { //Reset tempUploadPath when upload ends/fails
   tempUploadPath = null;
+});
+
+ipcMain.on('login', event => {
+  event.reply('login', { OHM_SERVER: settings.OHM_SERVER, userDataPath });
 });
 
 const spawnDaemon = (event) => {
@@ -145,7 +150,7 @@ const spawnDaemon = (event) => {
   daemon.stdout.on('data', (data) => {
     console.log(`${data}`);
     if (data.toString().match(/(?:daemon is running|Daemon is ready)/)) {
-      event.reply('daemon-ready', { userDataPath, view: 'explore' });
+      event.reply('daemon-ready', { view: 'explore' });
 
       //Update tray
       const contextMenu = Menu.buildFromTemplate(menuTemplate(true));

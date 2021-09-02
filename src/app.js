@@ -44,7 +44,8 @@ function App() {
     settings: null
   }
   this.GATEWAY ='localhost:8080';
-  this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : `https://api.ohm.rip${process.env.NODE_ENV === 'test' ? '/test' : ''}`;
+  this.OHM_SERVER;
+  this.URL;
   this.USER_DATA_PATH;
   this.MULTIADDR;
 
@@ -61,18 +62,30 @@ function App() {
   this.settingsStore = null;
   this.bandwidthController = null;
 
-  this.login = async () => {
-    const login = new LoginView();
+  this.login = () => {
+    ipcRenderer.once('login', async (e, data) => {
+      this.OHM_SERVER = data.OHM_SERVER;
+      this.USER_DATA_PATH = data.userDataPath;
+      this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : `https://${this.OHM_SERVER}${process.env.NODE_ENV === 'test' ? '/test' : ''}`;
 
-    try {
-      await login.init(); //Attempt login with credentials
-    }
-    catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      //Create settingsStore
+      this.settingsStore = new Store({ name: 'settings' });
+      this.settingsStore.init();
 
-      this.root.innerHTML = '' //Draw login screen
-      login.render();
-    }
+      const login = new LoginView();
+
+      try {
+        await login.init(); //Attempt login with credentials
+      }
+      catch (err) {
+        if (err.message !== 'FETCH_ERR') log.error(err.message);
+
+        this.root.innerHTML = '' //Draw login screen
+        login.render();
+      }
+    });
+
+    ipcRenderer.send('login');
   }
 
   this.logout = async (sessionExpired) => {
@@ -103,12 +116,6 @@ function App() {
     ipcRenderer.once('daemon-ready', async (e, data) => {
       log.success('IPFS daemon initiated.');
       try {
-        this.USER_DATA_PATH = data.userDataPath;
-
-        //Create settingsStore
-        this.settingsStore = new Store({ name: 'settings' });
-        this.settingsStore.init();
-
         this.ipfs = create({
           protocol: this.settingsStore.getOne('IPFS_PROTOCOL'),
           host: this.settingsStore.getOne('IPFS_HOST'),
@@ -147,7 +154,6 @@ function App() {
     });
 
     log('Initiating IPFS daemon..');
-    ipcRenderer.on('open-settings', this.openSettings); //Add listener for the open-settings command
     ipcRenderer.on('ipfs-error', this.handleIPFSError); //Add listener for the open-settings command
     ipcRenderer.send('start');
   }
@@ -373,7 +379,6 @@ function App() {
 
       const _res = await fetch(`${app.URL}/register`, {
         method: 'POST',
-        credentials: 'include', //Include cookie
         headers: {
           'Content-Type': 'application/json',
         },
