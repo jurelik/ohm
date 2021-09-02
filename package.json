@@ -10,7 +10,7 @@
     "test_server": "NODE_ENV=test electron .",
     "build_osx": "electron-packager . ohm --platform=darwin --arch=x64 --out ~/Documents/ --overwrite --icon=./src/assets/icon/icon.icns ; echo 'Built for OSX'",
     "build_linux": "electron-packager . ohm --platform=linux  --arch=x64 --out ~/Documents/ --overwrite --icon=./src/assets/icon/icon.png ; echo 'Built for LINUX'",
-    "build_win": "electron-packager . ohm --platform=win32  --arch=x64 --out ~/Documents/ --overwrite --icon=./src/assets/icon/icon.ico ; echo 'Built for WIN'",
+    "build_win": "electron-packager . ohm --platform=win32  --arch=x64 --out %HOMEPATH%/Documents/ --overwrite --icon=./src/assets/icon/icon.ico ; echo 'Built for WIN'",
     "build": "npm run clean ; npm run build_osx ; npm run build_linux ; npm run build_win ; echo 'Built for OSX, LINUX and WIN'"
   },
   "repository": {
