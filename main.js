@@ -28,8 +28,8 @@ function createWindow() {
   if (win) return win.show(); //Ignore if window is already created
 
   win = new BrowserWindow({
-    width: settings ? settings.WIDTH : 640,
-    height: settings ? settings.HEIGHT : 360,
+    width: settings && settings.WIDTH ? settings.WIDTH : 640,
+    height: settings && settings.HEIGHT ? settings.HEIGHT : 360,
     minWidth: 480,
     minHeight: 300,
     backgroundColor: "#222",
