@@ -10,26 +10,30 @@ let tempUploadPath = null; //True while upload is active
 let win = null; //Main window
 let view = null; //Which view should we open with ('explore' being default)
 let quitting = false; //Is the app in the process of quitting
+let settings = null; //User settings
 
 const DEFAULT_SETTINGS = {
   DOWNLOAD_PATH: path.join(os.homedir(), 'Documents', 'ohm'),
+  OPEN_DEV: 'false',
+  WIDTH: 640,
+  HEIGHT: 360,
+  OS_THEME: 'system',
   IPFS_PROTOCOL: 'http',
   IPFS_HOST: 'localhost',
   IPFS_PORT: 5001,
-  IPFS_PATH: 'api/v0',
-  OS_THEME: 'system'
+  IPFS_PATH: 'api/v0'
 }
 
 function createWindow() {
   if (win) return win.show(); //Ignore if window is already created
 
   win = new BrowserWindow({
-    width: 800,
-    height: 360,
+    width: settings ? settings.WIDTH : 640,
+    height: settings ? settings.HEIGHT : 360,
     minWidth: 480,
     minHeight: 300,
     backgroundColor: "#222",
-    icon: path.join(__dirname, 'src', 'assets', 'icon', { darwin: 'icon.icns', linux: 'icon.png', win32: 'icon.ico'  }[process.platform] || 'icon.ico'),
+    icon: path.join(__dirname, 'src', 'assets', 'icon', { darwin: 'icon.icns', linux: 'icon.png', win32: 'icon.ico' }[process.platform] || 'icon.ico'),
     titleBarStyle: 'hidden',
     autoHideMenuBar: true,
     trafficLightPosition: { x: 9, y: 6 },
@@ -40,14 +44,32 @@ function createWindow() {
   })
 
   if (process.platform === 'darwin') app.dock.show();
-  win.webContents.openDevTools();
-  win.webContents.on('devtools-opened', () => {
-    win.loadFile('src/index.html')
-  });
+  if (settings && settings.OPEN_DEV === 'true') {
+    win.webContents.openDevTools();
+    win.webContents.on('devtools-opened', () => {
+      win.loadFile('src/index.html');
+    });
+  }
+  else win.loadFile('src/index.html');
+
+  //Window event handlers
   win.once('closed', () => win = null);
+  win.on('resize', () => {
+    const size = win.getSize();
+
+    if (settings) {
+      const _settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+      _settings.WIDTH = size[0];
+      _settings.HEIGHT = size[1];
+      fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(_settings, null, 2));
+    }
+  });
 }
 
 app.whenReady().then(() => {
+  //Get user settings
+  if (fs.existsSync(path.join(userDataPath, 'settings.json'))) settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+
   createTray();
   createWindow();
 });
@@ -87,7 +109,7 @@ app.on('activate', () => {
 ipcMain.on('start', (event) => {
   process.env.IPFS_PATH = path.join(os.homedir(), '.ohm-ipfs'); //Set IPFS_PATH
   if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}');
-  if (!fs.existsSync(path.join(userDataPath, 'settings.json'))) fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(DEFAULT_SETTINGS, null, 2));
+  if (!settings) fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(DEFAULT_SETTINGS, null, 2));
 
   if (daemon) { //Check if daemon is already running
     event.reply('daemon-ready', { userDataPath, view: view || 'explore' });
@@ -225,7 +247,7 @@ const getTrayIconPath = () => {
     case 'darwin':
       return path.join(__dirname, 'src', 'assets', 'tray', 'trayLightTemplate.png');
     case 'linux':
-      if (fs.existsSync(path.join(userDataPath, 'settings.json'))) { //Check if user decided to overwrite default tray icon color
+      if (settings) { //Check if user decided to overwrite default tray icon color
         const { OS_THEME } = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
         if ( OS_THEME === 'dark' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayDark.png');
         else if ( OS_THEME === 'light' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayLightTemplate.png');
@@ -233,7 +255,7 @@ const getTrayIconPath = () => {
 
       return path.join(__dirname, 'src', 'assets', 'tray', `tray${nativeTheme.shouldUseDarkColors ? 'Dark' : 'LightTemplate'}.png`);
     case 'win32':
-      if (fs.existsSync(path.join(userDataPath, 'settings.json'))) { //Check if user decided to overwrite default tray icon color
+      if (settings) { //Check if user decided to overwrite default tray icon color
         const { OS_THEME } = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
         if ( OS_THEME === 'dark' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayDark.png');
         else if ( OS_THEME === 'light' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayLightTemplate.png');

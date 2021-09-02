@@ -5,6 +5,7 @@ const log = require('../utils/log');
 function SettingsView(data) {
   this.el = document.createElement('div');
   this.data = data;
+  app.settingsStore.init(); //Update values
   this.settings = app.settingsStore.get();
 
   this.handleSave = (e) => {

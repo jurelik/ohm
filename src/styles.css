@@ -888,6 +888,7 @@ pre {
 
 .actions-inner button {
   padding: 0 5px;
+  white-space: nowrap;
 }
 
 .actions-delete {
