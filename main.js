@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, Tray, nativeTheme } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray, nativeTheme, globalShortcut } = require('electron');
 const { spawn } = require('child_process')
 const os = require('os');
 const path = require('path');
@@ -69,6 +69,7 @@ function createWindow() {
 app.whenReady().then(() => {
   //Get user settings
   if (fs.existsSync(path.join(userDataPath, 'settings.json'))) settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+  globalShortcut.register('CommandOrControl+Q', app.quit);
 
   createTray();
   createWindow();
@@ -109,7 +110,10 @@ app.on('activate', () => {
 ipcMain.on('start', (event) => {
   process.env.IPFS_PATH = path.join(os.homedir(), '.ohm-ipfs'); //Set IPFS_PATH
   if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}');
-  if (!settings) fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(DEFAULT_SETTINGS, null, 2));
+  if (!settings) { //Init settings
+    fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(DEFAULT_SETTINGS, null, 2));
+    settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+  }
 
   if (daemon) { //Check if daemon is already running
     event.reply('daemon-ready', { userDataPath, view: view || 'explore' });
