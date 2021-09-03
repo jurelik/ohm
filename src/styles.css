@@ -335,6 +335,12 @@ pre {
   height: 100%;
 }
 
+.login .drag {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .login .main {
   display: flex;
   flex-direction: column;

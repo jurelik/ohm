@@ -45,7 +45,7 @@ function createWindow() {
   })
 
   if (process.platform === 'darwin') app.dock.show();
-  if (settings && settings.OPEN_DEV === 'true') {
+  if (settings.OPEN_DEV === 'true') {
     win.webContents.openDevTools();
     win.webContents.on('devtools-opened', () => {
       win.loadFile('src/index.html');

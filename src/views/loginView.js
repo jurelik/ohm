@@ -102,6 +102,13 @@ function LoginView() {
     submit.setAttribute('type', 'submit');
     submit.textContent = 'login';
 
+    //Add drag area if needed
+    if (process.platform === 'darwin') {
+      const drag = document.createElement('div');
+      drag.className = 'drag';
+      this.el.appendChild(drag);
+    }
+
     //Build structure
     this.el.appendChild(logoDiv);
     this.el.appendChild(main);
