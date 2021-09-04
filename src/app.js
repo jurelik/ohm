@@ -402,7 +402,7 @@ function App() {
     //Build HTML skeleton
     this.root.innerHTML = `
     ${process.platform === 'darwin' || (process.platform !== 'darwin' && this.settingsStore.getOne('FRAMELESS') === 'true') ?
-    `<div class="drag">
+    `<div class="drag ${process.platform === 'darwin' ? 'darwin' : ''}">
     </div>` : '' }
     <div class="header">
     </div>
