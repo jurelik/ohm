@@ -154,7 +154,8 @@ function App() {
     });
 
     log('Initiating IPFS daemon..');
-    ipcRenderer.on('ipfs-error', this.handleIPFSError); //Add listener for the open-settings command
+    ipcRenderer.on('open-settings', this.openSettings); //Add listener for the open-settings command
+    ipcRenderer.on('ipfs-error', this.handleIPFSError);
     ipcRenderer.send('start');
   }
 

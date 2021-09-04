@@ -16,13 +16,13 @@ const DEFAULT_SETTINGS = {
   OHM_SERVER: 'api.ohm.rip',
   DOWNLOAD_PATH: path.join(os.homedir(), 'Documents', 'ohm'),
   OPEN_DEV: 'false',
-  WIDTH: 640,
-  HEIGHT: 360,
+  WIDTH: '640',
+  HEIGHT: '360',
   FRAMELESS: 'false',
   OS_THEME: 'system',
   IPFS_PROTOCOL: 'http',
   IPFS_HOST: 'localhost',
-  IPFS_PORT: 5001,
+  IPFS_PORT: '5001',
   IPFS_PATH: 'api/v0'
 }
 
@@ -57,16 +57,7 @@ function createWindow() {
 
   //Window event handlers
   win.once('closed', () => win = null);
-  win.on('resize', () => {
-    const size = win.getSize();
-
-    if (settings) {
-      const _settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
-      _settings.WIDTH = size[0];
-      _settings.HEIGHT = size[1];
-      fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(_settings, null, 2));
-    }
-  });
+  win.on('resize', handleResize);
 }
 
 app.whenReady().then(() => {
@@ -245,6 +236,17 @@ const menuTemplate = (running) => {
     { type: 'separator' },
     { label: 'Quit', type: 'normal', role: 'quit', accelerator: 'CmdOrCtrl+Q' },
   ];
+}
+
+const handleResize = () => {
+  const size = win.getSize();
+
+  if (settings) {
+    const _settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+    _settings.WIDTH = size[0].toString();
+    _settings.HEIGHT = size[1].toString();
+    fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(_settings, null, 2));
+  }
 }
 
 const createTray = () => {
