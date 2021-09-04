@@ -103,7 +103,7 @@ function LoginView() {
     submit.textContent = 'login';
 
     //Add drag area if needed
-    if (process.platform === 'darwin' || (process.platform !== 'darwin' && app.settings.FRAMELESS === 'true')) {
+    if (process.platform === 'darwin' || (process.platform !== 'darwin' && app.settingsStore.getOne('FRAMELESS') === 'true')) {
       const drag = document.createElement('div');
       drag.className = 'drag';
       this.el.appendChild(drag);
