@@ -18,6 +18,7 @@ const DEFAULT_SETTINGS = {
   OPEN_DEV: 'false',
   WIDTH: 640,
   HEIGHT: 360,
+  FRAMELESS: 'false',
   OS_THEME: 'system',
   IPFS_PROTOCOL: 'http',
   IPFS_HOST: 'localhost',
@@ -36,6 +37,7 @@ function createWindow() {
     backgroundColor: "#222",
     icon: path.join(__dirname, 'src', 'assets', 'icon', { darwin: 'icon.icns', linux: 'icon.png', win32: 'icon.ico' }[process.platform] || 'icon.ico'),
     titleBarStyle: 'hidden',
+    frame: process.platform !== 'darwin' && settings.FRAMELESS === 'true' ? false : true,
     autoHideMenuBar: true,
     trafficLightPosition: { x: 9, y: 6 },
     webPreferences: {

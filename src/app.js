@@ -400,7 +400,7 @@ function App() {
   this.buildHTML = () => {
     //Build HTML skeleton
     this.root.innerHTML = `
-    ${process.platform === 'darwin' ?
+    ${process.platform === 'darwin' || (process.platform !== 'darwin' && this.settings.FRAMELESS === 'true') ?
     `<div class="drag">
     </div>` : '' }
     <div class="header">

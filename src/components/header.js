@@ -104,7 +104,7 @@ function Header() {
     searchButton.innerHTML = searchIcon;
 
     //Add classes
-    if (process.platform === 'darwin') this.el.classList.add('darwin');
+    if (process.platform === 'darwin' || (process.platform !== 'darwin' && app.settings.FRAMELESS === 'true')) this.el.classList.add('frameless');
     forward.disabled = true;
     back.disabled = true;;
     refresh.className = 'refresh';
