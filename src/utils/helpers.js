@@ -63,7 +63,7 @@ const transferTimeout = (unique) => {
       transfer.timeout = transferTimeout(unique);
     }
     catch (err) {
-      log.error(err.message)
+      if (err.message !== 'Request timed out') log.error(err.message) //Prevent error spam in case of bad availability
       if (app.transfersStore.getOne(unique).active) transfer.timeout = transferTimeout(unique);
     }
 
