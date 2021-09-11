@@ -24,11 +24,11 @@
   },
   "homepage": "https://github.com/jurelik/ohm#readme",
   "devDependencies": {
-    "electron": "^13.1.7",
-    "electron-packager": "^15.3.0"
+    "electron": "^14.0.0",
+    "electron-packager": "^15.4.0"
   },
   "dependencies": {
     "go-ipfs": "^0.9.1",
-    "ipfs-http-client": "^51.0.1"
+    "ipfs-http-client": "^52.0.3"
   }
 }

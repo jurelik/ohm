@@ -42,7 +42,8 @@ function createWindow() {
     trafficLightPosition: { x: 9, y: 6 },
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
+      nativeWindowOpen: true
     }
   })
 
