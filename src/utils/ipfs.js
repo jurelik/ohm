@@ -85,9 +85,9 @@ const resumeTransfer = async (unique) => {
     const controller = new AbortController();
 
     //Perform checks before resuming a transfer
-    if (transfer.active) throw 'Transfer is already active'; //Check if transfer is already active
+    if (transfer.active) throw new Error('Transfer is already active'); //Check if transfer is already active
     const folderExists = await helpers.folderExists(transfer); //Check if song/album folder exists already
-    if (transfer.completed && folderExists && transfer.type === 'pin') throw 'Transfer has already been completed'; //Check if item has already been pinned
+    if (transfer.completed && folderExists && transfer.type === 'pin') throw new Error ('Transfer has already been completed'); //Check if item has already been pinned
 
     //Resume transfer
     app.transfersStore.update(unique, { active: true, completed: false, controller, timeout: helpers.transferTimeout(unique) });
