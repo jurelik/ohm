@@ -21,4 +21,4 @@ npm run build_linux
 npm run build_win
 ```
 
-<sub>design inspired by [100r](https://100r.co/) | fonts by [DJR](https://djr.com/)</sub>
+<sub>design inspired by [100r](https://100r.co/) | fonts by [DJR](https://djr.com/) | icons made with [dotgrid](https://100r.co/site/dotgrid.html)</sub>
