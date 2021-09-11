@@ -98,6 +98,7 @@ const folderExists = async (transfer) => {
         //Check if CIDs are equal
         const { cid } = await app.ipfs.files.stat(`${transfer.path}/${transfer.title}`);
         if (cid.toString() === transfer.cid) return true;
+        await app.ipfs.files.rm(`${transfer.path}/${transfer.title}`, { recursive: true }); //If CIDs don't match delete the current folder as this means the song/album has been reuploaded
       }
     }
 
