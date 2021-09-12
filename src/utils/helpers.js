@@ -54,17 +54,18 @@ const transferTimeout = (unique) => {
     const transfer = app.transfersStore.getOne(unique);
 
     try {
-      const stat = await app.ipfs.files.stat(`/ipfs/${transfer.cid}`, { withLocal: true, timeout: 2000, signal: transfer.controller.signal });
+      const stat = await app.ipfs.files.stat(`/ipfs/${transfer.cid}`, { withLocal: true, signal: transfer.controller.signal });
       const percentage = Math.round(stat.sizeLocal / stat.cumulativeSize * 100);
       app.transfersStore.update(unique, { progress: percentage }); //Update progress in transfersStore
       if (app.current === 'transfers' && app.views.transfers) app.views.transfers.children[unique].update('progress'); //Update progress in transfersView
 
       if (percentage === 100) return;
-      transfer.timeout = transferTimeout(unique);
+      app.transfersStore.update(unique, { timeout: transferTimeout(unique) }, true); //Add timeout to transfer in memory
     }
     catch (err) {
-      if (err.message !== 'Request timed out') log.error(err.message) //Prevent error spam in case of bad availability
-      if (app.transfersStore.getOne(unique).active) transfer.timeout = transferTimeout(unique);
+      log.error(err.message);
+      if (app.transfersStore.getOne(unique).active) app.transfersStore.update(unique, { timeout: transferTimeout(unique) }, true); //Add timeout to transfer in memory
+
     }
 
   }, 1000);

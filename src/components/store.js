@@ -37,11 +37,9 @@ function Store(opts) {
     fs.writeFileSync(this.path, JSON.stringify(this.data));
   }
 
-  this.update = (unique, obj) => { //Update value of items
-    for (let key in obj) {
-      this.data[unique][key] = obj[key];
-    }
-    fs.writeFileSync(this.path, JSON.stringify(this.data));
+  this.update = (unique, obj, temporary) => { //Update value of items (temporary flag means the changes won't be written to disk)
+    for (let key in obj) this.data[unique][key] = obj[key];
+    if (!temporary) fs.writeFileSync(this.path, JSON.stringify(this.data));
   }
 }
 

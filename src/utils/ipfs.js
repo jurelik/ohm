@@ -34,6 +34,7 @@ const uploadAlbum = async (payload) => {
 
 const startTransfer = async (payload, _options) => {
   const options = _options || {}; //Initialise the options object if not provided
+  const unique = helpers.generateTransferId(); //Generate unique id for the transfer
 
   try {
     const type = options.download ? 'download' : 'pin';
@@ -41,7 +42,6 @@ const startTransfer = async (payload, _options) => {
     if (_unique) return resumeTransfer(_unique);
 
     //Create transfer
-    const unique = helpers.generateTransferId(); //Generate unique id for the transfer
     const controller = new AbortController(); //Create abort controller to abort pin.add
     const path = helpers.createMFSTransferPath(payload); //Create MFS path where the song/album will be stored
     const transfer = {
@@ -54,27 +54,31 @@ const startTransfer = async (payload, _options) => {
       type,
       progress: 0,
       active: true, //Is the timeout active
-      completed: false,
-      timeout: null,
-      controller
+      completed: false
     };
 
     app.transfersStore.add(unique, transfer); //Add transfer to transfersStore
-    transfer.timeout = helpers.transferTimeout(unique); //Create an interval to update progress
+    app.transfersStore.update(unique, { controller }, true); //Add controller to transfer in memory
+    app.transfersStore.update(unique, { timeout: helpers.transferTimeout(unique) }, true); //Add timeout to transfer in memory
     log('Transfer initiated..');
 
     const folderExists = await helpers.folderExists(transfer); //Check if folder exists already
     if (!folderExists) await helpers.pinItem(transfer, controller); //Add to MFS
     if (transfer.type === 'download') await helpers.writeToDisk(transfer); //Download to file system if download option is specified
 
-    clearTimeout(transfer.timeout);
-    app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
+    const timeout = app.transfersStore.getOne(unique).timeout; //Clear timeout if running
+    if (timeout) clearTimeout(timeout);
+
+    app.transfersStore.update(unique, { active: false, completed: true, progress: 100 }); //Clean up transfer
     if (app.current === 'transfers' && app.views.transfers) app.views.transfers.children[unique].reRender(); //Update transfersView if applicable
     helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
 
     log.success('Transfer succesfully completed.');
   }
   catch (err) {
+    const timeout = app.transfersStore.getOne(unique).timeout; //Clear timeout if running
+    if (timeout) clearTimeout(timeout);
+
     throw err;
   }
 }
@@ -90,14 +94,18 @@ const resumeTransfer = async (unique) => {
     if (transfer.completed && folderExists && transfer.type === 'pin') throw new Error ('Transfer has already been completed'); //Check if item has already been pinned
 
     //Resume transfer
-    app.transfersStore.update(unique, { active: true, completed: false, controller, timeout: helpers.transferTimeout(unique) });
+    app.transfersStore.update(unique, { active: true, completed: false });
+    app.transfersStore.update(unique, { controller }, true); //Add controller to transfer in memory
+    app.transfersStore.update(unique, { timeout: helpers.transferTimeout(unique) }, true); //Add timeout to transfer in memory
     log('Transfer initiated..');
 
     if (!folderExists) await helpers.pinItem(transfer, controller); //Add to MFS
     if (transfer.type === 'download') await helpers.writeToDisk(transfer); //Download to file system if download option is specified
 
-    clearTimeout(transfer.timeout);
-    app.transfersStore.update(unique, { active: false, controller: null, completed: true, progress: 100 }); //Clean up transfer
+    const timeout = app.transfersStore.getOne(unique).timeout; //Clear timeout if running
+    if (timeout) clearTimeout(timeout);
+
+    app.transfersStore.update(unique, { active: false, completed: true, progress: 100 }); //Clean up transfer
     if (app.current === 'transfers' && app.views.transfers) app.views.transfers.children[unique].reRender(); //Update transferView if applicable
     helpers.appendPinIcon(transfer.cid); //Update pin icon if applicable
 
@@ -112,10 +120,10 @@ const pauseTransfer = async (unique) => {
   try {
     const transfer = app.transfersStore.getOne(unique);
 
-    //Resume transfer
+    //Pause transfer
     app.transfersStore.update(unique, { active: false });
     transfer.controller.abort();
-    clearTimeout(transfer.timeout);
+    if (transfer.timeout) clearTimeout(transfer.timeout);
   }
   catch (err) {
     throw err;
@@ -127,8 +135,9 @@ const clearTransfer = async (unique) => {
     const transfer = app.transfersStore.getOne(unique);
     if (!transfer.completed) {
       if (transfer.active) { //Stop transfer if it is currently active
+        app.transfersStore.update(unique, { active: false });
         transfer.controller.abort();
-        clearTimeout(transfer.timeout);
+        if (transfer.timeout) clearTimeout(transfer.timeout);
       }
       await helpers.garbageCollect(); //Remove any data saved to IPFS
     }

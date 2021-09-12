@@ -29,7 +29,7 @@ function Transfer(data, unique) {
       if (this.data.active) { //If active pause
         this.el.querySelector(`.resume`).innerHTML = refreshIconSmall; //Update DOM
         ipfs.pauseTransfer(this.unique);
-        log.success('Successfully paused.');
+        log.success('Transfer paused.');
         return;
       }
 
