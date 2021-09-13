@@ -294,7 +294,7 @@ function App() {
     }
     catch (err) {
       if (err.message === 'The user aborted a request.') return;
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      log.error(err.message);
     }
   }
 

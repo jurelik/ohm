@@ -33,20 +33,9 @@ function Transfer(data, unique) {
         return;
       }
 
-      switch (this.data.type) {
-        case 'pin':
-          log('Innitiating transfer..');
-          this.el.querySelector(`.resume`).innerHTML = pauseIcon; //Update DOM
-          await ipfs.resumeTransfer(this.unique);
-          break;
-        case 'download':
-          log('Innitiating transfer..');
-          this.el.querySelector(`.resume`).innerHTML = pauseIcon; //Update DOM
-          await ipfs.resumeTransfer(this.unique);
-          break;
-        default:
-          log.error('Unknown command.');
-      }
+      log('Innitiating transfer..');
+      this.el.querySelector(`.resume`).innerHTML = pauseIcon; //Update DOM
+      await ipfs.resumeTransfer(this.unique);
     }
     catch (err) {
       log.error(err.message);

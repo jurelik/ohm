@@ -56,16 +56,14 @@ const transferTimeout = (unique) => {
     try {
       const stat = await app.ipfs.files.stat(`/ipfs/${transfer.cid}`, { withLocal: true, signal: transfer.controller.signal });
       const percentage = Math.round(stat.sizeLocal / stat.cumulativeSize * 100);
+      if (percentage === 100) return;
+
       app.transfersStore.update(unique, { progress: percentage }); //Update progress in transfersStore
       if (app.current === 'transfers' && app.views.transfers) app.views.transfers.children[unique].update('progress'); //Update progress in transfersView
-
-      if (percentage === 100) return;
       app.transfersStore.update(unique, { timeout: transferTimeout(unique) }, true); //Add timeout to transfer in memory
     }
     catch (err) {
-      log.error(err.message);
       if (app.transfersStore.getOne(unique).active) app.transfersStore.update(unique, { timeout: transferTimeout(unique) }, true); //Add timeout to transfer in memory
-
     }
 
   }, 1000);
@@ -185,7 +183,7 @@ const pinItem = async (transfer, controller) => {
     if (transfer.albumTitle) await createAlbumFolder(transfer); //Create an album folder if needed
     if (transfer.album) await removeExistingAlbumFolder(transfer); //Check if folder exists and remove it
     await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}/${transfer.title}`, { signal: controller.signal, parents: true, cidVersion: 1 });
-    log('Successfully pinned item.')
+    log('Successfully pinned item.');
   }
   catch (err) {
     throw err;
