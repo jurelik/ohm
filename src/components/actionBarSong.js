@@ -44,7 +44,7 @@ function ActionBarSong(data) {
       else await ipfs.startTransfer(this.data);
     }
     catch (err) {
-      log.error(err.message);
+      if (err.message !== 'The user aborted a request.') log.error(err.message); //If request was aborted this means it was either cleared or paused, which is logged accordingly already
     }
   }
 
@@ -57,7 +57,7 @@ function ActionBarSong(data) {
       await ipfs.startTransfer(this.data, { download: true });
     }
     catch (err) {
-      log.error(err.message);
+      if (err.message !== 'The user aborted a request.') log.error(err.message); //If request was aborted this means it was either cleared or paused, which is logged accordingly already
     }
   }
 

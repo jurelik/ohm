@@ -38,7 +38,7 @@ function Transfer(data, unique) {
       await ipfs.resumeTransfer(this.unique);
     }
     catch (err) {
-      log.error(err.message);
+      if (err.message !== 'The user aborted a request.') log.error(err.message); //If request was aborted this means it was either cleared or paused, which is logged accordingly already
     }
   }
 
@@ -48,6 +48,7 @@ function Transfer(data, unique) {
 
     try {
       await ipfs.clearTransfer(this.unique);
+      log.success('Transfer cleared.');
     }
     catch (err) {
       log.error(err.message);
