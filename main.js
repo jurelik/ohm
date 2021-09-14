@@ -26,7 +26,7 @@ const DEFAULT_SETTINGS = {
   IPFS_PATH: 'api/v0'
 }
 
-function createWindow() {
+const createWindow = () => {
   if (win) return win.show(); //Ignore if window is already created
 
   win = new BrowserWindow({
@@ -78,7 +78,7 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   if (process.platform === 'darwin') app.dock.hide();
-})
+});
 
 app.on('will-quit', async (e) => {
   quitting = true;
@@ -99,13 +99,11 @@ app.on('will-quit', async (e) => {
     e.preventDefault();
     daemon.kill();
   }
-})
+});
 
 app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
-  }
-})
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
+});
 
 //IPC events
 ipcMain.on('start', (event) => {
@@ -118,12 +116,8 @@ ipcMain.on('start', (event) => {
   }
 
   //Check if the repo exists already
-  if (fs.existsSync(process.env.IPFS_PATH)) {
-    spawnDaemon(event);
-  }
-  else {
-    initRepo(event);
-  }
+  if (fs.existsSync(process.env.IPFS_PATH)) spawnDaemon(event);
+  else initRepo(event);
 });
 
 ipcMain.on('upload-start', (event, arg) => { //When upload starts, make note of MFS path so that we can delete it on force close during upload
@@ -259,12 +253,13 @@ const createTray = () => {
 }
 
 const getTrayIconPath = () => {
+  const { OS_THEME } = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+
   switch (process.platform) {
     case 'darwin':
       return path.join(__dirname, 'src', 'assets', 'tray', 'trayLightTemplate.png');
     case 'linux':
       if (settings) { //Check if user decided to overwrite default tray icon color
-        const { OS_THEME } = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
         if ( OS_THEME === 'dark' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayDark.png');
         else if ( OS_THEME === 'light' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayLightTemplate.png');
       }
@@ -272,7 +267,6 @@ const getTrayIconPath = () => {
       return path.join(__dirname, 'src', 'assets', 'tray', `tray${nativeTheme.shouldUseDarkColors ? 'Dark' : 'LightTemplate'}.png`);
     case 'win32':
       if (settings) { //Check if user decided to overwrite default tray icon color
-        const { OS_THEME } = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
         if ( OS_THEME === 'dark' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayDark.png');
         else if ( OS_THEME === 'light' ) return path.join(__dirname, 'src', 'assets', 'tray', 'trayLightTemplate.png');
       }

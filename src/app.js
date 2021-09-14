@@ -252,11 +252,7 @@ function App() {
 
     //Clear all history above current index
     this.history.splice(this.historyIndex);
-
-    this.history.push({
-      type,
-      data
-    });
+    this.history.push({ type, data });
   }
 
   this.removeLastFromHistory = () => {
@@ -267,10 +263,7 @@ function App() {
 
   this.initTransfers = () => {
     const transfers = this.transfersStore.get();
-
-    for (let unique in transfers) {
-      transfers[unique].active = false; //All transfers are paused on app open - ADD OPTION TO DISABLE THIS
-    }
+    for (let unique in transfers) transfers[unique].active = false; //All transfers are paused on app open - ADD OPTION TO DISABLE THIS
   }
 
   this.triggerLoading = (val) => {
@@ -303,7 +296,7 @@ function App() {
     this.changeView('settings');
   }
 
-  this.handleIPFSError = (event, err) => {
+  this.handleIPFSError = (e, err) => {
     log.error(`IPFS Error: ${Buffer.from(err)}`);
   }
 
@@ -391,7 +384,6 @@ function App() {
       if (res.type === 'error') throw new Error(res.err);
 
       log.success('Successfully created artist.');
-
     }
     catch (err) {
       if (err.message !== 'FETCH_ERR') log.error(err.message);
