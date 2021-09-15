@@ -6,7 +6,7 @@ songs and albums are licensed under an All Rights Reserved license.
 
 files included with a song are licensed under a Creative Commons license of the artist's choosing.
 
-\[[read more](https://ohm.rip)\]
+\[[read more](https://ohm.rip)\] \[[ohm back-end](https://github.com/jurelik/ohm-be)\]
 
 ![screenshot](screenshot.jpg)
 

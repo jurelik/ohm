@@ -87,9 +87,7 @@ function ExploreView(data) {
           let album = new Album(item, 'explore');
           el = await album.render();
         }
-        else {
-          continue;
-        }
+        else continue;
         this.el.insertBefore(el, this.el.querySelector('.load-more'));
       }
     }
@@ -115,9 +113,7 @@ function ExploreView(data) {
           let album = new Album(item, 'explore');
           el = await album.render();
         }
-        else {
-          continue;
-        }
+        else continue;
         this.el.appendChild(el);
       }
 
