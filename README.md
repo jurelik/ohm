@@ -11,7 +11,9 @@ files included with a song are licensed under a Creative Commons license of the 
 ![screenshot](screenshot.jpg)
 
 ## run ohm
+Downlod the latest release \[[here](https://github.com/jurelik/ohm/releases)\] or run from source:
 ```
+git clone https://github.com/jurelik/ohm.git && cd ohm
 npm install
 npm start
 ```
