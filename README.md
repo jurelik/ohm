@@ -1,4 +1,5 @@
 # ohm
+![logo](./src/assets/icon/icon.svg)
 
 ohm is a platform for open source music built on top of [ipfs](https://ipfs.io/).
 
