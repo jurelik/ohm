@@ -66,10 +66,8 @@ function FollowingView(data) {
   this.append = async (data) => {
     try {
       for (let item of data) {
-        let el;
         let artist = new Artist(item, 'search');
-        el = artist.render();
-        this.el.insertBefore(el, this.el.querySelector('.load-more'));
+        this.el.insertBefore(artist.render(), this.el.querySelector('.load-more'));
       }
     }
     catch (err) {
@@ -95,11 +93,8 @@ function FollowingView(data) {
       if (this.data.length === 0) return helpers.handleEmpty(this.el); //Show different view if no items to be shown
 
       for (let item of this.data) {
-        let el;
         let artist = new Artist(item, 'search');
-        el = artist.render();
-
-        this.el.appendChild(el);
+        this.el.appendChild(artist.render());
       }
 
       //Add load more button

@@ -79,9 +79,8 @@ function FeedView(data) {
           let album = new Album(item, 'feed');
           el = await album.render();
         }
-        else {
-          continue;
-        }
+        else continue;
+
         this.el.insertBefore(el, this.el.querySelector('.load-more'));
       }
     }
@@ -117,9 +116,8 @@ function FeedView(data) {
           let album = new Album(item, 'feed');
           el = await album.render();
         }
-        else {
-          continue;
-        }
+        else continue;
+
         this.el.appendChild(el);
       }
 

@@ -129,7 +129,6 @@ function SearchView(data) {
       //Include main view
       const main = new SearchViewMain(this.data.results);
       this.children.main = main;
-      //this.el.appendChild(await main.render());
       this.el.insertBefore(await main.render(), this.el.querySelector('.load-more'));
     }
     catch (err) {
@@ -140,7 +139,6 @@ function SearchView(data) {
   this.render = async () => {
     try {
       this.el.innerHTML = ''; //Reset innerHTML
-
       if (!this.data.results) this.data.results = await this.fetch(); //Fetch data from server on first render
 
       //Create elements

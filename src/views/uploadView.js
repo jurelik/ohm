@@ -37,7 +37,7 @@ function UploadView(data) {
     let song;
     this.children.some(child => {
       if (child.unique === unique) {
-        song = child
+        song = child;
         return true;
       }
     });

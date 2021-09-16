@@ -9,7 +9,7 @@ const Song = require('../components/song');
 function PinnedView(data) {
   this.el = document.createElement('div');
   this.data = data;
-  this.LOAD_MORE_AMOUNT = 2;
+  this.LOAD_MORE_AMOUNT = 10;
 
   this.init = async () => {
     try {
@@ -80,9 +80,7 @@ function PinnedView(data) {
           let album = new Album(item, 'feed');
           el = await album.render();
         }
-        else {
-          continue;
-        }
+        else continue;
         this.el.insertBefore(el, this.el.querySelector('.load-more'));
       }
     }
@@ -125,9 +123,8 @@ function PinnedView(data) {
           let album = new Album(item, 'pinned');
           el = await album.render();
         }
-        else {
-          continue;
-        }
+        else continue;
+
         this.el.appendChild(el);
       }
 
