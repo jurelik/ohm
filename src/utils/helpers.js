@@ -270,7 +270,7 @@ const timerPromise = (ms) => {
 const allowedFormat = (string) => {
   if (string.length === 0) return false;
 
-  const regex = /^\w+$/;
+  const regex = /^[\w ]+$/;
   return regex.test(string);
 }
 
