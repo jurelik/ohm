@@ -129,6 +129,12 @@ function UploadFile(data) {
       if (file.id === '') throw 'file id is missing';
     }
 
+    //Check formatting
+    if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check for bad characters
+    for (let tag of file.tags) {
+      if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
+    }
+
     //Add properties
     file.cid = null;
     if (file.type !== 'internal') file.format = file.path.slice(-3);

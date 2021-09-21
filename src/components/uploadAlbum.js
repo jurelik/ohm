@@ -31,7 +31,12 @@ function UploadAlbum(data) {
     //Handle empty fields
     if (album.title === '') throw new Error('Album title is missing.');
     if (album.tags === '') throw new Error('Album tags are missing.');
-    if (!helpers.allowedFormat(album.title)) throw new Error('Album title can only include letters, numbers and underscores.'); //Check for bad characters
+
+    //Check formatting
+    if (!helpers.allowedFormat(album.title)) throw new Error('Album title can only include letters, numbers and underscores.');
+    for (let tag of album.tags) {
+      if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
+    }
 
     //Add CID property
     album.cid = null;
