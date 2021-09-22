@@ -32,6 +32,8 @@ function UploadAlbum(data) {
     if (album.title === '') throw new Error('Album title is missing.');
     if (album.tags === '') throw new Error('Album tags are missing.');
 
+    album.tags = album.tags.split(/[,;]+/); //Turn tags into an array
+
     //Check formatting
     if (!helpers.allowedFormat(album.title)) throw new Error('Album title can only include letters, numbers and underscores.');
     for (let tag of album.tags) {
