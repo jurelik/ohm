@@ -685,6 +685,12 @@ pre {
 }
 
 /* song element */
+.song-view-files, .song-view-comments {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
 .song-view-files .created-at, .song-view-comments .created-at {
   color: #888;
   margin-top: -5px;
@@ -716,6 +722,7 @@ pre {
 
 .song-view-files {
   overflow-x: hidden;
+  padding-bottom: 5px;
 }
 
 .song-view-files .files {
@@ -728,10 +735,12 @@ pre {
   margin-top: 10px;
 }
 
-
 .song-view-main {
+  display: flex;
+  flex-direction: column;
   color: #888;
   margin-left: 0px;
+  flex: 1;
 }
 
 .comment-container {
@@ -740,7 +749,7 @@ pre {
   position: sticky;
   bottom: 0;
   left: 0;
-  margin-top: 5px;
+  margin-top: auto;
   background-color: #222;
   width: 100%;
 }
@@ -1010,12 +1019,19 @@ pre {
 }
 
 .comments {
+  display: flex;
+  flex-direction: column;
   margin-top: 10px;
+  flex: 1;
 }
 
 .comments p {
   color: #eee;
   margin: 0;
+}
+
+.comments .padding {
+  height: 5px;
 }
 
 .delete {

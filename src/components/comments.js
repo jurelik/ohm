@@ -52,6 +52,7 @@ function Comments(data) {
 
   this.render = () => {
     //Create elements
+    const padding = document.createElement('div');
     const container = document.createElement('form');
     const marker = document.createElement('div');
     const textarea = document.createElement('textarea');
@@ -59,6 +60,7 @@ function Comments(data) {
 
     //Add classes for styling
     this.el.className = 'comments';
+    padding.className = 'padding';
     container.className = 'comment-container';
     marker.className = 'marker';
 
@@ -76,6 +78,7 @@ function Comments(data) {
       this.el.appendChild(comment.render());
     }
 
+    this.el.appendChild(padding);
     this.el.appendChild(container);
     container.appendChild(marker);
     container.appendChild(textarea);
