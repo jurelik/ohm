@@ -55,7 +55,8 @@ function UploadSong(data) {
     if (!song.path) throw new Error('Song file is missing.');
     if (song.tags === '') throw new Error('Song tags are missing.');
 
-    song.tags = song.tags.split(/[,;]+/); //Turn tags into an array
+    song.tags = song.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
+    if (song.tags.length === 0) throw new Error('Song tags are missing');
 
     //Check formatting
     if (!helpers.allowedFormat(song.title)) throw new Error('Song title can only include letters, numbers and underscores.'); //Check for bad characters

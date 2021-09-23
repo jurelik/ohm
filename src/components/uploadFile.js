@@ -129,7 +129,8 @@ function UploadFile(data) {
       if (file.id === '') throw 'file id is missing';
     }
 
-    file.tags = file.tags.split(/[,;]+/); //Turn tags into an array
+    file.tags = file.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
+    if (file.tags.length === 0) throw new Error('File tags are missing');
 
     //Check formatting
     if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check for bad characters
