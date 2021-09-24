@@ -211,7 +211,7 @@ const garbageCollect = async () => {
 }
 
 const childIsPlaying = (song, songs) => { //Check if a song within an album is playing
-  for (let _song of songs) if (_song.id === song.id) return true;
+  for (let _song of songs) if (_song.id === song.id && song.type === _song.type) return true;
   return false;
 }
 
