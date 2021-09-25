@@ -172,7 +172,7 @@ const pinItem = async (transfer, controller) => {
     await app.ipfs.pin.add(`/ipfs/${transfer.cid}`, { signal: controller.signal, cidVersion: 1 });
     if (transfer.albumTitle) await createAlbumFolder(transfer); //Create an album folder if needed
     if (transfer.album) await removeExistingAlbumFolder(transfer); //Check if folder exists and remove it
-    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}/${transfer.title}`, { signal: controller.signal, parents: true, cidVersion: 1 });
+    await app.ipfs.files.cp(`/ipfs/${transfer.cid}`, `${transfer.path}/${transfer.title}`, { signal: controller.signal, cidVersion: 1 });
     log('Successfully pinned item.');
   }
   catch (err) {

@@ -62,6 +62,7 @@ const startTransfer = async (payload, _options) => {
     app.transfersStore.update(unique, { timeout: helpers.transferTimeout(unique) }, true); //Add timeout to transfer in memory
     log('Transfer initiated..');
 
+    await app.ipfs.files.mkdir(transfer.path, { signal: controller.signal, parents: true, cidVersion: 1 }); //Create singles/album folder if doesn't exist yet
     const folderExists = await helpers.folderExists(transfer); //Check if folder exists already
     if (!folderExists) await helpers.pinItem(transfer, controller); //Add to MFS
     if (transfer.type === 'download') await helpers.writeToDisk(transfer); //Download to file system if download option is specified
@@ -99,6 +100,7 @@ const resumeTransfer = async (unique) => {
     app.transfersStore.update(unique, { timeout: helpers.transferTimeout(unique) }, true); //Add timeout to transfer in memory
     log('Transfer initiated..');
 
+    await app.ipfs.files.mkdir(transfer.path, { signal: controller.signal, parents: true, cidVersion: 1 }); //Create singles/album folder if doesn't exist yet
     if (!folderExists) await helpers.pinItem(transfer, controller); //Add to MFS
     if (transfer.type === 'download') await helpers.writeToDisk(transfer); //Download to file system if download option is specified
 

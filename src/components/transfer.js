@@ -33,7 +33,7 @@ function Transfer(data, unique) {
         return;
       }
 
-      log('Innitiating transfer..');
+      log('Initiating transfer..');
       this.el.querySelector(`.resume`).innerHTML = pauseIcon; //Update DOM
       await ipfs.resumeTransfer(this.unique);
     }
