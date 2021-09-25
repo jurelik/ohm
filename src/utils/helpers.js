@@ -158,17 +158,7 @@ const writeToDisk = async (transfer) => {
     const downloadPathFull = createFSPath(downloadPath, transfer)
     await fsp.mkdir(downloadPathFull, { recursive: true });
 
-    for await (const file of app.ipfs.get(transfer.cid)) {
-      if (!file.content) continue;
-
-      //Write file to disk
-      const filePath = file.path.slice(file.path.indexOf('/') + 1); //Get rid of first /
-      await fsCreateSongFolder(transfer, filePath); //Create song folder if it doesn't exist yet
-
-      const stream = fs.createWriteStream(path.join(downloadPathFull, filePath));
-      for await (const chunk of file.content) stream.write(chunk);
-      stream.end();
-    }
+    await iterateDirectory(downloadPathFull, transfer.cid);
     log.success('Successfully downloaded item.')
   }
   catch (err) {
@@ -373,6 +363,27 @@ const getFile = async (id) => {
     throw err;
   }
 }
+
+const iterateDirectory = async (downloadPath, cid) => {
+  try {
+    for await (const file of app.ipfs.ls(cid)) {
+      if (file.type === 'file') {
+        const stream = fs.createWriteStream(path.join(downloadPath, file.name));
+        for await (const chunk of app.ipfs.cat(file.path)) stream.write(chunk);
+        stream.end();
+      }
+      else if (file.type === 'dir') {
+        const folderPath = path.join(downloadPath, file.name);
+        await fsp.mkdir(folderPath, { recursive: true });
+        await iterateDirectory(folderPath, file.path);
+      }
+    }
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 
 module.exports = {
   addSong,
