@@ -68,10 +68,12 @@ function Player() {
   
     //Check if we are past the 5 second mark of current song
     if(this.audio.currentTime < 5) {
-      if (this.queuePosition <= 0) return log.error("Can't go further back in time Morty.");
-
-      this.current = this.queue[--this.queuePosition];
-      this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
+      if (this.queuePosition <= 0) {
+        log.error("Can't go further back in time Morty.");
+      } else {
+        this.current = this.queue[--this.queuePosition];
+        this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
+      }
     }
 
     this.playing = false;
