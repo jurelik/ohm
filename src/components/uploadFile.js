@@ -125,18 +125,17 @@ function UploadFile(data) {
       if (file.tags === '') throw new Error('File tags are missing.');
       if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check for bad characters
 
-      file.tags = file.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
+      //Turn tags into an array
+      file.tags = file.tags.split(/[,;]+/).filter(tag => tag.length > 0);
       if (file.tags.length === 0) throw new Error('File tags are missing');
-    }
-    else if (file.type === 'internal') {
-      if (file.id === '') throw 'file id is missing';
-    }
 
-    //Check formatting
-    if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check for bad characters
-    for (let tag of file.tags) {
-      if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
+      //Check formatting
+      if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check for bad characters
+      for (let tag of file.tags) {
+        if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
+      }
     }
+    else if (file.type === 'internal' && file.id === '') throw 'file id is missing';
 
     //Add properties
     file.cid = null;
