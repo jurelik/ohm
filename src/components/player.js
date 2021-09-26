@@ -67,7 +67,7 @@ function Player() {
     if (!this.current) return log.error('Please load a song first.');
   
     //Check if we are past the 5 second mark of current song
-    if(this.audio.currentTime < 5 && this.queuePosition <= 0) {
+    if(this.audio.currentTime < 5 && this.queuePosition < 1) {
       log.error("Can't go further back in time, Morty.");
     } else {
       this.current = this.queue[--this.queuePosition];
