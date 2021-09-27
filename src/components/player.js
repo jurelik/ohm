@@ -14,6 +14,7 @@ function Player() {
   this.playing = false;
   this.loading = false;
   this.seekClicked = false; //Keep track of user clicking the seek slider
+  this.BACK_THRESHOLD = 5; //Threshold in seconds, after which the back button goes to the beginning of current song instead of previous song
 
   //EVENT HANDLERS
   this.handleOnPlay = () => {
@@ -65,12 +66,12 @@ function Player() {
   //BUTTON HANDLERS
   this.handleBackButton = () => {
     if (!this.current) return log.error('Please load a song first.');
-  
-    //Check if we are past the 5 second mark of current song
-    if(this.audio.currentTime < 5 && this.queuePosition < 1) {
-      log.error("Can't go further back in time, Morty.");
-    } else {
-      this.current = this.queue[--this.queuePosition];
+
+    //Check if we are past the BACK_THRESHOLD mark of current song
+    if (this.audio.currentTime < BACK_THRESHOLD && this.queuePosition < 1) log.error("Can't go further back in time, Morty.");
+    else {
+      if (this.queuePosition > 0) this.queuePosition--; //Decrement queuePosition unless already playing the first/only item
+      this.current = this.queue[this.queuePosition];
       this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
     }
 
