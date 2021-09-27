@@ -316,7 +316,7 @@ function App() {
       if (res.type === 'error') throw new Error(res.err);
 
       log.success('Password successfully changed.');
-      this.logout();
+      this.logout(true);
     }
     catch (err) {
       if (err.message !== 'FETCH_ERR') log.error(err.message);
