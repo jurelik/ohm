@@ -21,10 +21,10 @@ const DEFAULT_SETTINGS = {
   HEIGHT: '360',
   FRAMELESS: 'false',
   OS_THEME: 'system',
-  IPFS_PROTOCOL: 'http',
-  IPFS_HOST: 'localhost',
-  IPFS_PORT: '5001',
-  IPFS_PATH: 'api/v0'
+  IPFS_API_PROTOCOL: 'http',
+  IPFS_API_HOST: 'localhost',
+  IPFS_API_PORT: '5001',
+  IPFS_API_PATH: 'api/v0'
 }
 
 const createWindow = () => {

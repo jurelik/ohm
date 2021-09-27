@@ -117,10 +117,10 @@ function App() {
       log.success('IPFS daemon initiated.');
       try {
         this.ipfs = create({
-          protocol: this.settingsStore.getOne('IPFS_PROTOCOL'),
-          host: this.settingsStore.getOne('IPFS_HOST'),
-          port: this.settingsStore.getOne('IPFS_PORT'),
-          apiPath: this.settingsStore.getOne('IPFS_PATH'),
+          protocol: this.settingsStore.getOne('IPFS_API_PROTOCOL'),
+          host: this.settingsStore.getOne('IPFS_API_HOST'),
+          port: this.settingsStore.getOne('IPFS_API_PORT'),
+          apiPath: this.settingsStore.getOne('IPFS_API_PATH'),
         });
         const id = await this.getId(); //Get multiaddress for swarm connections
         this.MULTIADDR = id.addresses[4];
