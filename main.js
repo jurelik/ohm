@@ -15,6 +15,7 @@ let settings = null; //User settings
 const DEFAULT_SETTINGS = {
   OHM_SERVER: 'api.ohm.rip',
   DOWNLOAD_PATH: path.join(os.homedir(), 'Documents', 'ohm'),
+  IPFS_REPO_PATH: path.join(os.homedir(), '.ohm-ipfs'),
   OPEN_DEV: 'false',
   WIDTH: '640',
   HEIGHT: '360',
@@ -66,7 +67,7 @@ app.whenReady().then(() => {
   if (fs.existsSync(path.join(userDataPath, 'settings.json'))) settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
   else {
     fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(DEFAULT_SETTINGS, null, 2));
-    settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+    settings = DEFAULT_SETTINGS;
   }
 
   //Register global shortcuts
@@ -107,7 +108,7 @@ app.on('activate', () => {
 
 //IPC events
 ipcMain.on('start', (event) => {
-  process.env.IPFS_PATH = path.join(os.homedir(), '.ohm-ipfs'); //Set IPFS_PATH
+  process.env.IPFS_PATH = settings.IPFS_REPO_PATH || path.join(os.homedir(), '.ohm-ipfs'); //Set IPFS_PATH
   if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}');
 
   if (daemon) { //Check if daemon is already running
