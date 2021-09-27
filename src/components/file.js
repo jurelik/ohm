@@ -5,7 +5,7 @@ const { playIcon, pauseIcon, loadingIcon } = require('../utils/svgs');
 function File(data) {
   this.el = document.createElement('tr');
   this.data = data;
-  this.playing = app.player.playing && app.player.current === this.data;
+  this.playing = app.player.playing && app.player.current.id === this.data.id && app.player.current.type === this.data.type;
   this.loading = app.player.loading && app.player.current.id === this.data.id && app.player.current.type === this.data.type;
 
   this.handlePlayButton = (e) => {
