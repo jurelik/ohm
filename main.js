@@ -1,5 +1,6 @@
-const { app, BrowserWindow, ipcMain, Menu, MenuItem, Tray, nativeTheme, globalShortcut } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray, nativeTheme, shell } = require('electron');
 const { spawn } = require('child_process')
+const menuTemplate = require('./src/utils/menuTemplate');
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
@@ -244,20 +245,7 @@ const handleResize = () => {
 }
 
 const createMenu = () => {
-  const menu = new Menu();
-  menu.append(new MenuItem({
-    label: process.platform === 'darwin' ? app.name : 'File',
-    submenu: [
-      {
-        label: 'Settings',
-        click: openSettings
-      },
-      {
-        role: 'quit',
-        accelerator: 'CommandOrControl+Q'
-      }]
-  }));
-
+  const menu = Menu.buildFromTemplate(menuTemplate(app.name, { openSettings }));
   Menu.setApplicationMenu(menu);
 }
 
