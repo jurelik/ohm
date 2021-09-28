@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, Tray, nativeTheme, globalShortcut } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, MenuItem, Tray, nativeTheme, globalShortcut } = require('electron');
 const { spawn } = require('child_process')
 const os = require('os');
 const path = require('path');
@@ -70,9 +70,7 @@ app.whenReady().then(() => {
     settings = DEFAULT_SETTINGS;
   }
 
-  //Register global shortcuts
-  globalShortcut.register('CommandOrControl+Q', app.quit);
-
+  createMenu();
   createTray();
   createWindow();
 });
@@ -142,7 +140,7 @@ const spawnDaemon = (event) => {
       event.reply('daemon-ready', { view: 'explore' });
 
       //Update tray
-      const contextMenu = Menu.buildFromTemplate(menuTemplate(true));
+      const contextMenu = Menu.buildFromTemplate(trayMenuTemplate(true));
       tray.setContextMenu(contextMenu)
     }
   });
@@ -159,7 +157,7 @@ const spawnDaemon = (event) => {
     if (quitting) return app.quit();
 
     //Update tray
-    const contextMenu = Menu.buildFromTemplate(menuTemplate(false));
+    const contextMenu = Menu.buildFromTemplate(trayMenuTemplate(false));
     tray.setContextMenu(contextMenu)
   });
 
@@ -224,7 +222,7 @@ const openSettings = () => {
   win.webContents.send('open-settings');
 }
 
-const menuTemplate = (running) => {
+const trayMenuTemplate = (running) => {
   return [
     { label: running ? 'Daemon is running...' : 'Daemon is not running...', type: 'normal', enabled: false },
     { label: 'Open ohm', type: 'normal', click: createWindow },
@@ -245,10 +243,28 @@ const handleResize = () => {
   }
 }
 
+const createMenu = () => {
+  const menu = new Menu();
+  menu.append(new MenuItem({
+    label: process.platform === 'darwin' ? app.name : 'File',
+    submenu: [
+      {
+        label: 'Settings',
+        click: openSettings
+      },
+      {
+        role: 'quit',
+        accelerator: 'CommandOrControl+Q'
+      }]
+  }));
+
+  Menu.setApplicationMenu(menu);
+}
+
 const createTray = () => {
   const trayIconPath = getTrayIconPath();
   tray = new Tray(trayIconPath);
-  const contextMenu = Menu.buildFromTemplate(menuTemplate(false));
+  const contextMenu = Menu.buildFromTemplate(trayMenuTemplate(false));
   if (process.platform === 'linux') tray.setToolTip('ohm'); //Set tooltip if on linux
   tray.setContextMenu(contextMenu)
 }
