@@ -18,15 +18,18 @@ const menuTemplate = (appName, data) => {
       ]
     }] : []),
     // { role: 'fileMenu' }
-    {
+    ...(isMac ? [{
       label: 'File',
       submenu: [
-        ...(isMac ? { role: 'close' } : [
-          { label: 'Settings', click: data.openSettings },
-          { role: 'quit', accelerator: 'CommandOrControl+Q' }
-        ])
+        { role: 'close' }
       ]
-    },
+    }] : [{
+      label: 'File',
+      submenu: [
+        { label: 'Settings', click: data.openSettings },
+        { role: 'quit', accelerator: 'CommandOrControl+Q' }
+      ]
+    }]),
     // { role: 'editMenu' }
     {
       label: 'Edit',
