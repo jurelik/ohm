@@ -309,16 +309,8 @@ pre {
   user-select: none;
 }
 
-.drag:hover {
-  cursor: pointer;
-}
-
 .drag.darwin {
   height: 22px;
-}
-
-.drag.darwin:hover {
-  cursor: default;
 }
 
 .bw {

@@ -21,7 +21,10 @@ const menuTemplate = (appName, data) => {
     {
       label: 'File',
       submenu: [
-        isMac ? { role: 'close' } : { role: 'quit', accelerator: 'CommandOrControl+Q' }
+        ...(isMac ? { role: 'close' } : [
+          { label: 'Settings', click: data.openSettings },
+          { role: 'quit', accelerator: 'CommandOrControl+Q' }
+        ])
       ]
     },
     // { role: 'editMenu' }
