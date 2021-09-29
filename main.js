@@ -38,7 +38,7 @@ const createWindow = () => {
     minHeight: 300,
     backgroundColor: "#222",
     icon: path.join(__dirname, 'src', 'assets', 'icon', { darwin: 'icon.icns', linux: 'icon.png', win32: 'icon.ico' }[process.platform] || 'icon.ico'),
-    titleBarStyle: 'hidden',
+    titleBarStyle: process.platform === 'darwin' ? 'hidden' : 'default',
     frame: process.platform !== 'darwin' && settings.FRAMELESS === 'true' ? false : true,
     autoHideMenuBar: true,
     trafficLightPosition: { x: 9, y: 6 },
