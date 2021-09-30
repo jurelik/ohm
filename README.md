@@ -18,6 +18,7 @@ npm install
 npm start
 ```
 
+#### Windows
 If you are a Windows user you should change the npm scripts in `package.json` to the following if you use Powershell:
 ```
 "start": "$env:NODE_ENV=\"production\"; electron ."
