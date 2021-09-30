@@ -18,6 +18,28 @@ npm install
 npm start
 ```
 
+If you are a Windows user you should change the npm scripts in `package.json` to the following if you use Powershell:
+```
+"start": "$env:NODE_ENV=\"production\"; electron ."
+"dev": "$env:NODE_ENV=\"development\"; electron ."
+"test": "$env:NODE_ENV=\"test\"; electron ."
+```
+or the following if you use CMD:
+```
+"start": "set NODE_ENV=production&&electron ."
+"dev": "set NODE_ENV=development&&electron ."
+"test": "set NODE_ENV=test&&electron ."
+```
+
+If you get the following error when trying to run inside Powershell:
+```
+electron : File ...\AppData\Roaming\npm\electron.ps1 cannot be loaded because running scripts is disabled on this system.
+```
+Use the following command and select "A" when prompted:
+```
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+```
+
 ## build ohm
 ```
 npm run build_osx
