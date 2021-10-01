@@ -8,10 +8,11 @@
     "start": "NODE_ENV=production electron .",
     "dev": "NODE_ENV=development electron .",
     "test_server": "NODE_ENV=test electron .",
-    "build_osx": "electron-packager . ohm --platform=darwin --arch=x64 --out ./dist/ --overwrite --icon=./src/assets/icon/icon.icns ; echo 'Built for OSX'",
-    "build_linux": "electron-packager . ohm --platform=linux  --arch=x64 --out ./dist/ --overwrite --icon=./src/assets/icon/icon.png ; echo 'Built for LINUX'",
-    "build_win": "electron-packager . ohm --platform=win32  --arch=x64 --out ./dist/ --overwrite --icon=./src/assets/icon/icon.ico ; echo 'Built for WIN'",
-    "build": "npm run clean ; npm run build_osx ; npm run build_linux ; npm run build_win ; echo 'Built for OSX, LINUX and WIN'"
+    "clean": "rm -rf ./dist/",
+    "build:osx": "electron-packager . ohm --platform=darwin --arch=x64 --out ./dist/ --overwrite --icon=./src/assets/icon/icon.icns --ignore=tags; echo 'Built for OSX'",
+    "build:linux": "electron-packager . ohm --platform=linux  --arch=x64 --out ./dist/ --overwrite --icon=./src/assets/icon/icon.png --ignore=tags; echo 'Built for LINUX'",
+    "build:win": "electron-packager . ohm --platform=win32  --arch=x64 --out ./dist/ --overwrite --icon=./src/assets/icon/icon.ico --ignore=tags; echo 'Built for WIN'",
+    "build": "npm run build_osx ; npm run build_linux ; npm run build_win ; echo 'Built for OSX, LINUX and WIN'"
   },
   "repository": {
     "type": "git",
