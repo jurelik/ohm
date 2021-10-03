@@ -278,8 +278,8 @@ function App() {
 
     try {
       for await (const stats of app.ipfs.stats.bw({ poll: true, interval: '1s', signal: this.bandwidthController.signal })) {
-        const dl = helpers.formatBytes(parseInt(stats.rateIn));
-        const ul = helpers.formatBytes(parseInt(stats.rateOut));
+        const dl = helpers.formatBytes(stats.rateIn);
+        const ul = helpers.formatBytes(stats.rateOut);
 
         document.querySelector('.dl').textContent = `dl: ${dl}`;
         document.querySelector('.ul').textContent = `ul: ${ul}`;
