@@ -61,6 +61,7 @@ function App() {
   this.transfersStore = null;
   this.settingsStore = null;
   this.bandwidthController = null;
+  this.remoteNode = null; //Is the ipfs node running on an external machine?
 
   this.login = () => {
     ipcRenderer.once('login', async (e, data) => {
@@ -103,7 +104,7 @@ function App() {
 
       this.root.innerHTML = '';
       const login = new LoginView();
-      await this.ipfs.stop();
+      if (!this.remoteNode) await this.ipfs.stop();
       login.render();
     }
     catch (err) {
@@ -114,7 +115,8 @@ function App() {
   this.init = () => {
     //Init an ipfs daemon & create an ipfs node
     ipcRenderer.once('daemon-ready', async (e, data) => {
-      log.success('IPFS daemon initiated.');
+      if (!this.remoteNode) log.success('IPFS daemon initiated.');
+
       try {
         this.ipfs = create({
           protocol: this.settingsStore.getOne('IPFS_API_PROTOCOL'),
@@ -124,6 +126,7 @@ function App() {
         });
         const id = await this.getId(); //Get multiaddress for swarm connections
         this.MULTIADDR = id.addresses[4];
+        if (this.remoteNode) log.success('Connection to IPFS daemon established.');
 
         //Create user folder if it doesn't exist yet
         let initialised = false;
@@ -153,15 +156,23 @@ function App() {
       }
     });
 
-    log('Initiating IPFS daemon..');
+    this.remoteNode = this.isNodeRemote(); //Check whether or not ipfs node is remote
+    this.remoteNode ? log('Connecting to remote IPFS daemon.') : log('Initiating IPFS daemon..');
     ipcRenderer.on('open-settings', this.openSettings); //Add listener for the open-settings command
     ipcRenderer.on('ipfs-error', this.handleIPFSError);
     ipcRenderer.send('start');
   }
 
+  this.isNodeRemote = () => {
+    const host = this.settingsStore.getOne('IPFS_API_HOST');
+    const remote = host === 'localhost' || host === '127.0.0.1' ? false : true;
+
+    return remote;
+  }
+
   this.getId = async () => {
     try {
-      const id = await this.ipfs.id();
+      const id = await this.ipfs.id({ timeout: 10000 });
       const a = id.addresses[4].toString().split('/');
       if (a[3] !== 'tcp') {
         await helpers.timerPromise(1000);

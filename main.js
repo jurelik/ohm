@@ -12,6 +12,7 @@ let win = null; //Main window
 let view = null; //Which view should we open with ('explore' being default)
 let quitting = false; //Is the app in the process of quitting
 let settings = null; //User settings
+let remoteNode = false; //Is the ipfs node hosted on an external machine?
 
 const DEFAULT_SETTINGS = {
   OHM_SERVER: 'api.ohm.rip',
@@ -71,6 +72,8 @@ app.whenReady().then(() => {
     settings = DEFAULT_SETTINGS;
   }
 
+  remoteNode = settings.IPFS_API_HOST === 'localhost' || settings.IPFS_API_HOST === '127.0.0.1' ? false : true; //Update remoteNode
+
   createMenu();
   createTray();
   createWindow();
@@ -88,14 +91,16 @@ app.on('will-quit', async (e) => {
 
     try {
       await clearUploadMFS(); //Clear MFS
-      daemon.kill();
+      if (remoteNode) app.quit();
+      else daemon.kill();
     }
     catch (err) {
       console.log(err);
-      daemon.kill();
+      if (remoteNode) app.quit();
+      else daemon.kill();
     }
   }
-  else if (daemon) {
+  else if (daemon && !remoteNode) {
     e.preventDefault();
     daemon.kill();
   }
@@ -111,8 +116,18 @@ ipcMain.on('start', (event) => {
   if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}');
 
   if (daemon) { //Check if daemon is already running
-    event.reply('daemon-ready', { userDataPath, view: view || 'explore' });
+    event.reply('daemon-ready', { userDataPath, view: view || 'explore', remote: remoteNode });
     return view = null; //Reset view to null
+  }
+
+  if (remoteNode) { //Don't run daemon if the ipfs node is remote
+    daemon = 'remote'; //Set value of daemon so we know it is assumed to be running
+    event.reply('daemon-ready', { view: 'explore', remote: true });
+
+    //Update tray
+    const contextMenu = Menu.buildFromTemplate(trayMenuTemplate(true));
+    tray.setContextMenu(contextMenu)
+    return;
   }
 
   //Check if the repo exists already
@@ -138,7 +153,7 @@ const spawnDaemon = (event) => {
   daemon.stdout.on('data', (data) => {
     console.log(`${data}`);
     if (data.toString().match(/(?:daemon is running|Daemon is ready)/)) {
-      event.reply('daemon-ready', { view: 'explore' });
+      event.reply('daemon-ready', { view: 'explore', remote: false });
 
       //Update tray
       const contextMenu = Menu.buildFromTemplate(trayMenuTemplate(true));
