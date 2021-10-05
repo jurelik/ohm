@@ -301,12 +301,7 @@ pre {
   width: 100%;
   height: 12px;
   display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  font-size: 9px;
   color: #bbb;
-  padding-right: 10px;
-  user-select: none;
 }
 
 .drag.darwin {
@@ -341,6 +336,7 @@ pre {
 
 .login .drag {
   position: absolute;
+  height: 24px;
   top: 0;
   left: 0;
 }
