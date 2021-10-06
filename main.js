@@ -15,18 +15,24 @@ let settings = null; //User settings
 let remoteNode = false; //Is the ipfs node hosted on an external machine?
 
 const DEFAULT_SETTINGS = {
-  OHM_SERVER: 'api.ohm.rip',
-  DOWNLOAD_PATH: path.join(os.homedir(), 'Documents', 'ohm'),
-  IPFS_REPO_PATH: path.join(os.homedir(), '.ohm-ipfs'),
-  OPEN_DEV: 'false',
-  WIDTH: '640',
-  HEIGHT: '360',
-  FRAMELESS: 'false',
-  OS_THEME: 'system',
-  IPFS_API_PROTOCOL: 'http',
-  IPFS_API_HOST: 'localhost',
-  IPFS_API_PORT: '5001',
-  IPFS_API_PATH: 'api/v0'
+  GENERAL: {
+    OHM_SERVER: 'api.ohm.rip',
+    DOWNLOAD_PATH: path.join(os.homedir(), 'Documents', 'ohm'),
+    IPFS_REPO_PATH: path.join(os.homedir(), '.ohm-ipfs'),
+    OPEN_DEV: 'false',
+  },
+  APPEARANCE: {
+    WIDTH: '640',
+    HEIGHT: '360',
+    FRAMELESS: 'false',
+    OS_THEME: 'system',
+  },
+  IPFS: {
+    IPFS_API_PROTOCOL: 'http',
+    IPFS_API_HOST: 'localhost',
+    IPFS_API_PORT: '5001',
+    IPFS_API_PATH: 'api/v0'
+  }
 }
 
 const createWindow = () => {
@@ -66,10 +72,10 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   //Get user settings
-  if (fs.existsSync(path.join(userDataPath, 'settings.json'))) settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
+  if (fs.existsSync(path.join(userDataPath, 'settings.json'))) settings = flattenSettings(JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json'))));
   else {
     fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(DEFAULT_SETTINGS, null, 2));
-    settings = DEFAULT_SETTINGS;
+    settings = flattenSettings(DEFAULT_SETTINGS);
   }
 
   remoteNode = settings.IPFS_API_HOST === 'localhost' || settings.IPFS_API_HOST === '127.0.0.1' ? false : true; //Update remoteNode
@@ -236,6 +242,16 @@ const openSettings = () => {
 
   win.show();
   win.webContents.send('open-settings');
+}
+
+const flattenSettings = (original) => {
+  const flattened = {};
+
+  for (const section in original) {
+    for (const setting in original[section]) flattened[setting] = original[section][setting];
+  }
+
+  return flattened;
 }
 
 const trayMenuTemplate = (running) => {
