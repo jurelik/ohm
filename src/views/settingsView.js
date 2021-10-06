@@ -12,13 +12,31 @@ function SettingsView(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    //Parse all settings into an object
-    const settings = {};
+    //Parse all settings
     const query = this.el.querySelectorAll('input[type="text"]')
-    for (const setting of query) settings[setting.id] = setting.value;
+    for (const setting of query) this.updateSetting(setting.id, setting.value);
 
-    app.settingsStore.set(settings);
+    app.settingsStore.set(this.settings);
     log.success('Settings successfully changed.');
+  }
+
+  this.updateSetting = (id, value) => {
+    for (const section in this.settings) {
+      if (this.settings[section][id]) return this.settings[section][id] = value;
+    }
+  }
+
+  this.createSection = (name) => {
+    //Create elements
+    const el = document.createElement('div');
+
+    //Add classes for styling
+    el.className = 'section';
+
+    //Add attributes and innerHTML/textContent
+    el.textContent = name + ': ';
+
+    return el;
   }
 
   this.createSetting = (name, value) => {
@@ -56,9 +74,14 @@ function SettingsView(data) {
     save.setAttribute('value', 'save');
 
     //Build structure
-    for (const name in this.settings) {
-      const el = this.createSetting(name, this.settings[name]);
+    for (const section in this.settings) {
+      const el = this.createSection(section);
       this.el.appendChild(el);
+
+      for (const name in this.settings[section]) {
+        const el = this.createSetting(name, this.settings[section][name]);
+        this.el.appendChild(el);
+      }
     }
     this.el.appendChild(save);
 
