@@ -269,8 +269,8 @@ const handleResize = () => {
 
   if (settings) {
     const _settings = JSON.parse(fs.readFileSync(path.join(userDataPath, 'settings.json')));
-    _settings.WIDTH = size[0].toString();
-    _settings.HEIGHT = size[1].toString();
+    _settings.APPEARANCE.WIDTH = size[0].toString();
+    _settings.APPEARANCE.HEIGHT = size[1].toString();
     fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(_settings, null, 2));
   }
 }
