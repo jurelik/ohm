@@ -17,7 +17,20 @@ function Store(opts) {
   }
 
   this.getOne = (key) => { //Get one item
-    return this.data[key];
+    if (this.data[key]) return this.data[key];
+
+    return this.recursiveGetOne(key, this.data);
+  }
+
+  this.recursiveGetOne = (key, data) => { //Search for item recursively
+    if (data[key]) return data[key];
+
+    for (const _key in data) {
+      if (typeof data[_key] === 'object') {
+        const res = this.recursiveGetOne(key, data[_key]);
+        if (res) return res;
+      }
+    }
   }
 
   this.set = (val) => { //Set entire store
