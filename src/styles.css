@@ -1318,6 +1318,20 @@ pre {
   align-items: stretch;
   min-height: 100%;
 }
+
+.settings-view .section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 20px;
+  margin-top: 5px;
+  color: #888;
+}
+
+.settings-view .section:first-of-type {
+  margin-top: 0px;
+}
+
 .settings-view .setting {
   display: flex;
   flex-direction: row;
