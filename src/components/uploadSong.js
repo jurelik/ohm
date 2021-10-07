@@ -2,6 +2,7 @@
 
 const UploadFile = require('./uploadFile');
 const helpers = require('../utils/helpers');
+const log = require('../utils/log');
 
 function UploadSong(data) {
   this.el = document.createElement('fieldset');
@@ -19,6 +20,20 @@ function UploadSong(data) {
     let uploadFile = new UploadFile({ handleRemoveFile: this.handleRemoveFile });
     this.children.push(uploadFile);
     this.el.insertBefore(uploadFile.render(), this.el.children[this.el.children.length - 2]);
+  }
+
+  this.handleFileDrop = (e) => {
+    e.stopPropagation();
+
+    //Prevent default behavior if file is not an mp3
+    const extension = e.dataTransfer.files[0].name.slice(-3);
+    if (extension !== 'mp3') {
+      e.preventDefault();
+      e.srcElement.value = null; //Reset input value
+      return log.error('Only mp3 files allowed.');
+    }
+
+    this.el.querySelector('#title').value = e.dataTransfer.files[0].name.slice(0, -4);
   }
 
   this.handleDeleteSong = (e) => {
@@ -96,6 +111,7 @@ function UploadSong(data) {
     //Add classes for styling
     this.el.className = 'upload-song';
     title.className = 'song-input';
+    title.id = 'title';
     titleDiv.className = 'song-title-div';
     tags.className = 'song-input';
     tagsDiv.className = 'song-tags-div';
@@ -144,6 +160,7 @@ function UploadSong(data) {
 
     //Add listeners
     addFile.onclick = this.handleAddFile;
+    file.ondrop = this.handleFileDrop;
     deleteSong.onclick = this.handleDeleteSong;
 
     return this.el;
