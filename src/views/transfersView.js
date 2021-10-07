@@ -27,8 +27,12 @@ function TransfersView(data) {
   }
 
   this.removeAllTransfers = () => {
-    for (const unique in this.children) if (this.children[unique].data.completed) this.children[unique].el.remove(); //Remove from DOM
-    this.children = {}; //Re-initialize children
+    for (const unique in this.children) {
+      if (this.children[unique].data.completed) {
+        this.children[unique].el.remove(); //Remove from DOM
+        delete this.children[unique]; //Remove from this.children
+      }
+    }
 
     this.transfers = app.transfersStore.get(); //Update state
   }
