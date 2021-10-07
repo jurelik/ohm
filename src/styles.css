@@ -1059,6 +1059,7 @@ pre {
 }
 
 .upload-song {
+  position: relative;
   padding: 5px;
   margin-bottom: 10px;
 }
@@ -1083,6 +1084,16 @@ pre {
 
 .upload-song .song-file-div {
   margin: 5px 0;
+}
+
+.upload-song .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  height: 100%;
+  width: 100%;
+  border: 1px solid red;
 }
 
 .upload-file {

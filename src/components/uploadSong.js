@@ -22,18 +22,31 @@ function UploadSong(data) {
     this.el.insertBefore(uploadFile.render(), this.el.children[this.el.children.length - 2]);
   }
 
+  this.handleDragEnter = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    this.el.querySelector('.overlay').style.visibility = "visible";
+  }
+
+  this.handleDragLeave = (e) => {
+    this.el.querySelector('.overlay').style.visibility = "hidden";
+  }
+
   this.handleFileDrop = (e) => {
     e.stopPropagation();
+    e.preventDefault();
 
     //Prevent default behavior if file is not an mp3
     const extension = e.dataTransfer.files[0].name.slice(-3);
     if (extension !== 'mp3') {
-      e.preventDefault();
       e.srcElement.value = null; //Reset input value
       return log.error('Only mp3 files allowed.');
     }
 
+    this.el.querySelector('input[type=file]').files = e.dataTransfer.files;
     this.el.querySelector('#title').value = e.dataTransfer.files[0].name.slice(0, -4);
+    this.el.querySelector('.overlay').style.visibility = "hidden";
   }
 
   this.handleDeleteSong = (e) => {
@@ -158,9 +171,18 @@ function UploadSong(data) {
     this.el.appendChild(addFile);
     this.el.appendChild(deleteSong);
 
+    //Add overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    this.el.appendChild(overlay);
+
     //Add listeners
     addFile.onclick = this.handleAddFile;
-    file.ondrop = this.handleFileDrop;
+    this.el.ondragenter = this.handleDragEnter;
+    overlay.ondragenter = (e) => e.preventDefault();
+    overlay.ondragover = (e) => e.preventDefault();
+    overlay.ondragleave = this.handleDragLeave;
+    overlay.ondrop = this.handleFileDrop;
     deleteSong.onclick = this.handleDeleteSong;
 
     return this.el;
