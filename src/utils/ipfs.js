@@ -230,13 +230,19 @@ const getPinned = async () => {
 
     for await (const file of app.ipfs.files.ls(`/`)) artists.push(file.name); //Get artists
     for (const artist of artists) {
-      for await (const file of app.ipfs.files.ls(`/${artist}/albums`)) { //Get albums
-        const stat = await app.ipfs.files.stat(`/${artist}/albums/${file.name}`);
-        albums.push(stat.cid.toString());
-      }
-      for await (const file of app.ipfs.files.ls(`/${artist}/singles`)) {
-        const stat = await app.ipfs.files.stat(`/${artist}/singles/${file.name}`);
-        songs.push(stat.cid.toString());
+      for await (const folder of app.ipfs.files.ls(`/${artist}`)) { //Check if artist folder contains the singles/albums folders
+        if (folder.name === 'singles') {
+          for await (const file of app.ipfs.files.ls(`/${artist}/singles`)) {
+            const stat = await app.ipfs.files.stat(`/${artist}/singles/${file.name}`);
+            songs.push(stat.cid.toString());
+          }
+        }
+        if (folder.name === 'albums') {
+          for await (const file of app.ipfs.files.ls(`/${artist}/albums`)) { //Get albums
+            const stat = await app.ipfs.files.stat(`/${artist}/albums/${file.name}`);
+            albums.push(stat.cid.toString());
+          }
+        }
       }
     }
 
