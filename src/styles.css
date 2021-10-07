@@ -999,6 +999,8 @@ pre {
   color: #888;
   margin-bottom: 20px;
   font-size: 11px;
+  margin-right: 5px;
+  white-space: pre-wrap;
 }
 
 .artist-card .location-div {
