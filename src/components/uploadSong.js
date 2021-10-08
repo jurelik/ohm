@@ -37,16 +37,20 @@ function UploadSong(data) {
     e.stopPropagation();
     e.preventDefault();
 
+    const file = this.el.querySelector('input[type=file]');
+    const title = this.el.querySelector('#title');
+
+    this.el.querySelector('.overlay').style.visibility = "hidden";
+
     //Prevent default behavior if file is not an mp3
     const extension = e.dataTransfer.files[0].name.slice(-3);
     if (extension !== 'mp3') {
-      e.srcElement.value = null; //Reset input value
+      file.value = null;
       return log.error('Only mp3 files allowed.');
     }
 
-    this.el.querySelector('input[type=file]').files = e.dataTransfer.files;
-    this.el.querySelector('#title').value = e.dataTransfer.files[0].name.slice(0, -4);
-    this.el.querySelector('.overlay').style.visibility = "hidden";
+    file.files = e.dataTransfer.files;
+    if (title.value === '') title.value = e.dataTransfer.files[0].name.slice(0, -4);
   }
 
   this.handleDeleteSong = (e) => {
@@ -171,7 +175,7 @@ function UploadSong(data) {
     this.el.appendChild(addFile);
     this.el.appendChild(deleteSong);
 
-    //Add overlay
+    //Add drag & drop overlay
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
     this.el.appendChild(overlay);
