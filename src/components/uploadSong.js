@@ -38,11 +38,11 @@ function UploadSong(data) {
     e.preventDefault();
 
     const file = this.el.querySelector('input[type=file]');
-    const title = this.el.querySelector('#title');
+    const title = this.el.querySelector('.title');
 
     this.el.querySelector('.overlay').style.visibility = "hidden";
 
-    //Prevent default behavior if file is not an mp3
+    //Check file extension
     const extension = e.dataTransfer.files[0].name.slice(-3);
     if (extension !== 'mp3') {
       file.value = null;
@@ -127,8 +127,7 @@ function UploadSong(data) {
 
     //Add classes for styling
     this.el.className = 'upload-song';
-    title.className = 'song-input';
-    title.id = 'title';
+    title.classList.add('song-input', 'title');
     titleDiv.className = 'song-title-div';
     tags.className = 'song-input';
     tagsDiv.className = 'song-tags-div';
