@@ -1089,13 +1089,10 @@ pre {
 .upload-song .song-overlay {
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 4px;
+  right: 4px;
+  bottom: 5px;
   visibility: hidden;
-  height: 99%;
-  width: 99%;
-  margin-left: auto;
-  margin-right: auto;
   background-color: rgba(238, 238, 238, 0.05); /* 238 is equivalent to #eee */
   z-index: 1;
 }
@@ -1113,6 +1110,10 @@ pre {
   margin-left: 5px;
 }
 
+.upload-file input:disabled {
+  color: #888;
+}
+
 .upload-file .file-name-div, .upload-file .file-id-div, .upload-file .file-tags-div, .upload-file .file-info-div {
   display: flex;
   flex-direction: row;
@@ -1122,13 +1123,10 @@ pre {
 .upload-file .file-overlay {
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 4px;
+  right: 4px;
+  bottom: 5px;
   visibility: hidden;
-  height: 99%;
-  width: 99%;
-  margin-left: auto;
-  margin-right: auto;
   background-color: rgba(238, 238, 238, 0.05); /* 238 is equivalent to #eee */
   z-index: 3;
 }

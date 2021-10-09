@@ -19,7 +19,7 @@ function UploadSong(data) {
 
     let uploadFile = new UploadFile({ handleRemoveFile: this.handleRemoveFile });
     this.children.push(uploadFile);
-    this.el.insertBefore(uploadFile.render(), this.el.children[this.el.children.length - 2]);
+    this.el.insertBefore(uploadFile.render(), this.el.children[this.el.children.length - 3]);
   }
 
   this.handleDragEnter = (e) => {

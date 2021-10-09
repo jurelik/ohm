@@ -108,7 +108,7 @@ function UploadFile(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    this.el.querySelector('.file-overlay').style.visibility = "visible";
+    if (!this.el.querySelector('input[type=radio][value="internal"]').checked) this.el.querySelector('.file-overlay').style.visibility = "visible";
   }
 
   this.handleDragLeave = (e) => {
@@ -119,20 +119,10 @@ function UploadFile(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    const file = this.el.querySelector('input[type=file]');
-    const title = this.el.querySelector('.title');
-
     this.el.querySelector('.file-overlay').style.visibility = "hidden";
 
-    //Check file extension
-    const extension = e.dataTransfer.files[0].name.slice(-3);
-    if (extension !== 'mp3') {
-      file.value = null;
-      return log.error('Only mp3 files allowed.');
-    }
-
-    file.files = e.dataTransfer.files;
-    if (title.value === '') title.value = e.dataTransfer.files[0].name.slice(0, -4);
+    this.file.querySelector('input').files = e.dataTransfer.files;
+    if (this.name.querySelector('input').value === '') this.name.querySelector('input').value = e.dataTransfer.files[0].name.slice(0, -4);
   }
 
   this.getFileData = () => {
