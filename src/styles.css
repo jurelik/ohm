@@ -1090,10 +1090,13 @@ pre {
   position: absolute;
   top: 0;
   left: 0;
+  right: 0;
   visibility: hidden;
-  height: 100%;
-  width: 100%;
-  border: 1px solid red;
+  height: 99%;
+  width: 99%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(238, 238, 238, 0.05); /* 238 is equivalent to #eee */
 }
 
 .upload-file {
