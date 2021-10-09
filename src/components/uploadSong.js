@@ -26,11 +26,11 @@ function UploadSong(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    this.el.querySelector('.overlay').style.visibility = "visible";
+    this.el.querySelector('.song-overlay').style.visibility = "visible";
   }
 
   this.handleDragLeave = (e) => {
-    this.el.querySelector('.overlay').style.visibility = "hidden";
+    this.el.querySelector('.song-overlay').style.visibility = "hidden";
   }
 
   this.handleFileDrop = (e) => {
@@ -40,7 +40,7 @@ function UploadSong(data) {
     const file = this.el.querySelector('input[type=file]');
     const title = this.el.querySelector('.title');
 
-    this.el.querySelector('.overlay').style.visibility = "hidden";
+    this.el.querySelector('.song-overlay').style.visibility = "hidden";
 
     //Check file extension
     const extension = e.dataTransfer.files[0].name.slice(-3);
@@ -176,7 +176,7 @@ function UploadSong(data) {
 
     //Add drag & drop overlay
     const overlay = document.createElement('div');
-    overlay.className = 'overlay';
+    overlay.className = 'song-overlay';
     this.el.appendChild(overlay);
 
     //Add listeners

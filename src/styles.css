@@ -1086,7 +1086,7 @@ pre {
   margin: 5px 0;
 }
 
-.upload-song .overlay {
+.upload-song .song-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -1097,11 +1097,15 @@ pre {
   margin-left: auto;
   margin-right: auto;
   background-color: rgba(238, 238, 238, 0.05); /* 238 is equivalent to #eee */
+  z-index: 1;
 }
 
 .upload-file {
+  position: relative;
   padding: 5px;
   margin: 10px 5px;
+  background-color: #222;
+  z-index: 2;
 }
 
 .upload-file input {
@@ -1113,6 +1117,20 @@ pre {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.upload-file .file-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  visibility: hidden;
+  height: 99%;
+  width: 99%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(238, 238, 238, 0.05); /* 238 is equivalent to #eee */
+  z-index: 3;
 }
 
 .upload-description {

@@ -104,6 +104,37 @@ function UploadFile(data) {
     shell.openExternal('https://creativecommons.org/about/cclicenses/');
   }
 
+  this.handleDragEnter = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    this.el.querySelector('.file-overlay').style.visibility = "visible";
+  }
+
+  this.handleDragLeave = (e) => {
+    this.el.querySelector('.file-overlay').style.visibility = "hidden";
+  }
+
+  this.handleFileDrop = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const file = this.el.querySelector('input[type=file]');
+    const title = this.el.querySelector('.title');
+
+    this.el.querySelector('.file-overlay').style.visibility = "hidden";
+
+    //Check file extension
+    const extension = e.dataTransfer.files[0].name.slice(-3);
+    if (extension !== 'mp3') {
+      file.value = null;
+      return log.error('Only mp3 files allowed.');
+    }
+
+    file.files = e.dataTransfer.files;
+    if (title.value === '') title.value = e.dataTransfer.files[0].name.slice(0, -4);
+  }
+
   this.getFileData = () => {
     const file = Array.from(this.el.querySelectorAll('.file-input')).reduce((acc, input) => {
       if (!acc.license) acc.license = [];
@@ -287,6 +318,11 @@ function UploadFile(data) {
     this.el.appendChild(file);
     this.el.appendChild(deleteFile);
 
+    //Add drag & drop overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'file-overlay';
+    this.el.appendChild(overlay);
+
     //Save references elements
     this.name = name;
     this.id = id;
@@ -297,6 +333,11 @@ function UploadFile(data) {
     //Add listeners
     deleteFile.onclick = this.handleDeleteFile;
     licenseInfoButton.onclick = this.handleLicenseInfo;
+    this.el.ondragenter = this.handleDragEnter;
+    overlay.ondragenter = (e) => e.preventDefault();
+    overlay.ondragover = (e) => e.preventDefault();
+    overlay.ondragleave = this.handleDragLeave;
+    overlay.ondrop = this.handleFileDrop;
 
     return this.el;
   }
