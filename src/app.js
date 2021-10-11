@@ -43,7 +43,7 @@ function App() {
     transfers: null,
     settings: null
   }
-  this.GATEWAY ='localhost:8080';
+  this.GATEWAY;
   this.OHM_SERVER;
   this.URL;
   this.USER_DATA_PATH;
@@ -127,6 +127,8 @@ function App() {
         const id = await this.getId(); //Get multiaddress for swarm connections
         this.MULTIADDR = id.addresses[4];
         if (this.remoteNode) log.success('Connection to IPFS daemon established.');
+
+        this.GATEWAY = `${this.settingsStore.getOne('IPFS_API_HOST')}:8080`; //Update gateway
 
         //Create user folder if it doesn't exist yet
         let initialised = false;

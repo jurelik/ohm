@@ -227,9 +227,9 @@ function Player() {
 
   this.updateSrc = () => {
     //If song, artist and title must be included as the CID points to the song parent folder
-    if (this.current.type === 'song') return this.audio.setAttribute('src', `http://${this.current.cid}.ipfs.${app.GATEWAY}/${this.current.artist} - ${this.current.title || this.current.name}.${this.current.format}`);
+    if (this.current.type === 'song') return this.audio.setAttribute('src', `http://${app.GATEWAY}/ipfs/${this.current.cid}/${this.current.artist} - ${this.current.title || this.current.name}.${this.current.format}`);
 
-    return this.audio.setAttribute('src', `http://${this.current.cid}.ipfs.${app.GATEWAY}`);
+    return this.audio.setAttribute('src', `http://${app.GATEWAY}/ipfs/${this.current.cid}`);
   }
 
   this.sameQueue = (files) => {
