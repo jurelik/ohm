@@ -48,4 +48,7 @@ npm run build_linux
 npm run build_win
 ```
 
+## contributing
+This project needs your help - please read our [CONTRIBUTING.md](CONTRIBUTING.md) for basic information on branching and code styling. Pull requests are more than welcome.
+
 <sub>design inspired by [100r](https://100r.co/) | fonts by [DJR](https://djr.com/) | icons made with [dotgrid](https://100r.co/site/dotgrid.html)</sub>
