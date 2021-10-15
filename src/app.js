@@ -67,7 +67,7 @@ function App() {
     ipcRenderer.once('login', async (e, data) => {
       this.OHM_SERVER = data.OHM_SERVER;
       this.USER_DATA_PATH = data.userDataPath;
-      this.URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : `https://${this.OHM_SERVER}${process.env.NODE_ENV === 'test' ? '/test' : ''}`;
+      this.URL = process.env.NODE_ENV === 'development' ? 'https://localhost' : `https://${this.OHM_SERVER}${process.env.NODE_ENV === 'test' ? '/test' : ''}`;
 
       //Create settingsStore
       this.settingsStore = new Store({ name: 'settings' });
