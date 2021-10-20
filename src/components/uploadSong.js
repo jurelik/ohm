@@ -143,19 +143,26 @@ function UploadSong(data) {
     titleLabel.textContent = 'title:';
     title.setAttribute('type', 'text');
     title.setAttribute('name', 'title');
+    if (this.data && this.data.title) title.setAttribute('value', this.data.title);
+
     tagsLabel.setAttribute('for', 'tags');
     tagsLabel.textContent = 'tags:';
     tags.setAttribute('type', 'text');
     tags.setAttribute('name', 'tags');
+    if (this.data && this.data.tags) tags.setAttribute('value', this.data.tags.join(', '));
+
     fileLabel.setAttribute('for', 'tags');
     fileLabel.textContent = 'file:';
     file.setAttribute('type', 'file');
     file.setAttribute('name', 'file');
     file.setAttribute('accept', 'audio/mpeg');
+
     descriptionLabel.setAttribute('for', 'description');
     descriptionLabel.textContent = 'description:';
     descriptionDiv.className = 'upload-description';
     description.setAttribute('name', 'description');
+    if (this.data && this.data.description) description.textContent = this.data.description;
+
     addFile.textContent = 'add file';
     deleteSong.textContent = 'delete song';
 
@@ -180,6 +187,15 @@ function UploadSong(data) {
     const overlay = document.createElement('div');
     overlay.className = 'song-overlay';
     this.el.appendChild(overlay);
+
+    //Add files if loading from a save file
+    if (this.data && this.data.files.length > 0) {
+      for (const file of this.data.files) {
+        let uploadFile = new UploadFile({ file, handleRemoveFile: this.handleRemoveFile });
+        this.children.push(uploadFile);
+        this.el.insertBefore(uploadFile.render(), this.el.children[this.el.children.length - 3]);
+      }
+    }
 
     //Add listeners
     addFile.onclick = this.handleAddFile;

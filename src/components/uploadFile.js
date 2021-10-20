@@ -182,6 +182,7 @@ function UploadFile(data) {
     label.textContent = name + ':';
     input.setAttribute('type', type);
     input.setAttribute('name', name);
+    if (this.data.file && this.data.file[name]) input.setAttribute('value', this.data.file[name]); //Set value if loading from save
 
     //Build structure
     el.appendChild(label);
@@ -207,6 +208,7 @@ function UploadFile(data) {
     input.setAttribute('id', `${name}-${this.unique}`);
     input.setAttribute('name', 'type-' + this.unique);
     input.setAttribute('value', name);
+    if (this.data.file && this.data.file.type === name) input.checked = true; //Set checked state if loading from save
 
     //Add listeners
     input.onchange = this.handleTypeChange;
@@ -235,7 +237,10 @@ function UploadFile(data) {
     input.setAttribute('id', `${name}-${this.unique}`);
     input.setAttribute('name', 'license-' + this.unique);
     input.setAttribute('value', name);
-    if (name !== 'BY') input.disabled = true; //Disable all checkboxes except BY on first render
+
+    const license = this.data.file && this.data.file.license ? this.data.file.license : null;
+    if (license && license.includes(name)) input.checked = true; //Set checked if loading from save
+    if ((name !== 'BY' && !license) || (name !== 'BY' && license.length < 1)) input.disabled = true; //Disable all checkboxes except BY on first render, except if we are loading from save
 
     //Add listeners
     input.onchange = this.handleLicenseChange;
@@ -280,7 +285,7 @@ function UploadFile(data) {
     //Add attributes and innerHTML/textContent
     legend.textContent = 'file:'
     typeLabel.textContent = 'type:';
-    typeOriginal.querySelector('.file-input').checked = true;
+    if (!this.data.file) typeOriginal.querySelector('.file-input').checked = true;
     licenseLabel.textContent = 'license:';
     licenseCC.textContent = 'CC';
     id.querySelector('.file-input').disabled = true;
