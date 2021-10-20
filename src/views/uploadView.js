@@ -54,10 +54,14 @@ function UploadView(data) {
     e.preventDefault();
 
     const home = require('os').homedir();
-    const data = [];
+    const data = {
+      album: null,
+      songs: []
+    }
 
     try {
-      for (const child of this.children) data.push(child.getSongData());
+      if (this.children.length > 1) data.album = this.album.getAlbumData(true);
+      for (const child of this.children) data.songs.push(child.getSongData(true));
 
       await fs.promises.mkdir(path.join(home, '/Documents/ohm-save'), { recursive: true });
       fs.writeFileSync(path.join(home, `Documents/ohm-save`, `test.sav`), JSON.stringify(data, null, 2));

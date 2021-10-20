@@ -75,7 +75,7 @@ function UploadSong(data) {
     this.children.splice(index, 1);
   }
 
-  this.getSongData = () => {
+  this.getSongData = (shallow) => {
     const song = Array.from(this.el.querySelectorAll('.song-input, .song-textarea')).reduce((acc, input) => {
       if (input.type === 'file' && input.files[0]) return { ...acc, path: input.files[0].path };
 
@@ -98,11 +98,13 @@ function UploadSong(data) {
 
     //Add files
     song.files = [];
-    for (let el of this.children) song.files.push(el.getFileData());
+    for (let el of this.children) song.files.push(el.getFileData(shallow));
 
     //Add CID & format
-    song.cid = null;
-    song.format = song.path.slice(-3);
+    if (!shallow) {
+      song.cid = null;
+      song.format = song.path.slice(-3);
+    }
 
     return song;
   }

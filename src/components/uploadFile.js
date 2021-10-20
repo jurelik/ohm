@@ -125,7 +125,7 @@ function UploadFile(data) {
     if (this.name.querySelector('input').value === '') this.name.querySelector('input').value = e.dataTransfer.files[0].name.slice(0, -4);
   }
 
-  this.getFileData = () => {
+  this.getFileData = (shallow) => {
     const file = Array.from(this.el.querySelectorAll('.file-input')).reduce((acc, input) => {
       if (!acc.license) acc.license = [];
 
@@ -159,8 +159,10 @@ function UploadFile(data) {
     else if (file.type === 'internal' && file.id === '') throw 'file id is missing';
 
     //Add properties
-    file.cid = null;
-    if (file.type !== 'internal') file.format = file.path.slice(-3);
+    if (!shallow) {
+      file.cid = null;
+      if (file.type !== 'internal') file.format = file.path.slice(-3);
+    }
 
     return file;
   }

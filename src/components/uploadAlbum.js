@@ -24,7 +24,7 @@ function UploadAlbum(data) {
     textarea.disabled = true;
   }
 
-  this.getAlbumData = () => {
+  this.getAlbumData = (shallow) => {
     const album = Array.from(this.el.querySelectorAll('input')).reduce((acc, input) => ({ ...acc, [input.name]: input.value }), {});
     album.description = this.el.querySelector('textarea').value;
 
@@ -42,7 +42,7 @@ function UploadAlbum(data) {
     }
 
     //Add CID property
-    album.cid = null;
+    if (!shallow) album.cid = null;
 
     return album;
   }
