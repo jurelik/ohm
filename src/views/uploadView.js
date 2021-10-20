@@ -78,10 +78,10 @@ function UploadView(data) {
     const home = require('os').homedir();
 
     try {
-      const data = JSON.parse(fs.readFileSync(path.join(home, `Documents/ohm-save`, `test.sav`)));
+      this.data = JSON.parse(fs.readFileSync(path.join(home, `Documents/ohm-save`, `test.sav`)));
 
       this.reset(true); //Reset view
-      for (const song of data.songs) {
+      for (const song of this.data.songs) {
         let uploadSong = new UploadSong(song);
         this.children.push(uploadSong);
         this.form.appendChild(uploadSong.render());
@@ -163,7 +163,7 @@ function UploadView(data) {
     let save = document.createElement('button');
     let submitDiv = document.createElement('div');
     let submit = document.createElement('input');
-    this.album = new UploadAlbum();
+    this.album = new UploadAlbum(this.data && this.data.album ? this.data.album : null);
     let album = this.album.render();
 
     //Add classes for styling

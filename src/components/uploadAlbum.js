@@ -62,32 +62,35 @@ function UploadAlbum(data) {
     //Add classes for styling
     this.el.className = 'upload-album';
     title.className = 'album-input';
-    titleLabel.className = 'label-disabled';
+    if (!this.data) titleLabel.className = 'label-disabled'; //Disabled unless album is loaded from save
     titleDiv.className = 'album-title-div';
     tags.className = 'album-input';
-    tagsLabel.className = 'label-disabled';
+    if (!this.data) tagsLabel.className = 'label-disabled'; //Disabled unless album is loaded from save
     tagsDiv.className = 'album-tags-div';
     description.className = 'album-textarea';
     descriptionDiv.className = 'upload-description';
-    descriptionLabel.className = 'label-disabled';
+    if (!this.data) descriptionLabel.className = 'label-disabled'; //Disabled unless album is loaded from save
 
     //Add attributes and innerHTML/textContent
     titleLabel.setAttribute('for', 'title');
     titleLabel.textContent = 'album title:';
     title.setAttribute('type', 'text');
     title.setAttribute('name', 'title');
-    title.disabled = true;
+    if (this.data && this.data.title) title.setAttribute('value', this.data.title); //Set value if loading from save
+    if (!this.data) title.disabled = true; //Disabled unless album is loaded from save
 
     tagsLabel.setAttribute('for', 'tags');
     tagsLabel.textContent = 'album tags:';
     tags.setAttribute('type', 'text');
     tags.setAttribute('name', 'tags');
-    tags.disabled = true;
+    if (this.data && this.data.tags) tags.setAttribute('value', this.data.tags.join(', ')); //Set value if loading from save
+    if (!this.data) tags.disabled = true; //Disabled unless album is loaded from save
 
     descriptionLabel.setAttribute('for', 'description');
     descriptionLabel.textContent = 'album description:';
     description.setAttribute('name', 'description');
-    description.disabled = true;
+    if (this.data && this.data.description) description.textContent = this.data.description; //Set value if loading from save
+    if (!this.data) description.disabled = true; //Disabled unless album is loaded from save
 
     //Build structure
     titleDiv.appendChild(titleLabel);
