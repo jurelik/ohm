@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const UploadSong = require('../components/uploadSong');
 const UploadAlbum = require('../components/uploadAlbum');
 const io = require('../utils/io');
@@ -45,6 +47,24 @@ function UploadView(data) {
 
     this.form.removeChild(this.children[index].el);
     this.children.splice(index, 1);
+  }
+
+  this.handleSave = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const home = require('os').homedir();
+    const data = [];
+
+    try {
+      for (const child of this.children) data.push(child.getSongData());
+
+      await fs.promises.mkdir(path.join(home, '/Documents/ohm-save'), { recursive: true });
+      fs.writeFileSync(path.join(home, `Documents/ohm-save`, `test.sav`), JSON.stringify(data, null, 2));
+    }
+    catch (err) {
+      log(err.message);
+    }
   }
 
   this.handleSubmit = async (e) => {
@@ -114,6 +134,7 @@ function UploadView(data) {
     //Create elements
     let bottomBar = document.createElement('div');
     let addSong = document.createElement('button');
+    let save = document.createElement('button');
     let submitDiv = document.createElement('div');
     let submit = document.createElement('input');
     this.album = new UploadAlbum();
@@ -127,6 +148,7 @@ function UploadView(data) {
 
     //Add attributes and innerHTML/textContent
     addSong.textContent = 'add song';
+    save.textContent = 'save';
     submit.setAttribute('type', 'submit');
     submit.setAttribute('value', 'submit');
 
@@ -135,6 +157,7 @@ function UploadView(data) {
     this.form.appendChild(album);
     this.el.appendChild(bottomBar);
     bottomBar.appendChild(addSong);
+    bottomBar.appendChild(save);
     bottomBar.appendChild(submitDiv);
     submitDiv.appendChild(submit);
 
@@ -146,6 +169,7 @@ function UploadView(data) {
 
     //Add listeners
     addSong.onclick = this.handleAddSong;
+    save.onclick = this.handleSave;
     submit.onclick = this.handleSubmit;
 
     app.content.innerHTML = '';
