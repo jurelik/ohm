@@ -22,53 +22,8 @@ function UploadFile(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    if (e.target.value === 'original' || e.target.value === 'external') {
-      this.id.querySelector('input').disabled = true;
-      this.id.querySelector('label').className = 'label-disabled';
-
-      this.name.querySelector('input').disabled = false;
-      this.name.querySelector('label').className = '';
-      this.tags.querySelector('input').disabled = false;
-      this.tags.querySelector('label').className = '';
-      this.info.querySelector('input').disabled = false;
-      this.info.querySelector('label').className = '';
-      this.file.querySelector('input').disabled = false;
-      this.file.querySelector('label').className = '';
-
-      this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
-        if (checkbox.id === `BY-${this.unique}`) checkbox.disabled = false;
-        else if (this.el.querySelector(`#BY-${this.unique}`).checked) checkbox.disabled = false;
-      });
-      this.el.querySelectorAll('.checkbox-group-div p').forEach(p => {
-        p.className = '';
-      });
-      this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
-        label.className = '';
-      });
-    }
-    else if (e.target.value === 'internal') {
-      this.id.querySelector('input').disabled = false;
-      this.id.querySelector('label').className = '';
-
-      this.name.querySelector('input').disabled = true;
-      this.name.querySelector('label').className = 'label-disabled';
-      this.tags.querySelector('input').disabled = true;
-      this.tags.querySelector('label').className = 'label-disabled';
-      this.info.querySelector('input').disabled = true;
-      this.info.querySelector('label').className = 'label-disabled';
-      this.file.querySelector('input').disabled = true;
-      this.file.querySelector('label').className = 'label-disabled';
-
-      this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
-        checkbox.disabled = true;
-      });
-      this.el.querySelectorAll('.checkbox-group-div p').forEach(p => {
-        p.className = 'label-disabled';
-      });
-      this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
-        label.className = 'label-disabled';
-      });
-    }
+    if (e.target.value === 'original' || e.target.value === 'external') this.setOriginalExternal();
+    else this.setInternal();
   }
 
   this.handleLicenseChange = (e) => {
@@ -167,6 +122,55 @@ function UploadFile(data) {
     else delete file.path; //Delete path if we are just saving state
 
     return file;
+  }
+
+  this.setInternal = () => {
+    this.id.querySelector('input').disabled = false;
+    this.id.querySelector('label').className = '';
+
+    this.name.querySelector('input').disabled = true;
+    this.name.querySelector('label').className = 'label-disabled';
+    this.tags.querySelector('input').disabled = true;
+    this.tags.querySelector('label').className = 'label-disabled';
+    this.info.querySelector('input').disabled = true;
+    this.info.querySelector('label').className = 'label-disabled';
+    this.file.querySelector('input').disabled = true;
+    this.file.querySelector('label').className = 'label-disabled';
+
+    this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+      checkbox.disabled = true;
+    });
+    this.el.querySelectorAll('.checkbox-group-div p').forEach(p => {
+      p.className = 'label-disabled';
+    });
+    this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
+      label.className = 'label-disabled';
+    });
+  }
+
+  this.setOriginalExternal = () => {
+    this.id.querySelector('input').disabled = true;
+    this.id.querySelector('label').className = 'label-disabled';
+
+    this.name.querySelector('input').disabled = false;
+    this.name.querySelector('label').className = '';
+    this.tags.querySelector('input').disabled = false;
+    this.tags.querySelector('label').className = '';
+    this.info.querySelector('input').disabled = false;
+    this.info.querySelector('label').className = '';
+    this.file.querySelector('input').disabled = false;
+    this.file.querySelector('label').className = '';
+
+    this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+      if (checkbox.id === `BY-${this.unique}`) checkbox.disabled = false;
+      else if (this.el.querySelector(`#BY-${this.unique}`).checked) checkbox.disabled = false;
+    });
+    this.el.querySelectorAll('.checkbox-group-div p').forEach(p => {
+      p.className = '';
+    });
+    this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
+      label.className = '';
+    });
   }
 
   this.createInput = (name, type) => {
@@ -328,6 +332,8 @@ function UploadFile(data) {
     this.tags = tags;
     this.info = info;
     this.file = file;
+
+    if (this.data.file && this.data.file.type === 'internal') this.setInternal(); //Disable inputs if loading from save and type is internal
 
     //Add listeners
     deleteFile.onclick = this.handleDeleteFile;
