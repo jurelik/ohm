@@ -7,6 +7,7 @@ const log = require('../utils/log');
 function UploadSong(data) {
   this.el = document.createElement('fieldset');
   this.data = data;
+  this.loadingFromSave = this.data ? true : false; //Are we loading from a save file?
   this.children = [];
 
   //Add unique id to file and increase songCounter
@@ -147,13 +148,13 @@ function UploadSong(data) {
     titleLabel.textContent = 'title:';
     title.setAttribute('type', 'text');
     title.setAttribute('name', 'title');
-    if (this.data && this.data.title) title.setAttribute('value', this.data.title);
+    if (this.loadingFromSave) title.setAttribute('value', this.data.title);
 
     tagsLabel.setAttribute('for', 'tags');
     tagsLabel.textContent = 'tags:';
     tags.setAttribute('type', 'text');
     tags.setAttribute('name', 'tags');
-    if (this.data && this.data.tags) tags.setAttribute('value', this.data.tags.join(', '));
+    if (this.loadingFromSave) tags.setAttribute('value', this.data.tags.join(', '));
 
     fileLabel.setAttribute('for', 'tags');
     fileLabel.textContent = 'file:';
@@ -165,7 +166,7 @@ function UploadSong(data) {
     descriptionLabel.textContent = 'description:';
     descriptionDiv.className = 'upload-description';
     description.setAttribute('name', 'description');
-    if (this.data && this.data.description) description.textContent = this.data.description;
+    if (this.loadingFromSave) description.textContent = this.data.description;
 
     addFile.textContent = 'add file';
     deleteSong.textContent = 'delete song';
@@ -193,7 +194,7 @@ function UploadSong(data) {
     this.el.appendChild(overlay);
 
     //Add files if loading from a save file
-    if (this.data && this.data.files.length > 0) {
+    if (this.loadingFromSave && this.data.files.length > 0) {
       for (const file of this.data.files) {
         let uploadFile = new UploadFile({ file, handleRemoveFile: this.handleRemoveFile });
         this.children.push(uploadFile);

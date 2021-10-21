@@ -6,6 +6,7 @@ const { shell } = require('electron');
 function UploadFile(data) {
   this.el = document.createElement('fieldset');
   this.data = data;
+  this.loadingFromSave = this.data.file ? true : false; //Are we loading from a save file?
 
   //Elements
   this.name = null;
@@ -188,7 +189,7 @@ function UploadFile(data) {
     label.textContent = name + ':';
     input.setAttribute('type', type);
     input.setAttribute('name', name);
-    if (this.data.file && this.data.file[name]) input.setAttribute('value', this.data.file[name]); //Set value if loading from save
+    if (this.loadingFromSave) input.setAttribute('value', this.data.file[name]); //Set value if loading from save
 
     //Build structure
     el.appendChild(label);
@@ -214,7 +215,7 @@ function UploadFile(data) {
     input.setAttribute('id', `${name}-${this.unique}`);
     input.setAttribute('name', 'type-' + this.unique);
     input.setAttribute('value', name);
-    if (this.data.file && this.data.file.type === name) input.checked = true; //Set checked state if loading from save
+    if (this.loadingFromSave && this.data.file.type === name) input.checked = true; //Set checked state if loading from save
 
     //Add listeners
     input.onchange = this.handleTypeChange;
@@ -244,7 +245,7 @@ function UploadFile(data) {
     input.setAttribute('name', 'license-' + this.unique);
     input.setAttribute('value', name);
 
-    const license = this.data.file && this.data.file.license ? this.data.file.license : null;
+    const license = this.loadingFromSave ? this.data.file.license : null;
     if (license && license.includes(name)) input.checked = true; //Set checked if loading from save
     if ((name !== 'BY' && !license) || (name !== 'BY' && license.length < 1)) input.disabled = true; //Disable all checkboxes except BY on first render, except if we are loading from save
 
@@ -291,7 +292,7 @@ function UploadFile(data) {
     //Add attributes and innerHTML/textContent
     legend.textContent = 'file:'
     typeLabel.textContent = 'type:';
-    if (!this.data.file) typeOriginal.querySelector('.file-input').checked = true;
+    if (!this.loadingFromSave) typeOriginal.querySelector('.file-input').checked = true;
     licenseLabel.textContent = 'license:';
     licenseCC.textContent = 'CC';
     id.querySelector('.file-input').disabled = true;
@@ -333,7 +334,7 @@ function UploadFile(data) {
     this.info = info;
     this.file = file;
 
-    if (this.data.file && this.data.file.type === 'internal') this.setInternal(); //Disable inputs if loading from save and type is internal
+    if (this.loadingFromSave && this.data.file.type === 'internal') this.setInternal(); //Disable inputs if loading from save and type is internal
 
     //Add listeners
     deleteFile.onclick = this.handleDeleteFile;

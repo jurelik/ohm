@@ -3,6 +3,7 @@
 function UploadAlbum(data) {
   this.el = document.createElement('div');
   this.data = data;
+  this.loadingFromSave = this.data ? true : false; //Are we loading from a save file?
 
   this.enable = () => {
     let inputs = this.el.querySelectorAll('input');
@@ -65,35 +66,35 @@ function UploadAlbum(data) {
     //Add classes for styling
     this.el.className = 'upload-album';
     title.className = 'album-input';
-    if (!this.data) titleLabel.className = 'label-disabled'; //Disabled unless album is loaded from save
+    if (!this.loadingFromSave) titleLabel.className = 'label-disabled'; //Disabled unless album is loaded from save
     titleDiv.className = 'album-title-div';
     tags.className = 'album-input';
-    if (!this.data) tagsLabel.className = 'label-disabled'; //Disabled unless album is loaded from save
+    if (!this.loadingFromSave) tagsLabel.className = 'label-disabled'; //Disabled unless album is loaded from save
     tagsDiv.className = 'album-tags-div';
     description.className = 'album-textarea';
     descriptionDiv.className = 'upload-description';
-    if (!this.data) descriptionLabel.className = 'label-disabled'; //Disabled unless album is loaded from save
+    if (!this.loadingFromSave) descriptionLabel.className = 'label-disabled'; //Disabled unless album is loaded from save
 
     //Add attributes and innerHTML/textContent
     titleLabel.setAttribute('for', 'title');
     titleLabel.textContent = 'album title:';
     title.setAttribute('type', 'text');
     title.setAttribute('name', 'title');
-    if (this.data && this.data.title) title.setAttribute('value', this.data.title); //Set value if loading from save
-    if (!this.data) title.disabled = true; //Disabled unless album is loaded from save
+    if (this.loadingFromSave) title.setAttribute('value', this.data.title); //Set value if loading from save
+    if (!this.loadingFromSave) title.disabled = true; //Disabled unless album is loaded from save
 
     tagsLabel.setAttribute('for', 'tags');
     tagsLabel.textContent = 'album tags:';
     tags.setAttribute('type', 'text');
     tags.setAttribute('name', 'tags');
-    if (this.data && this.data.tags) tags.setAttribute('value', this.data.tags.join(', ')); //Set value if loading from save
-    if (!this.data) tags.disabled = true; //Disabled unless album is loaded from save
+    if (this.loadingFromSave) tags.setAttribute('value', this.data.tags.join(', ')); //Set value if loading from save
+    if (!this.loadingFromSave) tags.disabled = true; //Disabled unless album is loaded from save
 
     descriptionLabel.setAttribute('for', 'description');
     descriptionLabel.textContent = 'album description:';
     description.setAttribute('name', 'description');
-    if (this.data && this.data.description) description.textContent = this.data.description; //Set value if loading from save
-    if (!this.data) description.disabled = true; //Disabled unless album is loaded from save
+    if (this.loadingFromSave) description.textContent = this.data.description; //Set value if loading from save
+    if (!this.loadingFromSave) description.disabled = true; //Disabled unless album is loaded from save
 
     //Build structure
     titleDiv.appendChild(titleLabel);
