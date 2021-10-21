@@ -95,9 +95,11 @@ function UploadSong(data) {
     if (song.tags.length === 0 && !shallow) throw new Error('Song tags are missing');
 
     //Check formatting
-    if (!helpers.allowedFormat(song.title)) throw new Error('Song title can only include letters, numbers and underscores.'); //Check for bad characters
-    for (let tag of song.tags) {
-      if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
+    if (!shallow) {
+      if (!helpers.allowedFormat(song.title)) throw new Error('Song title can only include letters, numbers and underscores.'); //Check for bad characters
+      for (let tag of song.tags) {
+        if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
+      }
     }
 
     //Add files
