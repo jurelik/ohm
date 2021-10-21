@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, Tray, nativeTheme, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray, nativeTheme, dialog } = require('electron');
 const { spawn } = require('child_process')
 const menuTemplate = require('./src/utils/menuTemplate');
 const os = require('os');
@@ -151,6 +151,34 @@ ipcMain.on('upload-end', event => { //Reset tempUploadPath when upload ends/fail
 
 ipcMain.on('login', event => {
   event.reply('login', { OHM_SERVER: settings.OHM_SERVER, userDataPath });
+});
+
+ipcMain.handle('load-file', async (event) => {
+  try {
+    const res = await dialog.showOpenDialog({
+      filters: [
+        { name: 'ohm_upload_state', extensions: [ 'ous' ] }
+      ]
+    });
+    return res;
+  }
+  catch (err) {
+    return { canceled: true, err };
+  }
+});
+
+ipcMain.handle('save-file', async (event) => {
+  try {
+    const res = await dialog.showSaveDialog({
+      filters: [
+        { name: 'ohm_upload_state', extensions: [ 'ous' ] }
+      ]
+    });
+    return res;
+  }
+  catch (err) {
+    return { canceled: true, err };
+  }
 });
 
 const spawnDaemon = (event) => {

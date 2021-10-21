@@ -140,7 +140,7 @@ function UploadFile(data) {
     }, {});
 
     //Handle empty fields
-    if (file.type === 'original' || file.type === 'external') {
+    if ((file.type === 'original' || file.type === 'external') && !shallow) {
       if (file.name === '') throw new Error('File name is missing.');
       if (file.path === '') throw new Error('File is missing.');
       if (file.tags === '') throw new Error('File tags are missing.');
@@ -156,13 +156,15 @@ function UploadFile(data) {
         if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
       }
     }
-    else if (file.type === 'internal' && file.id === '') throw 'file id is missing';
+    else if ((file.type === 'original' || file.type === 'external') && shallow) file.tags = file.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
+    else if (file.type === 'internal' && file.id === '' && !shallow) throw new Error('File id is missing');
 
     //Add properties
     if (!shallow) {
       file.cid = null;
       if (file.type !== 'internal') file.format = file.path.slice(-3);
     }
+    else delete file.path; //Delete path if we are just saving state
 
     return file;
   }

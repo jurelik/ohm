@@ -1,7 +1,8 @@
 'use strict';
 
-const fs = require('fs');
+const fsp = require('fs').promises;
 const path = require('path');
+const { ipcRenderer } = require('electron');
 const UploadSong = require('../components/uploadSong');
 const UploadAlbum = require('../components/uploadAlbum');
 const io = require('../utils/io');
@@ -53,32 +54,41 @@ function UploadView(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    const home = require('os').homedir();
     const data = {
       album: null,
       songs: []
     }
 
     try {
+      //Trigger dialog to prompt user for save location
+      const res = await ipcRenderer.invoke('save-file');
+      if (res.err) throw res.err;
+      if (res.canceled) throw new Error('Save canceled.');
+
       if (this.children.length > 1) data.album = this.album.getAlbumData(true);
       for (const child of this.children) data.songs.push(child.getSongData(true));
 
-      await fs.promises.mkdir(path.join(home, '/Documents/ohm-save'), { recursive: true });
-      fs.writeFileSync(path.join(home, `Documents/ohm-save`, `test.sav`), JSON.stringify(data, null, 2));
+      await fsp.mkdir(path.dirname(res.filePath), { recursive: true });
+      await fsp.writeFile(res.filePath, JSON.stringify(data, null, 2));
+
+      log.success('Successfully saved upload state.');
     }
     catch (err) {
-      log(err.message);
+      log.error(err.message);
     }
   }
 
-  this.handleLoad = (e) => {
+  this.handleLoad = async (e) => {
     e.stopPropagation();
     e.preventDefault();
 
-    const home = require('os').homedir();
-
     try {
-      this.data = JSON.parse(fs.readFileSync(path.join(home, `Documents/ohm-save`, `test.sav`)));
+      //Trigger dialog for user to select .ous file to load
+      const res = await ipcRenderer.invoke('load-file');
+      if (res.err) throw res.err;
+      if (res.canceled) throw new Error('Load canceled.');
+
+      this.data = JSON.parse(await fsp.readFile(res.filePaths[0]));
 
       this.reset(true); //Reset view
       for (const song of this.data.songs) {
@@ -86,9 +96,11 @@ function UploadView(data) {
         this.children.push(uploadSong);
         this.form.appendChild(uploadSong.render());
       }
+
+      log.success('Successfully loaded upload state.');
     }
     catch (err) {
-      log(err.message);
+      log.error(err.message);
     }
   }
 
