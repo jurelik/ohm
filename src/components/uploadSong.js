@@ -77,13 +77,7 @@ function UploadSong(data) {
   }
 
   this.getSongData = (shallow) => {
-    const song = Array.from(this.el.querySelectorAll('.song-input, .song-textarea')).reduce((acc, input) => {
-      if (input.type === 'file' && input.files[0]) return { ...acc, path: input.files[0].path };
-
-      return { ...acc, [input.name]: input.value };
-    }, {});
-
-    song.tags = song.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
+    const song = helpers.parseInputs('song', this.el);
 
     //Handle empty/bad fields
     if (!shallow) {

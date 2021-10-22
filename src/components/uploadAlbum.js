@@ -1,5 +1,7 @@
 'use strict';
 
+const helpers = require('../utils/helpers');
+
 function UploadAlbum(data) {
   this.el = document.createElement('div');
   this.data = data;
@@ -26,10 +28,7 @@ function UploadAlbum(data) {
   }
 
   this.getAlbumData = (shallow) => {
-    const album = Array.from(this.el.querySelectorAll('input')).reduce((acc, input) => ({ ...acc, [input.name]: input.value }), {});
-    album.description = this.el.querySelector('textarea').value;
-
-    album.tags = album.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
+    const album = helpers.parseInputs('album', this.el);
 
     //Handle empty/bad fields
     if (!shallow) {

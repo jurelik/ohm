@@ -1,7 +1,8 @@
 'use strict';
 
-const { infoIcon } = require('../utils/svgs');
 const { shell } = require('electron');
+const helpers = require('../utils/helpers');
+const { infoIcon } = require('../utils/svgs');
 
 function UploadFile(data) {
   this.el = document.createElement('fieldset');
@@ -82,20 +83,7 @@ function UploadFile(data) {
   }
 
   this.getFileData = (shallow) => {
-    const file = Array.from(this.el.querySelectorAll('.file-input')).reduce((acc, input) => {
-      if (!acc.license) acc.license = [];
-
-      if (input.type === 'radio' && input.checked) return { ...acc, type: input.value };
-      else if (input.type === 'radio' && !input.checked) return { ...acc };
-      else if (input.type === 'file' && input.files[0]) return { ...acc, path: input.files[0].path };
-      else if (input.type === 'file' && !input.files[0]) return { ...acc };
-      else if (input.type === 'checkbox' && input.checked && !input.disabled) return { ...acc, license: [ ...acc.license, input.value ] }
-      else if (input.type === 'checkbox' && (!input.checked || input.disabled)) return { ...acc }
-
-      return { ...acc, [input.name]: input.value };
-    }, {});
-
-    file.tags = file.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
+    const file = helpers.parseInputs('file', this.el);
 
     //Handle empty/bad fields
     if ((file.type === 'original' || file.type === 'external') && !shallow) {
