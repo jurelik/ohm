@@ -95,24 +95,18 @@ function UploadFile(data) {
       return { ...acc, [input.name]: input.value };
     }, {});
 
-    //Handle empty fields
+    file.tags = file.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
+
+    //Handle empty/bad fields
     if ((file.type === 'original' || file.type === 'external') && !shallow) {
       if (file.name === '') throw new Error('File name is missing.');
+      if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check name for bad characters
       if (file.path === '') throw new Error('File is missing.');
-      if (file.tags === '') throw new Error('File tags are missing.');
-      if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check for bad characters
-
-      //Turn tags into an array
-      file.tags = file.tags.split(/[,;]+/).filter(tag => tag.length > 0);
-      if (file.tags.length === 0) throw new Error('File tags are missing');
-
-      //Check formatting
-      if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check for bad characters
-      for (let tag of file.tags) {
+      if (file.tags.length === 0) throw new Error('File tags are missing.');
+      for (let tag of file.tags) { //Check tags for bad characters
         if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
       }
     }
-    else if ((file.type === 'original' || file.type === 'external') && shallow) file.tags = file.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
     else if (file.type === 'internal' && file.id === '' && !shallow) throw new Error('File id is missing');
 
     //Add properties

@@ -83,21 +83,15 @@ function UploadSong(data) {
       return { ...acc, [input.name]: input.value };
     }, {});
 
-    //Handle empty fields
+    song.tags = song.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
+
+    //Handle empty/bad fields
     if (!shallow) {
       if (song.title === '') throw new Error('Song title is missing.');
+      if (!helpers.allowedFormat(song.title)) throw new Error('Song title can only include letters, numbers and underscores.'); //Check title for bad characters
       if (!song.path ) throw new Error('Song file is missing.');
-      if (song.tags === '') throw new Error('Song tags are missing.');
-    }
-
-    //Turn tags into an array
-    song.tags = song.tags.split(/[,;]+/).filter(tag => tag.length > 0);
-    if (song.tags.length === 0 && !shallow) throw new Error('Song tags are missing');
-
-    //Check formatting
-    if (!shallow) {
-      if (!helpers.allowedFormat(song.title)) throw new Error('Song title can only include letters, numbers and underscores.'); //Check for bad characters
-      for (let tag of song.tags) {
+      if (song.tags.length === 0) throw new Error('Song tags are missing.');
+      for (let tag of song.tags) { //Check tags for bad characters
         if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
       }
     }

@@ -29,26 +29,19 @@ function UploadAlbum(data) {
     const album = Array.from(this.el.querySelectorAll('input')).reduce((acc, input) => ({ ...acc, [input.name]: input.value }), {});
     album.description = this.el.querySelector('textarea').value;
 
-    //Handle empty fields
+    album.tags = album.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
+
+    //Handle empty/bad fields
     if (!shallow) {
       if (album.title === '') throw new Error('Album title is missing.');
-      if (album.tags === '') throw new Error('Album tags are missing.');
-    }
-
-    //Turn tags into an array
-    album.tags = album.tags.split(/[,;]+/).filter(tag => tag.length > 0);
-    if (album.tags.length === 0 && !shallow) throw new Error('Album tags are missing');
-
-    //Check formatting
-    if (!shallow) {
-      if (!helpers.allowedFormat(album.title)) throw new Error('Album title can only include letters, numbers and underscores.');
-      for (let tag of album.tags) {
+      if (!helpers.allowedFormat(album.title)) throw new Error('Album title can only include letters, numbers and underscores.'); //Check title for bad characters
+      if (album.tags.length === 0) throw new Error('Album tags are missing.');
+      for (let tag of album.tags) { //Check tags for bad characters
         if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
       }
     }
 
-    //Add CID property
-    if (!shallow) album.cid = null;
+    if (!shallow) album.cid = null; //Add CID property
 
     return album;
   }
