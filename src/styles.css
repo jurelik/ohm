@@ -1234,18 +1234,20 @@ pre {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-bottom: 10px;
 }
 
 .upload-bottom-bar .add-song {
   padding-left: 0px;
+  margin-right: auto;
 }
 
 .upload-bottom-bar .submit-div {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-left: 5px;
 }
 
 .upload-bottom-bar .submit-div .spinner {
