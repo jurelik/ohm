@@ -7,6 +7,7 @@ const log = require('../utils/log');
 function UploadSong(data) {
   this.el = document.createElement('fieldset');
   this.data = data;
+  this.loadingFromSave = this.data ? true : false; //Are we loading from a save file?
   this.children = [];
 
   //Add unique id to file and increase songCounter
@@ -75,34 +76,30 @@ function UploadSong(data) {
     this.children.splice(index, 1);
   }
 
-  this.getSongData = () => {
-    const song = Array.from(this.el.querySelectorAll('.song-input, .song-textarea')).reduce((acc, input) => {
-      if (input.type === 'file' && input.files[0]) return { ...acc, path: input.files[0].path };
+  this.getSongData = (shallow) => {
+    const song = helpers.parseInputs('song', this.el);
 
-      return { ...acc, [input.name]: input.value };
-    }, {});
-
-    //Handle empty fields
-    if (song.title === '') throw new Error('Song title is missing.');
-    if (!song.path) throw new Error('Song file is missing.');
-    if (song.tags === '') throw new Error('Song tags are missing.');
-
-    song.tags = song.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
-    if (song.tags.length === 0) throw new Error('Song tags are missing');
-
-    //Check formatting
-    if (!helpers.allowedFormat(song.title)) throw new Error('Song title can only include letters, numbers and underscores.'); //Check for bad characters
-    for (let tag of song.tags) {
-      if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
+    //Handle empty/bad fields
+    if (!shallow) {
+      if (song.title === '') throw new Error('Song title is missing.');
+      if (!helpers.allowedFormat(song.title)) throw new Error('Song title can only include letters, numbers and underscores.'); //Check title for bad characters
+      if (!song.path ) throw new Error('Song file is missing.');
+      if (song.tags.length === 0) throw new Error('Song tags are missing.');
+      for (let tag of song.tags) { //Check tags for bad characters
+        if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
+      }
     }
 
     //Add files
     song.files = [];
-    for (let el of this.children) song.files.push(el.getFileData());
+    for (let el of this.children) song.files.push(el.getFileData(shallow));
 
     //Add CID & format
-    song.cid = null;
-    song.format = song.path.slice(-3);
+    if (!shallow) {
+      song.cid = null;
+      song.format = song.path.slice(-3);
+    }
+    else delete song.path; //Delete path if we are just saving state
 
     return song;
   }
@@ -141,19 +138,26 @@ function UploadSong(data) {
     titleLabel.textContent = 'title:';
     title.setAttribute('type', 'text');
     title.setAttribute('name', 'title');
+    if (this.loadingFromSave) title.setAttribute('value', this.data.title);
+
     tagsLabel.setAttribute('for', 'tags');
     tagsLabel.textContent = 'tags:';
     tags.setAttribute('type', 'text');
     tags.setAttribute('name', 'tags');
+    if (this.loadingFromSave) tags.setAttribute('value', this.data.tags.join(', '));
+
     fileLabel.setAttribute('for', 'tags');
     fileLabel.textContent = 'file:';
     file.setAttribute('type', 'file');
     file.setAttribute('name', 'file');
     file.setAttribute('accept', 'audio/mpeg');
+
     descriptionLabel.setAttribute('for', 'description');
     descriptionLabel.textContent = 'description:';
     descriptionDiv.className = 'upload-description';
     description.setAttribute('name', 'description');
+    if (this.loadingFromSave) description.textContent = this.data.description;
+
     addFile.textContent = 'add file';
     deleteSong.textContent = 'delete song';
 
@@ -178,6 +182,15 @@ function UploadSong(data) {
     const overlay = document.createElement('div');
     overlay.className = 'song-overlay';
     this.el.appendChild(overlay);
+
+    //Add files if loading from a save file
+    if (this.loadingFromSave && this.data.files.length > 0) {
+      for (const file of this.data.files) {
+        let uploadFile = new UploadFile({ file, handleRemoveFile: this.handleRemoveFile });
+        this.children.push(uploadFile);
+        this.el.insertBefore(uploadFile.render(), this.el.children[this.el.children.length - 3]);
+      }
+    }
 
     //Add listeners
     addFile.onclick = this.handleAddFile;

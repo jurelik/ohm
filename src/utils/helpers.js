@@ -264,6 +264,44 @@ const allowedFormat = (string) => {
   return regex.test(string);
 }
 
+const parseInputs = (type, el) => {
+  let parsed;
+
+  switch (type) {
+    case 'album':
+      parsed = Array.from(el.querySelectorAll('input')).reduce((acc, input) => ({ ...acc, [input.name]: input.value }), {});
+      parsed.description = el.querySelector('textarea').value;
+      break;
+    case 'song':
+      parsed = Array.from(el.querySelectorAll('.song-input, .song-textarea')).reduce((acc, input) => {
+        if (input.type === 'file' && input.files[0]) return { ...acc, path: input.files[0].path };
+
+        return { ...acc, [input.name]: input.value };
+      }, {});
+      break;
+    case 'file':
+      parsed = Array.from(el.querySelectorAll('.file-input')).reduce((acc, input) => {
+        if (!acc.license) acc.license = [];
+
+        if (input.type === 'radio' && input.checked) return { ...acc, type: input.value };
+        else if (input.type === 'radio' && !input.checked) return { ...acc };
+        else if (input.type === 'file' && input.files[0]) return { ...acc, path: input.files[0].path };
+        else if (input.type === 'file' && !input.files[0]) return { ...acc };
+        else if (input.type === 'checkbox' && input.checked && !input.disabled) return { ...acc, license: [ ...acc.license, input.value ] }
+        else if (input.type === 'checkbox' && (!input.checked || input.disabled)) return { ...acc }
+
+        return { ...acc, [input.name]: input.value };
+      }, {});
+      break;
+    default:
+      throw new Error('Type not recognized.');
+  }
+
+  parsed.tags = parsed.tags.split(/[,;]+/).filter(tag => tag.length > 0); //Turn tags into an array
+
+  return parsed;
+}
+
 //
 //PRIVATE FUNCTIONS
 //
@@ -405,5 +443,6 @@ module.exports = {
   formatBytes,
   handleEmpty,
   timerPromise,
-  allowedFormat
+  allowedFormat,
+  parseInputs
 }

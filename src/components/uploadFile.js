@@ -1,11 +1,13 @@
 'use strict';
 
-const { infoIcon } = require('../utils/svgs');
 const { shell } = require('electron');
+const helpers = require('../utils/helpers');
+const { infoIcon } = require('../utils/svgs');
 
 function UploadFile(data) {
   this.el = document.createElement('fieldset');
   this.data = data;
+  this.loadingFromSave = this.data.file ? true : false; //Are we loading from a save file?
 
   //Elements
   this.name = null;
@@ -22,53 +24,8 @@ function UploadFile(data) {
     e.stopPropagation();
     e.preventDefault();
 
-    if (e.target.value === 'original' || e.target.value === 'external') {
-      this.id.querySelector('input').disabled = true;
-      this.id.querySelector('label').className = 'label-disabled';
-
-      this.name.querySelector('input').disabled = false;
-      this.name.querySelector('label').className = '';
-      this.tags.querySelector('input').disabled = false;
-      this.tags.querySelector('label').className = '';
-      this.info.querySelector('input').disabled = false;
-      this.info.querySelector('label').className = '';
-      this.file.querySelector('input').disabled = false;
-      this.file.querySelector('label').className = '';
-
-      this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
-        if (checkbox.id === `BY-${this.unique}`) checkbox.disabled = false;
-        else if (this.el.querySelector(`#BY-${this.unique}`).checked) checkbox.disabled = false;
-      });
-      this.el.querySelectorAll('.checkbox-group-div p').forEach(p => {
-        p.className = '';
-      });
-      this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
-        label.className = '';
-      });
-    }
-    else if (e.target.value === 'internal') {
-      this.id.querySelector('input').disabled = false;
-      this.id.querySelector('label').className = '';
-
-      this.name.querySelector('input').disabled = true;
-      this.name.querySelector('label').className = 'label-disabled';
-      this.tags.querySelector('input').disabled = true;
-      this.tags.querySelector('label').className = 'label-disabled';
-      this.info.querySelector('input').disabled = true;
-      this.info.querySelector('label').className = 'label-disabled';
-      this.file.querySelector('input').disabled = true;
-      this.file.querySelector('label').className = 'label-disabled';
-
-      this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
-        checkbox.disabled = true;
-      });
-      this.el.querySelectorAll('.checkbox-group-div p').forEach(p => {
-        p.className = 'label-disabled';
-      });
-      this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
-        label.className = 'label-disabled';
-      });
-    }
+    if (e.target.value === 'original' || e.target.value === 'external') this.setOriginalExternal();
+    else this.setInternal();
   }
 
   this.handleLicenseChange = (e) => {
@@ -125,44 +82,78 @@ function UploadFile(data) {
     if (this.name.querySelector('input').value === '') this.name.querySelector('input').value = e.dataTransfer.files[0].name.slice(0, -4);
   }
 
-  this.getFileData = () => {
-    const file = Array.from(this.el.querySelectorAll('.file-input')).reduce((acc, input) => {
-      if (!acc.license) acc.license = [];
+  this.getFileData = (shallow) => {
+    const file = helpers.parseInputs('file', this.el);
 
-      if (input.type === 'radio' && input.checked) return { ...acc, type: input.value };
-      else if (input.type === 'radio' && !input.checked) return { ...acc };
-      else if (input.type === 'file' && input.files[0]) return { ...acc, path: input.files[0].path };
-      else if (input.type === 'file' && !input.files[0]) return { ...acc };
-      else if (input.type === 'checkbox' && input.checked && !input.disabled) return { ...acc, license: [ ...acc.license, input.value ] }
-      else if (input.type === 'checkbox' && (!input.checked || input.disabled)) return { ...acc }
-
-      return { ...acc, [input.name]: input.value };
-    }, {});
-
-    //Handle empty fields
-    if (file.type === 'original' || file.type === 'external') {
+    //Handle empty/bad fields
+    if ((file.type === 'original' || file.type === 'external') && !shallow) {
       if (file.name === '') throw new Error('File name is missing.');
+      if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check name for bad characters
       if (file.path === '') throw new Error('File is missing.');
-      if (file.tags === '') throw new Error('File tags are missing.');
-      if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check for bad characters
-
-      //Turn tags into an array
-      file.tags = file.tags.split(/[,;]+/).filter(tag => tag.length > 0);
-      if (file.tags.length === 0) throw new Error('File tags are missing');
-
-      //Check formatting
-      if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check for bad characters
-      for (let tag of file.tags) {
+      if (file.tags.length === 0) throw new Error('File tags are missing.');
+      for (let tag of file.tags) { //Check tags for bad characters
         if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
       }
     }
-    else if (file.type === 'internal' && file.id === '') throw 'file id is missing';
+    else if (file.type === 'internal' && file.id === '' && !shallow) throw new Error('File id is missing');
 
     //Add properties
-    file.cid = null;
-    if (file.type !== 'internal') file.format = file.path.slice(-3);
+    if (!shallow) {
+      file.cid = null;
+      if (file.type !== 'internal') file.format = file.path.slice(-3);
+    }
+    else delete file.path; //Delete path if we are just saving state
 
     return file;
+  }
+
+  this.setInternal = () => {
+    this.id.querySelector('input').disabled = false;
+    this.id.querySelector('label').className = '';
+
+    this.name.querySelector('input').disabled = true;
+    this.name.querySelector('label').className = 'label-disabled';
+    this.tags.querySelector('input').disabled = true;
+    this.tags.querySelector('label').className = 'label-disabled';
+    this.info.querySelector('input').disabled = true;
+    this.info.querySelector('label').className = 'label-disabled';
+    this.file.querySelector('input').disabled = true;
+    this.file.querySelector('label').className = 'label-disabled';
+
+    this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+      checkbox.disabled = true;
+    });
+    this.el.querySelectorAll('.checkbox-group-div p').forEach(p => {
+      p.className = 'label-disabled';
+    });
+    this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
+      label.className = 'label-disabled';
+    });
+  }
+
+  this.setOriginalExternal = () => {
+    this.id.querySelector('input').disabled = true;
+    this.id.querySelector('label').className = 'label-disabled';
+
+    this.name.querySelector('input').disabled = false;
+    this.name.querySelector('label').className = '';
+    this.tags.querySelector('input').disabled = false;
+    this.tags.querySelector('label').className = '';
+    this.info.querySelector('input').disabled = false;
+    this.info.querySelector('label').className = '';
+    this.file.querySelector('input').disabled = false;
+    this.file.querySelector('label').className = '';
+
+    this.el.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+      if (checkbox.id === `BY-${this.unique}`) checkbox.disabled = false;
+      else if (this.el.querySelector(`#BY-${this.unique}`).checked) checkbox.disabled = false;
+    });
+    this.el.querySelectorAll('.checkbox-group-div p').forEach(p => {
+      p.className = '';
+    });
+    this.el.querySelectorAll('.checkbox-group-div label').forEach(label => {
+      label.className = '';
+    });
   }
 
   this.createInput = (name, type) => {
@@ -180,6 +171,7 @@ function UploadFile(data) {
     label.textContent = name + ':';
     input.setAttribute('type', type);
     input.setAttribute('name', name);
+    if (this.loadingFromSave) input.setAttribute('value', this.data.file[name]); //Set value if loading from save
 
     //Build structure
     el.appendChild(label);
@@ -205,6 +197,7 @@ function UploadFile(data) {
     input.setAttribute('id', `${name}-${this.unique}`);
     input.setAttribute('name', 'type-' + this.unique);
     input.setAttribute('value', name);
+    if (this.loadingFromSave && this.data.file.type === name) input.checked = true; //Set checked state if loading from save
 
     //Add listeners
     input.onchange = this.handleTypeChange;
@@ -233,7 +226,10 @@ function UploadFile(data) {
     input.setAttribute('id', `${name}-${this.unique}`);
     input.setAttribute('name', 'license-' + this.unique);
     input.setAttribute('value', name);
-    if (name !== 'BY') input.disabled = true; //Disable all checkboxes except BY on first render
+
+    const license = this.loadingFromSave ? this.data.file.license : null;
+    if (license && license.includes(name)) input.checked = true; //Set checked if loading from save
+    if ((name !== 'BY' && !license) || (name !== 'BY' && license.length < 1)) input.disabled = true; //Disable all checkboxes except BY on first render, except if we are loading from save
 
     //Add listeners
     input.onchange = this.handleLicenseChange;
@@ -278,7 +274,7 @@ function UploadFile(data) {
     //Add attributes and innerHTML/textContent
     legend.textContent = 'file:'
     typeLabel.textContent = 'type:';
-    typeOriginal.querySelector('.file-input').checked = true;
+    if (!this.loadingFromSave) typeOriginal.querySelector('.file-input').checked = true;
     licenseLabel.textContent = 'license:';
     licenseCC.textContent = 'CC';
     id.querySelector('.file-input').disabled = true;
@@ -319,6 +315,8 @@ function UploadFile(data) {
     this.tags = tags;
     this.info = info;
     this.file = file;
+
+    if (this.loadingFromSave && this.data.file.type === 'internal') this.setInternal(); //Disable inputs if loading from save and type is internal
 
     //Add listeners
     deleteFile.onclick = this.handleDeleteFile;

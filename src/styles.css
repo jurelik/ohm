@@ -1052,6 +1052,14 @@ pre {
   margin-left: 5px;
 }
 
+.upload-album input:disabled {
+  color: #888;
+}
+
+.upload-album textarea:disabled {
+  color: #888;
+}
+
 .upload-album .album-title-div, .upload-album .album-tags-div {
   display: flex;
   flex-direction: row;
@@ -1226,18 +1234,20 @@ pre {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-bottom: 10px;
 }
 
 .upload-bottom-bar .add-song {
   padding-left: 0px;
+  margin-right: auto;
 }
 
 .upload-bottom-bar .submit-div {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-left: 5px;
 }
 
 .upload-bottom-bar .submit-div .spinner {

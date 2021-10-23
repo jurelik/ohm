@@ -1,5 +1,8 @@
 'use strict';
 
+const fsp = require('fs').promises;
+const path = require('path');
+const { ipcRenderer } = require('electron');
 const UploadSong = require('../components/uploadSong');
 const UploadAlbum = require('../components/uploadAlbum');
 const io = require('../utils/io');
@@ -45,6 +48,60 @@ function UploadView(data) {
 
     this.form.removeChild(this.children[index].el);
     this.children.splice(index, 1);
+  }
+
+  this.handleSave = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const data = {
+      album: null,
+      songs: []
+    }
+
+    try {
+      //Trigger dialog to prompt user for save location
+      const res = await ipcRenderer.invoke('save-file');
+      if (res.err) throw res.err;
+      if (res.canceled) throw new Error('Save canceled.');
+
+      if (this.children.length > 1) data.album = this.album.getAlbumData(true);
+      for (const child of this.children) data.songs.push(child.getSongData(true));
+
+      await fsp.mkdir(path.dirname(res.filePath), { recursive: true });
+      await fsp.writeFile(res.filePath, JSON.stringify(data, null, 2));
+
+      log.success('Successfully saved upload state.');
+    }
+    catch (err) {
+      log.error(err.message);
+    }
+  }
+
+  this.handleLoad = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    try {
+      //Trigger dialog for user to select .ous file to load
+      const res = await ipcRenderer.invoke('load-file');
+      if (res.err) throw res.err;
+      if (res.canceled) throw new Error('Load canceled.');
+
+      this.data = JSON.parse(await fsp.readFile(res.filePaths[0]));
+
+      this.reset(true); //Reset view
+      for (const song of this.data.songs) {
+        let uploadSong = new UploadSong(song);
+        this.children.push(uploadSong);
+        this.form.appendChild(uploadSong.render());
+      }
+
+      log.success('Successfully loaded upload state.');
+    }
+    catch (err) {
+      log.error(err.message);
+    }
   }
 
   this.handleSubmit = async (e) => {
@@ -97,7 +154,7 @@ function UploadView(data) {
     return app.content.appendChild(this.el);
   }
 
-  this.reset = () => { //Reset state and re-render if applicable
+  this.reset = (loadFromSave) => { //Reset state and re-render if applicable
     this.el.innerHTML = '';
     this.form.innerHTML = '';
     this.children = [];
@@ -106,17 +163,19 @@ function UploadView(data) {
     this.songCounter = 0;
     this.submitting = false;
     app.content.scrollTop = 0;
-    if (app.current === 'upload') this.render(); //Re-render view if still in uploadView
+    if (app.current === 'upload') this.render(loadFromSave); //Re-render view if still in uploadView
     else app.views.upload = null; //Reset otherwise
   }
 
-  this.render = () => {
+  this.render = (loadFromSave) => {
     //Create elements
     let bottomBar = document.createElement('div');
     let addSong = document.createElement('button');
+    let load = document.createElement('button');
+    let save = document.createElement('button');
     let submitDiv = document.createElement('div');
     let submit = document.createElement('input');
-    this.album = new UploadAlbum();
+    this.album = new UploadAlbum(this.data && this.data.album ? this.data.album : null);
     let album = this.album.render();
 
     //Add classes for styling
@@ -127,6 +186,8 @@ function UploadView(data) {
 
     //Add attributes and innerHTML/textContent
     addSong.textContent = 'add song';
+    load.textContent = 'load';
+    save.textContent = 'save';
     submit.setAttribute('type', 'submit');
     submit.setAttribute('value', 'submit');
 
@@ -135,10 +196,12 @@ function UploadView(data) {
     this.form.appendChild(album);
     this.el.appendChild(bottomBar);
     bottomBar.appendChild(addSong);
+    bottomBar.appendChild(load);
+    bottomBar.appendChild(save);
     bottomBar.appendChild(submitDiv);
     submitDiv.appendChild(submit);
 
-    if (this.children.length === 0) {
+    if (this.children.length === 0 && !loadFromSave) { //Don't create new uploadSong if we are loading a save file
       let uploadSong = new UploadSong();
       this.children.push(uploadSong);
       this.form.appendChild(uploadSong.render());
@@ -146,11 +209,13 @@ function UploadView(data) {
 
     //Add listeners
     addSong.onclick = this.handleAddSong;
+    load.onclick = this.handleLoad;
+    save.onclick = this.handleSave;
     submit.onclick = this.handleSubmit;
 
     app.content.innerHTML = '';
     app.content.appendChild(this.el);
-    return this.children[0].el.querySelector('input').focus(); //Focus the first input
+    if (!loadFromSave) return this.children[0].el.querySelector('input').focus(); //Focus the first input
   }
 }
 
