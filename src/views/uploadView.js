@@ -123,8 +123,8 @@ function UploadView(data) {
 
       log('Beginning upload.')
       await io.upload(payload);
-      log.success('Successfully uploaded.');
-      return this.reset();
+      this.reset();
+      return log.success('Successfully uploaded.');
     }
     catch (err) {
       log.error(err.message);
@@ -171,6 +171,7 @@ function UploadView(data) {
     //Create elements
     let bottomBar = document.createElement('div');
     let addSong = document.createElement('button');
+    let log = document.createElement('log');
     let load = document.createElement('button');
     let save = document.createElement('button');
     let submitDiv = document.createElement('div');
@@ -196,6 +197,7 @@ function UploadView(data) {
     this.form.appendChild(album);
     this.el.appendChild(bottomBar);
     bottomBar.appendChild(addSong);
+    bottomBar.appendChild(log);
     bottomBar.appendChild(load);
     bottomBar.appendChild(save);
     bottomBar.appendChild(submitDiv);

@@ -64,6 +64,8 @@ function App() {
   this.remoteNode = null; //Is the ipfs node running on an external machine?
 
   this.login = async () => {
+    let login;
+
     try {
       const res = await ipcRenderer.invoke('login');
 
@@ -75,7 +77,7 @@ function App() {
       this.settingsStore = new Store({ name: 'settings' });
       this.settingsStore.init();
 
-      const login = new LoginView();
+      login = new LoginView();
       await login.init(); //Attempt login with credentials
     }
     catch (err) {
