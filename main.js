@@ -119,7 +119,7 @@ app.on('activate', () => {
 //IPC events
 ipcMain.on('start', (event) => {
   process.env.IPFS_PATH = settings.IPFS_REPO_PATH || path.join(os.homedir(), '.ohm-ipfs'); //Set IPFS_PATH
-  if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}');
+  if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}'); //Create transfers storage file
 
   if (daemon) { //Check if daemon is already running
     event.reply('daemon-ready', { userDataPath, view: view || 'explore', remote: remoteNode });
@@ -128,12 +128,12 @@ ipcMain.on('start', (event) => {
 
   if (remoteNode) { //Don't run daemon if the ipfs node is remote
     daemon = 'remote'; //Set value of daemon so we know it is assumed to be running
-    event.reply('daemon-ready', { view: 'explore', remote: true });
 
     //Update tray
     const contextMenu = Menu.buildFromTemplate(trayMenuTemplate(true));
     tray.setContextMenu(contextMenu)
-    return;
+
+    return event.reply('daemon-ready', { view: 'explore', remote: true });
   }
 
   //Check if the repo exists already
@@ -149,8 +149,8 @@ ipcMain.on('upload-end', event => { //Reset tempUploadPath when upload ends/fail
   tempUploadPath = null;
 });
 
-ipcMain.on('login', event => {
-  event.reply('login', { OHM_SERVER: settings.OHM_SERVER, userDataPath });
+ipcMain.handle('login', event => {
+  return { OHM_SERVER: settings.OHM_SERVER, userDataPath };
 });
 
 ipcMain.handle('load-file', async (event) => {
