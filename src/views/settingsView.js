@@ -63,10 +63,13 @@ function SettingsView(data) {
 
   this.render = () => {
     //Create elements
+    const bottomBar = document.createElement('div');
     const save = document.createElement('input');
+    const log = document.createElement('log');
 
     //Add classes for styling
     this.el.className = 'settings-view'
+    bottomBar.className = 'bottom-bar';
     save.className = 'save';
 
     //Add attributes and innerHTML/textContent
@@ -83,7 +86,9 @@ function SettingsView(data) {
         this.el.appendChild(el);
       }
     }
-    this.el.appendChild(save);
+    this.el.appendChild(bottomBar);
+    bottomBar.appendChild(save);
+    bottomBar.appendChild(log);
 
     //Add listeners
     save.addEventListener('click', this.handleSave);
