@@ -118,7 +118,12 @@ app.on('activate', () => {
 
 //IPC events
 ipcMain.on('start', (event) => {
-  process.env.IPFS_PATH = settings.IPFS_REPO_PATH || path.join(os.homedir(), '.ohm-ipfs'); //Set IPFS_PATH
+  const repo = { production: '.ohm-ipfs', development: '.ohm-ipfs-dev', test: 'ohm-ipfs-test' }[process.env.NODE_ENV]; //Change repo depending on NODE_ENV
+
+  //Set IPFS_PATH
+  if (process.env.NODE_ENV === 'production') process.env.IPFS_PATH = settings.IPFS_REPO_PATH || path.join(os.homedir(), repo);
+  else process.env.IPFS_PATH = path.join(os.homedir(), repo);
+
   if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}'); //Create transfers storage file
 
   if (daemon) { //Check if daemon is already running
