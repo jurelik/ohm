@@ -118,7 +118,7 @@ app.on('activate', () => {
 
 //IPC events
 ipcMain.on('start', (event) => {
-  const repo = { production: '.ohm-ipfs', development: '.ohm-ipfs-dev', test: 'ohm-ipfs-test' }[process.env.NODE_ENV]; //Change repo depending on NODE_ENV
+  const repo = { production: '.ohm-ipfs', development: '.ohm-ipfs-dev', test: 'ohm-ipfs-test' }[process.env.NODE_ENV] || ".ohm-ipfs"; //Change repo depending on NODE_ENV
 
   //Set IPFS_PATH
   if (process.env.NODE_ENV === 'production') process.env.IPFS_PATH = settings.IPFS_REPO_PATH || path.join(os.homedir(), repo);
