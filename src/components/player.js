@@ -68,7 +68,7 @@ function Player() {
     if (!this.current) return log.error('Please load a song first.');
 
     //Check if we are past the BACK_THRESHOLD mark of current song
-    if (this.audio.currentTime < BACK_THRESHOLD && this.queuePosition < 1) log.error("Can't go further back in time, Morty.");
+    if (this.audio.currentTime < this.BACK_THRESHOLD && this.queuePosition < 1) log.error("Can't go further back in time, Morty.");
     else {
       if (this.queuePosition > 0) this.queuePosition--; //Decrement queuePosition unless already playing the first/only item
       this.current = this.queue[this.queuePosition];
