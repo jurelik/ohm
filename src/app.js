@@ -63,30 +63,29 @@ function App() {
   this.bandwidthController = null;
   this.remoteNode = null; //Is the ipfs node running on an external machine?
 
-  this.login = () => {
-    ipcRenderer.once('login', async (e, data) => {
-      this.OHM_SERVER = data.OHM_SERVER;
-      this.USER_DATA_PATH = data.userDataPath;
+  this.login = async () => {
+    let login;
+
+    try {
+      const res = await ipcRenderer.invoke('login');
+
+      this.OHM_SERVER = res.OHM_SERVER;
+      this.USER_DATA_PATH = res.userDataPath;
       this.URL = process.env.NODE_ENV === 'development' ? 'https://localhost' : `https://${this.OHM_SERVER}${process.env.NODE_ENV === 'test' ? '/test' : ''}`;
 
       //Create settingsStore
       this.settingsStore = new Store({ name: 'settings' });
       this.settingsStore.init();
 
-      const login = new LoginView();
+      login = new LoginView();
+      await login.init(); //Attempt login with credentials
+    }
+    catch (err) {
+      if (err.message !== 'FETCH_ERR') log.error(err.message);
 
-      try {
-        await login.init(); //Attempt login with credentials
-      }
-      catch (err) {
-        if (err.message !== 'FETCH_ERR') log.error(err.message);
-
-        this.root.innerHTML = '' //Draw login screen
-        login.render();
-      }
-    });
-
-    ipcRenderer.send('login');
+      this.root.innerHTML = '' //Draw login screen
+      login.render();
+    }
   }
 
   this.logout = async (sessionExpired) => {

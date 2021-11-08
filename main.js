@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, Tray, nativeTheme, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray, nativeTheme, dialog } = require('electron');
 const { spawn } = require('child_process')
 const menuTemplate = require('./src/utils/menuTemplate');
 const os = require('os');
@@ -118,8 +118,13 @@ app.on('activate', () => {
 
 //IPC events
 ipcMain.on('start', (event) => {
-  process.env.IPFS_PATH = settings.IPFS_REPO_PATH || path.join(os.homedir(), '.ohm-ipfs'); //Set IPFS_PATH
-  if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}');
+  const repo = { production: '.ohm-ipfs', development: '.ohm-ipfs-dev', test: 'ohm-ipfs-test' }[process.env.NODE_ENV] || ".ohm-ipfs"; //Change repo depending on NODE_ENV
+
+  //Set IPFS_PATH
+  if (process.env.NODE_ENV === 'production') process.env.IPFS_PATH = settings.IPFS_REPO_PATH || path.join(os.homedir(), repo);
+  else process.env.IPFS_PATH = path.join(os.homedir(), repo);
+
+  if (!fs.existsSync(path.join(userDataPath, 'transfers.json'))) fs.writeFileSync(path.join(userDataPath, 'transfers.json'), '{}'); //Create transfers storage file
 
   if (daemon) { //Check if daemon is already running
     event.reply('daemon-ready', { userDataPath, view: view || 'explore', remote: remoteNode });
@@ -128,12 +133,12 @@ ipcMain.on('start', (event) => {
 
   if (remoteNode) { //Don't run daemon if the ipfs node is remote
     daemon = 'remote'; //Set value of daemon so we know it is assumed to be running
-    event.reply('daemon-ready', { view: 'explore', remote: true });
 
     //Update tray
     const contextMenu = Menu.buildFromTemplate(trayMenuTemplate(true));
     tray.setContextMenu(contextMenu)
-    return;
+
+    return event.reply('daemon-ready', { view: 'explore', remote: true });
   }
 
   //Check if the repo exists already
@@ -149,8 +154,36 @@ ipcMain.on('upload-end', event => { //Reset tempUploadPath when upload ends/fail
   tempUploadPath = null;
 });
 
-ipcMain.on('login', event => {
-  event.reply('login', { OHM_SERVER: settings.OHM_SERVER, userDataPath });
+ipcMain.handle('login', event => {
+  return { OHM_SERVER: settings.OHM_SERVER, userDataPath };
+});
+
+ipcMain.handle('load-file', async (event) => {
+  try {
+    const res = await dialog.showOpenDialog({
+      filters: [
+        { name: 'ohm_upload_state', extensions: [ 'ous' ] }
+      ]
+    });
+    return res;
+  }
+  catch (err) {
+    return { canceled: true, err };
+  }
+});
+
+ipcMain.handle('save-file', async (event) => {
+  try {
+    const res = await dialog.showSaveDialog({
+      filters: [
+        { name: 'ohm_upload_state', extensions: [ 'ous' ] }
+      ]
+    });
+    return res;
+  }
+  catch (err) {
+    return { canceled: true, err };
+  }
 });
 
 const spawnDaemon = (event) => {

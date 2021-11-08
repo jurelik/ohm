@@ -1,6 +1,6 @@
 {
   "name": "ohm",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "platform for open source music",
   "main": "main.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "build:osx": "electron-packager . ohm --platform=darwin --arch=x64 --out ./dist/ --overwrite --icon=./src/assets/icon/icon.icns --ignore=tags; echo 'Built for OSX'",
     "build:linux": "electron-packager . ohm --platform=linux  --arch=x64 --out ./dist/ --overwrite --icon=./src/assets/icon/icon.png --ignore=tags; echo 'Built for LINUX'",
     "build:win": "electron-packager . ohm --platform=win32  --arch=x64 --out ./dist/ --overwrite --icon=./src/assets/icon/icon.ico --ignore=tags; echo 'Built for WIN'",
-    "build": "npm run build_osx ; npm run build_linux ; npm run build_win ; echo 'Built for OSX, LINUX and WIN'"
+    "build": "npm run build:osx ; npm run build:linux ; npm run build:win ; echo 'Built for OSX, LINUX and WIN'"
   },
   "repository": {
     "type": "git",

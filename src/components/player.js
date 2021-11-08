@@ -68,13 +68,13 @@ function Player() {
     if (!this.current) return log.error('Please load a song first.');
 
     //Check if we are past the BACK_THRESHOLD mark of current song
-    if (this.audio.currentTime < BACK_THRESHOLD && this.queuePosition < 1) log.error("Can't go further back in time, Morty.");
-    else {
-      if (this.queuePosition > 0) this.queuePosition--; //Decrement queuePosition unless already playing the first/only item
-      this.current = this.queue[this.queuePosition];
-      this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
+    if (this.audio.currentTime < this.BACK_THRESHOLD) {
+      if (this.queuePosition < 1) log.error("Can't go further back in time, Morty.");
+      else this.queuePosition--;
     }
 
+    this.current = this.queue[this.queuePosition];
+    this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
     this.playing = false;
     this.updateSrc();
     this.play();
@@ -243,7 +243,7 @@ function Player() {
   }
 
   this.deconstructFeed = () => { //Goes over the feed and turns deconstructs albums into songs
-    const feed = app.views[app.current].data;
+    const feed = app.current === 'pinned' ? app.views[app.current].data.items : app.views[app.current].data;
     let formatted = [];
 
     for (let item of feed) {

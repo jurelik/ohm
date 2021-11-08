@@ -1052,6 +1052,14 @@ pre {
   margin-left: 5px;
 }
 
+.upload-album input:disabled {
+  color: #888;
+}
+
+.upload-album textarea:disabled {
+  color: #888;
+}
+
 .upload-album .album-title-div, .upload-album .album-tags-div {
   display: flex;
   flex-direction: row;
@@ -1225,19 +1233,32 @@ pre {
 .upload-bottom-bar {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  align-items: stretch;
+  justify-content: flex-end;
   margin-bottom: 10px;
 }
 
 .upload-bottom-bar .add-song {
   padding-left: 0px;
+  margin-right: auto;
+  white-space: nowrap;
+}
+
+.upload-bottom-bar log {
+  color: #bbb;
+  font-size: 10px;
+  margin: 0 5px;
+  padding-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .upload-bottom-bar .submit-div {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-left: 5px;
 }
 
 .upload-bottom-bar .submit-div .spinner {
@@ -1381,10 +1402,22 @@ pre {
   margin-right: 5px;
 }
 
-.settings-view .save {
+.settings-view .bottom-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
   margin-top: 10px;
   margin-bottom: 5px;
-  align-self: flex-start;
+}
+
+.settings-view log {
+  color: #bbb;
+  font-size: 10px;
+  margin: 0 10px;
+  padding-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /*Empty screen*/
