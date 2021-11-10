@@ -68,7 +68,6 @@ function Comments(data) {
     submit.textContent = 'submit';
     submit.setAttribute('type', 'submit');
     textarea.setAttribute('rows', '1');
-    textarea.setAttribute('autofocus', true);
     textarea.setAttribute('placeholder', 'send comment..');
     marker.textContent = '> '
 

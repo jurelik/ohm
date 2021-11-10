@@ -91,6 +91,7 @@ function SongView(data, action) {
 
       app.content.innerHTML = '';
       app.content.appendChild(this.el);
+      if (this.children.main.action === 'comments') this.children.main.el.querySelector('textarea').focus(); //Focus the input if we are viewing comments
     }
     catch (err) {
       throw err;
