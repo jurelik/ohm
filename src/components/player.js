@@ -243,8 +243,14 @@ function Player() {
   }
 
   this.deconstructFeed = () => { //Goes over the feed and turns deconstructs albums into songs
-    const feed = app.current === 'pinned' ? app.views[app.current].data.items : app.views[app.current].data;
+    const currentView = app.views[app.current];
     let formatted = [];
+    let feed;
+
+    //Get feed depending on view
+    if (app.current === 'pinned') feed = currentView.data.items;
+    else if (app.current === 'artist') feed = currentView.artist.albums.concat(currentView.artist.songs);
+    else feed = app.views[app.current].data;
 
     for (let item of feed) {
       if (item.type === 'album') {

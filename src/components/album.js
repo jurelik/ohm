@@ -18,7 +18,7 @@ function Album(data, view) {
     e.stopPropagation();
     const position = this.getPosition();
 
-    if (this.view === 'explore' || this.view === 'feed' || this.view === 'pinned') app.player.queueFeed(this.data.songs[position])
+    if (this.view === 'explore' || this.view === 'feed' || this.view === 'pinned' || this.view === 'artist') app.player.queueFeed(this.data.songs[position])
     else app.player.queueAlbum(this.data, position);
   }
 
