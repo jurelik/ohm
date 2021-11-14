@@ -31,6 +31,10 @@
   background: #222;
 }
 
+:root {
+  --font-main: #2a5;
+}
+
 html {
   background-color: #222;
   box-sizing: border-box;
@@ -39,7 +43,7 @@ html {
 body {
   font-family: 'Mono';
   font-size: 12px;
-  color: #eee;
+  color: var(--font-main);
   margin: 0px;
   background-color: #222;
 }

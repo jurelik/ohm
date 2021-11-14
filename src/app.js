@@ -63,6 +63,12 @@ function App() {
   this.bandwidthController = null;
   this.remoteNode = null; //Is the ipfs node running on an external machine?
 
+  this.loadTheme = () => {
+    const rootStyle = document.documentElement.style;
+
+    rootStyle.setProperty("--font-main", "red");
+  }
+
   this.login = async () => {
     let login;
 
