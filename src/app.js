@@ -2,6 +2,8 @@
 
 const { ipcRenderer } = require('electron');
 const { create } = require('ipfs-http-client');
+const fs = require('fs');
+const path = require('path');
 const log = require('./utils/log');
 const helpers = require('./utils/helpers');
 const { loadingIcon } = require('./utils/svgs');
@@ -63,12 +65,6 @@ function App() {
   this.bandwidthController = null;
   this.remoteNode = null; //Is the ipfs node running on an external machine?
 
-  this.loadTheme = () => {
-    const rootStyle = document.documentElement.style;
-
-    rootStyle.setProperty("--font-main", "red");
-  }
-
   this.login = async () => {
     let login;
 
@@ -82,6 +78,9 @@ function App() {
       //Create settingsStore
       this.settingsStore = new Store({ name: 'settings' });
       this.settingsStore.init();
+
+      //Load theme
+      this.loadTheme();
 
       login = new LoginView();
       await login.init(); //Attempt login with credentials
@@ -115,6 +114,16 @@ function App() {
     catch (err) {
       if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
+  }
+
+  this.loadTheme = () => {
+    if (!fs.existsSync(path.join(this.USER_DATA_PATH, 'theme'))) return;
+
+    const file = fs.readFileSync(path.join(this.USER_DATA_PATH, 'theme'));
+    const parsed = JSON.parse(file);
+    const rootStyle = document.documentElement.style;
+
+    for (let key in parsed) rootStyle.setProperty(key, parsed[key]);
   }
 
   this.init = () => {
