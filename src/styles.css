@@ -14,13 +14,13 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: #222;
+  background: var(--b-low);
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #111;
+  background-color: var(--b-lowest);
   border-radius: 20px;
-  border: 3px solid #222;
+  border: 3px solid var(--b-low);
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -28,24 +28,31 @@
 }
 
 *::-webkit-scrollbar-corner {
-  background: #222;
+  background: var(--b-low);
 }
 
 :root {
-  --font-main: #2a5;
+  --f-highest: #eee;
+  --f-high: #ccc;
+  --f-mid: #bbb;
+  --f-low: #888;
+  --b-high: #444;
+  --b-mid: #333;
+  --b-low: #222;
+  --b-lowest: #111;
 }
 
 html {
-  background-color: #222;
+  background-color: var(--b-low);
   box-sizing: border-box;
 }
 
 body {
   font-family: 'Mono';
   font-size: 12px;
-  color: var(--font-main);
+  color: var(--f-highest);
   margin: 0px;
-  background-color: #222;
+  background-color: var(--b-low);
 }
 
 button {
@@ -72,14 +79,14 @@ table {
 
 th {
   text-align: left;
-  border-bottom: 1px solid #888;
+  border-bottom: 1px solid var(--f-low);
   height: 20px;
 }
 
 td {
   vertical-align: center;
   height: 20px;
-  color: #bbb;
+  color: var(--f-mid);
 }
 
 td button {
@@ -89,8 +96,8 @@ td button {
 input[type=text], input[type=password], input[type=search] {
   font-family: inherit;
   font-size: inherit;
-  background-color: #222;
-  color: #eee;
+  background-color: var(--b-low);
+  color: var(--f-highest);
   border: none;
 }
 
@@ -104,7 +111,7 @@ input[type=search]:focus {
 }
 
 input[type=text]:focus, input[type=password]:focus {
-  background-color: #222;
+  background-color: var(--b-low);
   border: none;
   outline: none;
 }
@@ -122,8 +129,8 @@ input[type=radio] {
   height: 10px;
   padding: 2px;
   background-clip: content-box;
-  border: 1px solid #bbb;
-  background-color: #222;
+  border: 1px solid var(--f-mid);
+  background-color: var(--b-low);
   border-radius: 50%;
   margin: 0 3px;
   cursor: pointer;
@@ -131,12 +138,12 @@ input[type=radio] {
 
 /* appearance for checked radiobutton */
 input[type=radio]:checked {
-  background-color: #eee;
+  background-color: var(--f-highest);
 }
 
 input[type=radio]:focus {
   outline: none;
-  border: 1px solid #eee;
+  border: 1px solid var(--f-highest);
 }
 
 input[type=checkbox] {
@@ -147,8 +154,8 @@ input[type=checkbox] {
   height: 10px;
   padding: 2px;
   background-clip: content-box;
-  border: 1px solid #bbb;
-  background-color: #222;
+  border: 1px solid var(--f-mid);
+  background-color: var(--b-low);
   border-radius: 50%;
   margin: 0 3px;
   cursor: pointer;
@@ -156,26 +163,26 @@ input[type=checkbox] {
 
 /* appearance for checked checkbox */
 input[type=checkbox]:checked {
-  background-color: #eee;
+  background-color: var(--f-highest);
 }
 
 input[type=checkbox]:focus {
   outline: none;
-  border: 1px solid #eee;
+  border: 1px solid var(--f-highest);
 }
 
 input[type=checkbox]:disabled {
-  border: 1px solid #444;
+  border: 1px solid var(--b-high);
 }
 
 input[type=checkbox]:disabled:checked {
-  background-color: #444;
+  background-color: var(--b-high);
 }
 
 input[type=file] {
   font-family: inherit;
   font-size: 10px;;
-  color: #eee;
+  color: var(--f-highest);
 }
 
 input[type=file]:focus {
@@ -184,13 +191,13 @@ input[type=file]:focus {
 }
 
 input[type=file]:focus::-webkit-file-upload-button {
-  border: 1px solid #eee;
+  border: 1px solid var(--f-highest);
 }
 
 input[type=file] button {
   font-family: inherit;
   font-size: inherit;
-  color: #eee;
+  color: var(--f-highest);
 }
 
 ::-webkit-file-upload-button { /*Input file button styling*/
@@ -198,14 +205,14 @@ input[type=file] button {
   font-size: 12px;
   color: inherit;
   background: none;
-  border: 1px solid #bbb;
+  border: 1px solid var(--f-mid);
   border-radius: 4px;
   outline: none;
   cursor: pointer;
 }
 
 ::-webkit-file-upload-button:hover {
-  background-color: #333;
+  background-color: var(--b-mid);
 }
 
 input[type=submit] {
@@ -213,22 +220,22 @@ input[type=submit] {
   font-size: 12px;
   color: inherit;
   background: none;
-  border: 1px solid #bbb;
+  border: 1px solid var(--f-mid);
   border-radius: 4px;
   outline: none;
   cursor: pointer;
 }
 
 input[type=submit]:hover {
-  background-color: #333;
+  background-color: var(--b-mid);
 }
 
 input[type=submit]:focus {
-  border: 1px solid #eee;
+  border: 1px solid var(--f-highest);
 }
 
 input[type=range] {
-  background: linear-gradient(to right, #bbb 0%, #bbb 0%, #444 0%, #444 100%);
+  background: linear-gradient(to right, var(--f-mid) 0%, var(--f-mid) 0%, var(--b-high) 0%, var(--b-high) 100%);
   height: 5px;
   border-radius: 5px;
   outline: none;
@@ -236,12 +243,12 @@ input[type=range] {
 }
 
 input[type=range]:focus::-webkit-slider-thumb {
-  background-color: #eee;
+  background-color: var(--f-highest);
 }
 
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  background: #ccc;
+  background: var(--f-high);
   height: 10px;
   width: 10px;
   border-radius: 50%;
@@ -253,8 +260,8 @@ select {
     -webkit-user-select: none;
     -webkit-padding-end: 20px;
     -webkit-padding-start: 2px;
-    background-color: #222; /* Fallback color if gradients are not supported */
-    color: #bbb;
+    background-color: var(--b-low); /* Fallback color if gradients are not supported */
+    color: var(--f-mid);
     font-size: inherit;
     font-family: inherit;
     margin-right: 10px;
@@ -271,11 +278,11 @@ select:focus {
 }
 
 select:hover {
-  color: #eee;
+  color: var(--f-highest);
 }
 
 select:disabled {
-  color: #888;
+  color: var(--f-low);
 }
 
 textarea {
@@ -294,7 +301,7 @@ pre {
 .root {
   display: flex;
   flex-direction: column;
-  background-color: #222;
+  background-color: var(--b-low);
   height: 100vh;
   width: 100vw;
   max-width: 100vw;
@@ -305,7 +312,7 @@ pre {
   width: 100%;
   height: 12px;
   display: flex;
-  color: #bbb;
+  color: var(--f-mid);
 }
 
 .drag.darwin {
@@ -392,15 +399,15 @@ pre {
   align-items: center;
   justify-content: center;
   margin-right: 5px;
-  stroke: #bbb;
+  stroke: var(--f-mid);
 }
 
 .header button:hover {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .header button:focus {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .header button:disabled {
@@ -408,7 +415,7 @@ pre {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  stroke: #444;
+  stroke: var(--b-high);
   cursor: default;
 }
 
@@ -416,30 +423,30 @@ pre {
   display: flex;
   align-items: center;
   justify-content: center;
-  stroke: #bbb;
+  stroke: var(--f-mid);
 }
 
 .header .refresh:hover {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .header .refresh:focus {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .header .upload {
-  border: 1px solid #bbb;
+  border: 1px solid var(--f-mid);
   border-radius: 4px;
   margin-left: 10px;
   text-decoration: none;
 }
 
 .header .upload:hover {
-  background-color: #333;
+  background-color: var(--b-mid);
 }
 
 .header .upload:focus {
-  border: 1px solid #eee;
+  border: 1px solid var(--f-highest);
 }
 
 .header .search {
@@ -451,19 +458,19 @@ pre {
   display: flex;
   align-items: center;
   justify-content: center;
-  stroke: #bbb;
+  stroke: var(--f-mid);
 }
 
 .search .search-button:hover {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .search .search-button:focus {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .search-view label {
-  color: #bbb;
+  color: var(--f-mid);
 }
 
 .search-view-options {
@@ -491,7 +498,7 @@ pre {
   max-width: 120px;
   padding-left: 5px;
   padding-top: 2px;
-  color: #888;
+  color: var(--f-low);
 }
 
 .nav button {
@@ -499,7 +506,7 @@ pre {
 }
 
 .nav .selected {
-  color: #eee;
+  color: var(--f-highest);
 }
 
 .content {
@@ -530,7 +537,7 @@ pre {
   width: 100%;
   height: 50px;
   overflow: hidden;
-  background-color: #222;
+  background-color: var(--b-low);
 }
 
 .player button {
@@ -566,60 +573,60 @@ pre {
 
 .player .main-back-button {
   margin-left: 10px;
-  stroke: #ccc;
-  fill: #ccc;
+  stroke: var(--f-high);
+  fill: var(--f-high);
 }
 
 .player .main-back-button:enabled:hover {
-  stroke: #eee;
-  fill: #eee;
+  stroke: var(--f-highest);
+  fill: var(--f-highest);
 }
 
 .player .main-back-button:enabled:focus {
-  stroke: #eee;
-  fill: #eee;
+  stroke: var(--f-highest);
+  fill: var(--f-highest);
 }
 
 .player .main-back-button:disabled {
-  stroke: #444;
-  fill: #444;
+  stroke: var(--b-high);
+  fill: var(--b-high);
   cursor: default;
 }
 
 .player .main-play-button {
-  stroke: #ccc;
-  fill: #ccc;
+  stroke: var(--f-high);
+  fill: var(--f-high);
 }
 
 .player .main-play-button:hover {
-  stroke: #eee;
-  fill: #eee;
+  stroke: var(--f-highest);
+  fill: var(--f-highest);
 }
 
 .player .main-play-button:focus {
-  stroke: #eee;
-  fill: #eee;
+  stroke: var(--f-highest);
+  fill: var(--f-highest);
 }
 
 .player .main-forward-button {
   margin-right: 20px;
-  stroke: #ccc;
-  fill: #ccc;
+  stroke: var(--f-high);
+  fill: var(--f-high);
 }
 
 .player .main-forward-button:enabled:hover {
-  stroke: #eee;
-  fill: #eee;
+  stroke: var(--f-highest);
+  fill: var(--f-highest);
 }
 
 .player .main-forward-button:enabled:focus {
-  stroke: #eee;
-  fill: #eee;
+  stroke: var(--f-highest);
+  fill: var(--f-highest);
 }
 
 .player .main-forward-button:disabled {
-  stroke: #444;
-  fill: #444;
+  stroke: var(--b-high);
+  fill: var(--b-high);
   cursor: default;
 }
 
@@ -652,7 +659,7 @@ pre {
 }
 
 .album-view .created-at {
-  color: #888;
+  color: var(--f-low);
   margin-top: -5px;
   margin-left: 25px;
   font-size: 9px;
@@ -674,7 +681,7 @@ pre {
 }
 
 .album-view .description {
-  color: #888;
+  color: var(--f-low);
   margin-bottom: 10px;
   margin-left: 25px;
   font-size: 11px;
@@ -692,14 +699,14 @@ pre {
 }
 
 .song-view-files .created-at, .song-view-comments .created-at {
-  color: #888;
+  color: var(--f-low);
   margin-top: -5px;
   margin-left: 25px;
   font-size: 10px;
 }
 
 .song-view-files .description, .song-view-comments .description {
-  color: #888;
+  color: var(--f-low);
   margin-bottom: 10px;
   margin-left: 25px;
   font-size: 11px;
@@ -738,7 +745,7 @@ pre {
 .song-view-main {
   display: flex;
   flex-direction: column;
-  color: #888;
+  color: var(--f-low);
   margin-left: 0px;
   flex: 1;
 }
@@ -750,19 +757,19 @@ pre {
   bottom: 0;
   left: 0;
   margin-top: auto;
-  background-color: #222;
+  background-color: var(--b-low);
   width: 100%;
 }
 
 .comment-container .marker {
-  color: #eee;
+  color: var(--f-highest);
   margin-left: 13px;
 }
 
 .comment-container textarea {
   border: none;
-  background-color: #222;
-  color: #eee;
+  background-color: var(--b-low);
+  color: var(--f-highest);
   flex: 1;
   margin-left: 5px;
   margin-right: 5px;
@@ -774,7 +781,7 @@ pre {
 }
 
 .comment-container button {
-  color: #eee;
+  color: var(--f-highest);
 }
 
 .comment {
@@ -784,7 +791,7 @@ pre {
 }
 
 .comment pre {
-  color: #eee;
+  color: var(--f-highest);
   margin-top: 1px;
   margin-bottom: 0;
   padding: 0;
@@ -798,7 +805,7 @@ pre {
 
 .song-view-main .selected {
   text-decoration: underline;
-  color: #eee;
+  color: var(--f-highest);
 }
 
 /*song and album*/
@@ -823,18 +830,18 @@ pre {
   align-items: center;
   width: 25px;
   min-width: 25px;
-  stroke: #ccc;
-  fill: #ccc;
+  stroke: var(--f-high);
+  fill: var(--f-high);
 }
 
 .song .main .play-button:hover, .album .main .play-button:hover {
-  stroke: #eee;
-  fill: #eee;
+  stroke: var(--f-highest);
+  fill: var(--f-highest);
 }
 
 .song .main .play-button:focus, .album .main .play-button:focus {
-  stroke: #eee;
-  fill: #eee;
+  stroke: var(--f-highest);
+  fill: var(--f-highest);
 }
 
 .song .main p, .album .main p {
@@ -872,7 +879,7 @@ pre {
   display: flex;
   align-items: center;
   font-size: 10px;
-  color: #888;
+  color: var(--f-low);
   margin-left: auto;
   margin-right: 5px;
   margin-top: 0px;
@@ -904,7 +911,7 @@ pre {
   flex-direction: row;
   align-items: stretch;
   font-size: 10px;
-  color: #888;
+  color: var(--f-low);
   margin-left: 20px;
   height: 20px;
 }
@@ -933,7 +940,7 @@ pre {
 }
 
 .file td {
-  color: #eee;
+  color: var(--f-highest);
 }
 
 .file .play-button-cell {
@@ -946,13 +953,13 @@ pre {
   display: flex;
   justify-content: center;
   align-items: center;
-  stroke: #ccc;
-  fill: #ccc;
+  stroke: var(--f-high);
+  fill: var(--f-high);
 }
 
 .file .play-button:hover {
-  stroke: #eee;
-  fill: #eee;
+  stroke: var(--f-highest);
+  fill: var(--f-highest);
 }
 
 .artist-card {
@@ -976,31 +983,31 @@ pre {
 }
 
 .artist-card .name-and-follow .follow {
-  border: 1px solid #bbb;
+  border: 1px solid var(--f-mid);
   border-radius: 4px;
   margin-left: 10px;
   text-decoration: none;
 }
 
 .artist-card .name-and-follow .follow:hover {
-  background-color: #333;
+  background-color: var(--b-mid);
 }
 
 .artist-card .name-and-follow .follow:focus {
-  border: 1px solid #eee;
+  border: 1px solid var(--f-highest);
 }
 
 .artist-card .name-and-follow .following {
-  background-color: #bbb;
-  color: #222;
+  background-color: var(--f-mid);
+  color: var(--b-low);
 }
 
 .artist-card .name-and-follow .following:hover {
-  background-color: #ccc;
+  background-color: var(--f-high);
 }
 
 .artist .bio {
-  color: #888;
+  color: var(--f-low);
   margin-bottom: 20px;
   font-size: 11px;
   margin-right: 5px;
@@ -1030,7 +1037,7 @@ pre {
 }
 
 .comments p {
-  color: #eee;
+  color: var(--f-highest);
   margin: 0;
 }
 
@@ -1057,11 +1064,11 @@ pre {
 }
 
 .upload-album input:disabled {
-  color: #888;
+  color: var(--f-low);
 }
 
 .upload-album textarea:disabled {
-  color: #888;
+  color: var(--f-low);
 }
 
 .upload-album .album-title-div, .upload-album .album-tags-div {
@@ -1113,7 +1120,7 @@ pre {
   position: relative;
   padding: 5px;
   margin: 10px 5px;
-  background-color: #222;
+  background-color: var(--b-low);
   z-index: 2;
 }
 
@@ -1123,7 +1130,7 @@ pre {
 }
 
 .upload-file input:disabled {
-  color: #888;
+  color: var(--f-low);
 }
 
 .upload-file .file-name-div, .upload-file .file-id-div, .upload-file .file-tags-div, .upload-file .file-info-div {
@@ -1150,9 +1157,9 @@ pre {
 }
 
 .album-textarea {
-  border: 2px groove #bbb;
-  background-color: #222;
-  color: #eee;
+  border: 2px groove var(--f-mid);
+  background-color: var(--b-low);
+  color: var(--f-highest);
   margin: 0 2px;
   margin-top: 5px;
   margin-bottom: 10px;
@@ -1160,16 +1167,16 @@ pre {
 }
 
 .song-textarea {
-  border: 2px groove #bbb;
-  background-color: #222;
-  color: #eee;
+  border: 2px groove var(--f-mid);
+  background-color: var(--b-low);
+  color: var(--f-highest);
   margin: 0 2px;
   margin-top: 5px;
   resize: vertical;
 }
 
 .album-textarea:disabled {
-  background-color: #333;
+  background-color: var(--b-mid);
 }
 
 .album-textarea:focus, .song-textarea:focus {
@@ -1177,7 +1184,7 @@ pre {
 }
 
 .label-disabled {
-  color: #888;
+  color: var(--f-low);
 }
 
 .radio-group-div {
@@ -1216,15 +1223,15 @@ pre {
   justify-content: center;
   margin: 0;
   margin-left: auto;
-  stroke: #bbb;
+  stroke: var(--f-mid);
 }
 
 .checkbox-group-div .license-info-button:hover {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .checkbox-group-div .license-info-button:focus {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .checkbox-div {
@@ -1249,7 +1256,7 @@ pre {
 }
 
 .upload-bottom-bar log {
-  color: #bbb;
+  color: var(--f-mid);
   font-size: 10px;
   margin: 0 5px;
   padding-top: 4px;
@@ -1284,8 +1291,8 @@ pre {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  border: 2px solid #fff;
-  border-color: #fff #fff #fff transparent;
+  border: 2px solid var(--f-highest);
+  border-color: var(--f-highest) var(--f-highest) var(--f-highest) transparent;
   animation: spinner 1.2s linear infinite;
 }
 
@@ -1306,18 +1313,18 @@ pre {
 }
 
 .transfers-view th {
-  color: #bbb;
+  color: var(--f-mid);
 }
 
 .transfer td {
   max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #eee;
+  color: var(--f-highest);
 }
 
 .transfer button:disabled {
-  color: #888;
+  color: var(--f-low);
   cursor: default;
 }
 .transfer button:hover:disabled {
@@ -1328,21 +1335,21 @@ pre {
   display: flex;
   align-items: center;
   justify-content: center;
-  stroke: #bbb;
-  fill: #bbb;
+  stroke: var(--f-mid);
+  fill: var(--f-mid);
   width: 30px;
 }
 
 .transfer .resume:enabled:hover {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .transfer .resume:enabled:focus {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .transfer .resume:disabled {
-  stroke: #666;
+  stroke: var(--f-low);
 }
 
 .transfer .clear {
@@ -1350,15 +1357,15 @@ pre {
   align-items: center;
   justify-content: center;
   width: 30px;
-  stroke: #bbb;
+  stroke: var(--f-mid);
 }
 
 .transfer .clear:hover {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .transfer .clear:focus {
-  stroke: #eee;
+  stroke: var(--f-highest);
 }
 
 .transfer .actions-cell {
@@ -1382,7 +1389,7 @@ pre {
   align-items: center;
   height: 20px;
   margin-top: 5px;
-  color: #888;
+  color: var(--f-low);
 }
 
 .settings-view .section:first-of-type {
@@ -1401,7 +1408,7 @@ pre {
 }
 
 .settings-view .setting input {
-  color: #bbb;
+  color: var(--f-mid);
   width: 100%;
   margin-right: 5px;
 }
@@ -1415,7 +1422,7 @@ pre {
 }
 
 .settings-view log {
-  color: #bbb;
+  color: var(--f-mid);
   font-size: 10px;
   margin: 0 10px;
   padding-top: 4px;
