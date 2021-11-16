@@ -366,6 +366,10 @@ pre {
   align-items: flex-end;
 }
 
+.logo-div svg {
+  stroke: var(--f-high);
+}
+
 .header {
   display: flex;
   flex-direction: row;
@@ -641,6 +645,7 @@ pre {
   justify-content: center;
   align-items: center;
   margin-left: 20px;
+  stroke: var(--f-high);
 }
 
 .player .spinner {
@@ -656,6 +661,7 @@ pre {
   width: 25px;
   min-width: 25px;
   margin-right: 10px;
+  stroke: var(--f-highest);
 }
 
 .album-view .created-at {
@@ -937,6 +943,7 @@ pre {
   align-items: center;
   margin-left: auto;
   margin-right: 5px;
+  stroke: var(--f-mid);
 }
 
 .file td {
@@ -1023,6 +1030,8 @@ pre {
 
 .artist-card .location-div svg {
   margin-right: 5px;
+  fill: var(--f-highest);
+  stroke: var(--f-highest);
 }
 
 .artist-card .location-div p {

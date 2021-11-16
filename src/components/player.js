@@ -309,7 +309,7 @@ function Player() {
   this.updateSeekStyle = (seek) => { //Updates background property
     const el = seek || this.el.querySelector('.seek');
     const value = (el.value-el.min)/(el.max-el.min)*100
-    el.style.background = 'linear-gradient(to right, #888 0%, #888 ' + value + '%, #444 ' + value + '%, #444 100%)'
+    el.style.background = 'linear-gradient(to right, var(--f-mid) 0%, var(--f-mid) ' + value + '%, var(--b-high) ' + value + '%, var(--b-high) 100%)'
   }
 
   this.getVolumeValue = () => {
