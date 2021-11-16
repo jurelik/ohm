@@ -40,6 +40,7 @@
   --b-mid: #333;
   --b-low: #222;
   --b-lowest: #111;
+  --overlay: rgba(238, 238, 238, 0.05); /* 238 is equivalent to #eee */
 }
 
 html {
@@ -1121,7 +1122,7 @@ pre {
   right: 4px;
   bottom: 5px;
   visibility: hidden;
-  background-color: rgba(238, 238, 238, 0.05); /* 238 is equivalent to #eee */
+  background-color: var(--overlay);
   z-index: 1;
 }
 
@@ -1155,7 +1156,7 @@ pre {
   right: 4px;
   bottom: 5px;
   visibility: hidden;
-  background-color: rgba(238, 238, 238, 0.05); /* 238 is equivalent to #eee */
+  background-color: var(--overlay);
   z-index: 3;
 }
 
