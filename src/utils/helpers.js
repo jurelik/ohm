@@ -10,7 +10,7 @@ const loadTheme = () => {
   try {
     if (!fs.existsSync(path.join(app.USER_DATA_PATH, 'theme'))) return;
 
-    const file = fs.readFileSync(path.join(app.USER_DATA_PATH, 'theme'));
+    const file = fs.readFileSync(path.join(app.USER_DATA_PATH, 'theme.json'));
     const parsed = JSON.parse(file);
     const rootStyle = document.documentElement.style;
 
