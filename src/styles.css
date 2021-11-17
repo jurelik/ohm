@@ -94,6 +94,10 @@ td button {
   display: flex;
 }
 
+input::placeholder {
+  color: var(--f-low);
+}
+
 input[type=text], input[type=password], input[type=search] {
   font-family: inherit;
   font-size: inherit;
@@ -257,21 +261,21 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 select {
-    -webkit-appearance: button;
-    -webkit-user-select: none;
-    -webkit-padding-end: 20px;
-    -webkit-padding-start: 2px;
-    background-color: var(--b-low); /* Fallback color if gradients are not supported */
-    color: var(--f-mid);
-    font-size: inherit;
-    font-family: inherit;
-    margin-right: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    border: 0;
-    width: 100px;
-    height: 20px;
+  -webkit-appearance: button;
+  -webkit-user-select: none;
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  background-color: var(--b-low); /* Fallback color if gradients are not supported */
+  color: var(--f-mid);
+  font-size: inherit;
+  font-family: inherit;
+  margin-right: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 0;
+  width: 100px;
+  height: 20px;
 }
 
 select:focus {
@@ -289,6 +293,10 @@ select:disabled {
 textarea {
   font-family: inherit;
   font-size: inherit;
+}
+
+textarea::placeholder {
+  color: var(--f-low);
 }
 
 pre {
