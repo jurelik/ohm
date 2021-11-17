@@ -6,6 +6,21 @@ const path = require('path');
 const crypto = require('crypto');
 const log = require('./log');
 
+const loadTheme = () => {
+  try {
+    if (!fs.existsSync(path.join(app.USER_DATA_PATH, 'theme'))) return;
+
+    const file = fs.readFileSync(path.join(app.USER_DATA_PATH, 'theme'));
+    const parsed = JSON.parse(file);
+    const rootStyle = document.documentElement.style;
+
+    for (let key in parsed) rootStyle.setProperty(key, parsed[key]);
+  }
+  catch (err) {
+    log.error(`Could not load theme due to following error: ${err.message}`);
+  }
+}
+
 const addSong = async (song, path) => {
   try {
     const buffer = await fsp.readFile(song.path);
@@ -424,6 +439,7 @@ const iterateDirectory = async (downloadPath, cid) => {
 
 
 module.exports = {
+  loadTheme,
   addSong,
   generateTransferId,
   transferTimeout,

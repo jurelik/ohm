@@ -80,7 +80,7 @@ function App() {
       this.settingsStore.init();
 
       //Load theme
-      this.loadTheme();
+      helpers.loadTheme();
 
       login = new LoginView();
       await login.init(); //Attempt login with credentials
@@ -114,16 +114,6 @@ function App() {
     catch (err) {
       if (err.message !== 'FETCH_ERR') log.error(err.message);
     }
-  }
-
-  this.loadTheme = () => {
-    if (!fs.existsSync(path.join(this.USER_DATA_PATH, 'theme'))) return;
-
-    const file = fs.readFileSync(path.join(this.USER_DATA_PATH, 'theme'));
-    const parsed = JSON.parse(file);
-    const rootStyle = document.documentElement.style;
-
-    for (let key in parsed) rootStyle.setProperty(key, parsed[key]);
   }
 
   this.init = () => {
