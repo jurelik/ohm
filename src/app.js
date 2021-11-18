@@ -2,6 +2,8 @@
 
 const { ipcRenderer } = require('electron');
 const { create } = require('ipfs-http-client');
+const fs = require('fs');
+const path = require('path');
 const log = require('./utils/log');
 const helpers = require('./utils/helpers');
 const { loadingIcon } = require('./utils/svgs');
@@ -76,6 +78,9 @@ function App() {
       //Create settingsStore
       this.settingsStore = new Store({ name: 'settings' });
       this.settingsStore.init();
+
+      //Load theme
+      helpers.loadTheme();
 
       login = new LoginView();
       await login.init(); //Attempt login with credentials
