@@ -928,7 +928,9 @@ pre {
   font-size: 10px;
   color: var(--f-low);
   margin-left: 20px;
+  margin-right: 5px;
   height: 20px;
+  overflow: hidden;
 }
 
 .actions-inner button {
@@ -947,12 +949,14 @@ pre {
 }
 
 .pin-icon {
+  position: sticky;
+  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: auto;
-  margin-right: 5px;
   stroke: var(--f-mid);
+  background-color: var(--b-low);
 }
 
 .file td {
