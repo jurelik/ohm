@@ -89,7 +89,7 @@ function UploadFile(data) {
     if ((file.type === 'original' || file.type === 'external') && !shallow) {
       if (file.name === '') throw new Error('File name is missing.');
       if (!helpers.allowedFormat(file.name)) throw new Error('File name can only include letters, numbers and underscores.'); //Check name for bad characters
-      if (file.path === '') throw new Error('File is missing.');
+      if (!file.path || file.path === '') throw new Error('File is missing.');
       if (file.tags.length === 0) throw new Error('File tags are missing.');
       for (let tag of file.tags) { //Check tags for bad characters
         if (!helpers.allowedFormat(tag)) throw new Error('Tags can only include letters, numbers and underscores.');
