@@ -22,12 +22,15 @@ const loadTheme = () => {
 }
 
 const addSong = async (song, path) => {
+  let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
+
   try {
     const buffer = await fsp.readFile(song.path);
     const { cid } = await app.ipfs.add({ content: buffer }, { cidVersion: 1 }); //Add song to IPFS
 
     //Copy song to MFS
     await app.ipfs.files.mkdir(`${path}/${song.title}/files`, { parents: true, cidVersion: 1 });
+    writtenToMFS = true; //The directory has been written to MFS
     await app.ipfs.files.cp(`/ipfs/${cid.toString()}`, `${path}/${song.title}/${app.artist} - ${song.title}.${song.format}`, { cidVersion: 1 });
 
     //Add files
@@ -54,6 +57,7 @@ const addSong = async (song, path) => {
     song.cid = folder.cid.toString();
   }
   catch (err) {
+    if (writtenToMFS) await app.ipfs.files.rm(`${path}/${song.title}`, { recursive: true });
     throw err;
   }
 }

@@ -4,30 +4,48 @@ const helpers = require('./helpers');
 const log = require('./log');
 
 const uploadSingle = async (payload) => {
+  let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
+
   try {
     const song = payload.songs[0];
     await helpers.addSong(song, `/${app.artist}/singles`);
+    writtenToMFS = true;
+
+    //Generate .ohm file
+    await app.ipfs.files.write(`/${app.artist}/singles/${song.title}/${app.artist} - ${song.title}.ohm`, JSON.stringify(payload), { create: true, cidVersion: 1 });
+
+    //Get CID of song folder
+    const folder = await app.ipfs.files.stat(`/${app.artist}/singles/${song.title}`);
+    song.cid = folder.cid.toString();
   }
   catch (err) {
+    if (writtenToMFS) await app.ipfs.files.rm(`${app.artist}/singles/${song.title}`, { recursive: true });
     throw err;
   }
 }
 
 const uploadAlbum = async (payload) => {
+  let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
+
   try {
     const album = payload.album;
     await app.ipfs.files.mkdir(`/${app.artist}/albums/${album.title}`, { cidVersion: 1 });
+    writtenToMFS = true; //The directory has been written to MFS
 
     //Add songs
     for (const song of payload.songs) {
-      await helpers.addSong(song,`/${app.artist}/albums/${album.title}`);
+      await helpers.addSong(song, `/${app.artist}/albums/${album.title}`);
     }
+
+    //Generate .ohm file
+    await app.ipfs.files.write(`/${app.artist}/albums/${album.title}/${app.artist} - ${album.title}.ohm`, JSON.stringify(payload), { create: true, cidVersion: 1 });
 
     //Get CID of album folder
     const folder = await app.ipfs.files.stat(`/${app.artist}/albums/${album.title}`);
     album.cid = folder.cid.toString();
   }
   catch (err) {
+    if (writtenToMFS) await app.ipfs.files.rm(`${app.artist}/albums/${album.title}`, { recursive: true });
     throw err;
   }
 }

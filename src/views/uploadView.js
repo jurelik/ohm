@@ -127,7 +127,7 @@ function UploadView(data) {
       return log.success('Successfully uploaded.');
     }
     catch (err) {
-      log.error(err.message);
+      console.error(err.message);
       this.submitting = false;
       spinner.remove();
     }
