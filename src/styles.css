@@ -377,6 +377,7 @@ pre {
 
 .logo-div svg {
   stroke: var(--f-high);
+  fill: var(--f-high);
 }
 
 .header {
