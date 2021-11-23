@@ -39,7 +39,11 @@ const addSong = async (song, path) => {
         const _file = await getFile(file.id);
 
         //Copy file to MFS
-        await app.ipfs.files.cp(`/ipfs/${_file.cid}`, `${path}/${song.title}/files/${_file.artist} - ${_file.name}.${_file.format}`, { cidVersion: 1 });
+        await app.ipfs.files.cp(`/ipfs/${_file.cid}`, `${path}/${song.title}/files/${_file.artist} - ${_file.name}.${_file.format}`, { cidVersion: 1, timeout: 30000 }).catch(err => {
+          //Handle TimeoutError if the file is no longer available on the IPFS network
+          if (err.name = "TimeoutError") throw new Error(`Request timed out: Could not find file with id "${file.id}" and cid "${_file.cid}" on the ipfs network. If you have the file saved locally please pin it manually and try again.`);
+          else console.error(err);
+        });
         file.cid = _file.cid;
       }
       else {

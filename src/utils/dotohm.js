@@ -1,7 +1,12 @@
 'use strict';
 
-const generate = () => {
-
+const generate = async (path, payload) => {
+  try {
+    await app.ipfs.files.write(path, JSON.stringify(payload, null, 2), { create: true, cidVersion: 1 });
+  }
+  catch (err) {
+    throw err;
+  }
 }
 
 const getOus = (e) => {
