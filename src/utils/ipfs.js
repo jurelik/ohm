@@ -12,7 +12,7 @@ const uploadSingle = async (payload) => {
     writtenToMFS = true;
 
     //Generate .ohm file
-    await app.ipfs.files.write(`/${app.artist}/singles/${song.title}/${app.artist} - ${song.title}.ohm`, JSON.stringify(payload), { create: true, cidVersion: 1 });
+    await app.ipfs.files.write(`/${app.artist}/singles/${song.title}/${app.artist} - ${song.title}.ohm`, JSON.stringify(payload, null, 2), { create: true, cidVersion: 1 });
 
     //Get CID of song folder
     const folder = await app.ipfs.files.stat(`/${app.artist}/singles/${song.title}`);
@@ -38,7 +38,7 @@ const uploadAlbum = async (payload) => {
     }
 
     //Generate .ohm file
-    await app.ipfs.files.write(`/${app.artist}/albums/${album.title}/${app.artist} - ${album.title}.ohm`, JSON.stringify(payload), { create: true, cidVersion: 1 });
+    await app.ipfs.files.write(`/${app.artist}/albums/${album.title}/${app.artist} - ${album.title}.ohm`, JSON.stringify(payload, null, 2), { create: true, cidVersion: 1 });
 
     //Get CID of album folder
     const folder = await app.ipfs.files.stat(`/${app.artist}/albums/${album.title}`);
