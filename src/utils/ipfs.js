@@ -29,6 +29,12 @@ const uploadAlbum = async (payload) => {
 
   try {
     const album = payload.album;
+
+    //Check if folder already exists
+    for await (const file of app.ipfs.files.ls(`/${app.artist}/albums`)) {
+      if (file.name === album.title) throw new Error(`"${album.title}" album folder already exists.`);
+    }
+
     await app.ipfs.files.mkdir(`/${app.artist}/albums/${album.title}`, { cidVersion: 1 });
     writtenToMFS = true; //The directory has been written to MFS
 

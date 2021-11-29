@@ -43,6 +43,11 @@ const addSong = async (song, path) => {
     const buffer = await fsp.readFile(song.path);
     const { cid } = await app.ipfs.add({ content: buffer }, { cidVersion: 1 }); //Add song to IPFS
 
+    //Check if folder already exists
+    for await (const file of app.ipfs.files.ls(`${path}`)) {
+      if (file.name === song.title) throw new Error(`"${song.title}" song folder already exists.`);
+    }
+
     //Copy song to MFS
     await app.ipfs.files.mkdir(`${path}/${song.title}/files`, { parents: true, cidVersion: 1 });
     writtenToMFS = true; //The directory has been written to MFS
