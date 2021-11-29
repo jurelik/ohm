@@ -9,7 +9,7 @@ const uploadSingle = async (payload) => {
   try {
     const song = payload.songs[0];
     await helpers.addSong(song, `/${app.artist}/singles`);
-    writtenToMFS = true;
+    writtenToMFS = true; //The directory has been written to MFS
 
     //Generate .ohm file
     await app.ipfs.files.write(`/${app.artist}/singles/${song.title}/${app.artist} - ${song.title}.ohm`, JSON.stringify(payload, null, 2), { create: true, cidVersion: 1 });

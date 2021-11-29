@@ -34,8 +34,10 @@ const upload = async (payload) => {
 
   try {
     log('Adding to IPFS...');
-    if (payload.album) await ipfs.uploadAlbum(payload, writtenToMFS);
-    else await ipfs.uploadSingle(payload, writtenToMFS);
+    if (payload.album) await ipfs.uploadAlbum(payload);
+    else await ipfs.uploadSingle(payload);
+    writtenToMFS = true; //The directory has been written to MFS
+
     ipcRenderer.send('upload-start', path);
     log(`${payload.album ? 'Album' : 'Single'} added to IPFS...`);
 
