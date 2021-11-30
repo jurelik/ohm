@@ -110,7 +110,7 @@ function Song(data, view) {
       return this.el;
     }
     catch (err) {
-      log.error(err.message);
+      log.error(err);
     }
   }
 }

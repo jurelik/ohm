@@ -46,7 +46,7 @@ function Comments(data) {
       this.el.querySelector('textarea').value = ''; //Reset comment field to empty
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
     }
   }
 

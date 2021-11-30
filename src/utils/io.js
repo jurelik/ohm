@@ -92,11 +92,11 @@ const resumeUpload = async (transfer) => {
       if (app.views.transfers) app.views.transfers.children[transfer.payload.unique].handleComplete(); //Update status of transfer to completed
     }
     catch (err) {
-      log.error(err.message);
+      log.error(err);
     }
   }
   catch (err) {
-    if (err.message !== 'FETCH_ERR') log.error(err.message);
+    if (err.message !== 'FETCH_ERR') log.error(err);
     if (transfer.payload.album && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/albums/${transfer.payload.album.title}`, { recursive: true });
     else if (transfer.payload.songs.length > 0 && writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/singles/${transfer.payload.songs[0].title}`, { recursive: true });
   }

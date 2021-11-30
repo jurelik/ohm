@@ -36,7 +36,7 @@ function LoginView() {
     }
     catch (err) {
       this.render();
-      log.error(err.message);
+      log.error(err);
     }
   }
 

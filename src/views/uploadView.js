@@ -74,7 +74,7 @@ function UploadView(data) {
       log.success('Successfully saved upload state.');
     }
     catch (err) {
-      log.error(err.message);
+      log.error(err);
     }
   }
 
@@ -100,7 +100,7 @@ function UploadView(data) {
       log.success('Successfully loaded upload state.');
     }
     catch (err) {
-      log.error(err.message);
+      log.error(err);
     }
   }
 
@@ -127,7 +127,7 @@ function UploadView(data) {
       return log.success('Successfully uploaded.');
     }
     catch (err) {
-      console.error(err);
+      log.error(err);
       this.submitting = false;
       spinner.remove();
     }

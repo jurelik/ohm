@@ -49,7 +49,7 @@ function SearchView(data) {
       return app.triggerLoading(false); //Trigger loading indicator
     }
     catch (err) {
-      log.error(err.message);
+      log.error(err);
     }
   }
 
@@ -82,7 +82,7 @@ function SearchView(data) {
       await this.children.main.append(res.payload); //Append to DOM
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
     }
   }
 

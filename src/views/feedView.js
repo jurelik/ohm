@@ -30,7 +30,7 @@ function FeedView(data) {
       return res.payload;
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
     }
   }
 
@@ -62,7 +62,7 @@ function FeedView(data) {
       app.triggerLoading(false); //Trigger loading indicator
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
       app.triggerLoading(false); //Trigger loading indicator
     }
   }
