@@ -1372,7 +1372,7 @@ pre {
 }
 
 .transfer .resume:disabled {
-  stroke: var(--f-low);
+  stroke: var(--b-high);
 }
 
 .transfer .clear {
