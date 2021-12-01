@@ -28,8 +28,8 @@ This is an automatically generated file which contains metadata related to an oh
 Copy the text below to give credit to artists whose files are included in this upload:
 =====================================================================================
 
-This work includes previous work of the following artists:
-${_artists.join(', ')}
+${_artists.length === 0 ? 'This work does not include previous work of any other artists.' : `This work includes previous work of the following artists:
+${_artists.join(', ')}`}
 
 Copy the text below into an .ous file in order to re-create this upload and re-upload:
 =====================================================================================
