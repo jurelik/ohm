@@ -1,6 +1,7 @@
 'use strict';
 
 const helpers = require('./helpers');
+const dotohm = require('./dotohm');
 const log = require('./log');
 
 const uploadSingle = async (payload) => {
@@ -11,8 +12,9 @@ const uploadSingle = async (payload) => {
     await helpers.addSong(song, `/${app.artist}/singles`);
     writtenToMFS = true; //The directory has been written to MFS
 
-    //Generate .ohm file
-    await app.ipfs.files.write(`/${app.artist}/singles/${song.title}/${app.artist} - ${song.title}.ohm`, JSON.stringify(payload, null, 2), { create: true, cidVersion: 1 });
+    //Generate .ohm file and add to MFS
+    const dotohmContent = await dotohm.generate(payload);
+    await app.ipfs.files.write(`/${app.artist}/singles/${song.title}/${app.artist} - ${song.title}.ohm`, dotohmContent, { create: true, cidVersion: 1 });
 
     //Get CID of song folder
     const folder = await app.ipfs.files.stat(`/${app.artist}/singles/${song.title}`);
@@ -43,8 +45,9 @@ const uploadAlbum = async (payload) => {
       await helpers.addSong(song, `/${app.artist}/albums/${album.title}`);
     }
 
-    //Generate .ohm file
-    await app.ipfs.files.write(`/${app.artist}/albums/${album.title}/${app.artist} - ${album.title}.ohm`, JSON.stringify(payload, null, 2), { create: true, cidVersion: 1 });
+    //Generate .ohm file and add to MFS
+    const dotohmContent = await dotohm.generate(payload);
+    await app.ipfs.files.write(`/${app.artist}/albums/${album.title}/${app.artist} - ${album.title}.ohm`, dotohmContent, { create: true, cidVersion: 1 });
 
     //Get CID of album folder
     const folder = await app.ipfs.files.stat(`/${app.artist}/albums/${album.title}`);
