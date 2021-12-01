@@ -15,9 +15,15 @@ const generate = async (payload) => {
       }
     }
 
-    const _artists = [...new Set(artists)]; //Remove duplicates
+    let _artists = [...new Set(artists)]; //Remove duplicates
+    _artists = _artists.filter(artist => artist !== app.artist); //Remove self
 
-    const data =`This is an automatically generated file which contains metadata related to an ohm upload.
+    const data =`     _
+ ___| |_ _____
+| . |   |     |
+|___|_|_|_|_|_|
+
+This is an automatically generated file which contains metadata related to an ohm upload.
 
 Copy the text below to give credit to artists whose files are included in this upload:
 =====================================================================================

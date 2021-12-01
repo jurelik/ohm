@@ -6,9 +6,9 @@ const log = require('./log');
 
 const uploadSingle = async (payload) => {
   let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
+  const song = payload.songs[0];
 
   try {
-    const song = payload.songs[0];
     await helpers.addSong(song, `/${app.artist}/singles`);
     writtenToMFS = true; //The directory has been written to MFS
 
@@ -21,17 +21,16 @@ const uploadSingle = async (payload) => {
     song.cid = folder.cid.toString();
   }
   catch (err) {
-    if (writtenToMFS) await app.ipfs.files.rm(`${app.artist}/singles/${song.title}`, { recursive: true });
+    if (writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/singles/${song.title}`, { recursive: true });
     throw err;
   }
 }
 
 const uploadAlbum = async (payload) => {
   let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
+  const album = payload.album;
 
   try {
-    const album = payload.album;
-
     //Check if folder already exists
     for await (const file of app.ipfs.files.ls(`/${app.artist}/albums`)) {
       if (file.name === album.title) throw new Error(`"${album.title}" album folder already exists.`);
@@ -54,7 +53,7 @@ const uploadAlbum = async (payload) => {
     album.cid = folder.cid.toString();
   }
   catch (err) {
-    if (writtenToMFS) await app.ipfs.files.rm(`${app.artist}/albums/${album.title}`, { recursive: true });
+    if (writtenToMFS) await app.ipfs.files.rm(`/${app.artist}/albums/${album.title}`, { recursive: true });
     throw err;
   }
 }
