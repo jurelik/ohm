@@ -9,8 +9,13 @@ const generate = async (payload) => {
     delete _payload.multiaddr;
     for (let song of _payload.songs) {
       delete song.path;
+      delete song.cid;
+      delete song.format;
+
       for (let file of song.files) {
         delete file.path;
+        delete file.cid;
+
         artists.push(file.artist);
       }
     }
@@ -23,16 +28,18 @@ const generate = async (payload) => {
 | . |   |     |
 |___|_|_|_|_|_|
 
-This is an automatically generated file which contains metadata related to an ohm upload.
+This is an automatically generated file which serves as a reference to all the artists
+whose work is contained within the uploaded folder. This file also includes the upload
+state of this upload in case it needs to be re-created in the future for any reason.
 
-Copy the text below to give credit to artists whose files are included in this upload:
-=====================================================================================
+Copy the lines underneath to give credit to artists whose work is used in this upload:
+======================================================================================
 
-${_artists.length === 0 ? 'This work does not include previous work of any other artists.' : `This work includes previous work of the following artists:
+${_artists.length === 0 ? 'This upload does not include previous work of any other artists.' : `This work includes previous work of the following artists:
 ${_artists.join(', ')}`}
 
-Copy the text below into an .ous file in order to re-create this upload and re-upload:
-=====================================================================================
+Upload state is saved underneath this line for the purpose of re-creating this upload:
+======================================================================================
 ${JSON.stringify(_payload, null, 2)}`
 
     return data;
