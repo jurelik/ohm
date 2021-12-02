@@ -6,6 +6,7 @@ const { ipcRenderer } = require('electron');
 const UploadSong = require('../components/uploadSong');
 const UploadAlbum = require('../components/uploadAlbum');
 const io = require('../utils/io');
+const helpers = require('../utils/helpers');
 const log = require('../utils/log');
 
 function UploadView(data) {
@@ -88,7 +89,8 @@ function UploadView(data) {
       if (res.err) throw res.err;
       if (res.canceled) throw new Error('Load canceled.');
 
-      this.data = JSON.parse(await fsp.readFile(res.filePaths[0]));
+      const json = await helpers.extractJSON(res);
+      this.data = JSON.parse(json);
 
       this.reset(true); //Reset view
       for (const song of this.data.songs) {

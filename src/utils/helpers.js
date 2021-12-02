@@ -347,6 +347,25 @@ const parseInputs = (type, el) => {
   return parsed;
 }
 
+const extractJSON = async (res) => {
+  try {
+    let json;
+    const extension = res.filePaths[0].slice(-3);
+
+    if (extension === 'ohm') {
+      const raw = await fsp.readFile(res.filePaths[0]);
+      const string = raw.toString();
+      json = string.slice(string.indexOf('{'));
+    }
+    else json = await fsp.readFile(res.filePaths[0]);
+
+    return json;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 //
 //PRIVATE FUNCTIONS
 //
@@ -490,5 +509,6 @@ module.exports = {
   handleEmpty,
   timerPromise,
   allowedFormat,
-  parseInputs
+  parseInputs,
+  extractJSON
 }

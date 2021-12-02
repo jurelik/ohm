@@ -162,7 +162,7 @@ ipcMain.handle('load-file', async (event) => {
   try {
     const res = await dialog.showOpenDialog({
       filters: [
-        { name: 'ohm_upload_state', extensions: [ 'ous' ] }
+        { name: 'ohm_upload_state', extensions: [ 'ous', 'ohm' ] }
       ]
     });
     return res;
