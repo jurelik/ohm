@@ -21,22 +21,51 @@ const loadTheme = () => {
   }
 }
 
+const copyInternalFileToMFS = async (path, file, songTitle) => {
+  try {
+    //Copy file to MFS
+    await app.ipfs.files.cp(`/ipfs/${file.cid}`, `${path}/${songTitle}/files/${file.artist} - ${file.name} (${file.songTitle}).${file.format}`, { cidVersion: 1, timeout: 30000 }).catch(err => {
+      //Handle TimeoutError if the file is no longer available on the IPFS network
+      if (err.name === "TimeoutError") throw new Error(`Request timed out: Could not find file with id "${file.id}" and cid "${file.cid}" on the ipfs network. If you have the file saved locally please pin it manually and try again.`);
+      else if (err.message.startsWith('cp: cannot put node')) throw new Error('Please make sure you are not naming multiple files with the same name and try again. If that is not the case, please submit an issue on https://github.com/jurelik/ohm');
+      else throw err;
+    });
+  }
+  catch (err) {
+    throw err
+  }
+}
+
 const addSong = async (song, path) => {
+  let writtenToMFS = false; //Keep track of whether or not MFS has been modified for error handling
+
   try {
     const buffer = await fsp.readFile(song.path);
     const { cid } = await app.ipfs.add({ content: buffer }, { cidVersion: 1 }); //Add song to IPFS
 
+    //Check if folder already exists
+    for await (const file of app.ipfs.files.ls(`${path}`)) {
+      if (file.name === song.title) throw new Error(`"${song.title}" song folder already exists.`);
+    }
+
     //Copy song to MFS
     await app.ipfs.files.mkdir(`${path}/${song.title}/files`, { parents: true, cidVersion: 1 });
+    writtenToMFS = true; //The directory has been written to MFS
     await app.ipfs.files.cp(`/ipfs/${cid.toString()}`, `${path}/${song.title}/${app.artist} - ${song.title}.${song.format}`, { cidVersion: 1 });
 
     //Add files
     for (const file of song.files) {
       if (file.type === 'internal') {
         const _file = await getFile(file.id);
+        await copyInternalFileToMFS(path, _file, song.title);
 
-        //Copy file to MFS
-        await app.ipfs.files.cp(`/ipfs/${_file.cid}`, `${path}/${song.title}/files/${_file.artist} - ${_file.name}.${_file.format}`, { cidVersion: 1 });
+        //Copy data to file so it can be saved in the dotohm file
+        file.artist = _file.artist;
+        file.name = _file.name;
+        // file.type = _file.type; //DO NOT COPY OVER THE TYPE
+        file.license = _file.license;
+        file.tags = _file.tags;
+        file.info = _file.info;
         file.cid = _file.cid;
       }
       else {
@@ -44,7 +73,7 @@ const addSong = async (song, path) => {
         const { cid } = await app.ipfs.add({ content: buffer }, { cidVersion: 1 }); //Add song to IPFS
 
         //Copy file to MFS
-        await app.ipfs.files.cp(`/ipfs/${cid.toString()}`, `${path}/${song.title}/files/${app.artist} - ${file.name}.${file.format}`, { cidVersion: 1 });
+        await app.ipfs.files.cp(`/ipfs/${cid.toString()}`, `${path}/${song.title}/files/${app.artist} - ${file.name} (${song.title}).${file.format}`, { cidVersion: 1 });
         file.cid = cid.toString();
       }
     }
@@ -54,6 +83,7 @@ const addSong = async (song, path) => {
     song.cid = folder.cid.toString();
   }
   catch (err) {
+    if (writtenToMFS) await app.ipfs.files.rm(`${path}/${song.title}`, { recursive: true });
     throw err;
   }
 }
@@ -317,6 +347,25 @@ const parseInputs = (type, el) => {
   return parsed;
 }
 
+const extractJSON = async (res) => {
+  try {
+    let json;
+    const extension = res.filePaths[0].slice(-3);
+
+    if (extension === 'ohm') {
+      const raw = await fsp.readFile(res.filePaths[0]);
+      const string = raw.toString();
+      json = string.slice(string.indexOf('{'));
+    }
+    else json = await fsp.readFile(res.filePaths[0]);
+
+    return json;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
 //
 //PRIVATE FUNCTIONS
 //
@@ -460,5 +509,6 @@ module.exports = {
   handleEmpty,
   timerPromise,
   allowedFormat,
-  parseInputs
+  parseInputs,
+  extractJSON
 }

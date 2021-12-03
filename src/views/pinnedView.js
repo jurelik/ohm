@@ -51,7 +51,7 @@ function PinnedView(data) {
       app.triggerLoading(false); //Trigger loading indicator
     }
     catch (err) {
-      log.error(err.message);
+      log.error(err);
       app.triggerLoading(false); //Trigger loading indicator
     }
   }

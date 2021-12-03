@@ -86,7 +86,7 @@ function App() {
       await login.init(); //Attempt login with credentials
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
 
       this.root.innerHTML = '' //Draw login screen
       login.render();
@@ -112,7 +112,7 @@ function App() {
       login.render();
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
     }
   }
 
@@ -158,7 +158,7 @@ function App() {
         this.header.backButton.disabled = true;
       }
       catch (err) {
-        if (err.message !== 'FETCH_ERR') log.error(err.message);
+        if (err.message !== 'FETCH_ERR') log.error(err);
       }
     });
 
@@ -257,7 +257,7 @@ function App() {
       this.triggerLoading(false); //Stop loading indicator
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
       if (err.message === 'User not authenticated') await this.logout(true);
     }
   }
@@ -304,7 +304,7 @@ function App() {
     }
     catch (err) {
       if (err.message === 'The user aborted a request.') return;
-      log.error(err.message);
+      log.error(err);
     }
   }
 
@@ -336,7 +336,7 @@ function App() {
       this.logout(true);
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
     }
   }
 
@@ -358,7 +358,7 @@ function App() {
       log.success('Location successfully changed.');
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
     }
   }
 
@@ -380,7 +380,7 @@ function App() {
       log.success('Bio successfully changed.');
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
     }
   }
 
@@ -403,7 +403,7 @@ function App() {
       log.success('Successfully created artist.');
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
     }
   }
 
