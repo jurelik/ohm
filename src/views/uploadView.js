@@ -66,6 +66,9 @@ function UploadView(data) {
       if (res.err) throw res.err;
       if (res.canceled) throw new Error('Save canceled.');
 
+      //Check if .ous extension is included on linux
+      if (process.platform === 'linux' && res.filePath.slice(-4) !== '.ous') res.filePath = res.filePath + '.ous';
+
       if (this.children.length > 1) data.album = this.album.getAlbumData(true);
       for (const child of this.children) data.songs.push(child.getSongData(true));
 
