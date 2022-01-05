@@ -470,6 +470,7 @@ const iterateDirectory = async (downloadPath, cid) => {
   try {
     for await (const file of app.ipfs.ls(cid)) {
       if (file.type === 'file') {
+        if (!file.name) continue; //Ignore if no files in dir
         const stream = fs.createWriteStream(path.join(downloadPath, file.name));
         for await (const chunk of app.ipfs.cat(file.path)) stream.write(chunk);
         stream.end();

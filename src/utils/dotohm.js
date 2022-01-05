@@ -40,6 +40,7 @@ ${_artists.join(', ')}`}
 
 Upload state is saved underneath this line for the purpose of re-creating this upload:
 ======================================================================================
+
 ${JSON.stringify(_payload, null, 2)}`
 
     return data;
