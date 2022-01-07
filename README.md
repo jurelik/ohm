@@ -43,9 +43,9 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 
 ## build ohm
 ```
-npm run build_osx
-npm run build_linux
-npm run build_win
+npm run build:osx
+npm run build:linux
+npm run build:win
 ```
 
 ## contributing
