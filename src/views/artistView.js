@@ -49,7 +49,7 @@ function ArtistView(data) {
       else button.classList.add('following');
     }
     catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err.message);
+      if (err.message !== 'FETCH_ERR') log.error(err);
     }
   }
 

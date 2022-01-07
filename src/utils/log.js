@@ -2,7 +2,9 @@
 
 const wrapper = (msg, type) => {
   const el = document.querySelector('log');
-  if (el) el.textContent = msg;
+  //If msg is an object with a message attribute, display the message instead (it is likely an Error object)
+  if (el && !msg.message) el.textContent = msg;
+  else if (el && msg.message) el.textContent = msg.message;
 
   if (type === 'success') return success(msg);
   else if (type === 'error') return error(msg);

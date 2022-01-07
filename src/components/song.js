@@ -17,7 +17,7 @@ function Song(data, view) {
     e.stopPropagation();
 
     if (this.view === 'album') app.player.queueAlbum(app.views.album.data, this.getPosition());
-    else if (this.view === 'explore' || this.view === 'feed' || this.view === 'pinned') app.player.queueFeed(this.data);
+    else if (this.view === 'explore' || this.view === 'feed' || this.view === 'pinned' || this.view === 'artist') app.player.queueFeed(this.data);
     else app.player.queueItem(this.data);
   }
 
@@ -110,7 +110,7 @@ function Song(data, view) {
       return this.el;
     }
     catch (err) {
-      log.error(err.message);
+      log.error(err);
     }
   }
 }
