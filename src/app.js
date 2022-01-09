@@ -384,29 +384,6 @@ function App() {
     }
   }
 
-  this.createArtist = async (artist, pw, secret) => { //Admin function for the time being
-    try {
-      const payload = JSON.stringify({ artist, pw, secret });
-
-      const _res = await fetch(`${app.URL}/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: payload
-      });
-
-      if (_res.status !== 200) throw new Error('FETCH_ERR');
-      const res = await _res.json();
-      if (res.type === 'error') throw new Error(res.err);
-
-      log.success('Successfully created artist.');
-    }
-    catch (err) {
-      if (err.message !== 'FETCH_ERR') log.error(err);
-    }
-  }
-
   this.buildHTML = () => {
     //Build HTML skeleton
     this.root.innerHTML = `
