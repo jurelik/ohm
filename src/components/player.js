@@ -146,7 +146,7 @@ function Player() {
     let _position = null; //Position of this.current in new feed (if applicable) - means song was loaded in a different view
 
     if (this.sameQueue(feed) && this.queuePosition === position) return this.play(); //Check if queue is already loaded and we are playing the same song
-    if (!this.feed && this.current && this.current.id === song.id && this.current.type === song.type) _position = this.checkIfCurrentSongIncluded(feed); //Check if the current song is included in the feed
+    if (this.current && this.current.id === song.id && this.current.type === song.type) _position = this.checkIfCurrentSongIncluded(feed); //Check if the current song is included in the feed
 
     this.feed = true; //Set this.feed to active
     this.queue = feed;
