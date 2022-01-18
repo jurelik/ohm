@@ -73,8 +73,12 @@ function Player() {
       else this.queuePosition--;
     }
 
+    const previousAlbum = this.current && this.current.albumId ? this.current.albumId : null;
     this.current = this.queue[this.queuePosition];
     this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
+
+    if (this.album && this.album != previousAlbum) this.skipToBeginingOfAlbum();
+
     this.playing = false;
     this.updateSrc();
     this.play();
@@ -223,6 +227,15 @@ function Player() {
         app.views.song.children.files[id].setPlayingState(false);
       }
     }
+  }
+
+  this.skipToBeginingOfAlbum = () => { //If navigating BACK to an album in a feed, skip to the beginning instead of the last song
+    if (this.queue[this.queuePosition - 1].albumId === this.album) {
+      this.queuePosition--;
+      return this.skipToBeginingOfAlbum();
+    }
+
+    return this.current = this.queue[this.queuePosition];
   }
 
   this.updateSrc = () => {
