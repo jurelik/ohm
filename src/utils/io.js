@@ -21,13 +21,8 @@ const login = async (payload) => {
     const res = await _res.json();
     if (res.type === 'error') throw new Error(res.err);
 
-    //Attempt connecting to central server for better performance
-    if (res.multiaddr) await app.ipfs.swarm.connect(res.multiaddr, { timeout: 30000 }).catch(err => {
-      log.error(`Failed to connect to mothership via IPFS - things may or may not work as intended. Try to connect to the following address manually: /p2p/${res.multiaddr}`)
-    });
-    if (res.multiaddr) log('Successfully connected to mothership.');
-
     app.artist = res.session.artist; //Set global artist value
+    app.SERVER_MULTIADDR = res.multiaddr || null; //Set global SERVER_MULTIADDR value
   }
   catch (err) {
     throw err;

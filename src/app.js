@@ -50,6 +50,7 @@ function App() {
   this.URL;
   this.USER_DATA_PATH;
   this.MULTIADDR;
+  this.SERVER_MULTIADDR;
 
   //State
   this.artist;
@@ -130,6 +131,12 @@ function App() {
         });
         this.MULTIADDR = await this.getMultiAddr(); //Get multiaddress for swarm connections
         if (this.remoteNode) log.success('Connection to IPFS daemon established.');
+
+        //Attempt connecting to central server for better performance
+        if (this.SERVER_MULTIADDR) await app.ipfs.swarm.connect(this.SERVER_MULTIADDR, { timeout: 30000 }).catch(err => {
+          log.error(`Failed to connect to mothership via IPFS - things may or may not work as intended. Try to connect to the following address manually: /p2p/${this.SERVER_MULTIADDR}`)
+        });
+        if (this.SERVER_MULTIADDR) log.success('Successfully connected to mothership.');
 
         this.GATEWAY = `${this.settingsStore.getOne('IPFS_API_HOST')}:8080`; //Update gateway
 
