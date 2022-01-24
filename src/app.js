@@ -50,6 +50,7 @@ function App() {
   this.URL;
   this.USER_DATA_PATH;
   this.MULTIADDR;
+  this.SERVER_MULTIADDR;
 
   //State
   this.artist;
@@ -128,9 +129,14 @@ function App() {
           port: this.settingsStore.getOne('IPFS_API_PORT'),
           apiPath: this.settingsStore.getOne('IPFS_API_PATH'),
         });
-        const id = await this.getId(); //Get multiaddress for swarm connections
-        this.MULTIADDR = id.addresses[4];
+        this.MULTIADDR = await this.getMultiAddr(); //Get multiaddress for swarm connections
         if (this.remoteNode) log.success('Connection to IPFS daemon established.');
+
+        //Attempt connecting to central server for better performance
+        if (this.SERVER_MULTIADDR) await app.ipfs.swarm.connect(this.SERVER_MULTIADDR, { timeout: 5000 }).catch(err => {
+          log.error(`Failed to connect to mothership via IPFS - things may or may not work as intended. Try to connect to the following address manually: /p2p/${this.SERVER_MULTIADDR}`)
+        });
+        if (this.SERVER_MULTIADDR) log.success('Successfully connected to mothership.');
 
         this.GATEWAY = `${this.settingsStore.getOne('IPFS_API_HOST')}:8080`; //Update gateway
 
@@ -176,15 +182,10 @@ function App() {
     return remote;
   }
 
-  this.getId = async () => {
+  this.getMultiAddr = async () => {
     try {
-      const id = await this.ipfs.id({ timeout: 10000 });
-      const a = id.addresses[4].toString().split('/');
-      if (a[3] !== 'tcp') {
-        await helpers.timerPromise(1000);
-        return await this.getId(); //Check to see if the tcp adress is in the right position and if not, run the same function again
-      }
-      return id;
+      const res = await this.ipfs.id({ timeout: 10000 });
+      return `/p2p/${res.id}`;
     }
     catch (err) {
       throw err;

@@ -22,6 +22,7 @@ const login = async (payload) => {
     if (res.type === 'error') throw new Error(res.err);
 
     app.artist = res.session.artist; //Set global artist value
+    app.SERVER_MULTIADDR = res.multiaddr || null; //Set global SERVER_MULTIADDR value
   }
   catch (err) {
     throw err;
