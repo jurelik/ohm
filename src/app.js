@@ -133,7 +133,7 @@ function App() {
         if (this.remoteNode) log.success('Connection to IPFS daemon established.');
 
         //Attempt connecting to central server for better performance
-        if (this.SERVER_MULTIADDR) await app.ipfs.swarm.connect(this.SERVER_MULTIADDR, { timeout: 10000 }).catch(err => {
+        if (this.SERVER_MULTIADDR) await app.ipfs.swarm.connect(this.SERVER_MULTIADDR, { timeout: 5000 }).catch(err => {
           log.error(`Failed to connect to mothership via IPFS - things may or may not work as intended. Try to connect to the following address manually: /p2p/${this.SERVER_MULTIADDR}`)
         });
         if (this.SERVER_MULTIADDR) log.success('Successfully connected to mothership.');
