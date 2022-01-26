@@ -230,7 +230,7 @@ function Player() {
   }
 
   this.skipToBeginingOfAlbum = () => { //If navigating BACK to an album in a feed, skip to the beginning instead of the last song
-    if (this.queue[this.queuePosition - 1].albumId === this.album) {
+    if (this.queuePosition > 0 && this.queue[this.queuePosition - 1].albumId === this.album) {
       this.queuePosition--;
       return this.skipToBeginingOfAlbum();
     }
