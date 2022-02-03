@@ -73,8 +73,12 @@ function Player() {
       else this.queuePosition--;
     }
 
+    const previousAlbum = this.current && this.current.albumId ? this.current.albumId : null;
     this.current = this.queue[this.queuePosition];
     this.album = this.current.albumId ? this.current.albumId : null; //Update album in case we're in a feed
+
+    if (this.album && this.album != previousAlbum) this.skipToBeginingOfAlbum();
+
     this.playing = false;
     this.updateSrc();
     this.play();
@@ -146,7 +150,7 @@ function Player() {
     let _position = null; //Position of this.current in new feed (if applicable) - means song was loaded in a different view
 
     if (this.sameQueue(feed) && this.queuePosition === position) return this.play(); //Check if queue is already loaded and we are playing the same song
-    if (!this.feed && this.current && this.current.id === song.id && this.current.type === song.type) _position = this.checkIfCurrentSongIncluded(feed); //Check if the current song is included in the feed
+    if (this.current && this.current.id === song.id && this.current.type === song.type) _position = this.checkIfCurrentSongIncluded(feed); //Check if the current song is included in the feed
 
     this.feed = true; //Set this.feed to active
     this.queue = feed;
@@ -223,6 +227,15 @@ function Player() {
         app.views.song.children.files[id].setPlayingState(false);
       }
     }
+  }
+
+  this.skipToBeginingOfAlbum = () => { //If navigating BACK to an album in a feed, skip to the beginning instead of the last song
+    if (this.queuePosition > 0 && this.queue[this.queuePosition - 1].albumId === this.album) {
+      this.queuePosition--;
+      return this.skipToBeginingOfAlbum();
+    }
+
+    return this.current = this.queue[this.queuePosition];
   }
 
   this.updateSrc = () => {
